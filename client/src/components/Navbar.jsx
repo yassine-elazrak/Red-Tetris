@@ -3,19 +3,28 @@ import logD from "../img/logo.svg";
 import logM from "../img/logoMobile.svg";
 
 import { NavbarStyled, LogoDesktop, LogoMobile } from './styles/HeaderStyled';
+import { BellOutlined } from '@ant-design/icons';
+import { Layout, Affix } from "antd";
+
+
+const { Header } = Layout;
 
 const Navbar = () => {
     return (
-        <NavbarStyled>
-            <h1>room name</h1>
+        <Affix>
+        <Header>
+        <NavbarStyled className='d-flex justify-content-between'>
+            <h1> test </h1>
             <LogoDesktop>
-                <img src={logD} alt="logo" />
+                <img src={logD} alt="logo" className='d-none d-md-block' />
             </LogoDesktop>
             <LogoMobile>
-                <img src={logM} alt="logo" />
+                <img src={logM} alt="logo"  />
             </LogoMobile>
-            <h1>notif</h1>
+                <BellOutlined style={{fontSize: 25}} />
         </NavbarStyled>
+        </Header>
+        </Affix>
     );
 }
 

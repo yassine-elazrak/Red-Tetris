@@ -4,8 +4,8 @@ import background from '../../img/footer-bg.png'
 
 export const FooterStyled = styled.footer`
 display: flex;
-position: absolute;
-bottom: 0;
+// position: absolute;
+// bottom: 0;
 justify-content: space-between;
 width: 100%;
 height: 50px;
