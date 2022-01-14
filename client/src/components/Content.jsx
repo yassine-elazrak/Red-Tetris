@@ -9,8 +9,7 @@ const { Content } = Layout;
 const ContentComponent = () => {
     return (
         <ContentStyled>
-            <Content style={{ padding: "0 50px", minHeight: "calc(100vh - 100px)"}}>
-                {/* <div style={{ border: 1, padding: 24, minHeight: 280 }}>Content</div> */}
+            <Content style={{ minHeight: "calc(100vh - 93px)"}}>
                 <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Magni iusto nam fugit quia quae a unde nesciunt delectus laudantium tempora. Dolores quam quas non in, quis possimus ipsum qui ipsam!</p>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse voluptatum corrupti libero culpa iste fugit debitis molestiae eligendi ad accusantium, fuga repudiandae cumque, cum ea error. Reiciendis facilis et aliquid.</p>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias odio, voluptatem laborum adipisci saepe sit dolores eius labore error a fugiat laudantium ut temporibus. Nobis, iure voluptatum. Porro, iste veritatis!</p>

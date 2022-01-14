@@ -16,8 +16,9 @@ background-repeat-y: no-repeat;
 z-index: 100;
 padding: 0 20px;
 margin: 0;
+align-items: center;
 
-border-bottom: 1px solid green;
+// border-bottom: 1px solid green;
 
 
 
@@ -67,5 +68,5 @@ export const Background = styled.img`
     padding: 0;
     margin: 0;
 
-    border: 1px solid red;
+    // border: 1px solid red;
 `
