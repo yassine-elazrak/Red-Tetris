@@ -1,15 +1,25 @@
-import { ExportOutlined } from "@ant-design/icons";
 import React from "react";
+import { Layout} from "antd";
 
 
-import ContentComponent from "../components/Content";
+import { HomeStyled } from "./styles/HomeStyle";
+import FormUserName from "../components/FormUserName";
+
+
+
+const { Content } = Layout;
+
 
 
 const HomePage = () => {
+
+
     return (
-        <>
-            <ContentComponent />
-        </>
+        <HomeStyled>
+            <Content style={{ minHeight: "calc(100vh - 98px)"}}>
+                <FormUserName />
+            </Content>
+        </HomeStyled>
     );
 }
 

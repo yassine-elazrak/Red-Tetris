@@ -6,9 +6,13 @@ export const NavbarStyled = styled.nav`
     background-image: url(${background});
     background-size: contain;
     background-repeat-y: no-repeat;
+    // height: 100%;
     z-index: 100;
-    padding: 0 20px;
+    padding: 5px 20px;
     align-items: center;
+    * {
+        color: #666;
+    }
     @media (max-width: 768px) {
         background-size: contain;
     }
@@ -25,6 +29,14 @@ export const NavbarStyled = styled.nav`
 
 `
 
+export const NotifDiv = styled.div`
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+    margin: 0;
+    
+`
+
 export const NotifIcon = styled.div`
     // border : 1px solid red;
     display: flex;
@@ -34,24 +46,25 @@ export const NotifIcon = styled.div`
     // width: 100%;
     justify-content: space-between;
     align-items: top;
+    cursor: pointer;
+    color: #666;
 
     div {
         font-family: 'Source Code Pro', monospace !important;
         display: flex;
         position: relative;
-        top: 0;
-        left: -10px;
+        top: -5px;
+        left: -15px;
         justify-content: center;
         align-items: center;
         width: 15px;
         height: 15px;
         border-radius: 50%;
-        background-color: #2D9CDB;
-
-        p {
+        background-color: #BEBEC8;
+        span {
             display: inline-block;
             font-size: 12px;
-            color: #EB5757;
+            color: white;
             font-weight: bold;
             margin: 0;
             padding: 0;
@@ -66,6 +79,7 @@ export const NotifIcon = styled.div`
 `
 
 export const LogoDesktop = styled.div`
+    cursor: pointer;
     @media (max-width: 768px) {
         display: none;
     }
@@ -73,6 +87,7 @@ export const LogoDesktop = styled.div`
 
 export const LogoMobile = styled.div`
     display: none;
+    cursor: pointer;
     @media (max-width: 768px) {
         display: block;
     }

@@ -3,45 +3,24 @@ import styled from 'styled-components'
 import background from '../../img/footer-bg.png'
 
 export const FooterStyled = styled.footer`
-display: flex;
-// position: absolute;
-// bottom: 0;
-justify-content: space-between;
-width: 100%;
-height: 50px;
-background-image: url(${background});
-background-size: contain;
-background-height: 100%;
-background-repeat-y: no-repeat;
-z-index: 100;
-padding: 0 20px;
-margin: 0;
-align-items: center;
-
-// border-bottom: 1px solid green;
-
-
-
+    background-image: url(${background});
+    background-size: contain;
+    background-repeat-y: no-repeat;
+    z-index: 100;
+    padding: 15px 20px;
+    margin-bottom: -3px;
+    align-items: center;
     @media (max-width: 768px) {
-        height: 50px;
         background-size: contain;
     }
     @media (max-width: 425px) {
-        height: 40px;
-        // background-position:  0% 15px;
         background-size: cover;
-        // background-attachment: fixed;
     }
 
     @media (max-width: 375px) {
-        height: 37px;
-        // background-position: center bottom -24px;
         background-size: cover;
     }
-
     @media (max-width: 320px) {
-        height: 35px;
-        // background-position: center bottom -21px;
         background-size: cover;
     }
 `
