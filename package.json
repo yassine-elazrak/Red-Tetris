@@ -1,0 +1,31 @@
+{
+  "name": "red-tetris",
+  "version": "1.0.0",
+  "description": "Redpelicans is the sponsor of this project. You understand the trend strongly highlighted in red in the Tetris game - that we propose to build and flight some pelicans on your playgrounds in a forest of tetriminos",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "coverage": "jest --coverage",
+    "dev": "nodemon srcs/index.js  --trace-warnings",
+    "start-gendoc": "node srcs/swagger.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yassineazrak/Red-Tetris.git"
+  },
+  "author": "yelazrak",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yassineazrak/Red-Tetris/issues"
+  },
+  "homepage": "https://github.com/yassineazrak/Red-Tetris#readme",
+  "dependencies": {
+    "dotenv": "^11.0.0",
+    "express": "^4.17.2",
+    "joi": "^17.5.0",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.15",
+    "swagger-autogen": "^2.18.8",
+    "swagger-ui-express": "^4.3.0"
+  }
+}
