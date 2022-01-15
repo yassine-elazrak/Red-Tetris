@@ -7,24 +7,31 @@ const FormUserName = () => {
 
     const [input, setInput] = useState({
         value: "",
-        error: " "
+        error: false
     });
 
-    const onChange = (e) => {
-        // value(e.target.value);
-        console.log(e.target.value);
+
+    const handleChange = (e) => {
         setInput({
-            ...input,
             value: e.target.value,
+            error: false
         });
         console.log('value:' + input.value);
     }
 
 
-    const onSubmit = (e) => {
-        // e.preventDefault();
-        console.log('value:' + input.value);
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        input.value.length > 0 ? setInput({
+            ...input,
+            error: false
+        }) : setInput({
+            ...input,
+            error: true
+        });
+        console.log('value:' + input.error);
     }
+
 
    
 
@@ -42,11 +49,9 @@ const FormUserName = () => {
                 top: '50%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
-                initialValues: { username: input.value },
                 
             }}
-            onSubmit={onSubmit}
-            // name="username"
+            onSubmit={handleSubmit}
             >
             
             <Input.Group size="large"
@@ -64,16 +69,12 @@ const FormUserName = () => {
                         pading: '0px',
                         margin: '0px',
                     }}
-                    // help={input.error}
+                    help={input.error ? 'Please input your username!' : ''}
                     hasFeedback
-                    // validateStatus={input.error ? 'error' : 'success'}
-                    rules={[{
-                        required: true,
-                        message: 'Please input your username!',
-                    }]}
+                    validateStatus={!input.error && input.value ? 'success' : input.error ? 'error' : ''}
                     >
                     <Input
-                        onChange={onChange}
+                        onChange={handleChange}
                         placeholder="Enter your name" 
                         name="username"
                     />
@@ -91,7 +92,7 @@ const FormUserName = () => {
                         }}
                         size="large"
                         color="#6FCF97"
-                        // onClick={onSubmit}
+                        onClick={handleSubmit}
                         >
                         Create
                     </Button>
