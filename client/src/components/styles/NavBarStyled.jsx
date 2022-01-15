@@ -39,42 +39,16 @@ export const NotifDiv = styled.div`
 
 export const NotifIcon = styled.div`
     // border : 1px solid red;
-    display: flex;
+    // display: flex;
+    // position: relative;
     padding: 8px 0px;
     // margin: 0;
     // height: 100%;
     // width: 100%;
-    justify-content: space-between;
-    align-items: top;
+    // justify-content: space-between;
+    // align-items: top;
     cursor: pointer;
-    color: #666;
-
-    div {
-        font-family: 'Source Code Pro', monospace !important;
-        display: flex;
-        position: relative;
-        top: -5px;
-        left: -15px;
-        justify-content: center;
-        align-items: center;
-        width: 15px;
-        height: 15px;
-        border-radius: 50%;
-        background-color: #BEBEC8;
-        span {
-            display: inline-block;
-            font-size: 12px;
-            color: white;
-            font-weight: bold;
-            margin: 0;
-            padding: 0;
-            font-family: 'Source Code Pro', monospace;
-            // background-color: green;
-            // border-radius: 50%;
-            // width: 10px;
-            // height: 10px;
-        }
-    }
+    // color: #666;
 
 `
 

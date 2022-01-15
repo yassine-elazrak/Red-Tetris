@@ -31,7 +31,6 @@ const FormUserName = () => {
 
 
     return (
-        <>
         <Form
             style={{
                 width: '100%',
@@ -99,7 +98,6 @@ const FormUserName = () => {
                 </Form.Item>
             </Input.Group>
         </Form>
-        </>
     );
 }
 
