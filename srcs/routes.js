@@ -8,10 +8,14 @@ router.use((request, response, next) => {
     next();
 });
 
-router.use('/api/auth/user', require('./users/user.controller'))
+router.use('/api', require('./users/user.controller'))
 
 
-router.get('/api/auth', (req, res) => {
+router.get('/', (req, res) => {
+    res.json({ message: 'alive auth' });
+});
+router.post('/test', (req, res) => {
+    console.log(req.body)
     res.json({ message: 'alive auth' });
 });
 

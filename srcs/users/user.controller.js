@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 
-router.post('/api/user', (req, res) => {
+router.post('/user', (req, res) => {
     /* 	#swagger.tags = ['User']
         #swagger.description = 'Endpoint to sign in a specific user' */
     /*	#swagger.parameters['obj'] = {
@@ -22,7 +22,7 @@ router.post('/api/user', (req, res) => {
 );
 
 
-router.get('/api/user', (req, res) => {
+router.get('/user', (req, res) => {
     res.json({ message: 'alive auth api-user get' });
 }
 );

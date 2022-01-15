@@ -25,6 +25,7 @@
     "joi": "^17.5.0",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.15",
+    "socket.io": "^4.4.1",
     "swagger-autogen": "^2.18.8",
     "swagger-ui-express": "^4.3.0"
   }
