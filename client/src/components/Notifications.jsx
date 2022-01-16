@@ -50,15 +50,13 @@ const NotifComponent = () => {
 
     const handnotif = (e) => {
         const newNotifs = notifs.map((notif, key) => {
-            if (e.key.split("-")[1] === key) {
-                notif.read = false;
+            if (parseInt(e.key.split("-")[1]) === key) {
+                notif.read = true;
             }
             return notif;
         });
         setNotifs(newNotifs);
-        
-
-        console.log(e.key.split("-")[1]);
+        // console.log(newNotifs[e.key.split("-")[1]]);
     }
 
 
@@ -84,7 +82,7 @@ const NotifComponent = () => {
                     Accept
                 </Menu.Item>
 
-                <Menu.Item key={'cancel-' + key} style={{
+                <Menu.Item key={'cancel-' + key} onClick={handnotif} style={{
                     backgroundColor: red[5],
                     borderRadius: "3px",
                     margin: "5px",
