@@ -7,29 +7,29 @@ const FormUserName = () => {
 
     const [input, setInput] = useState({
         value: "",
-        error: false
+        error: false,
+        errorMessage: "Please enter a valid username at least 3 characters long"
     });
 
 
     const handleChange = (e) => {
         setInput({
+            ...input,
             value: e.target.value,
-            error: false
+            error: e.target.value.length < 3,
         });
-        console.log('value:' + input.value);
     }
 
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        input.value.length > 0 ? setInput({
+        input.value.length > 2 ? setInput({
             ...input,
             error: false
         }) : setInput({
             ...input,
             error: true
         });
-        console.log('value:' + input.error);
     }
 
 
@@ -44,7 +44,6 @@ const FormUserName = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                // border: '1px solid red',
                 position: 'absolute',
                 top: '50%',
                 left: '50%',
@@ -69,9 +68,9 @@ const FormUserName = () => {
                         pading: '0px',
                         margin: '0px',
                     }}
-                    help={input.error ? 'Please input your username!' : ''}
+                    help={input.error ? input.errorMessage : ''}
                     hasFeedback
-                    validateStatus={!input.error && input.value ? 'success' : input.error ? 'error' : ''}
+                    validateStatus={input.error ? 'error' : input.value.length > 2 ? 'success' : ''}
                     >
                     <Input
                         onChange={handleChange}
@@ -88,11 +87,12 @@ const FormUserName = () => {
                             width: '90px',
                             display: 'inline-block',
                             background:'#6FCF97',
+                            color: '#fff',
 
                         }}
                         size="large"
-                        color="#6FCF97"
                         onClick={handleSubmit}
+                        disabled={input.error || input.value.length < 3}
                         >
                         Create
                     </Button>
