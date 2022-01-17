@@ -28,16 +28,16 @@ const io = socketIo(server,{
 
 io.on('connection', (socket) => {
     console.log('a user connected')
-    socket.emit('message', 'welcome to the chat')
+    // socket.emit('message', 'welcome to the chat')
     
-    socket.on('disconnect', () => {
-        console.log('user disconnected')
-    })
-    socket.on('chat message', (msg) => {
-        console.log('message: ' + msg)
-    })
+    // socket.on('disconnect', () => {
+    //     console.log('user disconnected')
+    // })
+    // socket.on('chat message', (msg) => {
+    //     console.log('message: ' + msg)
+    // })
 
 })
-server.get 
+ 
 server.listen(5000);
 
