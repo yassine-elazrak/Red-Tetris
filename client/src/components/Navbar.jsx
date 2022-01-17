@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 import logD from "../img/logo.svg";
 import logM from "../img/logoMobile.svg";
 

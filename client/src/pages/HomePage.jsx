@@ -7,7 +7,7 @@ import FormUserName from "../components/FormUserName";
 import FormRoomName from "../components/FormRoomName";
 
 import { connect } from "react-redux";
-import { login, isAuth } from "../actions/auth";
+import { isAuth } from "../actions/auth";
 import store from "../sotre";
 
 store.dispatch(isAuth());

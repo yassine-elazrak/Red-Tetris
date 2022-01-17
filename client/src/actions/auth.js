@@ -1,4 +1,11 @@
-import { SUCESS_LOGIN, SUCESS_LOGOUT, IS_LOADING } from "./types";
+import {
+    SUCESS_LOGIN,
+    SUCESS_LOGOUT,
+    IS_LOADING,
+    SUCESS_CREATE_ROOM,
+
+    ERROR_CREATE_ROOM,
+} from "./types";
 
 export const login = (user) => {
     // console.log("login action" + user);
@@ -28,10 +35,34 @@ export const isAuth = () => {
             }
         }
         catch (e) {
-            // console.log(e);
+            console.log(e);
+            dispatch(error(e, SUCESS_LOGOUT)); // for test
         }
     }
 }
+
+export const createRoom = (room) => {
+    const user = JSON.parse(localStorage.getItem("data"));
+    const data = {
+        id: 1,
+        name: room,
+        state: 'waiting',
+        adminId: user.id,
+        users: [user.id],
+    };
+    console.log(user.id + " " + room);
+    return async (dispatch) => {
+        dispatch({type: IS_LOADING});
+        await setTimeout(() => {
+        // dispatch({
+        //     type: SUCESS_CREATE_ROOM,
+        //     payload: data
+        // });
+        dispatch(error("test", ERROR_CREATE_ROOM));
+        }, 1000);
+    }
+}
+
 
 const success = (data, type) => {
     localStorage.setItem('data', JSON.stringify(data));
