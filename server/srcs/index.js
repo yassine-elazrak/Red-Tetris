@@ -39,5 +39,5 @@ io.on('connection', (socket) => {
 
 })
  
-server.listen(5000);
+server.listen(3000);
 

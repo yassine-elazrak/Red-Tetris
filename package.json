@@ -1,32 +1,22 @@
 {
   "name": "red-tetris",
   "version": "1.0.0",
-  "description": "Redpelicans is the sponsor of this project. You understand the trend strongly highlighted in red in the Tetris game - that we propose to build and flight some pelicans on your playgrounds in a forest of tetriminos",
-  "main": "index.js",
+  "description": "The objective of this project is to develop a networked multiplayer tetris game from a stack of software exclusively Full Stack Javascript",
   "scripts": {
-    "test": "jest",
-    "coverage": "jest --coverage",
-    "dev": "nodemon srcs/index.js  --trace-warnings",
-    "start-gendoc": "node srcs/swagger.js"
+    "server": "npm run start --prefix server/",
+    "client": "npm start --prefix client/",
+    "build": "npm run build --prefix client/"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/yassineazrak/Red-Tetris.git"
+  "rules": {
+    "react/react-in-jsx-scope": "off"
   },
-  "author": "yelazrak",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/yassineazrak/Red-Tetris/issues"
+  "keywords": [],
+  "author": "ali zaynoune",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-plugin-react-require": "^3.1.3"
   },
-  "homepage": "https://github.com/yassineazrak/Red-Tetris#readme",
   "dependencies": {
-    "dotenv": "^11.0.0",
-    "express": "^4.17.2",
-    "joi": "^17.5.0",
-    "morgan": "^1.10.0",
-    "nodemon": "^2.0.15",
-    "socket.io": "^4.4.1",
-    "swagger-autogen": "^2.18.8",
-    "swagger-ui-express": "^4.3.0"
+    "@ant-design/icons": "^4.7.0"
   }
 }
