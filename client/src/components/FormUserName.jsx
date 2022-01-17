@@ -2,8 +2,11 @@ import React, { useState } from "react";
 
 import { Form, Input, Button} from "antd";
 
+import { connect } from "react-redux";
+import { login} from "../actions/auth";
 
-const FormUserName = () => {
+
+const FormUserName = (props) => {
 
     const [input, setInput] = useState({
         value: "",
@@ -30,8 +33,10 @@ const FormUserName = () => {
             ...input,
             error: true
         });
+        if (input.value.length > 2 && !input.error) {
+            props.login(input.value);
+        }
     }
-
 
    
 
@@ -92,7 +97,7 @@ const FormUserName = () => {
                         }}
                         size="large"
                         onClick={handleSubmit}
-                        disabled={input.error || input.value.length < 3}
+                        disabled={input.error || input.value.length < 3 || props.isLoading}
                         >
                         Create
                     </Button>
@@ -102,4 +107,13 @@ const FormUserName = () => {
     );
 }
 
-export default FormUserName;
+const mapStateToProps = (state) => {
+    return {
+        auth: state.user,
+        isLoading: state.isLoading
+    }
+}
+
+const LogIn = connect(mapStateToProps, { login })(FormUserName);
+
+export default LogIn;
