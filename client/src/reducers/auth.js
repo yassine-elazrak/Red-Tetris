@@ -15,14 +15,6 @@ const initialState = {
         id: null,
         name: '',
     },
-    room: {
-        id: null,
-        name: '',
-        state: null,
-        adminId: null,
-        users: [],
-        messages: []
-    }
 };
 
 export default function authReducer(state = initialState, action) {

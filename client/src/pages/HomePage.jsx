@@ -35,6 +35,7 @@ const HomePage = (props) => {
 const mapStateToProps = (state) => {
     return {
         isAuth: state.auth.isAuth,
+        
     }
 }
 

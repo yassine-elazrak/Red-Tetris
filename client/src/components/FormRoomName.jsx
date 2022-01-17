@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Button} from "antd";
+import { Form, Input, Button, message} from "antd";
 import { connect } from "react-redux";
-import { createRoom } from "../actions/auth";
+import { createRoom } from "../actions/room";
 
 
 const FormRoomName = (props) => {
@@ -34,12 +34,19 @@ const FormRoomName = (props) => {
         }
     }
 
+    const error = () => {
+        message.error('test error');
+    }
+
     useEffect(() => {
         console.log(props);
+        if (props.error){
+            message.error(props.error);
+        }
         // if (props.roomCreated) {
         //     props.history.push(`/room/${props.roomCreated}`);
         // }
-    }, [props]);
+    }, [props.error]);
 
 
     
@@ -109,10 +116,8 @@ const FormRoomName = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        isAuth: state.auth.isAuth,
-        isLoading: state.auth.isLoading,
-        roomCreated: state.auth.roomCreated,
-        error: state.auth.error
+        isLoading: state.room.isLoading,
+        error: state.room.error,
     }
 }
 

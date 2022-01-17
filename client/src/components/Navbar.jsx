@@ -9,14 +9,18 @@ import { Affix, Dropdown, Menu } from "antd";
 
 import { connect } from "react-redux";
 import { isAuth, logout } from "../actions/auth";
+import { refreshRoom } from "../actions/room";
 import store from "../sotre";
 
 store.dispatch(isAuth());
+store.dispatch(refreshRoom());
 
 
 
 
 const NavbarComponent = (props) => {
+
+    console.log(store.getState())
 
     const isLogin = props.isAuth;
     // const userName = props.user.name;
@@ -79,7 +83,7 @@ const mapStateToProps = (state) => {
     return {
         isAuth: state.auth.isAuth,
         user: state.auth.user,
-        room: state.auth.room
+        room: state.room.room,
     }
 }
 
