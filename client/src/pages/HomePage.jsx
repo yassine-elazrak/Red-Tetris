@@ -40,7 +40,7 @@ const HomePage = (props) => {
             padding: 0,
             margin: 0,
             marginBottom: "-15px",
-            zIndex: "999",
+            zIndex: "998",
             }}>
               <Nabar />
           </Header>
@@ -61,37 +61,42 @@ const HomePage = (props) => {
                 : <RoomPage />
                 }
           </Content>
-          <Sider theme="dark"
-          trigger={null}
-          collapsible
-          collapsed={collapsible}
-          style={{
-              paddingTop: "15px",
-              background: '#404040',
-              margin: 0,
-
-            // background: 'none',
-            
-            }}
-        >
-          <div className="logo" />
-          {!collapsible ?
+          <span style={{
+                color: "#404040",
+                fontSize: "20px",
+                fontWeight: "bold",
+                marginRight: "5px",
+                marginTop: "8px",
+                padding: 0,
+                height: "50px",
+            }}>
+            {!collapsible ?
                 <MenuUnfoldOutlined
                     className="trigger"
                     onClick={() => setCollapsible(!collapsible)}
-                    style={{
-                        color: '#fff',
-                    }}
                 />
             :
                 <MenuFoldOutlined
                     className="trigger"
                     onClick={() => setCollapsible(!collapsible)}
-                    style={{
-                        color: '#fff',
-                    }}
                 />
             }
+            </span>
+          <Sider theme="dark"
+          trigger={null}
+          collapsible
+          collapsed={collapsible}
+          breakpoint={
+            "lg"
+          }
+            collapsedWidth={0}
+          style={{
+              paddingTop: "15px",
+              background: '#404040',
+              margin: 0,
+            }}
+        >
+
           <Menu theme="dark" mode="inline" style={{
             background: '#404040',
           }}>
