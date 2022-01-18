@@ -1,51 +1,43 @@
-export const SUCESS_LOGIN = 'SUCESS_LOGIN';
-export const SUCESS_LOGOUT = 'SUCESS_LOGOUT';
+// Global app actions
 export const IS_LOADING = 'IS_LOADING';
 
+// Auth actions
+export const LOADING_USER = 'LOADING_USER';
+export const SUCESS_LOGIN = 'SUCESS_LOGIN';
+export const SUCESS_LOGOUT = 'SUCESS_LOGOUT';
 export const FAIL_LOGIN = 'FAIL_LOGIN';
 export const FAIL_LOGOUT = 'FAIL_LOGOUT';
 
-export const SUCESS_JOIN_ROOM = 'SUCESS_JOIN_ROOM';
-export const SUCESS_LEAVE_ROOM = 'SUCESS_LEAVE_ROOM';
-export const SUCESS_CREATE_ROOM = 'SUCESS_CREATE_ROOM';
-export const SUCESS_DELETE_ROOM = 'SUCESS_DELETE_ROOM';
 
+// Message actions
 export const NOTIFICATION_INVITE = 'NOTIFICATION_INVITE';
 export const NOTIFICATION_LEAVE = 'NOTIFICATION_LEAVE';
 export const NOTIFICATION_JOIN = 'NOTIFICATION_JOIN';
 
+// Message actions
 export const SUCESS_SEND_MESSAGE = 'SUCESS_SEND_MESSAGE';
 export const SUCESS_RECEIVE_MESSAGE = 'SUCESS_RECEIVE_MESSAGE';
 
 
-export const SUCESS_GET_ROOMS = 'SUCESS_GET_ROOMS';
-
-
-export const ERROR_LOGIN = 'ERROR_LOGIN';
-export const ERROR_LOGOUT = 'ERROR_LOGOUT';
-export const ERROR_JOIN_ROOM = 'ERROR_JOIN_ROOM';
-export const ERROR_LEAVE_ROOM = 'ERROR_LEAVE_ROOM';
-export const ERROR_CREATE_ROOM = 'ERROR_CREATE_ROOM';
-
-
-export const REFRESH_ROOM = 'REFRESH_ROOM';
-
+// Room actions
 export const ROOM_REFRESH = "ROOM_REFRESH";
 export const ROOM_CREATE = 'ROOM_CREATE';
 export const ROOM_JOIN = 'ROOM_JOIN';
 export const ROOM_LEAVE = 'ROOM_LEAVE';
 export const ROOM_ERROR = 'ROOM_ERROR';
+export const ROOM_CLOSE = 'ROOM_CLOSE';
 
+// Notification actions
 export const NOTIFICATION_RECEIVE = 'NOTIFICATION_RECEIVE';
 export const NOTIFICATION_REFRESH = 'NOTIFICATION_REFRESH';
 
+// Message actions
 export const MESSAGE_RECEIVED = 'MESSAGE_RECEIVED';
 export const MESSAGE_SENT = 'MESSAGE_SENT';
 export const MESSAGE_REFRESH = 'MESSAGE_REFRESH';
 export const MESSAGE_SEND_FAILED = 'MESSAGE_SEND_FAILED';
 
-export const NOTIFCATION_RECIEVE = 'NOTICATION_RECIEVE';
-export const NOTIFCATION_REFRESH = 'NOTIFCATION_REFRESH'
+
 
 
 

@@ -1,6 +1,6 @@
 import {
-    NOTIFCATION_RECIEVE,
-    NOTIFCATION_REFRESH,
+    NOTIFICATION_RECEIVE,
+    NOTIFICATION_REFRESH
 } from '../actions/types';
 
 
@@ -26,13 +26,13 @@ const initialState = {
 
 const notifReducer = (state = initialState, action) => {
     switch (action.type) {
-        case NOTIFCATION_RECIEVE:
+        case NOTIFICATION_RECEIVE:
             return {
                 ...state,
                 isLoading: false,
                 notifications: [...state.notifications, action.payload]
             };
-        case NOTIFCATION_REFRESH:
+        case NOTIFICATION_REFRESH:
             return {
                 ...state,
                 isLoading: false,

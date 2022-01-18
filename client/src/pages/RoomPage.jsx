@@ -1,7 +1,10 @@
 import React from 'react'
 import { connect } from 'react-redux'
+import { leaveRoom, closeRoom } from '../actions/room'
+// don't forget to create a new action of inviteUser
 
 export const RoomPage = (props) => {
+    console.log(props);
     return (
         <div>
             RoomPage
@@ -10,11 +13,10 @@ export const RoomPage = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-    
+    room: state.room,
+    user: state.auth.user,
+
 })
 
-const mapDispatchToProps = {
-    
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(RoomPage)
+export default connect(mapStateToProps, {leaveRoom, closeRoom})(RoomPage)

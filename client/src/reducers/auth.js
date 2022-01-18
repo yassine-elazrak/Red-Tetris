@@ -58,6 +58,7 @@ export default function authReducer(state = initialState, action) {
                 isAuth: false,
                 error: action.payload
             };
+        
         default:
             return state;
     }

@@ -4,13 +4,14 @@ import {
     ROOM_LEAVE,
     ROOM_REFRESH,
     ROOM_ERROR,
+    ROOM_CLOSE,
 } from "../actions/types";
 
 const initialState = {
     isLoading: false,
-    // isAuth: false,
     error: null,
     is_joined: false,
+    isPravite: false,
     room: {
         id: null,
         name: '',
@@ -26,6 +27,7 @@ export default function roomReducer(state = initialState, action) {
                 ...state,
                 isLoading: false,
                 is_joined: true,
+                isPravite: action.payload.isPrivate,
                 room: {
                     id: action.payload.id,
                     name: action.payload.name,
@@ -38,11 +40,12 @@ export default function roomReducer(state = initialState, action) {
                 ...state,
                 isLoading: false,
                 is_joined: true,
+                isPravite: action.payload.isPrivate,
                 room: {
                     id: action.payload.id,
                     name: action.payload.name,
                     admin: action.payload.admin,
-                    users: [...state.users , action.payload.users]
+                    users: [...state.room.users , action.payload.users]
                 }
             };
         case ROOM_LEAVE:
@@ -50,6 +53,7 @@ export default function roomReducer(state = initialState, action) {
                 ...state,
                 isLoading: false,
                 is_joined: false,
+                isPravite: false,
                 room: {
                     id: null,
                     name: '',
@@ -62,12 +66,19 @@ export default function roomReducer(state = initialState, action) {
                 ...state,
                 isLoading: false,
                 is_joined: true,
+                isPravite: action.payload.isPrivate,
                 room: {
                     id: action.payload.id,
                     name: action.payload.name,
                     admin: action.payload.admin,
                     users: action.payload.users,
                 }
+            };
+        case ROOM_CLOSE:
+            return {
+                ...state,
+                isLoading: false,
+                state: action.payload.state,
             };
         case ROOM_ERROR:
             return {

@@ -5,18 +5,20 @@ import {
     ROOM_JOIN,
     ROOM_LEAVE,
     ROOM_ERROR,
+    ROOM_CLOSE,
 } from './types';
 
+// import 
+
 export const createRoom = (room) => {
-    const user = JSON.parse(localStorage.getItem("user"));
     const data = {
         id: 1,
-        name: room,
+        name: room.name,
+        isPrivate: room.isPrivate,
         state: 'waiting',
-        adminId: user.id,
-        users: [user.id],
+        adminId: room.user.id,
+        users: [room.user.id],
     };
-    // console.log(user.id + " " + room);
     return async (dispatch) => {
         dispatch({type: IS_LOADING});
         dispatch(success(data, ROOM_CREATE));
@@ -27,28 +29,23 @@ export const refreshRoom = () => {
     return (dispatch) => {
         try {
             const room = localStorage.getItem("room");
-            // console.log(room + " << room");
             if (room) {
                 dispatch(success(JSON.parse(room), ROOM_REFRESH));
             }
         }
         catch (e) {
             dispatch(error(e, ROOM_ERROR));
-            // console.log(e);
         }
     }
 }
 
 export const joinRoom = (room) => {
-    const user = JSON.parse(localStorage.getItem("user"));
     const data = {
         id: 1,
-        name: room,
+        name: room.name,
         state: 'waiting',
-        adminId: user.id,
-        users: [user.id],
+        users: [room.user.id],
     };
-    // console.log(user.id + " " + room);
     return async (dispatch) => {
         dispatch({type: IS_LOADING});
         dispatch(success(data, ROOM_JOIN));
@@ -56,10 +53,10 @@ export const joinRoom = (room) => {
 }
 
 export const leaveRoom = () => {
+    // if room users length is 1, delete room
     return (dispatch) => {
         try {
             const room = localStorage.getItem("room");
-            // console.log(room + " << room");
             if (room) {
                 dispatch(success(JSON.parse(room), ROOM_LEAVE));
                 localStorage.removeItem("room");
@@ -67,8 +64,19 @@ export const leaveRoom = () => {
         }
         catch (e) {
             dispatch(error(e, ROOM_ERROR));
-            // console.log(e);
         }
+    }
+}
+
+export const closeRoom = (room) => {
+    return (dispatch) => {
+        const data = {
+            state: 'closed',
+        };
+        if (room.state === 'waiting' && room.adminId === room.user.id)
+            dispatch(success(data, ROOM_CLOSE));
+        else
+            dispatch(error("You are not admin", ROOM_ERROR));
     }
 }
 

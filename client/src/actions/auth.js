@@ -5,7 +5,7 @@ import {
     FAIL_LOGOUT,
     IS_LOADING,
 
-    ERROR_CREATE_ROOM,
+    // ERROR_CREATE_ROOM,
 } from "./types";
 
 export const login = (user) => {
@@ -26,7 +26,7 @@ export const logout = () => {
                 localStorage.removeItem("user");
             }
         } catch (error) {
-            dispatch(error(error, ERROR_CREATE_ROOM));
+            dispatch(error(error, FAIL_LOGOUT));
         }
     }
 }
