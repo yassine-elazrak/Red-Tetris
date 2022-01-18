@@ -8,6 +8,8 @@ import "./styles/NotificationsStyled.css";
 const { SubMenu } = Menu;
 const MenuItemGroup = Menu.ItemGroup;
 const NotifComponent = () => {
+// don't forget to create a new action of newNotification
+// push notification to the user
 
     const testnotif = [
         {
@@ -59,13 +61,9 @@ const NotifComponent = () => {
     const [notifs, setNotifs] = useState(testnotif);
 
     const handnotif = (e) => {
-        // console.log(e);
         const id = parseInt(e.key.split("-")[1]);
-        // const action = e.key.split("-")[0]; // accept or reject
-        // console.log(id);
         const newNotifs = notifs.map((notif, key) => {
             if (id === key) {
-                // console.log(notif);
                 notif.read = true;
             }
             return notif;

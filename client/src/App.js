@@ -25,9 +25,9 @@ function App(props) {
 
   return (
     <div className="App">
-      <NavbarComponent />
+      {/* <NavbarComponent /> */}
       <HomePage />
-      < FooterContainer />
+      {/* < FooterContainer /> */}
     </div>
   );
 }

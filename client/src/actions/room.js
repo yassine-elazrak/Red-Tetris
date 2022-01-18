@@ -8,7 +8,6 @@ import {
     ROOM_CLOSE,
 } from './types';
 
-// import 
 
 export const createRoom = (room) => {
     const data = {
