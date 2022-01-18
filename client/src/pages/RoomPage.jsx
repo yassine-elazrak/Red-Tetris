@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 export const RoomPage = (props) => {
     return (
         <div>
-            RoomPage
+            RoomPage2
         </div>
     )
 }
