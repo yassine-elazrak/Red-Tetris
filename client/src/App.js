@@ -13,9 +13,9 @@ import 'antd/dist/antd.css';
 
 import { connect } from 'react-redux';
 
-import sotre from './sotre';
+// import sotre from './sotre';
 
-import { isAuth } from './actions/auth';
+// import { isAuth } from './actions/auth';
 
 // sotre.dispatch(isAuth());
 

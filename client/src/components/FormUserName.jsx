@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-import { Form, Input, Button} from "antd";
+import { Form, Input, Button, message} from "antd";
 
 import { connect } from "react-redux";
 import { login} from "../actions/auth";
@@ -38,6 +38,12 @@ const FormUserName = (props) => {
         }
     }
 
+
+    useEffect(() => {
+        if (props.error){
+            message.error(props.error);
+        }
+    }, [props.error])
    
 
 

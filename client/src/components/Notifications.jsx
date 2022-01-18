@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Menu, Dropdown, Badge, Popover, Button } from "antd";
+import { Menu, Badge, Popover } from "antd";
 import { BellOutlined } from '@ant-design/icons';
 
 
@@ -61,7 +61,7 @@ const NotifComponent = () => {
     const handnotif = (e) => {
         // console.log(e);
         const id = parseInt(e.key.split("-")[1]);
-        const action = e.key.split("-")[0];
+        // const action = e.key.split("-")[0]; // accept or reject
         // console.log(id);
         const newNotifs = notifs.map((notif, key) => {
             if (id === key) {
@@ -125,7 +125,7 @@ const NotifComponent = () => {
     })
 
     const menu = (
-        <Menu multiple mode="inline" trigger={['click']} selectable={false} selectable={false}  style={{
+        <Menu multiple mode="inline" trigger={['click']} selectable={false}  style={{
             width: "100%",
             maxHeight: "calc(100vh - 200px)",
             overflowY: "auto",

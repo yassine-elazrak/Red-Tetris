@@ -1,19 +1,19 @@
-import { SUCESS_LOGIN, IS_LOADING, SUCESS_LOGOUT, SUCESS_CREATE_ROOM } from '../actions/types';
+import {
+    SUCESS_LOGIN,
+    IS_LOADING,
+    SUCESS_LOGOUT,
+    FAIL_LOGIN,
+    FAIL_LOGOUT,
+} from '../actions/types';
 
 const initialState = {
     isLoading: false,
     isAuth: false,
+    error: null,
     user: {
         id: null,
         name: '',
     },
-    room: {
-        id: null,
-        name: '',
-        state: null,
-        users: [],
-        messages: []
-    }
 };
 
 export default function authReducer(state = initialState, action) {
@@ -44,17 +44,19 @@ export default function authReducer(state = initialState, action) {
                     name: '',
                 }
             };
-        case SUCESS_CREATE_ROOM:
+        case FAIL_LOGIN:
             return {
                 ...state,
                 isLoading: false,
-                room: {
-                    id: action.payload.id,
-                    name: action.payload.name,
-                    state: action.payload.state,
-                    users: action.payload.users,
-                    messages: action.payload.messages
-                }
+                isAuth: false,
+                error: action.payload
+            };
+        case FAIL_LOGOUT:
+            return {
+                ...state,
+                isLoading: false,
+                isAuth: false,
+                error: action.payload
             };
         default:
             return state;

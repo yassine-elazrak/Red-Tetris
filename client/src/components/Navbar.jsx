@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React from "react";
 import logD from "../img/logo.svg";
 import logM from "../img/logoMobile.svg";
 
@@ -9,9 +9,11 @@ import { Affix, Dropdown, Menu } from "antd";
 
 import { connect } from "react-redux";
 import { isAuth, logout } from "../actions/auth";
+import { refreshRoom, leaveRoom } from "../actions/room";
 import store from "../sotre";
 
 store.dispatch(isAuth());
+store.dispatch(refreshRoom());
 
 
 
@@ -19,11 +21,11 @@ store.dispatch(isAuth());
 const NavbarComponent = (props) => {
 
     const isLogin = props.isAuth;
-    // const userName = props.user.name;
     const roomName = props.room.name;
 
     const LogOut = () => {
         console.log("logout");
+        props.leaveRoom();
         props.logout();
     }
 
@@ -79,11 +81,11 @@ const mapStateToProps = (state) => {
     return {
         isAuth: state.auth.isAuth,
         user: state.auth.user,
-        room: state.auth.room
+        room: state.room.room,
     }
 }
 
-const Nabar = connect(mapStateToProps, {logout})(NavbarComponent);
+const Nabar = connect(mapStateToProps, {leaveRoom, logout})(NavbarComponent);
 
 
 

@@ -5,9 +5,10 @@ import { Layout} from "antd";
 import { HomeStyled } from "./styles/HomeStyle";
 import FormUserName from "../components/FormUserName";
 import FormRoomName from "../components/FormRoomName";
+import RoomPage from "../pages/RoomPage";
 
 import { connect } from "react-redux";
-import { login, isAuth } from "../actions/auth";
+import { isAuth } from "../actions/auth";
 import store from "../sotre";
 
 store.dispatch(isAuth());
@@ -17,15 +18,14 @@ const { Content } = Layout;
 
 
 const HomePage = (props) => {
-
-    // console.log(props);
     return (
         <HomeStyled>
             <Content style={{ minHeight: "calc(100vh - 98px)"}}>
-                {!props.isAuth ?
+                {!props.user.isAuth ?
                     <FormUserName />
-                :
+                :!props.room.is_joined ?
                     <FormRoomName />
+                : <RoomPage />
                 }
             </Content>
         </HomeStyled>
@@ -34,7 +34,9 @@ const HomePage = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        isAuth: state.auth.isAuth,
+        user: state.auth,
+        room: state.room,
+        
     }
 }
 

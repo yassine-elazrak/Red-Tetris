@@ -1,4 +1,12 @@
-import { SUCESS_LOGIN, SUCESS_LOGOUT, IS_LOADING } from "./types";
+import {
+    SUCESS_LOGIN,
+    SUCESS_LOGOUT,
+    // FAIL_LOGIN, // not used yet
+    FAIL_LOGOUT,
+    IS_LOADING,
+
+    ERROR_CREATE_ROOM,
+} from "./types";
 
 export const login = (user) => {
     // console.log("login action" + user);
@@ -10,31 +18,37 @@ export const login = (user) => {
 }
 
 export const logout = () => {
-    console.log("logout action");
     return (dispatch) => {
-        dispatch({
-            type: SUCESS_LOGOUT
-        });
+        try {
+            const user = JSON.parse(localStorage.getItem("user"));
+            if (user) {
+                dispatch(success(user, SUCESS_LOGOUT));
+                localStorage.removeItem("user");
+            }
+        } catch (error) {
+            dispatch(error(error, ERROR_CREATE_ROOM));
+        }
     }
 }
 
 export const isAuth = () => {
     return (dispatch) => {
         try {
-            const user = localStorage.getItem("data");
+            const user = localStorage.getItem("user");
             if (user) {
+                // console.log(user);
                 dispatch(success(JSON.parse(user), SUCESS_LOGIN));
-                dispatch(login);
             }
         }
         catch (e) {
-            // console.log(e);
+            dispatch(error(e, FAIL_LOGOUT)); // for test
         }
     }
 }
 
+
 const success = (data, type) => {
-    localStorage.setItem('data', JSON.stringify(data));
+    localStorage.setItem("user", JSON.stringify(data));
     return {
         type: type,
         payload: data
