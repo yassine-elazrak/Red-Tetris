@@ -34,12 +34,8 @@ const FormRoomName = (props) => {
         }
     }
 
-    const error = () => {
-        message.error('test error');
-    }
-
     useEffect(() => {
-        console.log(props);
+        // console.log(props);
         if (props.error){
             message.error(props.error);
         }
@@ -92,7 +88,7 @@ const FormRoomName = (props) => {
                 />
             </Form.Item>
             <Form.Item>
-                <Button loading={props.isLoading} type="primary"
+                <Button loading={props.isLoading}
                     htmlType="submit"
                     type="primary"
                     className="login-form-button"

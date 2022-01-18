@@ -9,7 +9,7 @@ import { Affix, Dropdown, Menu } from "antd";
 
 import { connect } from "react-redux";
 import { isAuth, logout } from "../actions/auth";
-import { refreshRoom } from "../actions/room";
+import { refreshRoom, leaveRoom } from "../actions/room";
 import store from "../sotre";
 
 store.dispatch(isAuth());
@@ -20,14 +20,12 @@ store.dispatch(refreshRoom());
 
 const NavbarComponent = (props) => {
 
-    console.log(store.getState())
-
     const isLogin = props.isAuth;
-    // const userName = props.user.name;
     const roomName = props.room.name;
 
     const LogOut = () => {
         console.log("logout");
+        props.leaveRoom();
         props.logout();
     }
 
@@ -87,7 +85,7 @@ const mapStateToProps = (state) => {
     }
 }
 
-const Nabar = connect(mapStateToProps, {logout})(NavbarComponent);
+const Nabar = connect(mapStateToProps, {leaveRoom, logout})(NavbarComponent);
 
 
 

@@ -2,6 +2,9 @@ export const SUCESS_LOGIN = 'SUCESS_LOGIN';
 export const SUCESS_LOGOUT = 'SUCESS_LOGOUT';
 export const IS_LOADING = 'IS_LOADING';
 
+export const FAIL_LOGIN = 'FAIL_LOGIN';
+export const FAIL_LOGOUT = 'FAIL_LOGOUT';
+
 export const SUCESS_JOIN_ROOM = 'SUCESS_JOIN_ROOM';
 export const SUCESS_LEAVE_ROOM = 'SUCESS_LEAVE_ROOM';
 export const SUCESS_CREATE_ROOM = 'SUCESS_CREATE_ROOM';

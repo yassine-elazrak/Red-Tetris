@@ -24,6 +24,16 @@ const messageReducer = (state = initialState, action) => {
                 ...state,
                 message: [...state.messages, action.paload.message]
             }
+        case MESSAGE_SENT:
+            return {
+                ...state,
+                message: [...state.messages, action.paload.message]
+            }
+        case MESSAGE_SEND_FAILED:
+            return {
+                ...state,
+                error: action.payload
+            }
 
         default:
             return state;

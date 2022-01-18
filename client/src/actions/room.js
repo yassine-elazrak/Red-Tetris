@@ -33,14 +33,48 @@ export const refreshRoom = () => {
             }
         }
         catch (e) {
-            console.log(e);
+            dispatch(error(e, ROOM_ERROR));
+            // console.log(e);
+        }
+    }
+}
+
+export const joinRoom = (room) => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const data = {
+        id: 1,
+        name: room,
+        state: 'waiting',
+        adminId: user.id,
+        users: [user.id],
+    };
+    // console.log(user.id + " " + room);
+    return async (dispatch) => {
+        dispatch({type: IS_LOADING});
+        dispatch(success(data, ROOM_JOIN));
+    }
+}
+
+export const leaveRoom = () => {
+    return (dispatch) => {
+        try {
+            const room = localStorage.getItem("room");
+            // console.log(room + " << room");
+            if (room) {
+                dispatch(success(JSON.parse(room), ROOM_LEAVE));
+                localStorage.removeItem("room");
+            }
+        }
+        catch (e) {
+            dispatch(error(e, ROOM_ERROR));
+            // console.log(e);
         }
     }
 }
 
 
 const success = (data, type) => {
-    console.log(data + " <<<< done")
+    // console.log(data + " <<<< done")
     localStorage.setItem("room", JSON.stringify(data));
     return {
         type: type,

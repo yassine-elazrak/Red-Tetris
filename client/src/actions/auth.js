@@ -1,8 +1,9 @@
 import {
     SUCESS_LOGIN,
     SUCESS_LOGOUT,
+    // FAIL_LOGIN, // not used yet
+    FAIL_LOGOUT,
     IS_LOADING,
-    SUCESS_CREATE_ROOM,
 
     ERROR_CREATE_ROOM,
 } from "./types";
@@ -17,13 +18,16 @@ export const login = (user) => {
 }
 
 export const logout = () => {
-    console.log("logout action");
-    localStorage.removeItem("user");
-    localStorage.removeItem("room");
     return (dispatch) => {
-        dispatch({
-            type: SUCESS_LOGOUT
-        });
+        try {
+            const user = JSON.parse(localStorage.getItem("user"));
+            if (user) {
+                dispatch(success(user, SUCESS_LOGOUT));
+                localStorage.removeItem("user");
+            }
+        } catch (error) {
+            dispatch(error(error, ERROR_CREATE_ROOM));
+        }
     }
 }
 
@@ -32,13 +36,12 @@ export const isAuth = () => {
         try {
             const user = localStorage.getItem("user");
             if (user) {
-                console.log(user);
+                // console.log(user);
                 dispatch(success(JSON.parse(user), SUCESS_LOGIN));
             }
         }
         catch (e) {
-            console.log(e);
-            dispatch(error(e, SUCESS_LOGOUT)); // for test
+            dispatch(error(e, FAIL_LOGOUT)); // for test
         }
     }
 }
