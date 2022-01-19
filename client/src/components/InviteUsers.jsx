@@ -1,15 +1,16 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React, {useEffect, useState} from 'react';
+import { connect, useDispatch } from 'react-redux';
+import { inviteRequest } from "../actions/invite";
 
 import { Form, Input, Button, message, Card } from 'antd';
 
-import { yellow, green, red } from '@ant-design/colors';
+import { yellow, red } from '@ant-design/colors';
 
 const { Meta } = Card;
 
 const InviteUsers = (props) => {
 
-    const [input, setInput] = React.useState({
+    const [input, setInput] = useState({
         value: "",
         error: false,
         errorMessage: "Please enter a valid username at least 3 characters long"
@@ -31,18 +32,31 @@ const InviteUsers = (props) => {
             error: false
         }) : setInput({
             ...input,
-            error: true
+            error: true,
         });
+        if (input.value.length > 2 && !input.error) {
+            const fackId = Math.floor(Math.random() * 10);
+            const data = {
+                roomId: props.room.room.id,
+                userId: fackId,
+                userName: input.value,
+            }
+            props.inviteRequest(data);
+        }
 
     }
+
+    useEffect(() => {
+        if (props.invite.error){
+            message.error(props.invite.error);
+          
+        }
+    }, [props.invite.error]);
 
     const form = (
         <Form
         style={{
-            // border: '1px solid #d9d9d9',
-            // marginBottom: 0,
-            // padding: 0,
-
+            // width: '100%',
         }}
     >
         <Input.Group style={{
@@ -52,7 +66,7 @@ const InviteUsers = (props) => {
         }}>
             <Form.Item
                 name="inviteUsers"
-                help={input.error ? input.errorMessage : ""}
+                help={input.error ? props.invite.error : ""}
                 validateStatus={input.error ? "error" : input.value.length > 2 ? "success" : ""}
                 style={{
                     width: '80%',
@@ -70,6 +84,12 @@ const InviteUsers = (props) => {
                     type="primary"
                     htmlType="submit"
                     onClick={handleSubmit}
+                    disabled={
+                        input.error ||
+                        input.value.length < 3 ||
+                        props.room.error
+                    }
+                    loading={props.room.isLoading}
                 >
                     Invite
                 </Button>
@@ -88,6 +108,7 @@ const InviteUsers = (props) => {
                 textAlign: 'center',
                 display: 'inline-block',
                 fontSize: '20px',
+                padding: '5px',
             }}>
                 users inveted</span>
           }
@@ -99,9 +120,7 @@ const InviteUsers = (props) => {
             display: 'inline-block',
             alignItems: 'center',
             justifyContent: 'center',
-            // background: 'none',
             border: 'none',
-            borderRadius: 10,
             }}>
 
 
@@ -159,8 +178,6 @@ const InviteUsers = (props) => {
                 </div>
         </div>
         <div style={{
-            // border: '1px solid #d9d9d9',
-            // borderBlockEnd: '1px solid #d9d9d9',
             marginTop: '5px',
             width: '100%',
             display: 'inline-block',
@@ -188,8 +205,6 @@ const InviteUsers = (props) => {
         </div>
         <Meta type='inner' title={
             <Button type="primary" style={{
-                // width: '100%',
-                // display: 'inline-block',
                 display: 'flex',
                 margin: 'auto',
                 marginTop: '10px',
@@ -207,8 +222,9 @@ const InviteUsers = (props) => {
 const mapStateToProps = (state) => {
     return {
         room: state.room,
-        auth: state.auth
+        auth: state.auth,
+        invite: state.invite,
     }
 }
 
-export default connect(mapStateToProps)(InviteUsers);
+export default connect(mapStateToProps, { inviteRequest })(InviteUsers);
