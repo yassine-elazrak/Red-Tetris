@@ -8,23 +8,15 @@ import { NavbarStyled, NotifDiv, LogoDesktop, LogoMobile } from './styles/NavBar
 import { Affix, Dropdown, Menu } from "antd";
 
 import { connect } from "react-redux";
-import { isAuth, logout } from "../actions/auth";
-import { refreshRoom, leaveRoom } from "../actions/room";
-import store from "../sotre";
-
-store.dispatch(isAuth());
-store.dispatch(refreshRoom());
-
-
+import { logout } from "../actions/auth";
+import { leaveRoom } from "../actions/room";
 
 
 const NavbarComponent = (props) => {
 
-    const isLogin = props.isAuth;
-    const roomName = props.room.name;
+    const { auth, room } = props;
 
     const LogOut = () => {
-        console.log("logout");
         props.leaveRoom();
         props.logout();
     }
@@ -43,7 +35,7 @@ const NavbarComponent = (props) => {
             <div style={{
                 cursor: "pointer",
             }}>
-                {props.user.name}
+                {auth.user.name}
             </div>
         </Dropdown>
     )
@@ -52,14 +44,14 @@ const NavbarComponent = (props) => {
     return (
         <Affix>
             <NavbarStyled className='d-flex justify-content-between'>
-                {!isLogin ?
+                {!auth.isAuth ?
                     <div className='d-flex justify-content-around' style={{width: '100%'}} >
                         <img src={logD} alt="logo" />
                     </div>
                     :
                 <>    
                     
-                    <h3> {roomName} </h3>
+                    <h3> {room.room.name} </h3>
                     <LogoDesktop>
                         <img src={logD} alt="logo" className='d-none d-md-block' />
                     </LogoDesktop>
@@ -79,14 +71,13 @@ const NavbarComponent = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        isAuth: state.auth.isAuth,
-        user: state.auth.user,
-        room: state.room.room,
+        room: state.room,
+        auth: state.auth
     }
 }
 
-const Nabar = connect(mapStateToProps, {leaveRoom, logout})(NavbarComponent);
+const Navbar = connect(mapStateToProps, {leaveRoom, logout})(NavbarComponent);
 
 
 
-export default Nabar;
+export default Navbar;

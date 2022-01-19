@@ -26,9 +26,8 @@ const FormRoomName = (props) => {
         const data = {
             name: input.value,
             isPrivate: checked,
-            user: props.user
+            user: props.auth.user
         }
-        // console.log(data);
         input.value.length > 2 ? setInput({
             ...input,
             error: false
@@ -42,10 +41,10 @@ const FormRoomName = (props) => {
     }
 
     useEffect(() => {
-        if (props.error){
-            message.error(props.error);
+        if (props.room.error){
+            message.error(props.room.error);
         }
-    }, [props.error]);
+    }, [props.room.error]);
 
 
     
@@ -114,7 +113,7 @@ const FormRoomName = (props) => {
                 />
             </Form.Item>
             <Form.Item>
-                <Button loading={props.isLoading}
+                <Button loading={props.room.isLoading}
                     htmlType="submit"
                     type="primary"
                     className="login-form-button"
@@ -127,7 +126,7 @@ const FormRoomName = (props) => {
                     }}
                     size="large"
                     onClick={handleSubmit}
-                    disabled={input.error || input.value.length < 3 || props.isLoading}
+                    disabled={input.error || input.value.length < 3 || props.room.isLoading}
                     >
                     Create
                 </Button>
@@ -141,9 +140,8 @@ const FormRoomName = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        isLoading: state.room.isLoading,
-        error: state.room.error,
-        user: state.auth.user
+        auth: state.auth,
+        room: state.room,
     }
 }
 

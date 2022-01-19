@@ -1,19 +1,13 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { leaveRoom, closeRoom } from '../actions/room'
+import { connect, useSelector } from 'react-redux'
 
 export const RoomPage = (props) => {
-    console.log(props);
+    // console.log(props);
+    const { room, auth } = useSelector(state => state);
+    // console.log(room);
     return (
-        <h1>RoomPage2</h1>
+        <h1>Welcome {auth.user.name} at Room page</h1>
     )
 }
-
-const mapStateToProps = (state) => ({
-    room: state.room,
-    user: state.auth.user,
-
-})
-
 
 export default RoomPage;

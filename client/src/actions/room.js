@@ -6,6 +6,7 @@ import {
     ROOM_LEAVE,
     ROOM_ERROR,
     ROOM_CLOSE,
+    ROOM_CLEAR_ERROR, // delete it1
 } from './types';
 
 
@@ -76,6 +77,12 @@ export const closeRoom = (room) => {
             dispatch(success(data, ROOM_CLOSE));
         else
             dispatch(error("You are not admin", ROOM_ERROR));
+    }
+}
+
+export const clearRoomError = () => {
+    return (dispatch) => {
+        dispatch({type: ROOM_CLEAR_ERROR});
     }
 }
 

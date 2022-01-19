@@ -5,6 +5,7 @@ import {
     ROOM_REFRESH,
     ROOM_ERROR,
     ROOM_CLOSE,
+    ROOM_CLEAR_ERROR,
 } from "../actions/types";
 
 const initialState = {
@@ -86,6 +87,13 @@ export default function roomReducer(state = initialState, action) {
                 isLoading: false,
                 error: action.payload
             };
+        case ROOM_CLEAR_ERROR:
+            return {
+                ...state,
+                isLoading: false,
+                error: null
+            };
+        
         default:
             return state;
     }

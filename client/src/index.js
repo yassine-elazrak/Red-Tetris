@@ -10,6 +10,8 @@ import { Provider } from 'react-redux';
 
 import store from './sotre'
 
+
+
 ReactDOM.render(
   // <React.StrictMode>
     <Provider store={store}>

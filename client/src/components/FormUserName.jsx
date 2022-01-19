@@ -40,10 +40,11 @@ const FormUserName = (props) => {
 
 
     useEffect(() => {
-        if (props.error){
-            message.error(props.error);
+        // console.log('props', props);
+        if (props.auth.error){
+            message.error(props.auth.error);
         }
-    }, [props.error])
+    }, [props.auth.error]);
    
 
 
@@ -103,7 +104,7 @@ const FormUserName = (props) => {
                         }}
                         size="large"
                         onClick={handleSubmit}
-                        disabled={input.error || input.value.length < 3 || props.isLoading}
+                        disabled={input.error || input.value.length < 3 || props.auth.isLoading}
                         >
                         Create
                     </Button>
@@ -115,11 +116,8 @@ const FormUserName = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        auth: state.user,
-        isLoading: state.isLoading
+        auth: state.auth,
     }
 }
 
-const LogIn = connect(mapStateToProps, { login })(FormUserName);
-
-export default LogIn;
+export default connect(mapStateToProps, { login })(FormUserName);

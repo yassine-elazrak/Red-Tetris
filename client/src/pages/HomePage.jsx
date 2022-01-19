@@ -9,6 +9,9 @@ import FormUserName from "../components/FormUserName";
 import FormRoomName from "../components/FormRoomName";
 import RoomPage from "../pages/RoomPage";
 
+import OnePlayerMode from "../pages/OnePlayerMode";
+import MultiPlayerMode from "../pages/MultiPlayerMode";
+
 import {
     UserOutlined,
     MenuUnfoldOutlined,
@@ -17,19 +20,19 @@ import {
 
 import "./styles/HeaderStyled.css";
 
-import { connect } from "react-redux";
-import { isAuth } from "../actions/auth";
-import store from "../sotre";
+import { useSelector } from "react-redux";
 
-store.dispatch(isAuth());
+
 
 const { Header, Sider, Content, Footer } = Layout;
 
 
 
-const HomePage = (props) => {
+const HomePage = () => {
     const [collapsible, setCollapsible] = useState(true);
+    const { auth, room } = useSelector(state => state);
 
+    console.log(room);
 
     return (
         <Layout style={{
@@ -54,11 +57,14 @@ const HomePage = (props) => {
             minHeight: 'calc(100vh - 138px)',
             
             }}>
-            {!props.user.isAuth ?
+            {!auth.isAuth ?
                      <FormUserName />
-                 :!props.room.is_joined ?
+                 :!room.is_joined ?
                      <FormRoomName />
-                : <RoomPage />
+                : !room.isPrivate ?
+                    <MultiPlayerMode />
+                :
+                    <OnePlayerMode />
                 }
           </Content>
           <span style={{
@@ -91,9 +97,12 @@ const HomePage = (props) => {
           }
             collapsedWidth={0}
           style={{
-              paddingTop: "15px",
               background: '#404040',
               margin: 0,
+              position: "absolute",
+              top: "97px",
+              right: "0px",
+              height: "calc(100vh - 97px)",
             }}
         >
 
@@ -127,14 +136,4 @@ const HomePage = (props) => {
     );
 }
 
-const mapStateToProps = (state) => {
-    return {
-        user: state.auth,
-        room: state.room,
-        
-    }
-}
-
-const Home = connect(mapStateToProps)(HomePage);
-
-export default Home;
+export default HomePage;

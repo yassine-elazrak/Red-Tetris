@@ -9,7 +9,6 @@ import {
 } from "./types";
 
 export const login = (user) => {
-    // console.log("login action" + user);
     const data = {id: 1, name: user};
     return (dispatch) => {
         dispatch({type: IS_LOADING});
