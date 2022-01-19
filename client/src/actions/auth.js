@@ -1,15 +1,11 @@
 import {
     SUCESS_LOGIN,
     SUCESS_LOGOUT,
-    // FAIL_LOGIN, // not used yet
     FAIL_LOGOUT,
     IS_LOADING,
-
-    ERROR_CREATE_ROOM,
 } from "./types";
 
 export const login = (user) => {
-    // console.log("login action" + user);
     const data = {id: 1, name: user};
     return (dispatch) => {
         dispatch({type: IS_LOADING});
@@ -26,7 +22,7 @@ export const logout = () => {
                 localStorage.removeItem("user");
             }
         } catch (error) {
-            dispatch(error(error, ERROR_CREATE_ROOM));
+            dispatch(error(error, FAIL_LOGOUT));
         }
     }
 }
@@ -36,7 +32,6 @@ export const isAuth = () => {
         try {
             const user = localStorage.getItem("user");
             if (user) {
-                // console.log(user);
                 dispatch(success(JSON.parse(user), SUCESS_LOGIN));
             }
         }

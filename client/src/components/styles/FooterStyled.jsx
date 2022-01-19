@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import background from '../../img/footer-bg.png'
+import background from '../../img/footer.png'
 
 export const FooterStyled = styled.footer`
     background-image: url(${background});

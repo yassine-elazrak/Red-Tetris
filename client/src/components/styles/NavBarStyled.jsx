@@ -1,14 +1,16 @@
 import styled from 'styled-components'
 
-import background from '../../img/nav-bg.png'
+import background from '../../img/header.png'
 
 export const NavbarStyled = styled.nav`
     background-image: url(${background});
     background-size: contain;
     background-repeat-y: no-repeat;
-    // height: 100%;
+    // width: 100%;
+    height: 64px;
     z-index: 100;
-    padding: 5px 20px;
+    padding: 0px 20px;
+    margin: 0;
     align-items: center;
     * {
         color: #666;

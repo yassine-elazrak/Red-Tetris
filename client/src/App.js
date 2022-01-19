@@ -4,41 +4,26 @@ import './App.css';
 
 
 
-import NavbarComponent from './components/Navbar';
-import FooterContainer from './components/Footer';
-// import ContentComponent from './components/Content';
-
 import HomePage from './pages/HomePage';
 import 'antd/dist/antd.css';
 
-import { connect } from 'react-redux';
+import sotre from './sotre';
 
-// import sotre from './sotre';
+import { isAuth } from './actions/auth';
+import { refreshRoom } from './actions/room';
 
-// import { isAuth } from './actions/auth';
-
-// sotre.dispatch(isAuth());
-
+sotre.dispatch(isAuth());
+sotre.dispatch(refreshRoom());
 
 
-function App(props) {
+
+function App() {
 
   return (
     <div className="App">
-      <NavbarComponent />
       <HomePage />
-      < FooterContainer />
     </div>
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    isAuth: state.auth.isAuth,
-    user: state.auth.user,
-  }
-}
-
-const isLogin = connect(mapStateToProps)(App);
-
-export default isLogin;
+export default App;
