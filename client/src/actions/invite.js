@@ -19,6 +19,12 @@ export const inviteRequest = (invite) => {
     }
 }
 
+export const refreshInvite = () => {
+    return (dispatch) => {
+        dispatch(success(null, INVITE_REFRESH));
+    }
+}
+
 export const removeAll = () => {
     return {
         type: INVITE_REMOVE_ALL,

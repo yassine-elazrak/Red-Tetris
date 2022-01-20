@@ -8,7 +8,7 @@ import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Provider } from 'react-redux';
 
-import store from './sotre'
+import store from './store'
 
 
 

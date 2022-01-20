@@ -23,10 +23,13 @@ const FormRoomName = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        const fackId = Math.floor(Math.random() * 10);
         const data = {
-            name: input.value,
-            isPrivate: checked,
-            user: props.auth.user
+            roomId: fackId,
+            roomName: input.value,
+            isPravite: checked,
+            user: props.auth.user,
+
         }
         input.value.length > 2 ? setInput({
             ...input,

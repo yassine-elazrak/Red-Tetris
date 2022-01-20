@@ -15,10 +15,12 @@ const initialState = {
 }
 
 const newInvite = (state, action) => {
+    const fackStatus = ['accepted', 'declined', 'waiting'];
+    const fackStatusIndex = Math.floor(Math.random() * fackStatus.length);
     const data = {
         userId: action.payload.userId,
         userName: action.payload.userName,
-        state: 'waiting',
+        status: fackStatus[fackStatusIndex], // waiting, accepted, declined
     };
     const index = state.invites.findIndex(invite => invite.userId === data.userId);
     if (index === -1) {
@@ -42,7 +44,7 @@ const newInvite = (state, action) => {
 const accept = (state, action) => {
     const newInvites = state.invites.map(invite => {
         if (invite.id === action.payload.id) {
-            invite.state = 'accepted';
+            invite.status = 'accepted';
         }
         return invite;
     });
@@ -59,7 +61,7 @@ const accept = (state, action) => {
 const decline = (state, action) => {
     const newInvites = state.invites.map(invite => {
         if (invite.id === action.payload.id) {
-            invite.state = 'declined';
+            invite.status = 'declined';
         }
         return invite;
     });
@@ -80,6 +82,20 @@ const removeAll = (state, action) => {
     localStorage.setItem('invite', JSON.stringify(data));
 }
 
+const refresh = () => {
+    const data = localStorage.getItem('invite');
+    if (data) {
+        const jsonData = JSON.parse(data);
+        return {
+            ...jsonData,
+            isLoading: false,
+            error: null,
+        }
+    } else {
+        return initialState;
+    }
+}
+
 export default function inviteReducer(state = initialState, action) {
     switch (action.type) {
         case INVITE_REQUEST:
@@ -95,13 +111,7 @@ export default function inviteReducer(state = initialState, action) {
         case INVITE_DECLINE:
             return decline(state, action);
         case INVITE_REFRESH:
-            return {
-                ...state,
-                isLoading: false,
-                error: null,
-                room_id: action.payload.room_id,
-                invites: action.payload.invites,
-            };
+            return refresh();
         case INVITE_REMOVE_ALL:
             return removeAll(state, action);
         default:
