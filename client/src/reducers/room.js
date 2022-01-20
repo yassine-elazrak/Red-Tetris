@@ -5,7 +5,6 @@ import {
     ROOM_REFRESH,
     ROOM_ERROR,
     ROOM_CLOSE,
-    ROOM_CLEAR_ERROR,
 } from "../actions/types";
 
 const initialState = {
@@ -13,87 +12,132 @@ const initialState = {
     error: null,
     is_joined: false,
     isPravite: false,
-    room: {
-        id: null,
-        name: '',
-        admin: null,
-        users: [],
+    isAdmin : false,
+    status: '',
+    id: null,
+    name: null,
+    users: [],
+};
+
+const createRoom = (state, action) => {
+    console.log(action.payload);
+    const user = {
+        id: action.payload.user.id,
+        name: action.payload.user.name,
+    };
+    const data = {
+        ...state,
+        isLoading: false,
+        error: null,
+        is_joined: true,
+        isAdmin: true,
+        status: 'waiting',
+        isPravite: action.payload.isPravite,
+        id: action.payload.roomId,
+        name: action.payload.roomName,
+        users: [user],
+    };
+    localStorage.setItem("room", JSON.stringify(data));
+    return data;
+};
+
+const pushUser = (state, action) => {
+    const index = state.users.findIndex(user => user.id === action.payload.userId);
+    if (index === -1) {
+        const user = {
+            id: action.payload.userId,
+            name: action.payload.userName,
+        };
+        const data = {
+            ...state,
+            isLoading: false,
+            error: null,
+            is_joined: true,
+            isAdmin: false,
+            isPravite: action.payload.isPravite,
+            id: action.payload.roomId,
+            name: action.payload.roomName,
+            status: action.payload.status,
+            users: [...state.users, user],
+        };
+        localStorage.setItem("room", JSON.stringify(data));
+        return data;
+    } else {
+        return {
+            ...state,
+            isLoading: false,
+            error: `${action.payload.userName} is already in the room`,
+        };
     }
 };
+
+const deleteUser = (state, action) => {
+    // modef it to delete user from room
+    // console.log(action.payload);
+    const index = state.users.findIndex(user => user.id === action.payload.userId);
+    if (index !== -1) {
+        const users = [...state.users];
+        users.splice(index, 1);
+        const data = {
+            ...state,
+            isLoading: false,
+            users: users,
+        };
+        localStorage.setItem("room", JSON.stringify(data));
+        return data;
+    } else {
+        return {
+            ...state,
+            isLoading: false,
+            error: `${action.payload.userName} is not in the room`,
+        };
+    }
+};
+
+const deletRoom = (state, action) => {
+    localStorage.removeItem("room");
+    return initialState;
+};
+
+const refreshRoom = (state, action) => {
+    const data = localStorage.getItem("room");
+    if (data) {
+        const room = JSON.parse(data);
+        return {
+            ...room,
+            isLoading: false,
+            error: null,
+        };
+    } else {
+        return initialState;
+    }
+};
+
 
 export default function roomReducer(state = initialState, action) {
     switch (action.type) {
         case ROOM_CREATE:
-            return {
-                ...state,
-                isLoading: false,
-                is_joined: true,
-                isPravite: action.payload.isPrivate,
-                room: {
-                    id: action.payload.id,
-                    name: action.payload.name,
-                    admin: action.payload.admin,
-                    users: action.payload.users,
-                }
-            };
+            return createRoom(state, action);
         case ROOM_JOIN:
-            return {
-                ...state,
-                isLoading: false,
-                is_joined: true,
-                isPravite: action.payload.isPrivate,
-                room: {
-                    id: action.payload.id,
-                    name: action.payload.name,
-                    admin: action.payload.admin,
-                    users: [...state.room.users , action.payload.users]
-                }
-            };
+            return pushUser(state, action);
         case ROOM_LEAVE:
-            return {
-                ...state,
-                isLoading: false,
-                is_joined: false,
-                isPravite: false,
-                room: {
-                    id: null,
-                    name: '',
-                    admin: null,
-                    users: [],
-                }
-            };
+            return deletRoom(state, action);
         case ROOM_REFRESH:
-            return {
-                ...state,
-                isLoading: false,
-                is_joined: true,
-                isPravite: action.payload.isPrivate,
-                room: {
-                    id: action.payload.id,
-                    name: action.payload.name,
-                    admin: action.payload.admin,
-                    users: action.payload.users,
-                }
-            };
+            return refreshRoom(state, action);
         case ROOM_CLOSE:
             return {
                 ...state,
                 isLoading: false,
-                state: action.payload.state,
+                error: null,
+                status: 'closed',
             };
         case ROOM_ERROR:
             return {
                 ...state,
                 isLoading: false,
-                error: action.payload
+                error: action.payload,
             };
-        case ROOM_CLEAR_ERROR:
-            return {
-                ...state,
-                isLoading: false,
-                error: null
-            };
-        
+
         default:
             return state;
     }

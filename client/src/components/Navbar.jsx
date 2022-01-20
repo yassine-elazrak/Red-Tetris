@@ -17,7 +17,7 @@ const NavbarComponent = (props) => {
     const { auth, room } = props;
 
     const LogOut = () => {
-        props.leaveRoom();
+        props.leaveRoom(auth.user.id);
         props.logout();
     }
 
@@ -51,7 +51,7 @@ const NavbarComponent = (props) => {
                     :
                 <>    
                     
-                    <h3> {room.room.name} </h3>
+                    <h3> {room.name} </h3>
                     <LogoDesktop>
                         <img src={logD} alt="logo" className='d-none d-md-block' />
                     </LogoDesktop>

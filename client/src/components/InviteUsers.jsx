@@ -35,9 +35,9 @@ const InviteUsers = (props) => {
             error: true,
         });
         if (input.value.length > 2 && !input.error) {
-            const fackId = Math.floor(Math.random() * 10);
+            const fackId = Math.floor(Math.random() * 100);
             const data = {
-                roomId: props.room.room.id,
+                roomId: props.room.id,
                 userId: fackId,
                 userName: input.value,
             }
@@ -98,6 +98,89 @@ const InviteUsers = (props) => {
     </Form>
     );
 
+    const divAccepted = (name, id) => {
+        return (
+            <div style={{
+                width: '100%',
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'space-around',
+                alignItems: 'top',
+                flex: 2,
+                }}>
+                    <p>{name}</p>
+                    <span style={{
+                        backgroundColor: "#6FCF97",
+                        padding: '5px',
+                        borderRadius: '5px',
+                        margin: '5px',
+                    }}>Joined</span>
+            </div>
+        )
+    }
+
+    const divWaiting = (name, id) => {
+        return (
+                <div style={{
+                    width: '100%',
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    justifyContent: 'space-around',
+                    alignItems: 'top',
+                    flex: 2,
+                    }}>
+                        <p>{name}</p>
+                        <span style={{
+                            backgroundColor: yellow[5],
+                            padding: '5px',
+                            borderRadius: '5px',
+                            margin: '5px',
+                        }}>Waiting</span>
+                </div>
+        )
+    }
+
+    const divCancled = (name, id) => {
+        return (
+            <div style={{
+                width: '100%',
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'space-around',
+                alignItems: 'top',
+                flex: 2,
+                }}>
+                    <p>{name}</p>
+                    <span style={{
+                        backgroundColor: red[4],
+                        padding: '5px',
+                        borderRadius: '5px',
+                        margin: '5px',
+                    }}>Canceled</span>
+            </div>
+        )
+    }
+
+
+    const inviteList = props.invite.invites.map((invite, index) => {
+        return (
+
+            // divAccepted(index, invite.userName)
+            <div key={index} style={{
+                marginTop: '5px',
+                width: '100%',
+                display: 'inline-block',
+                flexWrap: 'wrap',
+                justifyContent: 'center',
+                alignItems: 'center',
+                flex: 2,
+                }}>
+                    {invite.status === 'accepted' ? divAccepted(invite.userName, invite.userId) :
+                    invite.status === 'waiting' ?   divWaiting(invite.userName, invite.userId) :
+                                                    divCancled(invite.userName, invite.userId)}
+            </div>
+        )
+    })
 
     return (
         <Card title={form} type='inner'
@@ -134,74 +217,7 @@ const InviteUsers = (props) => {
             alignItems: 'center',
             flex: 2,
             }}>
-                <div style={{
-                    width: '100%',
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    justifyContent: 'space-around',
-                    alignItems: 'top',
-                    flex: 2,
-                    }}>
-                        <p>user name</p>
-                        <span style={{
-                            backgroundColor: red[4],
-                            padding: '5px',
-                            borderRadius: '5px',
-                            margin: '5px',
-                        }}>Canceled</span>
-                </div>
-        </div>
-        <div style={{
-            marginTop: '5px',
-            width: '100%',
-            display: 'inline-block',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flex: 2,
-            }}>
-                <div style={{
-                    width: '100%',
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    justifyContent: 'space-around',
-                    alignItems: 'top',
-                    flex: 2,
-                    }}>
-                        <p>user name</p>
-                        <span style={{
-                            backgroundColor: "#6FCF97",
-                            padding: '5px',
-                            borderRadius: '5px',
-                            margin: '5px',
-                        }}>Joined</span>
-                </div>
-        </div>
-        <div style={{
-            marginTop: '5px',
-            width: '100%',
-            display: 'inline-block',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            alignItems: 'center',
-            flex: 2,
-            }}>
-                <div style={{
-                    width: '100%',
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    justifyContent: 'space-around',
-                    alignItems: 'top',
-                    flex: 2,
-                    }}>
-                        <p>user name</p>
-                        <span style={{
-                            backgroundColor: yellow[5],
-                            padding: '5px',
-                            borderRadius: '5px',
-                            margin: '5px',
-                        }}>Waiting</span>
-                </div>
+                {inviteList}
         </div>
         <Meta type='inner' title={
             <Button type="primary" style={{

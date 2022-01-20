@@ -1,27 +1,16 @@
 import {
-    IS_LOADING,
     ROOM_REFRESH,
     ROOM_CREATE,
     ROOM_JOIN,
     ROOM_LEAVE,
     ROOM_ERROR,
     ROOM_CLOSE,
-    ROOM_CLEAR_ERROR, // delete it1
 } from './types';
 
 
 export const createRoom = (room) => {
-    const data = {
-        id: 1,
-        name: room.name,
-        isPrivate: room.isPrivate,
-        state: 'waiting',
-        adminId: room.user.id,
-        users: [room.user.id],
-    };
     return async (dispatch) => {
-        dispatch({type: IS_LOADING});
-        dispatch(success(data, ROOM_CREATE));
+        dispatch(success(room, ROOM_CREATE));
     }
 }
 
@@ -40,31 +29,15 @@ export const refreshRoom = () => {
 }
 
 export const joinRoom = (room) => {
-    const data = {
-        id: 1,
-        name: room.name,
-        state: 'waiting',
-        users: [room.user.id],
-    };
     return async (dispatch) => {
-        dispatch({type: IS_LOADING});
-        dispatch(success(data, ROOM_JOIN));
+        dispatch(success(room, ROOM_JOIN));
     }
 }
 
-export const leaveRoom = () => {
+export const leaveRoom = (userId) => {
     // if room users length is 1, delete room
     return (dispatch) => {
-        try {
-            const room = localStorage.getItem("room");
-            if (room) {
-                dispatch(success(JSON.parse(room), ROOM_LEAVE));
-                localStorage.removeItem("room");
-            }
-        }
-        catch (e) {
-            dispatch(error(e, ROOM_ERROR));
-        }
+        dispatch(success({userId}, ROOM_LEAVE));
     }
 }
 
@@ -80,11 +53,6 @@ export const closeRoom = (room) => {
     }
 }
 
-export const clearRoomError = () => {
-    return (dispatch) => {
-        dispatch({type: ROOM_CLEAR_ERROR});
-    }
-}
 
 
 const success = (data, type) => {
