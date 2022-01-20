@@ -2,62 +2,64 @@ import React, {useEffect, useState} from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { inviteRequest } from "../actions/invite";
 
-import { Form, Input, Button, message, Card, AutoComplete } from 'antd';
+import { Form, Input, Button, message, Card, AutoComplete, Select } from 'antd';
 
-import { yellow, red } from '@ant-design/colors';
+import { gold, red } from '@ant-design/colors';
 
 const { Meta } = Card;
 const { Option } = AutoComplete;
+
+
 
 const InviteUsers = (props) => {
 
     const dataSource = [
         {
-            name : 'John',
+            value : 'John',
             id : 1
         },
         {
-            name : 'Jane',
+            value : 'Jane',
             id : 2
         },
         {
-            name : 'Jack',
+            value : 'Jack',
             id : 3
         },
         {
-            name : 'Jill',
+            value : 'Jill',
             id : 4
         },
         {
-            name : 'Jenny',
+            value : 'Jenny',
             id : 5
         },
         {
-            name : 'Jenny',
+            value : 'Jenny',
             id : 6
         },
         {
-            name : 'Jenny',
+            value : 'Jenny',
             id : 7
         },
         {
-            name : 'Jenny',
+            value : 'Jenny',
             id : 8
         },
         {
-            name : 'Jenny',
+            value : 'Jenny',
             id : 9
         },
         {
-            name : 'Jenny',
+            value : 'Jenny',
             id : 10
         },
     ];
 
 
-
     const [input, setInput] = useState({
         value: "",
+        id: null,
         error: false,
         errorMessage: "Please enter a valid username at least 3 characters long"
     });
@@ -82,10 +84,10 @@ const InviteUsers = (props) => {
             error: true,
         });
         if (input.value.length > 2 && !input.error) {
-            const fackId = Math.floor(Math.random() * 100);
+            // const fackId = Math.floor(Math.random() * 100);
             const data = {
                 roomId: props.room.id,
-                userId: fackId,
+                userId: input.id,
                 userName: input.value,
             }
             props.inviteRequest(data);
@@ -102,29 +104,35 @@ const InviteUsers = (props) => {
 
   
 
-    const handleSelect = (value) => {
-        console.log('value', value);
+    const handleSelect = (id) => {
+        console.log('value', id);
+        const value = dataSource.filter(item => item.id === id);
         setInput({
             ...input,
-            value: value,
-            error: false,
+            value: value[0].value,
+            id: value[0].id,
+            error: false
         });
+        console.log('value', value);
     }
 
   const options = dataSource.map(item => {
         return (
             <Option key={item.id}
-                    value={item.name}
-                    onClick={() => handleSelect(item)}
-            >{item.name}</Option>
+                    value={item.id}
+            >{item.value}</Option>
         )
     });
+
+    const filterOption = (inputValue, option) => {
+        console.log('inputValue', inputValue);
+        console.log('option', option);
+        return (Array.isArray(option.children) ? option.children.join('') :
+        option.children).toUpperCase().indexOf(inputValue.toUpperCase()) !== -1;
+    }
+
     const form = (
-        <Form
-        style={{
-            // width: '100%',
-        }}
-    >
+        <Form >
         <Input.Group style={{
             width: '100%',
             display: 'flex',
@@ -139,20 +147,19 @@ const InviteUsers = (props) => {
                     maxWidth: '40vh',
                 }}
             >
-                <AutoComplete
-                    style={{
-                    }}
-                    onSelect={handleSelect}
+                <Select
+                    showSearch
+                    style={{ width: '100%' }}
+                    placeholder="Search for a user"
+                    // optionFilterProp="children"
+                    // onChange={handleSelect}
+                    filterOption={filterOption}
                     onSearch={handleChange}
-                    placeholder="Enter username"
-                    value={input.value}
-                    // dataSource={options}
-                    filterOption={(inputValue, options) =>
-                        options.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
-                    }
-                 >
-                 {options}
-                 </AutoComplete>
+                    onSelect={handleSelect}
+                    // value={input.value}
+                >
+                    {options}
+                </Select>
             </Form.Item>
             <Form.Item>
                 <Button
@@ -173,75 +180,6 @@ const InviteUsers = (props) => {
     </Form>
     );
 
-    const divBackground = ['none', '#f5f5f5'];
-
-    const divAccepted = (name, id) => {
-        return (
-            <div style={{
-                width: '100%',
-                display: 'flex',
-                flexWrap: 'wrap',
-                justifyContent: 'space-around',
-                alignItems: 'center',
-                flex: 2,
-                }}>
-                    <span>{id}</span>
-                    <span>{name}</span>
-                    <span style={{
-                        color: "#6FCF97",
-                        padding: '5px',
-                        borderRadius: '5px',
-                        margin: '5px',
-                    }}>Joined</span>
-            </div>
-        )
-    }
-
-    const divWaiting = (name, id) => {
-        return (
-                <div style={{
-                    width: '100%',
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    justifyContent: 'space-around',
-                    alignItems: 'center',
-                    flex: 2,
-                    }}>
-                        <span>{id}</span>
-                        <span>{name}</span>
-                        <span style={{
-                            color: yellow[6],
-                            padding: '5px',
-                            borderRadius: '5px',
-                            margin: '5px',
-                        }}>Waiting</span>
-                </div>
-        )
-    }
-
-    const divCancled = (name, id) => {
-        return (
-            <div style={{
-                width: '100%',
-                display: 'flex',
-                flexWrap: 'wrap',
-                justifyContent: 'space-around',
-                alignItems: 'center',
-                flex: 2,
-                }}>
-                    <span>{id}</span>
-                    <span>{name}</span>
-                    <span style={{
-                        color: red[4],
-                        padding: '5px',
-                        borderRadius: '5px',
-                        margin: '5px',
-                    }}>Canceled</span>
-            </div>
-        )
-    }
-
-
     const inviteList = props.invite.invites.map((invite, index) => {
         return (
             <div key={index} style={{
@@ -252,11 +190,26 @@ const InviteUsers = (props) => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 flex: 2,
-                backgroundColor: divBackground[index % 2],
+                backgroundColor: index % 2 === 0 ? '#fafafa' :  '#f0f0f0',
                 }}>
-                    {invite.status === 'accepted' ? divAccepted(invite.userName, invite.userId) :
-                    invite.status === 'waiting' ?   divWaiting(invite.userName, invite.userId) :
-                                                    divCancled(invite.userName, invite.userId)}
+                    <div style={{
+                        width: '100%',
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        justifyContent: 'space-around',
+                        alignItems: 'center',
+                        flex: 2,
+                        }}>
+                            <span>{invite.userId}</span>
+                            <span>{invite.userName}</span>
+                            <span style={{
+                                color: invite.status === 'accepted' ? "#6FCF97" :
+                                        invite.status === 'waiting' ?  gold.primary : red[4],
+                                padding: '5px',
+                                borderRadius: '5px',
+                                margin: '5px',
+                            }}>{invite.status.charAt(0).toUpperCase() + invite.status.slice(1)}</span>
+                    </div>
             </div>
         )
     })
@@ -316,7 +269,7 @@ const InviteUsers = (props) => {
                         justifyContent: 'center',
                         alignItems: 'center',
                         textAlign: 'center',
-                        backgroundColor: '#fafafa',
+                        backgroundColor: '#f0f0f0',
                         paddingTop: '5px',
                         // position: 'fixed',
                         }}>
