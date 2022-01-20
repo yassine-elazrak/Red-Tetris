@@ -2,13 +2,59 @@ import React, {useEffect, useState} from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { inviteRequest } from "../actions/invite";
 
-import { Form, Input, Button, message, Card } from 'antd';
+import { Form, Input, Button, message, Card, AutoComplete } from 'antd';
 
 import { yellow, red } from '@ant-design/colors';
 
 const { Meta } = Card;
+const { Option } = AutoComplete;
 
 const InviteUsers = (props) => {
+
+    const dataSource = [
+        {
+            name : 'John',
+            id : 1
+        },
+        {
+            name : 'Jane',
+            id : 2
+        },
+        {
+            name : 'Jack',
+            id : 3
+        },
+        {
+            name : 'Jill',
+            id : 4
+        },
+        {
+            name : 'Jenny',
+            id : 5
+        },
+        {
+            name : 'Jenny',
+            id : 6
+        },
+        {
+            name : 'Jenny',
+            id : 7
+        },
+        {
+            name : 'Jenny',
+            id : 8
+        },
+        {
+            name : 'Jenny',
+            id : 9
+        },
+        {
+            name : 'Jenny',
+            id : 10
+        },
+    ];
+
+
 
     const [input, setInput] = useState({
         value: "",
@@ -17,11 +63,12 @@ const InviteUsers = (props) => {
     });
 
     const handleChange = (e) => {
-        setInput({
-            ...input,
-            value: e.target.value,
-            error: e.target.value.length < 3,
-        });
+        console.log(e);
+        // setInput({
+        //     ...input,
+        //     value: e.target.value,
+        //     error: e.target.value.length < 3,
+        // });
     }
 
     const handleSubmit = (e) => {
@@ -53,6 +100,25 @@ const InviteUsers = (props) => {
         }
     }, [props.invite.error]);
 
+  
+
+    const handleSelect = (value) => {
+        console.log('value', value);
+        setInput({
+            ...input,
+            value: value,
+            error: false,
+        });
+    }
+
+  const options = dataSource.map(item => {
+        return (
+            <Option key={item.id}
+                    value={item.name}
+                    onClick={() => handleSelect(item)}
+            >{item.name}</Option>
+        )
+    });
     const form = (
         <Form
         style={{
@@ -73,11 +139,20 @@ const InviteUsers = (props) => {
                     maxWidth: '40vh',
                 }}
             >
-                <Input
+                <AutoComplete
+                    style={{
+                    }}
+                    onSelect={handleSelect}
+                    onSearch={handleChange}
+                    placeholder="Enter username"
                     value={input.value}
-                    onChange={handleChange}
-                    placeholder="Invite Users"
-                />
+                    // dataSource={options}
+                    filterOption={(inputValue, options) =>
+                        options.props.children.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                    }
+                 >
+                 {options}
+                 </AutoComplete>
             </Form.Item>
             <Form.Item>
                 <Button
@@ -98,6 +173,8 @@ const InviteUsers = (props) => {
     </Form>
     );
 
+    const divBackground = ['none', '#f5f5f5'];
+
     const divAccepted = (name, id) => {
         return (
             <div style={{
@@ -105,10 +182,11 @@ const InviteUsers = (props) => {
                 display: 'flex',
                 flexWrap: 'wrap',
                 justifyContent: 'space-around',
-                alignItems: 'top',
+                alignItems: 'center',
                 flex: 2,
                 }}>
-                    <p>{name}</p>
+                    <span>{id}</span>
+                    <span>{name}</span>
                     <span style={{
                         backgroundColor: "#6FCF97",
                         padding: '5px',
@@ -126,10 +204,11 @@ const InviteUsers = (props) => {
                     display: 'flex',
                     flexWrap: 'wrap',
                     justifyContent: 'space-around',
-                    alignItems: 'top',
+                    alignItems: 'center',
                     flex: 2,
                     }}>
-                        <p>{name}</p>
+                        <span>{id}</span>
+                        <span>{name}</span>
                         <span style={{
                             backgroundColor: yellow[5],
                             padding: '5px',
@@ -147,10 +226,11 @@ const InviteUsers = (props) => {
                 display: 'flex',
                 flexWrap: 'wrap',
                 justifyContent: 'space-around',
-                alignItems: 'top',
+                alignItems: 'center',
                 flex: 2,
                 }}>
-                    <p>{name}</p>
+                    <span>{id}</span>
+                    <span>{name}</span>
                     <span style={{
                         backgroundColor: red[4],
                         padding: '5px',
@@ -164,16 +244,15 @@ const InviteUsers = (props) => {
 
     const inviteList = props.invite.invites.map((invite, index) => {
         return (
-
-            // divAccepted(index, invite.userName)
             <div key={index} style={{
-                marginTop: '5px',
+                // marginTop: '5px',
                 width: '100%',
                 display: 'inline-block',
                 flexWrap: 'wrap',
                 justifyContent: 'center',
                 alignItems: 'center',
                 flex: 2,
+                backgroundColor: divBackground[index % 2],
                 }}>
                     {invite.status === 'accepted' ? divAccepted(invite.userName, invite.userId) :
                     invite.status === 'waiting' ?   divWaiting(invite.userName, invite.userId) :
@@ -184,18 +263,6 @@ const InviteUsers = (props) => {
 
     return (
         <Card title={form} type='inner'
-        cover={
-            <span style={{
-                width: '100%',
-                borderBlockEnd: '1px solid #d9d9d9',
-                textAlign: 'center',
-                display: 'inline-block',
-                fontSize: '20px',
-                padding: '5px',
-            }}>
-                users inveted</span>
-          }
-        
         style={{
             width: '100%',
             padding: 0,
@@ -209,14 +276,45 @@ const InviteUsers = (props) => {
 
         
         <div style={{
-            marginTop: '5px',
+            // marginTop: '5px',
+            margin: 0,
+            padding: 0,
+            height: '100%',
             width: '100%',
             display: 'inline-block',
             flexWrap: 'wrap',
             justifyContent: 'center',
             alignItems: 'center',
             flex: 2,
+            border: '1px solid #d9d9d9',
+            borderRadius: '5px',
+            boxShadow: '0px 0px 5px #d9d9d9',
             }}>
+                <div style={{
+                    width: '100%',
+                    height: '100%',
+                    display: 'inline-block',
+                    flexWrap: 'wrap',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                    backgroundColor: '#fafafa',
+                    paddingTop: '5px',
+                    margin: 0,
+                    }}>
+                        <div style={{
+                            width: '100%',
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            justifyContent: 'space-around',
+                            alignItems: 'top',
+                            flex: 2,
+                            }}>
+                                <p>UserId</p>
+                                <p>Name</p>
+                                <p>Status</p>
+                        </div>
+            </div>
                 {inviteList}
         </div>
         <Meta type='inner' title={
