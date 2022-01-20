@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { connect, useDispatch } from 'react-redux';
-import { inviteRequest } from "../actions/invite";
+import { inviteRequest, currentUser } from "../actions";
 
 import { Form, Input, Button, message, Card, AutoComplete, Select } from 'antd';
 
@@ -13,48 +13,36 @@ const { Option } = AutoComplete;
 
 const InviteUsers = (props) => {
 
-    const dataSource = [
-        {
-            value : 'John',
-            id : 1
-        },
-        {
-            value : 'Jane',
-            id : 2
-        },
-        {
-            value : 'Jack',
-            id : 3
-        },
-        {
-            value : 'Jill',
-            id : 4
-        },
-        {
-            value : 'Jenny',
-            id : 5
-        },
-        {
-            value : 'Jenny',
-            id : 6
-        },
-        {
-            value : 'Jenny',
-            id : 7
-        },
-        {
-            value : 'Jenny',
-            id : 8
-        },
-        {
-            value : 'Jenny',
-            id : 9
-        },
-        {
-            value : 'Jenny',
-            id : 10
-        },
-    ];
+    const [dataSource, setDataSource] = useState([]);
+    const [oldValue, setOldValue] = useState('');
+
+    // const handleFocus = () => {
+    //     props.currentUser('a');
+    //     // console.log(props.users);
+    // };
+
+    const handleSearch = (value) => {
+        if (!value) {
+            // setDataSource([]);
+            return;
+        }
+        // console.log(value.includes(oldValue));
+        if (!value.includes(oldValue) || oldValue === '') {
+            console.log('searching');
+            setOldValue(value);
+            props.currentUser(value);
+        }
+    };
+
+    useEffect(() => {
+        const data = props.users.online.map(user => {
+            return {
+                value: user.name,
+                id: user.id
+            }
+        });
+        setDataSource(data);
+    }, [props.users]);
 
 
     const [input, setInput] = useState({
@@ -64,17 +52,8 @@ const InviteUsers = (props) => {
         errorMessage: "Please enter a valid username at least 3 characters long"
     });
 
-    const handleChange = (e) => {
-        console.log(e);
-        // setInput({
-        //     ...input,
-        //     value: e.target.value,
-        //     error: e.target.value.length < 3,
-        // });
-    }
-
     const handleSubmit = (e) => {
-        console.log('e', e);
+        // console.log('e', e);
         e.preventDefault();
         input.value.length > 2 ? setInput({
             ...input,
@@ -84,7 +63,6 @@ const InviteUsers = (props) => {
             error: true,
         });
         if (input.value.length > 2 && !input.error) {
-            // const fackId = Math.floor(Math.random() * 100);
             const data = {
                 roomId: props.room.id,
                 userId: input.id,
@@ -98,14 +76,13 @@ const InviteUsers = (props) => {
     useEffect(() => {
         if (props.invite.error){
             message.error(props.invite.error);
-          
         }
     }, [props.invite.error]);
 
   
 
     const handleSelect = (id) => {
-        console.log('value', id);
+        // console.log('value', id);
         const value = dataSource.filter(item => item.id === id);
         setInput({
             ...input,
@@ -113,7 +90,7 @@ const InviteUsers = (props) => {
             id: value[0].id,
             error: false
         });
-        console.log('value', value);
+        // console.log('value', value);
     }
 
   const options = dataSource.map(item => {
@@ -125,8 +102,8 @@ const InviteUsers = (props) => {
     });
 
     const filterOption = (inputValue, option) => {
-        console.log('inputValue', inputValue);
-        console.log('option', option);
+        // console.log('inputValue', inputValue);
+        // console.log('option', option);
         return (Array.isArray(option.children) ? option.children.join('') :
         option.children).toUpperCase().indexOf(inputValue.toUpperCase()) !== -1;
     }
@@ -151,12 +128,11 @@ const InviteUsers = (props) => {
                     showSearch
                     style={{ width: '100%' }}
                     placeholder="Search for a user"
-                    // optionFilterProp="children"
-                    // onChange={handleSelect}
                     filterOption={filterOption}
-                    onSearch={handleChange}
                     onSelect={handleSelect}
-                    // value={input.value}
+                    onSearch={handleSearch}
+
+                    // onFocus={handleFocus}
                 >
                     {options}
                 </Select>
@@ -310,7 +286,8 @@ const mapStateToProps = (state) => {
         room: state.room,
         auth: state.auth,
         invite: state.invite,
+        users: state.users,
     }
 }
 
-export default connect(mapStateToProps, { inviteRequest })(InviteUsers);
+export default connect(mapStateToProps, { inviteRequest, currentUser })(InviteUsers);

@@ -48,7 +48,7 @@ export const INVITE_REFRESH = 'INVITE_REFRESH';
 export const INVITE_REMOVE_ALL = 'INVITE_REMOVE_ALL';
 
 
-
+export const CURRENT_USER = 'CURRENT_USER';
 
 
 
