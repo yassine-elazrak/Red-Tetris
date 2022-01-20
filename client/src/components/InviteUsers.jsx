@@ -188,7 +188,7 @@ const InviteUsers = (props) => {
                     <span>{id}</span>
                     <span>{name}</span>
                     <span style={{
-                        backgroundColor: "#6FCF97",
+                        color: "#6FCF97",
                         padding: '5px',
                         borderRadius: '5px',
                         margin: '5px',
@@ -210,7 +210,7 @@ const InviteUsers = (props) => {
                         <span>{id}</span>
                         <span>{name}</span>
                         <span style={{
-                            backgroundColor: yellow[5],
+                            color: yellow[6],
                             padding: '5px',
                             borderRadius: '5px',
                             margin: '5px',
@@ -232,7 +232,7 @@ const InviteUsers = (props) => {
                     <span>{id}</span>
                     <span>{name}</span>
                     <span style={{
-                        backgroundColor: red[4],
+                        color: red[4],
                         padding: '5px',
                         borderRadius: '5px',
                         margin: '5px',
@@ -263,6 +263,23 @@ const InviteUsers = (props) => {
 
     return (
         <Card title={form} type='inner'
+        actions={[
+            <Button type="primary" style={{
+                display: 'flex',
+                margin: 'auto',
+                marginTop: '10px',
+                }}>
+                Leave Room
+            </Button>,
+            <Button type="primary" style={{
+                display: 'flex',
+                margin: 'auto',
+                marginTop: '10px',
+                }}>
+                Start Game
+            </Button>
+
+        ]}
         style={{
             width: '100%',
             padding: 0,
@@ -276,7 +293,6 @@ const InviteUsers = (props) => {
 
         
         <div style={{
-            // marginTop: '5px',
             margin: 0,
             padding: 0,
             height: '100%',
@@ -289,35 +305,38 @@ const InviteUsers = (props) => {
             border: '1px solid #d9d9d9',
             borderRadius: '5px',
             boxShadow: '0px 0px 5px #d9d9d9',
+            maxHeight: '60vh',
+            overflowY: 'scroll',
             }}>
-                <div style={{
-                    width: '100%',
-                    height: '100%',
-                    display: 'inline-block',
-                    flexWrap: 'wrap',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    textAlign: 'center',
-                    backgroundColor: '#fafafa',
-                    paddingTop: '5px',
-                    margin: 0,
-                    }}>
-                        <div style={{
-                            width: '100%',
-                            display: 'flex',
-                            flexWrap: 'wrap',
-                            justifyContent: 'space-around',
-                            alignItems: 'top',
-                            flex: 2,
-                            }}>
-                                <p>UserId</p>
-                                <p>Name</p>
-                                <p>Status</p>
-                        </div>
-            </div>
+                <Meta type='inner' title={
+                    <div style={{
+                        width: '100%',
+                        display: 'inline-block',
+                        flexWrap: 'wrap',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        textAlign: 'center',
+                        backgroundColor: '#fafafa',
+                        paddingTop: '5px',
+                        // position: 'fixed',
+                        }}>
+                            <div style={{
+                                width: '100%',
+                                display: 'flex',
+                                flexWrap: 'wrap',
+                                justifyContent: 'space-around',
+                                alignItems: 'top',
+                                flex: 2,
+                                }}>
+                                    <p>UserId</p>
+                                    <p>Name</p>
+                                    <p>Status</p>
+                            </div> 
+                    </div>
+                 }  />
                 {inviteList}
         </div>
-        <Meta type='inner' title={
+        {/* <Meta type='inner' title={
             <Button type="primary" style={{
                 display: 'flex',
                 margin: 'auto',
@@ -327,7 +346,7 @@ const InviteUsers = (props) => {
             </Button>
         } style={{
             backgroundColor: '#fff',
-        }} />
+        }} /> */}
         </Card>
 
     )

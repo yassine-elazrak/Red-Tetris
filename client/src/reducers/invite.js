@@ -85,7 +85,12 @@ const removeAll = (state, action) => {
 const refresh = () => {
     const data = localStorage.getItem('invite');
     if (data) {
-        return JSON.parse(data);
+        const jsonData = JSON.parse(data);
+        return {
+            ...jsonData,
+            isLoading: false,
+            error: null,
+        }
     } else {
         return initialState;
     }
