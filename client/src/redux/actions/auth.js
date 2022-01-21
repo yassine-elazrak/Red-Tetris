@@ -3,7 +3,7 @@ import {
     SUCESS_LOGOUT,
     FAIL_LOGOUT,
     IS_LOADING,
-} from "./types";
+} from "../types";
 
 export const login = (user) => {
     const data = {id: 1, name: user};

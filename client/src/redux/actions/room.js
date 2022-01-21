@@ -5,7 +5,7 @@ import {
     ROOM_LEAVE,
     ROOM_ERROR,
     ROOM_CLOSE,
-} from './types';
+} from '../types';
 
 
 export const createRoom = (room) => {

@@ -2,7 +2,7 @@ import {
     MESSAGE_RECEIVED,
     MESSAGE_SENT,
     MESSAGE_SEND_FAILED,
-} from '../actions/types';
+} from '../types';
 
 const initialState = {
     isLoading: false,

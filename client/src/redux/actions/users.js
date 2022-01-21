@@ -1,7 +1,7 @@
 import {
     CURRENT_ONLINE_USERS,
     LOADING_ONLINE_USERS,
-} from './types';
+} from '../types';
 
 
 export const currentUser = (value) => {

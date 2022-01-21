@@ -6,7 +6,7 @@ import {
     INVITE_REFRESH,
     INVITE_REMOVE_ALL,
     LOADING_INVITES,
-} from '../actions/types';
+} from '../types';
 
 const initialState = {
     isLoading: false,
@@ -81,6 +81,7 @@ const removeAll = (state) => {
         invites: [],
     }
     localStorage.setItem('invite', JSON.stringify(data));
+    return data;
 }
 
 const refresh = () => {

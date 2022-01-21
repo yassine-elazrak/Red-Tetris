@@ -8,8 +8,10 @@ import { NavbarStyled, NotifDiv, LogoDesktop, LogoMobile } from './styles/NavBar
 import { Affix, Dropdown, Menu } from "antd";
 
 import { connect } from "react-redux";
-import { logout } from "../actions/auth";
-import { leaveRoom } from "../actions/room";
+// import { logout } from "../actions/auth";
+// import { leaveRoom } from "../actions/room";
+
+import { logout, leaveRoom, removeAllInvetes } from '../redux/actions'
 
 
 const NavbarComponent = (props) => {
@@ -18,6 +20,7 @@ const NavbarComponent = (props) => {
 
     const LogOut = () => {
         props.leaveRoom(auth.user.id);
+        props.removeAllInvetes();
         props.logout();
     }
 
@@ -76,8 +79,8 @@ const mapStateToProps = (state) => {
     }
 }
 
-const Navbar = connect(mapStateToProps, {leaveRoom, logout})(NavbarComponent);
-
-
-
-export default Navbar;
+export default connect(mapStateToProps, {
+    leaveRoom,
+    logout,
+    removeAllInvetes
+})(NavbarComponent);

@@ -7,7 +7,7 @@ import {
     INVITE_REFRESH,
     INVITE_REMOVE_ALL,
     LOADING_INVITES,
-} from './types';
+} from '../types';
 
 
 export const inviteRequest = (invite) => {
@@ -28,7 +28,7 @@ export const refreshInvite = () => {
     }
 }
 
-export const removeAll = () => {
+export const removeAllInvetes = () => {
     return {
         type: INVITE_REMOVE_ALL,
     }

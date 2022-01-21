@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Form, Input, Button, message, Checkbox} from "antd";
 import { connect } from "react-redux";
-import { createRoom } from "../actions/room";
+import { createRoom } from "../redux/actions";
 
 
 const FormRoomName = (props) => {

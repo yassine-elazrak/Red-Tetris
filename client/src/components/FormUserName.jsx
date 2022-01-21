@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Form, Input, Button, message} from "antd";
 
 import { connect } from "react-redux";
-import { login} from "../actions/auth";
+import { login } from "../redux/actions";
 
 
 const FormUserName = (props) => {

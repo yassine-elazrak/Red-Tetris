@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { connect } from 'react-redux';
-import { inviteRequest, currentUser } from "../actions";
+import { inviteRequest, currentUser } from "../redux/actions";
 
 import { Form, Input, Button, message, Card, Select } from 'antd';
 

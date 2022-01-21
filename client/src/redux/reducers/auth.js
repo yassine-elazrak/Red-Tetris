@@ -4,7 +4,7 @@ import {
     SUCESS_LOGOUT,
     FAIL_LOGIN,
     FAIL_LOGOUT,
-} from '../actions/types';
+} from '../types';
 
 const initialState = {
     isLoading: false,

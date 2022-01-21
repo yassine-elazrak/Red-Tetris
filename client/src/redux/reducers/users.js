@@ -1,7 +1,7 @@
 import {
     CURRENT_ONLINE_USERS,
     LOADING_ONLINE_USERS,
-} from '../actions/types';
+} from '../types';
 
 
 const initialState = {

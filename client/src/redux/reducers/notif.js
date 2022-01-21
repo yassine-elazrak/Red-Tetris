@@ -1,7 +1,7 @@
 import {
     NOTIFICATION_RECEIVE,
     NOTIFICATION_REFRESH
-} from '../actions/types';
+} from '../types';
 
 
 const initialState = {

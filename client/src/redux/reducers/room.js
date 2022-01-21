@@ -5,7 +5,7 @@ import {
     ROOM_REFRESH,
     ROOM_ERROR,
     ROOM_CLOSE,
-} from "../actions/types";
+} from "../types";
 
 const initialState = {
     isLoading: false,
