@@ -25,7 +25,7 @@ const newInvite = (state, action) => {
     };
     const index = state.invites.findIndex(invite => invite.userId === data.userId);
     if (index === -1) {
-        state.invites.push(data);
+        state.invites.unshift(data);
         localStorage.setItem('invite', JSON.stringify(state));
         return {
             ...state,
