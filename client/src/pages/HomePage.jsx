@@ -7,7 +7,7 @@ import Nabar from "../components/Navbar";
 import FooterComponent from "../components/Footer";
 import FormUserName from "../components/FormUserName";
 import FormRoomName from "../components/FormRoomName";
-import RoomPage from "../pages/RoomPage";
+import RoomPage from "./RoomPage";
 
 import OnePlayerMode from "../pages/OnePlayerMode";
 import MultiPlayerMode from "../pages/MultiPlayerMode";
@@ -31,8 +31,6 @@ const { Header, Sider, Content, Footer } = Layout;
 const HomePage = () => {
     const [collapsible, setCollapsible] = useState(true);
     const { auth, room } = useSelector(state => state);
-
-    console.log(room);
 
     return (
         <Layout style={{
@@ -61,8 +59,9 @@ const HomePage = () => {
                      <FormUserName />
                  :!room.is_joined ?
                      <FormRoomName />
-                : !room.isPrivate ?
-                    <MultiPlayerMode />
+                : !room.isPravite ? room.status === "waiting" ?
+                      <MultiPlayerMode />
+                      : <RoomPage />
                 :
                     <OnePlayerMode />
                 }

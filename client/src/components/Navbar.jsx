@@ -8,10 +8,12 @@ import { NavbarStyled, NotifDiv, LogoDesktop, LogoMobile } from './styles/NavBar
 import { Affix, Dropdown, Menu } from "antd";
 
 import { connect } from "react-redux";
-// import { logout } from "../actions/auth";
-// import { leaveRoom } from "../actions/room";
-
-import { logout, leaveRoom, removeAllInvetes } from '../redux/actions'
+// actions
+import {
+    logout,
+    leaveRoom,
+    removeAllInvetes,
+} from '../redux/actions'
 
 
 const NavbarComponent = (props) => {

@@ -1,10 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import { connect } from 'react-redux';
-import { inviteRequest, currentUser } from "../redux/actions";
 
 import { Form, Input, Button, message, Card, Select } from 'antd';
 
 import { gold, red } from '@ant-design/colors';
+import {
+    inviteRequest,
+    currentUser,
+    closeRoom,
+} from "../redux/actions";
 
 const { Meta } = Card;
 const { Option } = Select;
@@ -15,8 +19,17 @@ const InviteUsers = (props) => {
 
     const [dataSource, setDataSource] = useState([]);
     const [oldValue, setOldValue] = useState('');
-
+    const [input, setInput] = useState({
+        value: "",
+        id: null,
+        error: false,
+        errorMessage: "Please enter a valid username at least 3 characters long"
+    });
     const handleSearch = (value) => {
+        setInput({
+            ...input,
+            value: value,
+        });
         if (value && !value.includes(oldValue) || oldValue === '') {
             console.log('searching');
             setOldValue(value);
@@ -36,12 +49,7 @@ const InviteUsers = (props) => {
     }, [props.users]);
 
 
-    const [input, setInput] = useState({
-        value: "",
-        id: null,
-        error: false,
-        errorMessage: "Please enter a valid username at least 3 characters long"
-    });
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -79,6 +87,11 @@ const InviteUsers = (props) => {
             id: value[0].id,
             error: false
         });
+    }
+
+    const startGame = () => {
+        console.log(props.room);
+        props.closeRoom(props.room);
     }
 
     // filter the dataSource to only show the users that are included value
@@ -122,6 +135,8 @@ const InviteUsers = (props) => {
                     showSearch
                     style={{ width: '100%' }}
                     placeholder="Search for a user"
+                    notFoundContent={input.value.length ? "No users found" :
+                    "Please enter at least 1 character"}
                     filterOption={filterOption}
                     onSelect={handleSelect}
                     onSearch={handleSearch}
@@ -136,7 +151,7 @@ const InviteUsers = (props) => {
                     onClick={handleSubmit}
                     disabled={
                         input.error ||
-                        input.value.length < 3
+                        !(input.value.length && input.id)
                     }
                     loading={props.room.isLoading || props.invite.isLoading || props.users.isLoading}
                 >
@@ -150,7 +165,6 @@ const InviteUsers = (props) => {
     const inviteList = props.invite.invites.map((invite, index) => {
         return (
             <div key={index} style={{
-                // marginTop: '5px',
                 width: '100%',
                 display: 'inline-block',
                 flexWrap: 'wrap',
@@ -191,7 +205,9 @@ const InviteUsers = (props) => {
                 }}>
                 Leave Room
             </Button>,
-            <Button type="primary" style={{
+            <Button type="primary"
+            onClick={startGame}
+            style={{
                 display: 'flex',
                 margin: 'auto',
                 marginTop: '10px',
@@ -221,12 +237,10 @@ const InviteUsers = (props) => {
             flexWrap: 'wrap',
             justifyContent: 'center',
             alignItems: 'center',
-            flex: 2,
-            border: '1px solid #d9d9d9',
             borderRadius: '5px',
             boxShadow: '0px 0px 5px #d9d9d9',
             maxHeight: '60vh',
-            overflowY: 'scroll',
+            overflowY: 'auto',
             }}>
                 <Meta type='inner' title={
                     <div style={{
@@ -236,37 +250,29 @@ const InviteUsers = (props) => {
                         justifyContent: 'center',
                         alignItems: 'center',
                         textAlign: 'center',
-                        backgroundColor: '#f0f0f0',
                         paddingTop: '5px',
-                        // position: 'fixed',
-                        }}>
+                    }}>
                             <div style={{
                                 width: '100%',
                                 display: 'flex',
-                                flexWrap: 'wrap',
                                 justifyContent: 'space-around',
-                                alignItems: 'top',
-                                flex: 2,
-                                }}>
+                                alignItems: 'center',
+                                padding: 0,
+                                margin: 0,
+                            }}>
                                     <p>UserId</p>
                                     <p>Name</p>
                                     <p>Status</p>
                             </div> 
                     </div>
-                 }  />
+                 } style={{
+                     backgroundColor: '#f0f0f0',
+                     padding: 0,
+                     margin: 0,
+                     width: '100%',
+                 }}  />
                 {inviteList}
         </div>
-        {/* <Meta type='inner' title={
-            <Button type="primary" style={{
-                display: 'flex',
-                margin: 'auto',
-                marginTop: '10px',
-                }}>
-                Start Game
-            </Button>
-        } style={{
-            backgroundColor: '#fff',
-        }} /> */}
         </Card>
 
     )
@@ -281,4 +287,8 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, { inviteRequest, currentUser })(InviteUsers);
+export default connect(mapStateToProps, {
+    inviteRequest,
+    currentUser,
+    closeRoom,
+})(InviteUsers);

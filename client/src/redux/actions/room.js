@@ -44,9 +44,10 @@ export const leaveRoom = (userId) => {
 export const closeRoom = (room) => {
     return (dispatch) => {
         const data = {
-            state: 'closed',
+            ...room,
+            status: 'closed',
         };
-        if (room.state === 'waiting' && room.adminId === room.user.id)
+        if (room.status === 'waiting' && room.isAdmin)
             dispatch(success(data, ROOM_CLOSE));
         else
             dispatch(error("You are not admin", ROOM_ERROR));
@@ -56,7 +57,7 @@ export const closeRoom = (room) => {
 
 
 const success = (data, type) => {
-    // console.log(data + " <<<< done")
+    // console.log(data , " <<<< done")
     localStorage.setItem("room", JSON.stringify(data));
     return {
         type: type,
