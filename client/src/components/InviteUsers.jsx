@@ -24,6 +24,7 @@ const InviteUsers = (props) => {
         }
     };
 
+    // listen for changes in the online users
     useEffect(() => {
         const data = props.users.online.map(user => {
             return {
@@ -62,6 +63,7 @@ const InviteUsers = (props) => {
 
     }
 
+    // listen for changes in the invite error
     useEffect(() => {
         if (props.invite.error){
             message.error(props.invite.error);
@@ -69,7 +71,6 @@ const InviteUsers = (props) => {
     }, [props.invite.error]);
 
   
-
     const handleSelect = (id) => {
         const value = dataSource.filter(item => item.id === id);
         setInput({
@@ -80,18 +81,26 @@ const InviteUsers = (props) => {
         });
     }
 
-  const options = dataSource.map(item => {
-        return (
-            <Option key={item.id}
-                    value={item.id}
-            >{item.value}</Option>
-        )
-    });
-
+    // filter the dataSource to only show the users that are included value
     const filterOption = (inputValue, option) => {
         return (Array.isArray(option.children) ? option.children.join('') :
         option.children).toUpperCase().indexOf(inputValue.toUpperCase()) !== -1;
     }
+
+      const options = dataSource.map(item => {
+        return (
+            <Option key={item.id}
+                    value={item.id}
+            >{item.value}
+            <span style={{
+                color: '#ccc',
+                fontSize: '12px',
+                fontWeight: 'normal',
+                position: 'absolute',
+                right: '20px',
+            }}>{`User ID: ${item.id}`}</span></Option>
+        )
+    });
 
     const form = (
         <Form >
