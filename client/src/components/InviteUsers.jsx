@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import { connect, useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import { inviteRequest, currentUser } from "../actions";
 
-import { Form, Input, Button, message, Card, AutoComplete, Select } from 'antd';
+import { Form, Input, Button, message, Card, Select } from 'antd';
 
 import { gold, red } from '@ant-design/colors';
 
 const { Meta } = Card;
-const { Option } = AutoComplete;
+const { Option } = Select;
 
 
 
@@ -16,18 +16,8 @@ const InviteUsers = (props) => {
     const [dataSource, setDataSource] = useState([]);
     const [oldValue, setOldValue] = useState('');
 
-    // const handleFocus = () => {
-    //     props.currentUser('a');
-    //     // console.log(props.users);
-    // };
-
     const handleSearch = (value) => {
-        if (!value) {
-            // setDataSource([]);
-            return;
-        }
-        // console.log(value.includes(oldValue));
-        if (!value.includes(oldValue) || oldValue === '') {
+        if (value && !value.includes(oldValue) || oldValue === '') {
             console.log('searching');
             setOldValue(value);
             props.currentUser(value);
@@ -53,7 +43,6 @@ const InviteUsers = (props) => {
     });
 
     const handleSubmit = (e) => {
-        // console.log('e', e);
         e.preventDefault();
         input.value.length > 2 ? setInput({
             ...input,
@@ -82,7 +71,6 @@ const InviteUsers = (props) => {
   
 
     const handleSelect = (id) => {
-        // console.log('value', id);
         const value = dataSource.filter(item => item.id === id);
         setInput({
             ...input,
@@ -90,7 +78,6 @@ const InviteUsers = (props) => {
             id: value[0].id,
             error: false
         });
-        // console.log('value', value);
     }
 
   const options = dataSource.map(item => {
@@ -102,8 +89,6 @@ const InviteUsers = (props) => {
     });
 
     const filterOption = (inputValue, option) => {
-        // console.log('inputValue', inputValue);
-        // console.log('option', option);
         return (Array.isArray(option.children) ? option.children.join('') :
         option.children).toUpperCase().indexOf(inputValue.toUpperCase()) !== -1;
     }
@@ -131,8 +116,6 @@ const InviteUsers = (props) => {
                     filterOption={filterOption}
                     onSelect={handleSelect}
                     onSearch={handleSearch}
-
-                    // onFocus={handleFocus}
                 >
                     {options}
                 </Select>
@@ -144,10 +127,9 @@ const InviteUsers = (props) => {
                     onClick={handleSubmit}
                     disabled={
                         input.error ||
-                        input.value.length < 3 ||
-                        props.room.error
+                        input.value.length < 3
                     }
-                    loading={props.room.isLoading}
+                    loading={props.room.isLoading || props.invite.isLoading || props.users.isLoading}
                 >
                     Invite
                 </Button>

@@ -1,11 +1,13 @@
 import {
-    CURRENT_USER,
+    CURRENT_ONLINE_USERS,
+    LOADING_ONLINE_USERS,
 } from './types';
 
 
 export const currentUser = (value) => {
     return (dispatch) => {
-        dispatch(success({value: value}, CURRENT_USER));
+        dispatch({type: LOADING_ONLINE_USERS});
+        dispatch(success({value: value}, CURRENT_ONLINE_USERS));
     }
 }
 

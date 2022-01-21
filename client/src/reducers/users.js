@@ -1,6 +1,14 @@
 import {
-    CURRENT_USER,
+    CURRENT_ONLINE_USERS,
+    LOADING_ONLINE_USERS,
 } from '../actions/types';
+
+
+const initialState = {
+    isLoading: false,
+    online: [],
+};
+
 
 const generateRandomUser = (value) => {
     const users = [];
@@ -10,30 +18,25 @@ const generateRandomUser = (value) => {
             name: Math.random().toString(36).substring(7),
         });
     }
-    // return users;
-    // return users.filter(user => user.name.includes(value));
-    // console.log(value);
-    // if (value) {
-    //     console.log(value, 'value');
-    //     console.log(users.filter(user => user.name.includes(value)));
-    // }
     const newusers = users.filter(user => user.name.toLowerCase().includes(value.toLowerCase()));
-    // console.log(newusers.length, 'users.length');
     return newusers;
 };
 
-const initialState = {
-    isLoading: false,
-    online: [],
-};
+
 
 export default function usersReducer(state = initialState, action) {
     switch (action.type) {
-        case CURRENT_USER:
+        case CURRENT_ONLINE_USERS:
             console.log(action.payload);
             return {
                 ...state,
+                isLoading: false,
                 online: generateRandomUser(action.payload.value),
+            };
+        case LOADING_ONLINE_USERS:
+            return {
+                ...state,
+                isLoading: true,
             };
         default:
             return state;

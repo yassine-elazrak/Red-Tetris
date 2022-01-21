@@ -9,7 +9,8 @@ export const FAIL_LOGIN = 'FAIL_LOGIN';
 export const FAIL_LOGOUT = 'FAIL_LOGOUT';
 
 
-// Message actions
+// Notifications actions
+export const LOADING_NOTIFICATIONS = 'LOADING_NOTIFICATIONS';
 export const NOTIFICATION_INVITE = 'NOTIFICATION_INVITE';
 export const NOTIFICATION_LEAVE = 'NOTIFICATION_LEAVE';
 export const NOTIFICATION_JOIN = 'NOTIFICATION_JOIN';
@@ -20,6 +21,7 @@ export const SUCESS_RECEIVE_MESSAGE = 'SUCESS_RECEIVE_MESSAGE';
 
 
 // Room actions
+export const LOADING_ROOMS = 'LOADING_ROOMS';
 export const ROOM_REFRESH = "ROOM_REFRESH";
 export const ROOM_CREATE = 'ROOM_CREATE';
 export const ROOM_JOIN = 'ROOM_JOIN';
@@ -33,12 +35,14 @@ export const NOTIFICATION_RECEIVE = 'NOTIFICATION_RECEIVE';
 export const NOTIFICATION_REFRESH = 'NOTIFICATION_REFRESH';
 
 // Message actions
+export const LOADING_MESSAGES = 'LOADING_MESSAGES';
 export const MESSAGE_RECEIVED = 'MESSAGE_RECEIVED';
 export const MESSAGE_SENT = 'MESSAGE_SENT';
 export const MESSAGE_REFRESH = 'MESSAGE_REFRESH';
 export const MESSAGE_SEND_FAILED = 'MESSAGE_SEND_FAILED';
 
 // Invite actions
+export const LOADING_INVITES = 'LOADING_INVITES';
 export const INVITE_REQUEST = 'INVITE_REQUEST';
 export const INVITE_SUCCESS = 'INVITE_SUCCESS';
 export const INVITE_FAILURE = 'INVITE_FAILURE';
@@ -48,7 +52,9 @@ export const INVITE_REFRESH = 'INVITE_REFRESH';
 export const INVITE_REMOVE_ALL = 'INVITE_REMOVE_ALL';
 
 
-export const CURRENT_USER = 'CURRENT_USER';
+// Online User actions
+export const LOADING_ONLINE_USERS = 'LOADING_ONLINE_USERS';
+export const CURRENT_ONLINE_USERS = 'CURRENT_ONLINE_USERS';
 
 
 
