@@ -40,7 +40,6 @@ const FormUserName = (props) => {
 
 
     useEffect(() => {
-        // console.log('props', props);
         if (props.auth.error){
             message.error(props.auth.error);
         }

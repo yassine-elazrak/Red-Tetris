@@ -19,9 +19,9 @@ import {
   refreshInvite,
 } from './redux/actions';
 
-store.dispatch(isAuth());
-store.dispatch(refreshRoom());
-store.dispatch(refreshInvite());
+// store.dispatch(isAuth());
+// store.dispatch(refreshRoom());
+// store.dispatch(refreshInvite());
 
 
 
