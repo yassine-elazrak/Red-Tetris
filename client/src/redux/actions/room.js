@@ -14,19 +14,19 @@ export const createRoom = (room) => {
     }
 }
 
-export const refreshRoom = () => {
-    return (dispatch) => {
-        try {
-            const room = localStorage.getItem("room");
-            if (room) {
-                dispatch(success(JSON.parse(room), ROOM_REFRESH));
-            }
-        }
-        catch (e) {
-            dispatch(error(e, ROOM_ERROR));
-        }
-    }
-}
+// export const refreshRoom = () => {
+//     return (dispatch) => {
+//         try {
+//             // const room = localStorage.getItem("room");
+//             // if (room) {
+//                 dispatch(success(JSON.parse(room), ROOM_REFRESH));
+//             // }
+//         }
+//         catch (e) {
+//             dispatch(error(e, ROOM_ERROR));
+//         }
+//     }
+// }
 
 export const joinRoom = (room) => {
     return async (dispatch) => {
@@ -58,7 +58,7 @@ export const closeRoom = (room) => {
 
 const success = (data, type) => {
     // console.log(data , " <<<< done")
-    localStorage.setItem("room", JSON.stringify(data));
+    // localStorage.setItem("room", JSON.stringify(data));
     return {
         type: type,
         payload: data

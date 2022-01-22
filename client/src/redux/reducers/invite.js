@@ -26,7 +26,7 @@ const newInvite = (state, action) => {
     const index = state.invites.findIndex(invite => invite.userId === data.userId);
     if (index === -1) {
         state.invites.unshift(data);
-        localStorage.setItem('invite', JSON.stringify(state));
+        // localStorage.setItem('invite', JSON.stringify(state));
         return {
             ...state,
             error: null,
@@ -55,7 +55,7 @@ const accept = (state, action) => {
         isLoading: false,
         invites: newInvites,
     }
-    localStorage.setItem('invite', JSON.stringify(data));
+    // localStorage.setItem('invite', JSON.stringify(data));
     return data;
 }
 
@@ -72,7 +72,8 @@ const decline = (state, action) => {
         isLoading: false,
         invites: newInvites,
     }
-    localStorage.setItem('invite', JSON.stringify(data));
+    return data;
+    // localStorage.setItem('invite', JSON.stringify(data));
 }
 
 const removeAll = (state) => {
@@ -80,23 +81,23 @@ const removeAll = (state) => {
         ...state,
         invites: [],
     }
-    localStorage.setItem('invite', JSON.stringify(data));
+    // localStorage.setItem('invite', JSON.stringify(data));
     return data;
 }
 
-const refresh = () => {
-    const data = localStorage.getItem('invite');
-    if (data) {
-        const jsonData = JSON.parse(data);
-        return {
-            ...jsonData,
-            isLoading: false,
-            error: null,
-        }
-    } else {
-        return initialState;
-    }
-}
+// const refresh = () => {
+//     const data = localStorage.getItem('invite');
+//     if (data) {
+//         const jsonData = JSON.parse(data);
+//         return {
+//             ...jsonData,
+//             isLoading: false,
+//             error: null,
+//         }
+//     } else {
+//         return initialState;
+//     }
+// }
 
 export default function inviteReducer(state = initialState, action) {
     switch (action.type) {
@@ -117,8 +118,8 @@ export default function inviteReducer(state = initialState, action) {
             return accept(state, action);
         case INVITE_DECLINE:
             return decline(state, action);
-        case INVITE_REFRESH:
-            return refresh();
+        // case INVITE_REFRESH:
+            // return refresh();
         case INVITE_REMOVE_ALL:
             return removeAll(state);
         default:
