@@ -9,19 +9,17 @@ const initialState = {
     error: null,
     read: false,
     status: null,
-    notifications: [{
-        id: null,
-        type: null,
-        user: {
-            id: null,
-            name: '',
-        },
-        room: {
-            id: null,
-            name: '',
-            state: null,
-        }
-    }],
+    notifications: [
+        // userId: userId,
+        // userName: userName,
+        // roomId: roomId,
+        // roomName: roomName,
+        // read: false | true,
+        // type: invite | message | ...,
+        // content: content,
+        // createdAt: createdAt,
+        // updatedAt: updatedAt,
+    ],
 };
 
 const notifReducer = (state = initialState, action) => {

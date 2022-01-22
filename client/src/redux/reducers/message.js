@@ -8,12 +8,14 @@ const initialState = {
     isLoading: false,
     error: null,
     messages: [
-        {
-            id: null,
-            user: null,
-            text: '',
-            createdAt: null,
-        }
+        // userId: userId,
+        // userName: userName,
+        // roomId: roomId,
+        // roomName: roomName,
+        // read: false | true,
+        // content: content,
+        // createdAt: createdAt,
+        // updatedAt: updatedAt,
     ],
 };
 

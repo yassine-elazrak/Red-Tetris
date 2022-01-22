@@ -21,7 +21,7 @@ const NavbarComponent = (props) => {
     const { auth, room } = props;
 
     const LogOut = () => {
-        props.leaveRoom(auth.user.id);
+        props.leaveRoom(auth.id);
         props.removeAllInvetes();
         props.logout();
     }
@@ -40,7 +40,7 @@ const NavbarComponent = (props) => {
             <div style={{
                 cursor: "pointer",
             }}>
-                {auth.user.name}
+                {auth.name}
             </div>
         </Dropdown>
     )

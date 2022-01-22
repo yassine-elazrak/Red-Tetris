@@ -6,7 +6,11 @@ import {
 
 const initialState = {
     isLoading: false,
-    online: [],
+    online: [
+        // userId: userId,
+        // userName: userName,
+        // loggedAt: loggedAt,
+    ],
 };
 
 

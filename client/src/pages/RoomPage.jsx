@@ -10,7 +10,7 @@ export const RoomPage = (props) => {
     // console.log(room);
     return (
         <div>
-            <h1>Welcome {auth.user.name}  at Room page</h1>
+            <h1>Welcome {auth.name}  at Room page</h1>
             <h1>{room.name}</h1>
         </div>
     )

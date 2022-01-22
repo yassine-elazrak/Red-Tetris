@@ -10,10 +10,8 @@ const initialState = {
     isLoading: false,
     isAuth: false,
     error: null,
-    user: {
-        id: null,
-        name: '',
-    },
+    id: null,
+    name: '',
 };
 
 export default function authReducer(state = initialState, action) {
@@ -28,22 +26,11 @@ export default function authReducer(state = initialState, action) {
                 ...state,
                 isLoading: false,
                 isAuth: true,
-                user: {
-                    id: action.payload.id,
-                    name: action.payload.name,
-                }
+                id: action.payload.id,
+                name: action.payload.name,
             };
         case SUCESS_LOGOUT:
-            delete localStorage.data;
-            return {
-                ...state,
-                isLoading: false,
-                isAuth: false,
-                user: {
-                    id: '',
-                    name: '',
-                }
-            };
+            return initialState;
         case FAIL_LOGIN:
             return {
                 ...state,

@@ -1,35 +1,24 @@
 import React from 'react';
 
-import './App.css';
+import { Routes, Route } from 'react-router-dom';
 
-
-
+// Home page component
 import HomePage from './pages/HomePage';
+import Page404 from './pages/404';
+
+// Style
 import 'antd/dist/antd.css';
-
-import store from './redux/store';
-
-// import { isAuth } from './actions/auth';
-// import { refreshRoom } from './actions/room';
-// import { refreshInvite } from './actions/invite';
-
-import {
-  isAuth,
-  refreshRoom,
-  refreshInvite,
-} from './redux/actions';
-
-// store.dispatch(isAuth());
-// store.dispatch(refreshRoom());
-// store.dispatch(refreshInvite());
-
+import './App.css';
 
 
 function App() {
 
   return (
     <div className="App">
-      <HomePage />
+      <Routes>
+        <Route path="/"  element={<HomePage />} />
+        <Route path="*" element={<Page404 />} />
+      </Routes>
     </div>
   );
 }

@@ -28,7 +28,7 @@ const FormRoomName = (props) => {
             roomId: fackId,
             roomName: input.value,
             isPravite: checked,
-            user: props.auth.user,
+            user: props.auth,
 
         }
         input.value.length > 2 ? setInput({

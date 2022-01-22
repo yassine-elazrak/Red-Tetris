@@ -14,37 +14,12 @@ export const login = (user) => {
 }
 
 export const logout = () => {
-    return (dispatch) => {
-        try {
-            // const user = JSON.parse(localStorage.getItem("user"));
-            // if (user) {
-                // dispatch(success(user, SUCESS_LOGOUT));
-                return dispatch(success({}, SUCESS_LOGOUT));
-                // localStorage.removeItem("user");
-            // }
-        } catch (error) {
-            dispatch(error(error, FAIL_LOGOUT));
-        }
-    }
-}
+    return (dispatch) => dispatch(success({}, SUCESS_LOGOUT));
 
-// export const isAuth = () => {
-//     return (dispatch) => {
-//         try {
-//             const user = localStorage.getItem("user");
-//             if (user) {
-//                 dispatch(success(JSON.parse(user), SUCESS_LOGIN));
-//             }
-//         }
-//         catch (e) {
-//             dispatch(error(e, FAIL_LOGOUT)); // for test
-//         }
-//     }
-// }
+}
 
 
 const success = (data, type) => {
-    // localStorage.setItem("user", JSON.stringify(data));
     return {
         type: type,
         payload: data
