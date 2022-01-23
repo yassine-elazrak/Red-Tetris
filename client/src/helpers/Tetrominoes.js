@@ -1,5 +1,9 @@
 
 const Tetrominoes = {
+    0: {
+        shape : [0],
+        color: "#FFF",
+    },
     I: {
         shape : [
             [0, 1, 0, 0],

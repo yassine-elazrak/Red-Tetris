@@ -1,5 +1,4 @@
 import {
-    ROOM_REFRESH,
     ROOM_CREATE,
     ROOM_JOIN,
     ROOM_LEAVE,
@@ -33,10 +32,12 @@ export const closeRoom = (room) => {
             ...room,
             status: 'closed',
         };
-        if (room.status === 'waiting' && room.isAdmin)
-            dispatch(success(data, ROOM_CLOSE));
-        else
+        if (room.status === 'waiting'){
+            room.isAdmin ? dispatch(success(data, ROOM_CLOSE)) :
             dispatch(error("You are not admin", ROOM_ERROR));
+        }
+        else
+            dispatch(error('room error'), ROOM_ERROR);
     }
 }
 
