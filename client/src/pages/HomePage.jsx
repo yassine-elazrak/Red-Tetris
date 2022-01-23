@@ -19,6 +19,9 @@ import {
     MenuFoldOutlined,
 } from '@ant-design/icons';
 
+import { connect } from "react-redux";
+import { login, createRoom } from "../redux/actions";
+
 import "./styles/HeaderStyled.css";
 
 import { useSelector, useDispatch } from "react-redux";
@@ -31,17 +34,32 @@ const { Header, Sider, Content, Footer } = Layout;
 
 const HomePage = (props) => {
     const [collapsible, setCollapsible] = useState(true);
-    const { auth, room } = useSelector(state => state);
+    const { auth, room } = props;
 
-    // if (window.location.hash){
-    //   const { hash } = window.location;
-    //   const Regx = /(^#[\w\-]+\[[\w\-]+\]$)|(^#[\w\-]+$)/g
-    //   const match = hash.match(Regx);
-    //   console.log(hash, match);
-    //   message.error(hash)
-    // }
-
-    // console.log(window.location);
+    useEffect(() => {
+        const { hash } = window.location;
+        if (hash){
+            const Regx = /(^#[\w\-]+\[[\w\-]+\]$)|(^#[\w\-]+$)/g
+            const match = hash.match(Regx);
+            console.log(hash, hash.match(Regx) );
+            if (!match){
+                message.error(`Invalid hash-basd url`)
+            } else {
+                const split = hash.match(/([\w\-]+)/g)
+                props.login(split[0]);
+                if (split[1]) {
+                  const data = {
+                    roomId: 1,
+                    roomName: split[1],
+                    isPravite: false,
+                    user: props.auth,
+                  }
+                  props.createRoom(data)
+                }
+            }
+        }
+        
+    }, [window.location.hash])
 
     return (
         <Layout style={{
@@ -148,4 +166,11 @@ const HomePage = (props) => {
     );
 }
 
-export default HomePage;
+const mapStateToProps = state => {
+    return {
+        auth: state.auth,
+        room: state.room,
+    };
+};
+
+export default connect(mapStateToProps, { login, createRoom })(HomePage);
