@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import { Layout, Menu} from "antd";
+import React, {useState, useEffect} from "react";
+import { Layout, Menu, message} from "antd";
 
 
 
@@ -8,6 +8,7 @@ import FooterComponent from "../components/Footer";
 import FormUserName from "../components/FormUserName";
 import FormRoomName from "../components/FormRoomName";
 import RoomPage from "./RoomPage";
+import Page404 from "./404";
 
 import OnePlayerMode from "../pages/OnePlayerMode";
 import MultiPlayerMode from "../pages/MultiPlayerMode";
@@ -20,7 +21,7 @@ import {
 
 import "./styles/HeaderStyled.css";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 
 
@@ -28,9 +29,19 @@ const { Header, Sider, Content, Footer } = Layout;
 
 
 
-const HomePage = () => {
+const HomePage = (props) => {
     const [collapsible, setCollapsible] = useState(true);
     const { auth, room } = useSelector(state => state);
+
+    // if (window.location.hash){
+    //   const { hash } = window.location;
+    //   const Regx = /(^#[\w\-]+\[[\w\-]+\]$)|(^#[\w\-]+$)/g
+    //   const match = hash.match(Regx);
+    //   console.log(hash, match);
+    //   message.error(hash)
+    // }
+
+    // console.log(window.location);
 
     return (
         <Layout style={{
@@ -55,7 +66,9 @@ const HomePage = () => {
             minHeight: 'calc(100vh - 138px)',
             
             }}>
-            {!auth.isAuth ?
+            {window.location.pathname !== '/' ?
+                  <Page404 />
+                  :!auth.isAuth ?
                      <FormUserName />
                  :!room.is_joined ?
                      <FormRoomName />

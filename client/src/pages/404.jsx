@@ -6,36 +6,23 @@ const { Content, Footer } = Layout
 
 const Page404 = () => {
     return (
-        <Layout style={{background: 'none'}}>
-            <Layout style={{background: 'none'}}>
-              <Content style={{
-                  margin: '24px 16px',
-                  padding: 24,
-                  height: 'calc(100vh - 100px)'
-              }}>
-                  <Card type="inner"
-                        actions={[
-                            <Button type='primary'>
-                                Back Home
-                            </Button>
-                        ]}
-                        >
-                  <Result
-                  status="404"
-                  title="404"
-                  subTitle="Sorry, the page you visited does not exist."
-                  />
-                  </Card>
-              </Content>
-            </Layout>
-            <Footer style={{
-                background: 'none',
-                zIndex: '999',
+        <Card type="inner"
+            actions={[
+                <Button type='primary'>
+                    Back Home </Button>
+            ]}
+            >
+            <Result
+            status="404"
+            title="404"
+            subTitle="Sorry, the page you visited does not exist."
+            style={{
+              //   border: '1px solid green',
                 padding: 0,
-            }}>
-                <FooterComponet />
-            </Footer>
-        </Layout>
+                margin: 0,
+            }}
+            />
+        </Card>
 
     )
 }

@@ -47,6 +47,19 @@ const FormUserName = (props) => {
    
 
 
+    useEffect(() => {
+        const { hash } = window.location;
+        if (hash){
+            const Regx = /(^#[\w\-]+\[[\w\-]+\]$)|(^#[\w\-]+$)/g
+            const match = hash.match(Regx);
+            console.log(hash, hash.match(Regx) );
+            !match && message.error(`Invalid hash-basd url`)
+        }
+        
+    }, [window.location.hash])
+
+
+
 
     return (
         <Form
