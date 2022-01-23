@@ -13,6 +13,7 @@ export const login = (user) => {
     }
 }
 
+
 export const logout = () => {
     return (dispatch) => dispatch(success({}, SUCESS_LOGOUT));
 

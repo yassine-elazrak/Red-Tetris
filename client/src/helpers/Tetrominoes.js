@@ -1,8 +1,8 @@
 
-const Tetrominoes = {
+export const TETROMINOES = {
     0: {
         shape : [0],
-        color: "#FFF",
+        color: "0, 0, 0",
     },
     I: {
         shape : [
@@ -11,7 +11,7 @@ const Tetrominoes = {
             [0, 1, 0, 0],
             [0, 1, 0, 0],
         ],
-        color: "cyan",
+        color: "80, 227, 230",
     },
     J: {
         shape : [
@@ -19,7 +19,7 @@ const Tetrominoes = {
             [0, 2, 0],
             [2, 2, 0],
         ],
-        color: "blue",
+        color: "36, 95, 223",
     },
     L: {
         shape : [
@@ -27,14 +27,14 @@ const Tetrominoes = {
             [0, 3, 0],
             [0, 3, 3],
         ],
-        color: "orange",
+        color: "223, 173, 36",
     },
     O: {
         shape : [
             [4, 4],
             [4, 4],
         ],
-        color: "yellow",
+        color: "223, 217, 36",
     },
     S: {
         shape : [
@@ -42,7 +42,7 @@ const Tetrominoes = {
             [5, 5, 0],
             [0, 0, 0],
         ],
-        color: "green",
+        color: "48, 211, 56",
     },
     T: {
         shape : [
@@ -50,7 +50,7 @@ const Tetrominoes = {
             [6, 6, 6],
             [0, 0, 0],
         ],
-        color: "purple",
+        color: "132, 61, 198",
     },
     Z: {
         shape : [
@@ -58,9 +58,12 @@ const Tetrominoes = {
             [0, 7, 7],
             [0, 0, 0],
         ],
-        color: "red",
+        color: "227, 78, 78",
     },
 };
 
-
-export default Tetrominoes;
+export const randomTetromino = () => {
+    const tetrominoes = 'IJLOSTZ';
+    const randomTetromino = tetrominoes[Math.floor(Math.random() * tetrominoes.length)];
+    return TETROMINOES[randomTetromino];
+}

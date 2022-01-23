@@ -36,40 +36,48 @@ const HomePage = (props) => {
     const [collapsible, setCollapsible] = useState(true);
     const { auth, room } = props;
 
+    const user = useSelector(state => state.auth);
+    const dispatch = useDispatch();
+
     useEffect(() => {
         const { hash } = window.location;
         if (hash){
-            const Regx = /(^#[\w\-]+\[[\w\-]+\]$)|(^#[\w\-]+$)/g
+            const Regx = /(^#[\w\-]+\[[\w\-]+\]$)/g
             const match = hash.match(Regx);
             console.log(hash, hash.match(Regx) );
+            console.log(props);
             if (!match){
                 message.error(`Invalid hash-basd url`)
             } else {
                 const split = hash.match(/([\w\-]+)/g)
-                props.login(split[0]);
-                if (split[1]) {
-                  const data = {
-                    roomId: 1,
-                    roomName: split[1],
-                    isPravite: false,
-                    user: props.auth,
-                  }
-                  props.createRoom(data)
+                dispatch(login(split[1]));
+                console.log(user, 'user');
+                const roomData = {
+                  roomId: 1,
+                  roomName: split[0],
+                  isPravite: true,
+                  user: props.auth,
                 }
+                dispatch(createRoom(roomData));
             }
         }
         
-    }, [window.location.hash])
+    }, [])
+
+
 
     return (
         <Layout style={{
             background: "none",
+            width: "100vw",
+            height: "auto",
+            // border: "1px solid green",
         }}>
         <Header theme="dark" className="header" style={{
             background: 'none',
             padding: 0,
             margin: 0,
-            marginBottom: "-15px",
+            // marginBottom: "-15px",
             zIndex: "998",
             }}>
               <Nabar />
@@ -79,9 +87,10 @@ const HomePage = (props) => {
         }}>
         <Content style={{
             background: 'none',
-            margin: '24px 16px',
-            padding: 24,
-            minHeight: 'calc(100vh - 138px)',
+            // marginTop: "24px",
+            // margin: '24px 16px',
+            // padding: 24,
+            minHeight: 'calc(100vh - 115px)',
             
             }}>
             {window.location.pathname !== '/' ?
@@ -97,7 +106,7 @@ const HomePage = (props) => {
                     <OnePlayerMode />
                 }
           </Content>
-          <span style={{
+          {/* <span style={{
                 color: "#404040",
                 fontSize: "20px",
                 fontWeight: "bold",
@@ -117,8 +126,8 @@ const HomePage = (props) => {
                     onClick={() => setCollapsible(!collapsible)}
                 />
             }
-            </span>
-          <Sider theme="dark"
+            </span> */}
+          {/* <Sider theme="dark"
           trigger={null}
           collapsible
           collapsed={collapsible}
@@ -150,11 +159,11 @@ const HomePage = (props) => {
               <span>nav 3</span>
             </Menu.Item>
           </Menu>
-        </Sider>
+        </Sider> */}
         </Layout>
         <Footer style={{
             background: 'none',
-            marginTop: '-10px',
+            // marginTop: '-10px',
             zIndex: "999",
             padding: 0,
         }}>
