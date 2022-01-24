@@ -1,7 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { connect } from 'react-redux';
-import { Layout, Card, Button, Row, Col } from 'antd';
+import { Layout, Card, Button, Row, Col, Input } from 'antd';
+import moment from 'moment'
 
 import { createStage, STAGE_HEIGHT, STAGE_WIDTH } from '../helpers/StageHelper';
 import { TETROMINOES, randomTetromino } from '../helpers/Tetrominoes';
@@ -10,10 +11,6 @@ import { CellStyle } from './styles/CellStyle';
 const { Content, Sider } = Layout;
 
 const Stage = (props) => {
-
-    // const stage = useSelector(state => state.stage);
-    // const tetromino = useSelector(state => state.tetromino);
-    // const dispatch = useDispatch();
 
 
     const { room, auth } = props;
@@ -27,35 +24,42 @@ const Stage = (props) => {
             userId: 1,
             userName: 'user1',
             message: 'hello',
-            createdAt: '2020-01-01'
+            createdAt: '2022-1-24 12:12:12'
         },
         {
             id: 2,
             userId: 2,
             userName: 'user2',
-            message: 'hello',
-            createdAt: '2020-01-01'
+            message: 'hi',
+            createdAt: '2022-1-24 12:12:12'
         },
         {
             id: 3,
             userId: 3,
             userName: 'user3',
-            message: 'hello',
-            createdAt: '2020-01-01'
+            message: 'how are you',
+            createdAt: '2022-1-24 12:12:12'
         },
         {
             id: 4,
-            userId: 4,
+            userId: 1,
             userName: 'user4',
-            message: 'hello',
-            createdAt: '2020-01-01'
+            message: 'fine',
+            createdAt: '2022-1-24 12:12:12'
         },
         {
             id: 5,
             userId: 5,
             userName: 'user5',
-            message: 'hello',
-            createdAt: '2020-01-01'
+            message: 'good',
+            createdAt: '2022-1-24 12:12:12'
+        },
+        {
+            id: 6,
+            userId: 6,
+            userName: 'user6',
+            message: 'nice',
+            createdAt: '2022-1-24 12:12:12'
         },
     ]
 
@@ -86,27 +90,64 @@ const Stage = (props) => {
     const MessageSide = () => {
         return (
             <div style={{
-                height: '100%',
                 width: '100%',
-                // background: 'rgba(0,0,0,0.5)',
                 borderRight: '1px solid #ccc',
-                overflow: 'auto',
-                padding: '10px'
+                overflowX: 'hidden',
+                overflowY: 'auto',
+                padding: '5px',
+                height: 'calc(100% - 30px)',
             }}>
                 {fackeMessage.map(item => {
                     return (
-                        <div key={item.id}>
-                            {/* <span>{auth.id}</span>
-                            <span>{item.userName}</span>
-                            <span>{item.message}</span>
-                            <span>{item.createdAt}</span>
-                            <span>{item.id}</span> */}
+                        <div key={item.id} style={{
+                            background: 'rgba(0,0,0,0.5)',
+                            width: '90%',
+                            paddingLeft: '5px',
+                            paddingRight: '5px',
+                            direction: `${item.userId === auth.id ? 'rtl' : 'ltr'}`,
+                            float: `${item.userId === auth.id ? 'right' : 'left'}`,
+                            marginBottom: '10px',
+                            borderRadius: '10px',
+                            display: 'grid',
+                            gridTemplateColumns: '1fr 1fr',
+                            gridTemplateRows: '1fr 1fr',
+                            gridTemplateAreas: `
+                            "userName createdAt"
+                            "message message"
+                            `
+                        }}>
+                            <div style={{
+                                gridArea: 'userName',
+                                fontSize: '12px',
+                                fontWeight: 'bold',
+                                color: 'rgba(255,255,255,0.5)',
+                                textAlign: 'start',
+                                padding: '5px'
+                            }}>{item.userId === auth.id ? 'You' : item.userName}</div>
+                            <div style={{
+                                gridArea: 'message',
+                                fontSize: '12px',
+                                color: '#ccc',
+                                textAlign: 'start',
+                                padding: '5px'
+                            }}>{item.message}</div>
+                            <div style={{
+                                gridArea: 'createdAt',
+                                fontSize: '12px',
+                                color: 'rgba(255,255,255,0.5)',
+                                textAlign: 'end',
+                                padding: '5px'
+                            }}>{moment(item.createdAt).fromNow()}</div>
                         </div>
+
                     )
-                })}
+                }
+                )}
             </div>
         )
     }
+
+
     const LeftSide = () => {
         return (
             <div style={{
@@ -137,7 +178,7 @@ const Stage = (props) => {
                     gridTemplateColumns: `repeat(${rendom.shape.length}, 1fr)`,
                     gridGap: '1px',
                     width: `calc(15px * ${rendom.shape.length})`,
-                    
+
                 }} >
                     {nextTetromino}
                 </div>
@@ -161,6 +202,7 @@ const Stage = (props) => {
                 maxWidth: '400px',
                 background: 'none',
                 margin: 'auto',
+                // padding: '10px',
                 border: '1px solid red',
 
             }}>
@@ -177,49 +219,61 @@ const Stage = (props) => {
             padding: 0,
             margin: 0,
             height: 'calc(100vh - 90px)',
-            paddingTop: '30px',
+            paddingTop: '15px',
             paddingBottom: '30px',
             marginTop: '-10px',
             marginBottom: '-20px',
-            }}>
-        <Row style={{
-            border: '1px solid red',
+            // position: 'fixed',
         }}>
-            <Col span={24}>
-                {header()}
-            </Col>
-        </Row>
-        <Row style={{
-            border: '1px solid green',
-        }}>
-            <Col span={8} style={{
-                border: '1px solid blue',
+            <Row style={{
+                border: '1px solid red',
             }}>
-                <LeftSide />
-            </Col>
-            <Col span={8} style={{
-                border: '1px solid blue',
+                <Col span={24}>
+                    {header()}
+                </Col>
+            </Row>
+            <Row style={{
+                border: '1px solid green',
+                // background: 'rgba(0, 0, 0, 0.5)',
+                height: 'calc(100vh - 220px)',
             }}>
-                {body()}
-            </Col>
-            <Col span={8} style={{
-                border: '1px solid grey',
-            }}>
-                <MessageSide />
-            </Col>
-        </Row>
-        <Row style={{
-            border: '1px solid red',
-        }}>
-            <Col span={24}>
-                <div style={{
-                    border: '1px solid red',
-                    padding: '10px',
+                <Col span={8} style={{
+                    border: '1px solid blue',
                 }}>
-                    <span>Footer</span>
-                </div>
-            </Col>
-        </Row>
+                    <LeftSide />
+                </Col>
+                <Col span={8} style={{
+                    border: '1px solid blue',
+                    padding: '10px',
+                    margin: 'auto',
+                }}>
+                    {body()}
+                </Col>
+                <Col span={8} style={{
+                    border: '1px solid grey',
+                    height: '100%',
+                    // overflow: 'hidden',
+                    // padding: '10px',
+                }}>
+                    <MessageSide />
+                    <Input style={{
+                        width: '100%'
+                    }} />
+
+                </Col>
+            </Row>
+            <Row style={{
+                border: '1px solid red',
+            }}>
+                <Col span={24}>
+                    <div style={{
+                        border: '1px solid red',
+                        padding: '10px',
+                    }}>
+                        <span>Footer</span>
+                    </div>
+                </Col>
+            </Row>
 
         </Content>
     )
