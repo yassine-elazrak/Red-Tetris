@@ -91,7 +91,7 @@ const Stage = (props) => {
         return (
             <div style={{
                 width: '100%',
-                borderRight: '1px solid #ccc',
+                // borderRight: '1px solid #ccc',
                 overflowX: 'hidden',
                 overflowY: 'auto',
                 padding: '5px',
@@ -156,7 +156,7 @@ const Stage = (props) => {
                 // justifyContent: 'space-around',
                 // alignItems: 'center',
                 // flex: 2,
-                border: '1px solid red',
+                // border: '1px solid red',
             }}>
                 <span>LeftSide</span>
             </div>
@@ -170,6 +170,7 @@ const Stage = (props) => {
                 flexWrap: 'wrap',
                 justifyContent: 'space-around',
                 padding: '10px',
+                background: 'rgba(0,0,0,0.3)',
             }}>
                 <div style={{
                     display: 'grid',
@@ -203,7 +204,7 @@ const Stage = (props) => {
                 background: 'none',
                 margin: 'auto',
                 // padding: '10px',
-                border: '1px solid red',
+                // border: '1px solid red',
 
             }}>
                 {stage}
@@ -226,31 +227,31 @@ const Stage = (props) => {
             // position: 'fixed',
         }}>
             <Row style={{
-                border: '1px solid red',
+                // border: '1px solid red',
             }}>
                 <Col span={24}>
                     {header()}
                 </Col>
             </Row>
             <Row style={{
-                border: '1px solid green',
+                // border: '1px solid green',
                 // background: 'rgba(0, 0, 0, 0.5)',
                 height: 'calc(100vh - 220px)',
             }}>
                 <Col span={8} style={{
-                    border: '1px solid blue',
+                    // border: '1px solid blue',
                 }}>
                     <LeftSide />
                 </Col>
                 <Col span={8} style={{
-                    border: '1px solid blue',
+                    // border: '1px solid blue',
                     padding: '10px',
                     margin: 'auto',
                 }}>
                     {body()}
                 </Col>
                 <Col span={8} style={{
-                    border: '1px solid grey',
+                    // border: '1px solid grey',
                     height: '100%',
                     // overflow: 'hidden',
                     // padding: '10px',
@@ -263,11 +264,11 @@ const Stage = (props) => {
                 </Col>
             </Row>
             <Row style={{
-                border: '1px solid red',
+                // border: '1px solid red',
             }}>
                 <Col span={24}>
                     <div style={{
-                        border: '1px solid red',
+                        // border: '1px solid red',
                         padding: '10px',
                     }}>
                         <span>Footer</span>

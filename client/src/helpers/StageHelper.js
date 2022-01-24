@@ -9,7 +9,7 @@ const gnerateId = () => {
 export const createStage = () => {
     console.log('test');
     const stage = Array.from(Array(STAGE_HEIGHT), () =>
-        new Array(STAGE_WIDTH).fill(gnerateId()));
+        new Array(STAGE_WIDTH).fill(0));
 
     return stage
 
