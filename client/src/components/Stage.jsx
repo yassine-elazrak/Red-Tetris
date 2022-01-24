@@ -4,9 +4,10 @@ import { connect } from 'react-redux';
 import { Layout, Card, Button, Row, Col, Input } from 'antd';
 import moment from 'moment'
 
-import { createStage, STAGE_HEIGHT, STAGE_WIDTH } from '../helpers/StageHelper';
+import { InitStage, CreateStage, STAGE_HEIGHT, STAGE_WIDTH } from '../helpers/StageHelper';
 import { TETROMINOES, randomTetromino } from '../helpers/Tetrominoes';
 import { CellStyle } from './styles/CellStyle';
+import { UsersStage } from './styles/UsersStage';
 
 const { Content, Sider } = Layout;
 
@@ -16,7 +17,8 @@ const Stage = (props) => {
     const { room, auth } = props;
 
     console.log(props);
-    const map = createStage();
+
+    const stage = CreateStage(InitStage());
 
     const fackeMessage = [
         {
@@ -63,21 +65,69 @@ const Stage = (props) => {
         },
     ]
 
+    const fakeMapUsers = {
+        1: {
+            id: 1,
+            userId: 1,
+            userName: 'user1',
+            lines: 3,
+            score: 100,
+            map: [
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 'L', 'L', 'L', 0, 0, 0, 0],
+                ['L', 'O', 'O', 'L', 0, 0, 0, 0, 0, 0],
+                ['L', 'O', 'O', 'J', 'T', 'T', 'T', 0, 0, 0],
+                ['L', 'L', 'J', 'J', 0, 'T', 0, 0, 0, 0],
+                ['D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D', 'D'],
 
+            ]
+        },
+    }
 
+    const UsersMaps = CreateStage(fakeMapUsers[1].map);
 
-    const stage = map.map(row => {
-        return row.map((Index, key) => {
-            return <CellStyle
-                key={key} type={Index}
-                color={TETROMINOES[Index].color} />
-        })
-    })
+    const SliderMaps = () => {
+        return (
+            <div style={{
+                display: 'grid',
+                gridTemplateRows: `repeat(${UsersMaps.length},
+                8px)`,
+                // display: 'grid',
+                gridTemplateColumns: `repeat(${UsersMaps[0].length}, 15px)`,
+                gridGap: '1px',
+                // width: '30vw',
+                // maxWidth: '400px',
+                background: 'none',
+                justifyContent: 'center',
+                // margin: 'auto',
+                // left: '50%',
+                // right: '50%',
+                padding: '10px',
+                // background: '#f0f0f0',
+
+            }}>
+                {UsersMaps}
+            </div>
+        )
+    }
 
     const rendom = randomTetromino();
 
     const nextTetromino = rendom.shape.map(row => {
-        // console.log(randomTetromino());
         console.log(rendom);
         return row.map((cell, key) => {
             return <CellStyle
@@ -91,7 +141,6 @@ const Stage = (props) => {
         return (
             <div style={{
                 width: '100%',
-                // borderRight: '1px solid #ccc',
                 overflowX: 'hidden',
                 overflowY: 'auto',
                 padding: '5px',
@@ -150,16 +199,15 @@ const Stage = (props) => {
 
     const LeftSide = () => {
         return (
-            <div style={{
-                // display: 'flex',
-                // flexWrap: 'wrap',
-                // justifyContent: 'space-around',
-                // alignItems: 'center',
-                // flex: 2,
-                // border: '1px solid red',
-            }}>
-                <span>LeftSide</span>
-            </div>
+            <UsersStage >
+
+                {SliderMaps()}
+                {SliderMaps()}
+                {SliderMaps()}
+                {SliderMaps()}
+                {SliderMaps()}
+
+            </UsersStage>
         )
     }
 
@@ -171,6 +219,7 @@ const Stage = (props) => {
                 justifyContent: 'space-around',
                 padding: '10px',
                 background: 'rgba(0,0,0,0.3)',
+                color: 'rgba(255,255,255,0.8)',
             }}>
                 <div style={{
                     display: 'grid',
@@ -183,8 +232,8 @@ const Stage = (props) => {
                 }} >
                     {nextTetromino}
                 </div>
-                <span>SCOR N*</span>
-                <span>LINES N*</span>
+                <span>SCOR 120</span>
+                <span>LINES 2</span>
             </div>
         )
     }
@@ -240,8 +289,10 @@ const Stage = (props) => {
             }}>
                 <Col span={8} style={{
                     // border: '1px solid blue',
+                    // height: '100%',
+                    margin: 'auto',
                 }}>
-                    <LeftSide />
+                    {LeftSide()}
                 </Col>
                 <Col span={8} style={{
                     // border: '1px solid blue',
@@ -256,7 +307,7 @@ const Stage = (props) => {
                     // overflow: 'hidden',
                     // padding: '10px',
                 }}>
-                    <MessageSide />
+                    {MessageSide()}
                     <Input style={{
                         width: '100%'
                     }} />
@@ -266,9 +317,9 @@ const Stage = (props) => {
             <Row style={{
                 // border: '1px solid red',
             }}>
-                <Col span={24}>
+                <Col span={16} offset={8}>
                     <div style={{
-                        // border: '1px solid red',
+                        border: '1px solid red',
                         padding: '10px',
                     }}>
                         <span>Footer</span>
