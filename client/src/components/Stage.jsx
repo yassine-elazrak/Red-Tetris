@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { connect } from 'react-redux';
-import { Layout, Card, Button } from 'antd';
+import { Layout, Card, Button, Row, Col } from 'antd';
 
 import { createStage, STAGE_HEIGHT, STAGE_WIDTH } from '../helpers/StageHelper';
 import { TETROMINOES, randomTetromino } from '../helpers/Tetrominoes';
@@ -11,12 +11,54 @@ const { Content, Sider } = Layout;
 
 const Stage = (props) => {
 
+    // const stage = useSelector(state => state.stage);
+    // const tetromino = useSelector(state => state.tetromino);
+    // const dispatch = useDispatch();
+
+
     const { room, auth } = props;
 
     console.log(props);
     const map = createStage();
 
-    console.log(map);
+    const fackeMessage = [
+        {
+            id: 1,
+            userId: 1,
+            userName: 'user1',
+            message: 'hello',
+            createdAt: '2020-01-01'
+        },
+        {
+            id: 2,
+            userId: 2,
+            userName: 'user2',
+            message: 'hello',
+            createdAt: '2020-01-01'
+        },
+        {
+            id: 3,
+            userId: 3,
+            userName: 'user3',
+            message: 'hello',
+            createdAt: '2020-01-01'
+        },
+        {
+            id: 4,
+            userId: 4,
+            userName: 'user4',
+            message: 'hello',
+            createdAt: '2020-01-01'
+        },
+        {
+            id: 5,
+            userId: 5,
+            userName: 'user5',
+            message: 'hello',
+            createdAt: '2020-01-01'
+        },
+    ]
+
 
 
 
@@ -41,20 +83,30 @@ const Stage = (props) => {
         })
     })
 
-    const RightSide = () => {
+    const MessageSide = () => {
         return (
             <div style={{
-                // display: 'flex',
-                // flexWrap: 'wrap',
-                // justifyContent: 'space-around',
-                // alignItems: 'center',
-                // flex: 2,
+                height: '100%',
+                width: '100%',
+                // background: 'rgba(0,0,0,0.5)',
+                borderRight: '1px solid #ccc',
+                overflow: 'auto',
+                padding: '10px'
             }}>
-                <span>RigthSide</span>
+                {fackeMessage.map(item => {
+                    return (
+                        <div key={item.id}>
+                            {/* <span>{auth.id}</span>
+                            <span>{item.userName}</span>
+                            <span>{item.message}</span>
+                            <span>{item.createdAt}</span>
+                            <span>{item.id}</span> */}
+                        </div>
+                    )
+                })}
             </div>
         )
     }
-
     const LeftSide = () => {
         return (
             <div style={{
@@ -63,6 +115,7 @@ const Stage = (props) => {
                 // justifyContent: 'space-around',
                 // alignItems: 'center',
                 // flex: 2,
+                border: '1px solid red',
             }}>
                 <span>LeftSide</span>
             </div>
@@ -75,6 +128,7 @@ const Stage = (props) => {
                 display: 'flex',
                 flexWrap: 'wrap',
                 justifyContent: 'space-around',
+                padding: '10px',
             }}>
                 <div style={{
                     display: 'grid',
@@ -105,8 +159,9 @@ const Stage = (props) => {
                 gridGap: '1px',
                 width: '30vw',
                 maxWidth: '400px',
-                background: '#fff',
+                background: 'none',
                 margin: 'auto',
+                border: '1px solid red',
 
             }}>
                 {stage}
@@ -114,32 +169,59 @@ const Stage = (props) => {
         )
     }
 
-    return (
+    // const fakeMessage = 
 
-        <Card style={{
-            width: '100%',
+    return (
+        <Content style={{
+            background: 'rgba(0, 0, 0, 0.5)',
             padding: 0,
             margin: 0,
-            border: 'none',
-        }} title={header()} actions={[
-            <Button type="primary" style={{
-                display: 'flex',
-                margin: 'auto',
-                marginTop: '10px',
+            height: 'calc(100vh - 90px)',
+            paddingTop: '30px',
+            paddingBottom: '30px',
+            marginTop: '-10px',
+            marginBottom: '-20px',
             }}>
-                Leave Room
-            </Button>,
-            <Button type="primary"
-                style={{
-                    display: 'flex',
-                    margin: 'auto',
-                    marginTop: '10px',
+        <Row style={{
+            border: '1px solid red',
+        }}>
+            <Col span={24}>
+                {header()}
+            </Col>
+        </Row>
+        <Row style={{
+            border: '1px solid green',
+        }}>
+            <Col span={8} style={{
+                border: '1px solid blue',
+            }}>
+                <LeftSide />
+            </Col>
+            <Col span={8} style={{
+                border: '1px solid blue',
+            }}>
+                {body()}
+            </Col>
+            <Col span={8} style={{
+                border: '1px solid grey',
+            }}>
+                <MessageSide />
+            </Col>
+        </Row>
+        <Row style={{
+            border: '1px solid red',
+        }}>
+            <Col span={24}>
+                <div style={{
+                    border: '1px solid red',
+                    padding: '10px',
                 }}>
-                Start Game
-            </Button>
-        ]}>
-            {body()}
-        </Card>
+                    <span>Footer</span>
+                </div>
+            </Col>
+        </Row>
+
+        </Content>
     )
 }
 
