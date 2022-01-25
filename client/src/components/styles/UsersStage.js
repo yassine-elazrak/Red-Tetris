@@ -23,3 +23,13 @@ export const UsersStage = styled.div`
       }
     
 `;
+
+export const SliderMaps = styled.div`
+      display: grid;
+      grid-template-columns: repeat(${props => props.x}, 15px);
+      grid-template-rows: repeat(${props => props.y}, 8px);
+      grid-gap: 1px;
+      background: none;
+      justify-content: center;
+      padding: 10px;
+`;

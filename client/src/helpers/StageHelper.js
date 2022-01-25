@@ -12,7 +12,7 @@ const gnerateId = () => {
     return gen === '0' ? 0 : gen;
 }
 export const InitStage = () => {
-    console.log('test');
+    // console.log('test');
     const stage = Array.from(Array(STAGE_HEIGHT), () =>
         new Array(STAGE_WIDTH).fill(0));
 
@@ -21,8 +21,8 @@ export const InitStage = () => {
 }
 
 export const CreateStage = (map) => {
-    console.log(map);
-   const Stage = map.map(row =>{
+    // console.log(map);
+   const Stage = map?.map(row =>{
        return row.map((cell, key) => {
            return <CellStyle key={key} type={cell} color={TETROMINOES[cell].color}/>
        })
