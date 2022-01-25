@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Layout, message } from "antd";
+import { Layout, message, Menu, Col } from "antd";
 
 
 
@@ -50,7 +50,7 @@ const HomePage = (props) => {
           roomName: split[0],
           isPravite: false,
           user: props.auth,
-          status : 'closed'
+          status: 'closed'
         }
         dispatch(createRoom(roomData));
       }
@@ -85,70 +85,73 @@ const HomePage = (props) => {
           {window.location.pathname !== '/' ?
             <Page404 />
             : !auth.isAuth ? <FormUserName /> : !room.is_joined ?
-                <FormRoomName />
-                : !room.isPravite && room.status === "waiting" ?
-                  <InviteUsers />
-                  : <Stage />
+              <FormRoomName />
+              : !room.isPravite && room.status === "waiting" ?
+                <InviteUsers />
+                : <Stage />
           }
         </Content>
-      </Layout>
-      {/* <span style={{
-                color: "#404040",
-                fontSize: "20px",
-                fontWeight: "bold",
-                marginRight: "5px",
-                marginTop: "8px",
-                padding: 0,
-                height: "50px",
-            }}>
-            {!collapsible ?
-                <MenuUnfoldOutlined
-                    className="trigger"
-                    onClick={() => setCollapsible(!collapsible)}
-                />
-            :
-                <MenuFoldOutlined
-                    className="trigger"
-                    onClick={() => setCollapsible(!collapsible)}
-                />
-            }
-            </span> */}
-          {/* <Sider theme="dark"
+        <Sider theme="dark"
           trigger={null}
           collapsible
           collapsed={collapsible}
           breakpoint={
             "lg"
           }
-            collapsedWidth={0}
+          collapsedWidth={25}
           style={{
-              background: '#404040',
-              margin: 0,
-              position: "absolute",
-              top: "97px",
-              right: "0px",
-              height: "calc(100vh - 97px)",
-            }}
-        >
-
-          <Menu theme="dark" mode="inline" style={{
             background: '#404040',
+            position: "absolute",
+            top: "50px",
+            right: "0px",
+            height: "calc(100vh - 90px)",
+          }}
+        >
+          <div style={{
+            height: "100%",
+            display: "grid",
+            gridTemplateColumns: "25px auto",
+
           }}>
-            <Menu.Item key="1">
-                <UserOutlined />
-              <span>nav 1</span>
-            </Menu.Item>
-            <Menu.Item key="2">
-              <span>nav 2</span>
-            </Menu.Item>
-            <Menu.Item key="3">
-              <span>nav 3</span>
-            </Menu.Item>
-          </Menu>
-        </Sider> */}
+            <div style={{
+              height: "100%",
+            }} >
+              <h4 style={{
+                height: '25px',
+                width: 'calc(100vh - 90px)',
+                position: "relative",
+                right: -26,
+                textAlign: "center",
+                // top: "",
+                letterSpacing: "10px",
+                fontWeight: "bold",
+                transformOrigin: "0 0",
+                transform: "rotate(90deg)"
+              }}>
+                OnlineUsers
+              </h4>
+            </div>
+
+            <Menu theme="dark" style={{
+              height: "100%",
+              background: "none",
+
+            }}>
+              <Menu.Item key="1">
+                nav 1
+              </Menu.Item>
+              <Menu.Item key="2">
+                nav 2
+              </Menu.Item>
+              <Menu.Item key="3">
+                <span>nav 3</span>
+              </Menu.Item>
+            </Menu>
+          </div>
+        </Sider>
+      </Layout>
       <Footer style={{
         background: 'none',
-        // marginTop: '-10px',
         zIndex: "999",
         padding: 0,
       }}>

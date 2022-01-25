@@ -6,5 +6,5 @@ body{
     font-family: 'Source Code Pro', monospace !important;
 }
 * {
-    letter-spacing: -1px !important;
+    letter-spacing: -1px;
 }

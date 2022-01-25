@@ -75,8 +75,6 @@ const Stage = (props) => {
                 display: 'grid',
                 gridTemplateColumns: `repeat(${STAGE_WIDTH}, 1fr)`,
                 gridGap: '1px',
-                // width: '50vw',
-                // maxWidth: '400px',
                 width: '100%',
                 background: 'none',
                 margin: 'auto',
