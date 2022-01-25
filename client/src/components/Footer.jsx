@@ -8,7 +8,7 @@ const FooterComponet = () => {
     return (
         <FooterStyled>
                 <FooterDiv style={{alignItems: 'end', padding: 0, margin:0}}>
-                    <p className="d-none d-md-block" style={{margin:0}} >Read Tetris</p>
+                    <p className="d-none d-md-block" style={{margin:0}} >Red Tetris</p>
                     <p  style={{margin:0}}>©2022 Created by Alzaynou</p>
                 </FooterDiv>
         </FooterStyled>

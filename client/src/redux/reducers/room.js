@@ -35,7 +35,7 @@ const createRoom = (state, action) => {
         error: null,
         is_joined: true,
         isAdmin: true,
-        status: action.payload.isPravite ? 'closed' : 'waiting',
+        status: action.payload.status || 'waiting',
         isPravite: action.payload.isPravite,
         id: action.payload.roomId,
         name: action.payload.roomName,

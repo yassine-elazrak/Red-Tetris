@@ -16,39 +16,29 @@ import {
 } from './styles/BoxMessage';
 
 const Message = (props) => {
-    const fackMessage = [
-        {
-            userId: 1,
-            userName: 'user1',
-            message: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate sit voluptates mollitia magni corrupti, nemo distinctio eius asperiores quasi quae quam velit, placeat quis temporibus numquam, reiciendis sapiente. Totam, non.",
-            createdAt: '2022-1-24 12:12:12'
-        },
-        {
-            userId: 2,
-            userName: 'user2',
-            message: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci deleniti enim doloribus laboriosam distinctio cumque eum, sed eius perspiciatis reiciendis aut reprehenderit, cupiditate vitae vero unde veritatis omnis, velit quam?",
-            createdAt: '2022-1-24 12:12:12'
-        },
-        {
-            userId: 3,
-            userName: 'user3',
-            message: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem!',
-            createdAt: '2022-1-24 12:12:12'
-        },
-        {
-            userId: 1,
-            userName: 'user4',
-            message: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem!',
-            createdAt: '2022-1-25 12:12:12',
-        },
-    ]
+
+    const fackeMessage = () => {
+        const message = [];
+        for (let i = 0; i < 20; i++) {
+            let id = Math.floor(Math.random() * 10);
+            message.push({
+                userId: id,
+                userName: 'user' + id,
+                message: "Lorem ipsum dolor sit amet consectetur, \
+                            adipisicing elit. Ipsam, architecto!",
+                createdAt: moment().format()
+            })
+        }
+        return message;
+    }
+
     const { room, auth } = props;
     const [input, setInput] = useState({
         value: '',
         error: false
     })
 
-    const [messages, setMessages] = useState(fackMessage);
+    const [messages, setMessages] = useState(fackeMessage());
 
     const handleChange = (e) => {
         setInput({

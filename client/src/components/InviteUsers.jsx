@@ -212,7 +212,7 @@ const InviteUsers = (props) => {
                 margin: 'auto',
                 marginTop: '10px',
                 }}>
-                Start Game
+                Close Room
             </Button>
 
         ]}
