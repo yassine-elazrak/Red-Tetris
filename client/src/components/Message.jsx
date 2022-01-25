@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 
 
@@ -20,19 +20,19 @@ const Message = (props) => {
         {
             userId: 1,
             userName: 'user1',
-            message: 'hello',
+            message: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate sit voluptates mollitia magni corrupti, nemo distinctio eius asperiores quasi quae quam velit, placeat quis temporibus numquam, reiciendis sapiente. Totam, non.",
             createdAt: '2022-1-24 12:12:12'
         },
         {
             userId: 2,
             userName: 'user2',
-            message: 'hi',
+            message: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Adipisci deleniti enim doloribus laboriosam distinctio cumque eum, sed eius perspiciatis reiciendis aut reprehenderit, cupiditate vitae vero unde veritatis omnis, velit quam?",
             createdAt: '2022-1-24 12:12:12'
         },
         {
             userId: 3,
             userName: 'user3',
-            message: 'how are you',
+            message: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem!',
             createdAt: '2022-1-24 12:12:12'
         },
     ]
@@ -53,6 +53,7 @@ const Message = (props) => {
     }
 
     const handleSubmit = (e) => {
+        e.preventDefault();
         // console.log(moment().format());
         const newMessage = {
             userId: auth.id,
@@ -61,13 +62,24 @@ const Message = (props) => {
             createdAt: moment().format()
         }
         setMessages([...messages, newMessage])
+        setInput({
+            value: '',
+            error: false
+        })
     }
+
+    // scrool to bottom
+    useEffect(() => {
+        const chat = document.getElementById('chatBox');
+        chat.scrollTop = chat.scrollHeight;
+    }, [messages])
+    
 
 
     const MessageSide = () => {
         console.log(messages);
         return (
-            <BoxMessage>
+            <BoxMessage id='chatBox'>
                 {messages?.map((item, id) => {
                     return (
                         <MessageContent
@@ -77,17 +89,17 @@ const Message = (props) => {
                             <MessageUserName
                                 userId={item.userId}
                                 authId={auth.id}>
-                                {item.userId === auth.id ? 'You' : item.userName}
+                                <span>{item.userId === auth.id ? 'You' : item.userName}</span>
                             </MessageUserName>
                             <MessageText
                                 userId={item.userId}
                                 authId={auth.id}>
-                                {item.message}
+                                <span>{item.message}</span>
                             </MessageText>
                             <MessageCreatedAt
                                 userId={item.userId}
                                 authId={auth.id}>
-                                {moment(item.createdAt).fromNow()}
+                                <span>{moment(item.createdAt).fromNow()}</span>
                             </MessageCreatedAt>
                         </MessageContent>
 
@@ -108,7 +120,7 @@ const Message = (props) => {
                 }}
                     onPressEnter={handleSubmit}
                     onChange={handleChange}
-                    value={Input.value}
+                    value={input.value}
                 />
                 <Button type="primary" onClick={handleSubmit}>
                     <SendOutlined />

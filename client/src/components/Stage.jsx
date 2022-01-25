@@ -42,6 +42,7 @@ const Stage = (props) => {
                 flexWrap: 'wrap',
                 justifyContent: 'space-around',
                 padding: '10px',
+                paddingTop: '20px',
                 background: 'rgba(0,0,0,0.3)',
                 color: 'rgba(255,255,255,0.8)',
             }}>
@@ -85,18 +86,21 @@ const Stage = (props) => {
 
     return (
         <Content style={{
-            background: 'rgba(0, 0, 0, 0.5)',
+            background: 'rgba(0, 0, 0, 0.7)',
             padding: 0,
             margin: 0,
             height: 'calc(100vh - 90px)',
-            paddingTop: '15px',
+            // paddingTop: 'px',
             paddingBottom: '30px',
             marginTop: '-10px',
             marginBottom: '-20px',
         }}>
             <Row style={{
             }}>
-                <Col span={24}>
+                <Col span={24} style={{
+                    // background: 'rgba(0, 0, 0, 0.7)',
+
+                }}>
                     {header()}
                 </Col>
             </Row>

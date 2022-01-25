@@ -42,7 +42,7 @@ export const MessageUserName = styled.div`
 export const MessageText = styled.div`
     font-size: 12px;
     color: #ccc;
-    text-align: ${props => props.userId === props.authId ? 'end' : 'start'};
+    text-align: 'start';
     padding-left: 5px;
     padding-right: 5px;
 `;
