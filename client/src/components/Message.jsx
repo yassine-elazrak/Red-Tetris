@@ -35,6 +35,12 @@ const Message = (props) => {
             message: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem!',
             createdAt: '2022-1-24 12:12:12'
         },
+        {
+            userId: 1,
+            userName: 'user4',
+            message: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quidem!',
+            createdAt: '2022-1-25 12:12:12',
+        },
     ]
     const { room, auth } = props;
     const [input, setInput] = useState({
@@ -68,7 +74,7 @@ const Message = (props) => {
         })
     }
 
-    // scrool to bottom
+    // scrool to bottom wheres new message
     useEffect(() => {
         const chat = document.getElementById('chatBox');
         chat.scrollTop = chat.scrollHeight;
