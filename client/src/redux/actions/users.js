@@ -22,9 +22,9 @@ const success = (data, type) => {
     }
 }
 
-const error = (data, type) => {
-    return {
-        type: type,
-        payload: data,
-    }
-}
+// const error = (data, type) => {
+//     return {
+//         type: type,
+//         payload: data,
+//     }
+// }

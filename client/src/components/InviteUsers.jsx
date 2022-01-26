@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Form, Input, Button, message, Card, Select } from 'antd';
 
 import { gold, red } from '@ant-design/colors';
+import { useSider } from '../hooks/SiderBar';
 import {
     inviteRequest,
     currentUser,
@@ -16,6 +17,13 @@ const { Option } = Select;
 
 
 const InviteUsers = (props) => {
+
+    const [showSider, setShowSider] = useSider();
+
+    useEffect(() => {
+        setShowSider(false);
+        console.log(showSider, 'showSide2r');
+    }, []);
 
     const [dataSource, setDataSource] = useState([]);
     const [oldValue, setOldValue] = useState('');
@@ -30,7 +38,7 @@ const InviteUsers = (props) => {
             ...input,
             value: value,
         });
-        if (value && !value.includes(oldValue) || oldValue === '') {
+        if ((value && !value.includes(oldValue)) || oldValue === '') {
             console.log('searching');
             setOldValue(value);
             props.currentUser(value);

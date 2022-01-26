@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Layout, Row, Col, Button, Popover } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
@@ -15,12 +15,12 @@ import Message from './Message';
 import Players from './Players';
 
 
-const { Content, Sider } = Layout;
+const { Content } = Layout;
 
 const Stage = (props) => {
 
 
-    const { room, auth } = props;
+    const { room } = props;
 
     console.log(room, 'room');
 
@@ -72,7 +72,6 @@ const Stage = (props) => {
                 display: 'grid',
                 gridTemplateRows: `repeat(${STAGE_HEIGHT},
                 calc(28vh / ${STAGE_WIDTH}))`,
-                display: 'grid',
                 gridTemplateColumns: `repeat(${STAGE_WIDTH}, 1fr)`,
                 gridGap: '1px',
                 width: '100%',

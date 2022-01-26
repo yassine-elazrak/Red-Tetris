@@ -1,8 +1,16 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
-export const useCollapsible = () => {
-    const [useCollapsible, setCollapsible] = useState(false);
+export const useSider = () => {
+    const [showSider, setShowSider] = useState(false);
+    const [collapsed, setCollapsed] = useState(true);
+    const [siderName, setSiderName] = useState('Home');
+    const [content, setContent] = useState("");
 
-    return useCollapsible;
+
+    return [
+        collapsed, setCollapsed,
+        showSider, setShowSider,
+        siderName, setSiderName,
+        content, setContent,
+    ];
 }
-

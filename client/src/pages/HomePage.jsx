@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Layout, message, Menu, Col } from "antd";
+import React, { useEffect } from "react";
+import { Layout, message, Menu } from "antd";
 
 
 
@@ -17,7 +17,9 @@ import { login, createRoom } from "../redux/actions";
 
 import "./styles/HeaderStyled.css";
 
-import { useSelector, useDispatch } from "react-redux";
+// import { useSelecto } from "react-redux";
+
+import { useSider } from "../hooks/SiderBar";
 
 
 
@@ -25,38 +27,52 @@ const { Header, Sider, Content, Footer } = Layout;
 
 
 
+
 const HomePage = (props) => {
-  const [collapsible, setCollapsible] = useState(true);
+
+
+  const [
+    collapsed, setCollapsed,
+    showSider, setShowSider,
+    setSiderName,
+  ] = useSider();
+
+
   const { auth, room } = props;
 
-  const user = useSelector(state => state.auth);
-  const dispatch = useDispatch();
 
   useEffect(() => {
-    const { hash } = window.location;
-    if (hash) {
-      const Regx = /(^#[\w\-]+\[[\w\-]+\]$)/g
-      const match = hash.match(Regx);
-      console.log(hash, hash.match(Regx));
-      console.log(props);
-      if (!match) {
-        message.error(`Invalid hash-basd url`)
-      } else {
-        const split = hash.match(/([\w\-]+)/g)
-        dispatch(login(split[1]));
-        console.log(user, 'user');
-        const roomData = {
-          roomId: 1,
-          roomName: split[0],
-          isPravite: false,
-          user: props.auth,
-          status: 'closed'
+    const hashBased = () => {
+      const { hash } = window.location;
+      if (hash) {
+        const Regx = new RegExp(/(^#[\w-]+\[[\w-]+\]$)/g);
+        const match = hash.match(Regx);
+        if (!match) {
+          message.error(`Invalid hash-basd url`)
+        } else {
+          const split = hash.match(/([\w-]+)/g)
+          // dispatch(login(split[1]));
+          props.login(split[1]);
+          const roomData = {
+            roomId: 1,
+            roomName: split[0],
+            isPravite: false,
+            user: props.auth,
+            status: 'waiting',
+          }
+          props.createRoom(roomData);
         }
-        dispatch(createRoom(roomData));
       }
-    }
+    };
+    hashBased();
+  }, []);
 
-  }, [])
+  useEffect(() => {
+    setShowSider(true);
+    console.log(collapsed, 'collapsed');
+    console.log(showSider, 'showSider2');
+
+  }, []);
 
 
 
@@ -91,64 +107,70 @@ const HomePage = (props) => {
                 : <Stage />
           }
         </Content>
-        <Sider theme="dark"
-          trigger={null}
-          collapsible
-          collapsed={collapsible}
-          breakpoint={
-            "lg"
-          }
-          collapsedWidth={25}
-          style={{
-            background: '#404040',
-            position: "absolute",
-            top: "50px",
-            right: "0px",
-            height: "calc(100vh - 90px)",
-          }}
-        >
-          <div style={{
-            height: "100%",
-            display: "grid",
-            gridTemplateColumns: "25px auto",
-
-          }}>
+        {showSider &&
+          <Sider theme="dark"
+            trigger={null}
+            collapsible
+            collapsed={collapsed}
+            breakpoint={
+              "lg"
+            }
+            collapsedWidth={25}
+            style={{
+              background: '#404040',
+              position: "absolute",
+              top: "50px",
+              right: "0px",
+              height: "calc(100vh - 90px)",
+            }}
+          >
             <div style={{
               height: "100%",
-            }} >
-              <h4 style={{
-                height: '25px',
-                width: 'calc(100vh - 90px)',
-                position: "relative",
-                right: -26,
-                textAlign: "center",
-                // top: "",
-                letterSpacing: "10px",
-                fontWeight: "bold",
-                transformOrigin: "0 0",
-                transform: "rotate(90deg)"
-              }}>
-                OnlineUsers
-              </h4>
-            </div>
-
-            <Menu theme="dark" style={{
-              height: "100%",
-              background: "none",
+              display: "grid",
+              gridTemplateColumns: "25px auto",
 
             }}>
-              <Menu.Item key="1">
-                nav 1
-              </Menu.Item>
-              <Menu.Item key="2">
-                nav 2
-              </Menu.Item>
-              <Menu.Item key="3">
-                <span>nav 3</span>
-              </Menu.Item>
-            </Menu>
-          </div>
-        </Sider>
+              <div style={{
+                height: "100%",
+              }} >
+                <h4 style={{
+                  height: '25px',
+                  width: 'calc(100vh - 90px)',
+                  position: "relative",
+                  right: -26,
+                  textAlign: "center",
+                  // top: "",
+                  letterSpacing: "10px",
+                  fontWeight: "bold",
+                  transformOrigin: "0 0",
+                  transform: "rotate(90deg)",
+                  cursor: "pointer",
+                }}
+                onClick={() => setCollapsed(!collapsed)}
+                >
+                  {/* <setSiderName /> */}
+                  {collapsed ? "v" : "^"}
+                </h4>
+              </div>
+
+              <Menu theme="dark" style={{
+                height: "100%",
+                background: "none",
+
+              }}>
+                <Menu.Item key="1">
+                  nav 1
+                </Menu.Item>
+                <Menu.Item key="2">
+                  nav 2
+                </Menu.Item>
+                <Menu.Item key="3">
+                  <span>nav 3</span>
+                </Menu.Item>
+              </Menu>
+            </div>
+          </Sider>
+        }
       </Layout>
       <Footer style={{
         background: 'none',

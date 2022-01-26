@@ -1,8 +1,8 @@
 import React from "react"
-import { Result, Button, Card, Layout } from "antd"
-import FooterComponet from "../components/Footer"
+import { Result, Button, Card } from "antd"
+// import FooterComponet from "../components/Footer"
 
-const { Content, Footer } = Layout
+// const { Content, Footer } = Layout
 
 const Page404 = () => {
     return (

@@ -1,9 +1,5 @@
 import {
     INVITE_REQUEST,
-    INVITE_SUCCESS,
-    INVITE_FAILURE,
-    INVITE_ACCEPT,
-    INVITE_DECLINE,
     INVITE_REFRESH,
     INVITE_REMOVE_ALL,
     LOADING_INVITES,
@@ -41,9 +37,9 @@ const success = (data, type) => {
     }
 }
 
-const error = (data, type) => {
-    return {
-        type: type,
-        payload: data,
-    }
-}
+// const error = (data, type) => {
+//     return {
+//         type: type,
+//         payload: data,
+//     }
+// }

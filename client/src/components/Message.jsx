@@ -24,15 +24,14 @@ const Message = (props) => {
             message.push({
                 userId: id,
                 userName: 'user' + id,
-                message: "Lorem ipsum dolor sit amet consectetur, \
-                            adipisicing elit. Ipsam, architecto!",
+                message: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsam, architecto!",
                 createdAt: moment().format()
             })
         }
         return message;
     }
 
-    const { room, auth } = props;
+    const { auth } = props;
     const [input, setInput] = useState({
         value: '',
         error: false

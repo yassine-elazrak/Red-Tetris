@@ -1,7 +1,6 @@
 import {
     SUCESS_LOGIN,
     SUCESS_LOGOUT,
-    FAIL_LOGOUT,
     IS_LOADING,
 } from "../types";
 
@@ -27,9 +26,9 @@ const success = (data, type) => {
     }
 }
 
-const error = (data, type) => {
-    return {
-        type: type,
-        payload: data
-    }
-}
+// const error = (data, type) => {
+//     return {
+//         type: type,
+//         payload: data
+//     }
+// }

@@ -73,27 +73,27 @@ const pushUser = (state, action) => {
     }
 };
 
-const deleteUser = (state, action) => {
-    // modef it to delete user from room
-    // console.log(action.payload);
-    const index = state.users.findIndex(user => user.id === action.payload.userId);
-    if (index !== -1) {
-        const users = [...state.users];
-        users.splice(index, 1);
-        const data = {
-            ...state,
-            isLoading: false,
-            users: users,
-        };
-        return data;
-    } else {
-        return {
-            ...state,
-            isLoading: false,
-            error: `${action.payload.userName} is not in the room`,
-        };
-    }
-};
+// const deleteUser = (state, action) => {
+//     // modef it to delete user from room
+//     // console.log(action.payload);
+//     const index = state.users.findIndex(user => user.id === action.payload.userId);
+//     if (index !== -1) {
+//         const users = [...state.users];
+//         users.splice(index, 1);
+//         const data = {
+//             ...state,
+//             isLoading: false,
+//             users: users,
+//         };
+//         return data;
+//     } else {
+//         return {
+//             ...state,
+//             isLoading: false,
+//             error: `${action.payload.userName} is not in the room`,
+//         };
+//     }
+// };
 
 
 export default function roomReducer(state = initialState, action) {

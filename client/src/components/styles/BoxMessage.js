@@ -1,4 +1,3 @@
-import Item from "antd/lib/list/Item";
 import styled from "styled-components";
 
 export const BoxMessage = styled.div`
