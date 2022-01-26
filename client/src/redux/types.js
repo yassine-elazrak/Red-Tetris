@@ -56,6 +56,14 @@ export const INVITE_REMOVE_ALL = 'INVITE_REMOVE_ALL';
 export const LOADING_ONLINE_USERS = 'LOADING_ONLINE_USERS';
 export const CURRENT_ONLINE_USERS = 'CURRENT_ONLINE_USERS';
 
+// Stage actions
+export const STAGE_CREATE = 'STAGE_CREATE';
+export const STAGE_UPDATE = 'STAGE_UPDATE';
+
+// Cell actions
+export const CELL_CURRENT = 'CELL_CURRENT';
+export const CELL_NEXT = 'CELL_NEXT';
+export const CELL_UPDATE = 'CELL_UPDATE';
 
 
 

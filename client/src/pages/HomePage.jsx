@@ -19,11 +19,11 @@ import "./styles/HeaderStyled.css";
 
 // import { useSelecto } from "react-redux";
 
-import { useSider } from "../hooks/SiderBar";
+// import { useSider } from "../hooks/SiderBar";
 
 
 
-const { Header, Sider, Content, Footer } = Layout;
+const { Header, Content, Footer } = Layout;
 
 
 
@@ -31,14 +31,12 @@ const { Header, Sider, Content, Footer } = Layout;
 const HomePage = (props) => {
 
 
-  const [
-    collapsed, setCollapsed,
-    showSider, setShowSider,
-    setSiderName,
-  ] = useSider();
-
 
   const { auth, room } = props;
+
+  // useEffect(() => {
+  //   setShowSider(false);
+  // })
 
 
   useEffect(() => {
@@ -51,12 +49,11 @@ const HomePage = (props) => {
           message.error(`Invalid hash-basd url`)
         } else {
           const split = hash.match(/([\w-]+)/g)
-          // dispatch(login(split[1]));
           props.login(split[1]);
           const roomData = {
             roomId: 1,
             roomName: split[0],
-            isPravite: false,
+            isPravite: true,
             user: props.auth,
             status: 'waiting',
           }
@@ -67,12 +64,6 @@ const HomePage = (props) => {
     hashBased();
   }, []);
 
-  useEffect(() => {
-    setShowSider(true);
-    console.log(collapsed, 'collapsed');
-    console.log(showSider, 'showSider2');
-
-  }, []);
 
 
 
@@ -80,7 +71,10 @@ const HomePage = (props) => {
     <Layout style={{
       background: "none",
       width: "100vw",
-      height: "auto",
+      height: "100vh",
+      padding: 0,
+      margin: 0,
+      overflow: "hidden",
     }}>
       <Header theme="dark" className="header" style={{
         background: 'none',
@@ -96,7 +90,6 @@ const HomePage = (props) => {
         <Content style={{
           background: 'none',
           minHeight: 'calc(100vh - 115px)',
-
         }}>
           {window.location.pathname !== '/' ?
             <Page404 />
@@ -107,21 +100,23 @@ const HomePage = (props) => {
                 : <Stage />
           }
         </Content>
-        {showSider &&
+        {/* {showSider &&
           <Sider theme="dark"
             trigger={null}
-            collapsible
+            // collapsible
             collapsed={collapsed}
             breakpoint={
-              "lg"
+              "sm"
             }
             collapsedWidth={25}
+            // sm={0} md={0}
             style={{
               background: '#404040',
               position: "absolute",
               top: "50px",
               right: "0px",
               height: "calc(100vh - 90px)",
+              padding: 0,
             }}
           >
             <div style={{
@@ -148,29 +143,22 @@ const HomePage = (props) => {
                 }}
                 onClick={() => setCollapsed(!collapsed)}
                 >
-                  {/* <setSiderName /> */}
-                  {collapsed ? "v" : "^"}
+                  {siderName}
                 </h4>
               </div>
 
               <Menu theme="dark" style={{
                 height: "100%",
                 background: "none",
+                margin: 0,
+                padding: 0,
 
               }}>
-                <Menu.Item key="1">
-                  nav 1
-                </Menu.Item>
-                <Menu.Item key="2">
-                  nav 2
-                </Menu.Item>
-                <Menu.Item key="3">
-                  <span>nav 3</span>
-                </Menu.Item>
+                {siderContent}
               </Menu>
-            </div>
-          </Sider>
-        }
+            </div> 
+              </Sider> 
+        }*/}
       </Layout>
       <Footer style={{
         background: 'none',

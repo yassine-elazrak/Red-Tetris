@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import { connect } from 'react-redux';
 
-import { Form, Input, Button, message, Card, Select } from 'antd';
+import { Form, Input, Button, message, Card, Select, Row } from 'antd';
 
 import { gold, red } from '@ant-design/colors';
-import { useSider } from '../hooks/SiderBar';
 import {
     inviteRequest,
     currentUser,
@@ -18,12 +17,7 @@ const { Option } = Select;
 
 const InviteUsers = (props) => {
 
-    const [showSider, setShowSider] = useSider();
-
-    useEffect(() => {
-        setShowSider(false);
-        console.log(showSider, 'showSide2r');
-    }, []);
+    // console.log(props, 'props2');
 
     const [dataSource, setDataSource] = useState([]);
     const [oldValue, setOldValue] = useState('');
@@ -98,7 +92,7 @@ const InviteUsers = (props) => {
     }
 
     const startGame = () => {
-        console.log(props.room);
+        // console.log(props.room);
         props.closeRoom(props.room);
     }
 
@@ -204,7 +198,8 @@ const InviteUsers = (props) => {
     })
 
     return (
-        <Card title={form} type='inner'
+        <Card md={20}
+        title={form} type="inner"
         actions={[
             <Button type="primary" style={{
                 display: 'flex',
@@ -225,13 +220,13 @@ const InviteUsers = (props) => {
 
         ]}
         style={{
-            width: '100%',
-            padding: 0,
-            margin: 0,
-            display: 'inline-block',
-            alignItems: 'center',
+            // width: '99%',
+            // padding: 0,
+            // margin: 0,
+            // display: 'inline-block',
+            // alignItems: 'center',
             justifyContent: 'center',
-            border: 'none',
+            // border: 'none',
             }}>
 
 
@@ -239,7 +234,7 @@ const InviteUsers = (props) => {
         <div style={{
             margin: 0,
             padding: 0,
-            height: '100%',
+            // height: '100%',
             width: '100%',
             display: 'inline-block',
             flexWrap: 'wrap',

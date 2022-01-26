@@ -4,3 +4,4 @@ export * from './auth';
 export * from './room';
 export * from './invite';
 export * from './users';
+export * from './stage';

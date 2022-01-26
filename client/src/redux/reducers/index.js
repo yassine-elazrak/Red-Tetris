@@ -5,6 +5,7 @@ import notif from "./notif";
 import room from "./room";
 import invite from "./invite";
 import users from "./users";
+import stage from "./stage";
 
 export default combineReducers({
     auth,
@@ -13,4 +14,5 @@ export default combineReducers({
     room,
     invite,
     users,
+    stage,
 });

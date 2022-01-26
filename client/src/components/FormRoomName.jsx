@@ -51,6 +51,10 @@ const FormRoomName = (props) => {
         }
     }, [props.room.error]);
 
+    // useEffect(() => {
+
+    // }, [props.room.name])
+
     
     return (
         <Form
@@ -69,7 +73,6 @@ const FormRoomName = (props) => {
         >
             <Form.Item
                 name="onlyOnePlayer"
-                // valuePropName="checked"
                 style={{
                     display: 'inline-block',
                     width: '100%',
