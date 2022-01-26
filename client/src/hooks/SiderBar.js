@@ -3,7 +3,7 @@ import { useState } from "react";
 export const useSider = () => {
     const [showSider, setShowSider] = useState(false);
     const [collapsed, setCollapsed] = useState(true);
-    const [siderName, setSiderName] = useState('Home');
+    const [siderName, setSiderName] = useState('');
     const [content, setContent] = useState("");
 
 
