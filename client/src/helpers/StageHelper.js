@@ -1,6 +1,6 @@
 import React from 'react';
 import { TETROMINOES } from './Tetrominoes';
-import { CellStyle } from '../components/styles/CellStyle';
+import { TetrominoStyle } from '../components/styles/TetrominoStyle';
 
 
 export const STAGE_WIDTH = 10;
@@ -19,7 +19,7 @@ export const CreateStage = (map) => {
     // console.log(map);
    const Stage = map?.map(row =>{
        return row.map((cell, key) => {
-           return <CellStyle key={key} type={cell} color={TETROMINOES[cell].color}/>
+           return <TetrominoStyle key={key} type={cell} color={TETROMINOES[cell].color}/>
        })
     })
     // console.log(Stage);

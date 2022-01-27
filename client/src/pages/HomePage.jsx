@@ -34,9 +34,6 @@ const HomePage = (props) => {
 
   const { auth, room } = props;
 
-  // useEffect(() => {
-  //   setShowSider(false);
-  // })
 
 
   useEffect(() => {

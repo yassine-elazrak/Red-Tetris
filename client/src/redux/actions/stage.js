@@ -1,7 +1,7 @@
 import {
     STAGE_CREATE,
     STAGE_UPDATE,
-    CELL_UPDATE
+    TETROMINOES_UPDATE
 } from "../types";
 
 export const createStage = (stage) => {
@@ -16,9 +16,9 @@ export const updateStage = (stage) => {
     }
 };
 
-export const updateCell = (current) => {
+export const updateTetromino = (current) => {
     return async (dispatch) => {
-        dispatch(success(current, CELL_UPDATE));
+        dispatch(success(current, TETROMINOES_UPDATE));
     }
 };
 

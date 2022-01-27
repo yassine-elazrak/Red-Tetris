@@ -60,10 +60,8 @@ export const CURRENT_ONLINE_USERS = 'CURRENT_ONLINE_USERS';
 export const STAGE_CREATE = 'STAGE_CREATE';
 export const STAGE_UPDATE = 'STAGE_UPDATE';
 
-// Cell actions
-export const CELL_CURRENT = 'CELL_CURRENT';
-export const CELL_NEXT = 'CELL_NEXT';
-export const CELL_UPDATE = 'CELL_UPDATE';
+// updateTetromino actions
+export const TETROMINOES_UPDATE = 'TETROMINOES_UPDATE';
 
 
 

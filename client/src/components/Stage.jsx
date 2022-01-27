@@ -9,7 +9,7 @@ import {
     STAGE_WIDTH
 } from '../helpers/StageHelper';
 import { TETROMINOES, randomTetromino } from '../helpers/Tetrominoes';
-import { CellStyle } from './styles/CellStyle';
+import { TetrominoStyle } from './styles/TetrominoStyle';
 
 import Message from './Message';
 import Players from './Players';
@@ -17,8 +17,11 @@ import Players from './Players';
 import {
     createStage,
     updateStage,
-    updateCell,
+    // updateCell,
+    updateTetromino,
 } from "../redux/actions";
+
+import { useStage } from "../hooks/Stage";
 
 
 
@@ -29,58 +32,57 @@ const Stage = (props) => {
 
     const { room, stage } = props;
 
-    const [currentCell, setCurrentCell] = useState(stage.cell.current);
-    const [nextCell, setNextCell] = useState(stage.cell.next);
-    const [currentStage, setCurrentStage] = useState(stage.stage);
-    const [score, setScore] = useState(stage.score);
-    const [rows, setRows] = useState(stage.rows);
-    const [start, setStart] = useState(false);
-    const [gameOver, setGameOver] = useState(false);
-    const [paused, setPaused] = useState(false);
+    const [
+        currentStage, updateStage,
+        dropRow, setDropRow,
+        score, updateScore,
+        rows, updateRows,
+        gameOver, updateGameOver,
+        gameWon, updateGameWon,
+        gameStart, startGame,
+        gamePause, pauseGame,
+        currentTetromino, updateCurrentTetromino,
+        nextTetromino, updateNextTetromino,
+        resetGame,
+        pushToStage,
+    ] = useStage(InitStage());
+
+    useEffect(() => {
+        pushToStage(currentTetromino);
+    }, [gameStart]);
 
     useEffect(() => {
         let stage = InitStage();
         let next = randomTetromino();
         props.createStage({ stage });
-        props.updateCell({ next });
+        props.updateTetromino({ next });
         document.getElementById('Content').focus();
     }, []);
 
     useEffect(() => {
-        setCurrentCell(props.stage.cell.current);
-        setNextCell(props.stage.cell.next);
-        setCurrentStage(props.stage.stage);
-        setScore(props.stage.score);
-        setRows(props.stage.rows);
-    }, [
-        props.stage.cell,
-        props.stage.cell.current,
-        props.stage.cell.next,
-    ]);
+        updateCurrentTetromino(
+            {
+                pos: { x: 0, y: 5 },
+                tetromino: TETROMINOES[stage.tetromino.next],
+                collided: false,
+            });
+        updateNextTetromino(stage.tetromino.next);
+        updateStage(stage.stage);
+        updateScore(stage.score);
+    }, [props.stage]);
 
-    const updateCell = () => {
+
+    const updateTetromino = () => {
         let next = randomTetromino();
-        props.updateCell({ next });
+        props.updateTetromino({ next });
     }
 
-    const resetGame = () => {
-        let stage = InitStage();
-        let next = randomTetromino();
-        props.createStage({ stage });
-        props.updateCell({ next });
-        setStart(false);
-        setPaused(false);
-        setGameOver(false);
-        setScore(0);
-        setRows(0);
-    }
-
-    const nextTetromino = TETROMINOES[nextCell].shape.map(row => {
-        return row.map((cell, key) => {
-            return <CellStyle
+    const nextTetrominoShape = TETROMINOES[nextTetromino].shape.map(row => {
+        return row.map((tetromino, key) => {
+            return <TetrominoStyle
                 key={key}
-                type={cell}
-                color={TETROMINOES[cell].color} />
+                type={tetromino}
+                color={TETROMINOES[tetromino].color} />
         })
     });
 
@@ -97,14 +99,14 @@ const Stage = (props) => {
             }}>
                 <div style={{
                     display: 'grid',
-                    gridTemplateRows: `repeat(${TETROMINOES[nextCell].shape[0].length},
-                        calc(100% / ${TETROMINOES[nextCell].shape[0].length}))`,
-                    gridTemplateColumns: `repeat(${TETROMINOES[nextCell].shape.length}, 1fr)`,
+                    gridTemplateRows: `repeat(${TETROMINOES[nextTetromino].shape[0].length},
+                        calc(100% / ${TETROMINOES[nextTetromino].shape[0].length}))`,
+                    gridTemplateColumns: `repeat(${TETROMINOES[nextTetromino].shape.length}, 1fr)`,
                     gridGap: '1px',
-                    width: `calc(15px * ${TETROMINOES[nextCell].shape.length})`,
+                    width: `calc(15px * ${TETROMINOES[nextTetromino].shape.length})`,
 
                 }} >
-                    {nextTetromino}
+                    {nextTetrominoShape}
                 </div>
                 <span>{`SCORE ${score}`}</span>
                 <span>{`ROWS ${rows}`}</span>
@@ -134,17 +136,14 @@ const Stage = (props) => {
     const bouttons = () => {
         return (
             <div style={{
-                // padding: '10px',
                 display: 'flex',
                 justifyContent: 'space-between',
-                // background: 'grey',
-                // width: '100%',
             }}>
-                {start ? (
+                {gameStart ? (
                     <Button
                         type="primary"
                         onClick={() => {
-                            resetGame();
+                            resetGame(randomTetromino());
                         }}
                     >
                         Restart
@@ -153,19 +152,19 @@ const Stage = (props) => {
                     <Button
                         type="primary"
                         onClick={() => {
-                            setStart(true);
-                            updateCell();
+                            startGame(true);
+                            updateTetromino();
                         }
                         }
                     >
                         Start
                     </Button>
                 )}
-                {start && (paused ? (
+                {gameStart && (gamePause ? (
                     <Button
                         type="primary"
                         onClick={() => {
-                            setPaused(false);
+                            pauseGame(false);
                         }}
                     >
                         Resume
@@ -174,7 +173,7 @@ const Stage = (props) => {
                     <Button
                         type="primary"
                         onClick={() => {
-                            setPaused(true);
+                            pauseGame(true);
                         }}
                     >
                         Pause
@@ -282,5 +281,5 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, {
     createStage,
     updateStage,
-    updateCell,
+    updateTetromino,
 })(Stage);

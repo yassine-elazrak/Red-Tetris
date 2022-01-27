@@ -1,17 +1,17 @@
 import {
     STAGE_CREATE,
     STAGE_UPDATE,
-    CELL_UPDATE
+    TETROMINOES_UPDATE
 } from '../types';
 
 const initialState = {
     stage: [],
-    cell: {
+    tetromino: {
         current: 0,
         next: 0,
     },
-    score: 20,
-    rows: 20,
+    score: 0,
+    rows: 0,
 };
 
 
@@ -28,11 +28,11 @@ const stage = (state = initialState, action) => {
                 ...state,
                 stage: action.payload.stage,
             };
-        case CELL_UPDATE:
+        case TETROMINOES_UPDATE:
             return {
                 ...state,
-                cell: {
-                    current: state.cell.next,
+                tetromino: {
+                    current: state.tetromino.next,
                     next: action.payload.next,
                 },
             };

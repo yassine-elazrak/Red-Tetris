@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const CellStyle = styled.div`
+export const TetrominoStyle = styled.div`
     // width: atuo;
     // height: 20px;
     background-color: rgba(${props => props.color},
