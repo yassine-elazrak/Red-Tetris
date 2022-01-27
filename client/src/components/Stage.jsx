@@ -45,50 +45,34 @@ const Stage = (props) => {
         nextTetromino, updateNextTetromino,
         resetGame,
         moveTetromino,
-    ] = useStage(InitStage());
+    ] = useStage();
 
     // useEffect(() => {
     //     pushToStage(currentTetromino);
     // }, [gameStart]);
 
     useEffect(() => {
-        let stage = InitStage();
-        let next = randomTetromino();
-        // let current = randomTetromino();
-        props.createStage({ stage });
-        props.updateTetromino({ next });
-        updateNextTetromino(next);
+        // let stage = InitStage();
+        // let next = randomTetromino();
+        // // let current = randomTetromino();
+        // props.createStage({ stage });
+        // props.updateTetromino({ next });
+        // updateNextTetromino(randomTetromino());
         document.getElementById('Content').focus();
     }, []);
 
-    // useEffect(() => {
-    //     updateCurrentTetromino(
-    //         {
-    //             pos: { x: 4, y: 0 },
-    //             tetromino: TETROMINOES[stage.tetromino.next],
-    //             collided: false,
-    //         });
-    //     updateNextTetromino(stage.tetromino.next);
-    //     updateStage(stage.stage);
-    //     updateScore(stage.score);
-    // }, [props.stage]);
 
+    
 
     const updateTetromino = () => {
-        let next = randomTetromino();
-        // console.log('updateTetromino', next);
-        const pos = TETROMINOES[nextTetromino].pos.map(
-            (index) => ([index[0], index[1] + 3])
-        );
-        console.log(pos);
-        updateCurrentTetromino(
-            {
-                pos: TETROMINOES[nextTetromino].pos,
-                type: nextTetromino,
-                collided: false,
-            });
-        updateNextTetromino(next);
-        props.updateTetromino({ next });
+        // let next = randomTetromino();
+        // const pos = TETROMINOES[nextTetromino].pos.map(
+        //     (index) => ([index[0], index[1] + 3])
+        // );
+        // console.log(pos);
+        // updateCurrentTetromino();
+        updateNextTetromino(randomTetromino());
+        // props.updateTetromino(randomTetromino());
     }
 
     const nextTetrominoShape = TETROMINOES[nextTetromino].shape.map(row => {
@@ -170,7 +154,9 @@ const Stage = (props) => {
                         type="primary"
                         onClick={() => {
                             startGame(true);
-                            updateTetromino();
+                            // updateTetromino();
+                            // moveTetromino({x: 0, y: 0});
+                            // console.log(currentTetromino);
                         }
                         }
                     >
@@ -210,6 +196,7 @@ const Stage = (props) => {
 
     const handlekeys = (e) => {
         console.log(e.keyCode);
+        if (!gameStart) return;
         if (e.keyCode === 37) {
             moveTetromino({ x: -1, y: 0 });
         } else if (e.keyCode === 39) {
