@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { Layout, Row, Col, Button, Popover } from 'antd';
+import { Layout, Row, Col, Button, Popover, Modal, Space } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import {
     InitStage,
@@ -63,7 +63,7 @@ const Stage = (props) => {
     }, []);
 
 
-    
+
 
     const updateTetromino = () => {
         // let next = randomTetromino();
@@ -78,7 +78,7 @@ const Stage = (props) => {
 
     const nextTetrominoShape = TETROMINOES[nextTetromino].shape.map(row => {
         if (!row)
-            return ;
+            return;
         return row.map((tetromino, key) => {
             return <TetrominoStyle
                 key={key}
@@ -184,9 +184,9 @@ const Stage = (props) => {
                     </Button>
                 ))}
                 <Button
-                type="primary"
-                onClick={() => {
-                    updateTetromino();
+                    type="primary"
+                    onClick={() => {
+                        updateTetromino();
                     }}
                 >
                     Leave
@@ -209,6 +209,22 @@ const Stage = (props) => {
             rotateTetromino();
         }
     }
+
+    const handleAlertGameOver = () => {
+        if (gameOver) {
+            Modal.error({
+                title: 'Game Over',
+                content: 'Game Over',
+                onOk() {
+                    resetGame(randomTetromino());
+                },
+            });
+        }
+    }
+
+    useEffect(() => {
+        handleAlertGameOver();
+    }, [gameOver]);
 
 
     return (
