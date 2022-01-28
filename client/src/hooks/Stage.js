@@ -86,17 +86,47 @@ export const useStage = () => {
         return false;
     };
 
-
-    const moveTetromino = (dir = { x: 0, y: 0 }) => {
-        let stage = currentStage.map((row) => [...row]);
-        let tetromino = { ...currentTetromino };
+    const removeTetromino = (stage, tetromino) => {
+        let newStage = stage.map(row => [...row]);
         tetromino.shape.forEach((row, y) => {
             row.forEach((value, x) => {
                 if (value !== 0) {
-                    stage[tetromino.pos.y + y][tetromino.pos.x + x] = 0;
+                    newStage[tetromino.pos.y + y][tetromino.pos.x + x] = 0;
                 }
             });
         });
+        return newStage;
+    };
+
+    const rotateTetromino = () => {
+        let newStage = removeTetromino(currentStage, currentTetromino);
+        updateStage(newStage);
+        let tetromino = { ...currentTetromino };
+        let pos = tetromino.pos;
+        const shape = tetromino.shape;
+        const newShape = currentTetromino.shape.map((row) => row.reverse());
+
+        console.log(newShape, 'newShape');
+        updateCurrentTetromino({
+            ...currentTetromino,
+            pos: { x: pos.x, y: pos.y },
+            shape: newShape.reverse(),
+        });
+    };
+
+
+    const moveTetromino = (dir = { x: 0, y: 0 }) => {
+        // let stage = currentStage.map((row) => [...row]);
+        // let tetromino = { ...currentTetromino };
+        // tetromino.shape.forEach((row, y) => {
+        //     row.forEach((value, x) => {
+        //         if (value !== 0) {
+        //             stage[tetromino.pos.y + y][tetromino.pos.x + x] = 0;
+        //         }
+        //     });
+        // });
+
+        let stage = removeTetromino(currentStage, currentTetromino);
 
         if (collided(stage, dir) === false) {
             // console.log(collided(stage, dir));
@@ -110,9 +140,9 @@ export const useStage = () => {
             let newPos = { ...currentTetromino.pos };
             newPos.x += dir.x;
             newPos.y += dir.y;
-            
+
             // console.log(newPos, 'newPos');
-            
+
             updateCurrentTetromino({
                 ...currentTetromino,
                 pos: newPos,
@@ -137,7 +167,7 @@ export const useStage = () => {
 
     useEffect(() => {
         console.log(currentTetromino.pos, 'currentTetromino.pos');
-        if (gameStart){
+        if (gameStart) {
             let stage = currentStage.map((row) => [...row]);
             drawTetromino(currentTetromino, stage);
         }
@@ -187,5 +217,6 @@ export const useStage = () => {
         nextTetromino, updateNextTetromino,
         resetGame,
         moveTetromino,
+        rotateTetromino,
     ];
 }

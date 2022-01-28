@@ -45,6 +45,7 @@ const Stage = (props) => {
         nextTetromino, updateNextTetromino,
         resetGame,
         moveTetromino,
+        rotateTetromino,
     ] = useStage();
 
     // useEffect(() => {
@@ -204,9 +205,9 @@ const Stage = (props) => {
         } else if (e.keyCode === 40) {
             moveTetromino({ x: 0, y: 1 });
         }
-        // else if (e.keyCode === 38) {
-        //     rotateTetromino();
-        // }
+        else if (e.keyCode === 38) {
+            rotateTetromino();
+        }
     }
 
 
