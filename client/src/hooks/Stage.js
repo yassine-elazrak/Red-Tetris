@@ -24,7 +24,7 @@ export const useStage = () => {
     const startGame = () => {
         setGameStart(true);
         setCurrentTetromino({
-            pos: { x: 0, y: 0 },
+            pos: { x: STAGE_WIDTH / 2 - 2, y: 0 },
             shape: TETROMINOES[nextTetromino].shape,
             collided: false,
         });
@@ -36,9 +36,8 @@ export const useStage = () => {
     const updateGameOver = (gameOver) => { setGameOver(gameOver); };
     const updateGameWon = (gameWon) => { setGameWon(gameWon); };
     const updateCurrentTetromino = (tetromino) => {
-        // console.log("updateCurrentTetromino");
+        // console.log(tetromino, 'tetromino');
         setCurrentTetromino(tetromino);
-        // console.log(currentTetromino, "currentTetromino");
     };
     const updateNextTetromino = (nextTetromino) => {
         setNextTetromino(nextTetromino);
@@ -72,22 +71,13 @@ export const useStage = () => {
                     if (pos.x + x + dir.x < 0 || pos.x + x + dir.x > STAGE_WIDTH - 1 ||
                         pos.y + y + dir.y > STAGE_HEIGHT - 1 ||
                         (stage[pos.y + y + dir.y][pos.x + x + dir.x] !== 0)) {
-                        console.log('collided');
                         if ((dir.y > 0) && ((pos.y + y + dir.y > STAGE_HEIGHT - 1) ||
                             (stage[pos.y + y + dir.y][pos.x + x + dir.x] !== 0))) {
-                                // updateCurrentTetromino();
-                                // setCurrentTetromino({
-                                //     ...currentTetromino,
-                                //     collided: true,
-                                // });
-                                updateCurrentTetromino({
-                                    pos: { x: 0, y: 0 },
-                                    shape: TETROMINOES[nextTetromino].shape,
-                                    collided: true,
-                                });
-                            // console.log('game over');
+                            updateCurrentTetromino({
+                                ...currentTetromino,
+                                collided: true,
+                            });
                         }
-                        // updateGameOver(true);
                         return true;
                     }
                 }
@@ -97,7 +87,7 @@ export const useStage = () => {
     };
 
 
-    const moveTetromino = (dir) => {
+    const moveTetromino = (dir = { x: 0, y: 0 }) => {
         let stage = currentStage.map((row) => [...row]);
         let tetromino = { ...currentTetromino };
         tetromino.shape.forEach((row, y) => {
@@ -110,81 +100,78 @@ export const useStage = () => {
 
         if (collided(stage, dir) === false) {
             // console.log(collided(stage, dir));
-            tetromino.shape.forEach((row, y) => {
-                row.forEach((value, x) => {
-                    if (value !== 0) {
-                        stage[tetromino.pos.y + y + dir.y][tetromino.pos.x + x + dir.x] = value;
-                    }
-                });
-            });
+            // tetromino.shape.forEach((row, y) => {
+            //     row.forEach((value, x) => {
+            //         if (value !== 0) {
+            //             stage[tetromino.pos.y + y + dir.y][tetromino.pos.x + x + dir.x] = value;
+            //         }
+            //     });
+            // });
             let newPos = { ...currentTetromino.pos };
             newPos.x += dir.x;
             newPos.y += dir.y;
-
+            
             // console.log(newPos, 'newPos');
-
-            updateStage(stage);
-            console.log('moveTetromino');
-            // console.log(currentTetromino, 'currentTetromino');
-            console.log('updateStage<<<');
-            // console.log(currentTetromino, 'currentTetromino');
-            setCurrentTetromino({
+            
+            updateCurrentTetromino({
                 ...currentTetromino,
                 pos: newPos,
             });
-            console.log(currentTetromino, 'currentTetromino');
-            console.log('updateStage>>>');
+            updateStage(stage);
         }
-        // console.log(currentStage, 'stage2');
     }
 
-    // const rot
+    const drawTetromino = (tetromino, stage) => {
+        // console.log(tetromino, 'tetromino');
+        tetromino.shape.forEach((row, y) => {
+            row.forEach((value, x) => {
+                if (value !== 0) {
+                    stage[tetromino.pos.y + y][tetromino.pos.x + x] = value;
+                }
+            });
+        });
+        // console.log(stage, 'stage');
+        updateStage(stage);
+        // return stage;
+    };
+
+    useEffect(() => {
+        console.log(currentTetromino.pos, 'currentTetromino.pos');
+        if (gameStart){
+            let stage = currentStage.map((row) => [...row]);
+            drawTetromino(currentTetromino, stage);
+        }
+    }, [currentTetromino.pos])
 
     // useEffect(() => {
-    //     console.log(currentStage, 'currentStagess');
-    //     // console.log(currentTetromino.pos, 'currentTetromino');
-    // }, [currentTetromino.pos]);
+    //     console.log(currentStage, 'currentStage');
+    // }, [currentStage]);
 
     useEffect(() => {
         if (currentTetromino.collided) {
-            console.log("<<<<<<");
-            // let tetromino = {
-            //     pos: { x: 0, y: 0 },
-            //     shape: TETROMINOES[nextTetromino].shape,
-            //     collided: false,
-            // }
-            // setCurrentTetromino(tetromino);
-            
-            // console.log(currentTetromino, 'currentTetromino');
-            console.log(currentTetromino, '....');
-            setCurrentTetromino({
+            // console.log('collided');
+            //    updateCurrentTetromino({
+            //         ...currentTetromino,
+            //         collided: false,
+            //         pos: { x: STAGE_WIDTH / 2 - 2, y: 0 },
+            //         shape: TETROMINOES[nextTetromino].shape,
+            //     }, 'update');
+            updateCurrentTetromino({
                 ...currentTetromino,
                 collided: false,
+                pos: { x: STAGE_WIDTH / 2 - 2, y: 0 },
+                shape: TETROMINOES[nextTetromino].shape,
             });
-            if (collided(currentStage, { x: 0, y: 0 })) {
-                console.log('game over');
-                updateGameOver(true);
-            }
-            moveTetromino({ x: 0, y: 0 });
             updateNextTetromino(randomTetromino());
         }
     }, [currentTetromino.collided]);
 
-    useEffect(() => {
-        console.log(currentTetromino, 'listener');
-    }, [currentTetromino]);
 
     useEffect(() => {
         if (!gameStart) {
             return;
         }
-        // console.log('start');
-        updateCurrentTetromino({
-            pos: { x: STAGE_WIDTH / 2 - 2, y: 0 },
-            shape: TETROMINOES[nextTetromino].shape,
-            collided: false,
-        });
-        moveTetromino({ x: 0, y: 0 });
+        updateNextTetromino(randomTetromino());
     }, [gameStart]);
 
     return [
