@@ -6,6 +6,7 @@ import { UsersStage, SliderMaps } from './styles/UsersStage';
 
 
 export const Players = (props) => {
+    console.log('Players');
     const fakeMap = [
         {
             id: 1,

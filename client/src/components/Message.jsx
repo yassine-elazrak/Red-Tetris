@@ -16,6 +16,7 @@ import {
 } from './styles/BoxMessage';
 
 const Message = (props) => {
+    console.log('Message');
 
     const fackeMessage = () => {
         const message = [];

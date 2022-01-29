@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Stage from '../components/Stage';
+import GameSpace from '../components/GameSpace';
 
 
 const OnePlayerMode = (props) => {
     // console.log(props, 'props');
     return (
-        <Stage />
+        <GameSpace />
     )
 }
 

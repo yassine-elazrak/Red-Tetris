@@ -9,7 +9,7 @@ import FormUserName from "../components/FormUserName";
 import FormRoomName from "../components/FormRoomName";
 import Page404 from "./404";
 
-import Stage from "../components/Stage";
+import GameSpace from "../components/GameSpace";
 import InviteUsers from "../components/InviteUsers";
 
 import { connect } from "react-redux";
@@ -92,9 +92,9 @@ const HomePage = (props) => {
             <Page404 />
             : !auth.isAuth ? <FormUserName /> : !room.is_joined ?
               <FormRoomName />
-              : !room.isPravite && room.status === "waiting" ?
-                <InviteUsers />
-                : <Stage />
+              // : !room.isPravite && room.status === "waiting" ?
+              //   <InviteUsers />
+                : <GameSpace />
           }
         </Content>
         {/* {showSider &&

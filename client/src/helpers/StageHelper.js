@@ -16,12 +16,9 @@ export const InitStage = () => {
 }
 
 export const CreateStage = (map) => {
-    // console.log(map);
-   const Stage = map?.map(row =>{
-       return row.map((cell, key) => {
-           return <TetrominoStyle key={key} type={cell} color={TETROMINOES[cell].color}/>
-       })
+    return map.map(row => {
+        return row.map((cell, key) => {
+            return <TetrominoStyle key={key} type={cell} color={TETROMINOES[cell].color} />
+        })
     })
-    // console.log(Stage);
-    return Stage;
 }

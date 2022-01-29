@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 
 
 // import { createStage } from '../helpers/StageHelper'
-import Stage from '../components/Stage'
+import GameSpace from '../components/GameSpace'
 
 export const RoomPage = (props) => {
     // console.log(props);
@@ -11,7 +11,7 @@ export const RoomPage = (props) => {
     // console.log(room);
     return (
         <div>
-            <Stage />
+            <GameSpace />
         </div>
     )
 }
