@@ -1,5 +1,8 @@
 PROJECT_NAME	= Tetris 
 
+#source info
+# https://github.com/webdevjourneyWDJ/Chat-App/blob/master/server/server.js
+#https://github.com/sujoyduttajad/Socket.io-Chat-Application/blob/master/server/index.js
 # -f is not used because --env-file is not available on the version of docker-compose
 # the VM uses.
 AIRFLOW_UID		= $(shell id -u)
