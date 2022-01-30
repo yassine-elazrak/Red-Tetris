@@ -45,7 +45,7 @@ const GameSpace = (props) => {
         gameStart, startGame,
         gamePause, pauseGame,
         currentTetromino, updateCurrentTetromino,
-        nextTetromino, updateNextTetromino,
+        nextTetromino,
         resetGame,
         moveTetromino,
         rotateTetromino,
@@ -57,17 +57,17 @@ const GameSpace = (props) => {
 
 
     const handlekeys = (e) => {
-        console.log(e.keyCode);
+        // console.log(e.keyCode);
         if (!gameStart) return;
         if (e.keyCode === 37) {
-            moveTetromino({ x: -1, y: 0 });
+            moveTetromino(currentStage, currentTetromino, { x: -1, y: 0 });
         } else if (e.keyCode === 39) {
-            moveTetromino({ x: 1, y: 0 });
+            moveTetromino(currentStage, currentTetromino,{ x: 1, y: 0 });
         } else if (e.keyCode === 40) {
-            moveTetromino({ x: 0, y: 1 });
+            moveTetromino(currentStage, currentTetromino,{ x: 0, y: 1 });
         }
         else if (e.keyCode === 38) {
-            rotateTetromino(currentTetromino);
+            rotateTetromino(currentStage, currentTetromino);
         }
     }
 

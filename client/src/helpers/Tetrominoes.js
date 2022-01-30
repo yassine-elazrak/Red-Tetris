@@ -14,12 +14,6 @@ export const TETROMINOES = {
         ],
         // type: "I",
         color: "80, 227, 230",
-        pos: [
-            [0, 1],
-            [1, 1],
-            [2, 1],
-            [3, 1],
-        ],
     },
     J: {
         shape: [
@@ -29,12 +23,6 @@ export const TETROMINOES = {
         ],
         // type: "J",
         color: "36, 95, 223",
-        pos: [
-            [0, 1],
-            [1, 1],
-            [2, 0],
-            [2, 1],
-        ],
     },
     L: {
         shape: [
@@ -44,12 +32,6 @@ export const TETROMINOES = {
         ],
         // type: "L",
         color: "223, 173, 36",
-        pos: [
-            [0, 0],
-            [1, 0],
-            [2, 0],
-            [2, 1],
-        ],
     },
     O: {
         shape: [
@@ -58,12 +40,6 @@ export const TETROMINOES = {
         ],
         // type: "O",
         color: "223, 217, 36",
-        pos: [
-            [0, 0],
-            [0, 1],
-            [1, 0],
-            [1, 1],
-        ],
     },
     S: {
         shape: [
@@ -73,12 +49,6 @@ export const TETROMINOES = {
         ],
         // type: "S",
         color: "48, 211, 56",
-        pos: [
-            [0, 1],
-            [0, 2],
-            [1, 0],
-            [1, 1],
-        ],
     },
     T: {
         shape: [
@@ -88,12 +58,6 @@ export const TETROMINOES = {
         ],
         // type: "T",
         color: "132, 61, 198",
-        pos: [
-            [0, 0],
-            [0, 1],
-            [0, 2],
-            [1, 1],
-        ],
     },
     Z: {
         shape: [
@@ -103,12 +67,6 @@ export const TETROMINOES = {
         ],
         // type: "Z",
         color: "227, 78, 78",
-        pos: [
-            [0, 0],
-            [0, 1],
-            [1, 1],
-            [1, 2],
-        ],
     },
     D: {
         shape: ['D'],

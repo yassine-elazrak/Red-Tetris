@@ -7,7 +7,7 @@ import {
 } from '../helpers/StageHelper';
 
 const Stage = (props) => {
-    console.log('Stage');
+    // console.log('Stage');
     return (
         <div style={{
             display: 'grid',
