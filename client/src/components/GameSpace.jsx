@@ -62,9 +62,9 @@ const GameSpace = (props) => {
         if (e.keyCode === 37) {
             moveTetromino(currentStage, currentTetromino, { x: -1, y: 0 });
         } else if (e.keyCode === 39) {
-            moveTetromino(currentStage, currentTetromino,{ x: 1, y: 0 });
+            moveTetromino(currentStage, currentTetromino, { x: 1, y: 0 });
         } else if (e.keyCode === 40) {
-            moveTetromino(currentStage, currentTetromino,{ x: 0, y: 1 });
+            moveTetromino(currentStage, currentTetromino, { x: 0, y: 1 });
         }
         else if (e.keyCode === 38) {
             rotateTetromino(currentStage, currentTetromino);
@@ -93,6 +93,9 @@ const GameSpace = (props) => {
     const bottons = () => {
         return (
             <div style={{
+                // border: '1px solid black',
+                padding: '10px',
+                margin: 0,
                 display: 'flex',
                 justifyContent: 'space-between',
             }}>
@@ -164,21 +167,31 @@ const GameSpace = (props) => {
                         <Players />
                     </Col>
                 }
-                <Col xs={14} sm={13} md={12} lg={10} xl={9} xxl={8} style={{
-                    padding: '10px',
+                <Col xs={24} sm={13} md={12} lg={10} xl={9} xxl={9} style={{
+                    padding: '0px',
+                    // backgroundColor: '#000',
                     margin: 'auto',
+                    width: '100%',
                 }}>
                     {/* Current Stage */}
-                    <Stage stage={currentStage} />
+                    <Stage stage={currentStage}/>
                     <Row style={{
-                        marginTop: '20px',
+                        marginTop: '0',
                     }}>
-                        <Col xs={0} sm={0} md={24} lg={24} xl={24} xxl={24}>
+                        <Col xs={0} sm={0} md={24} lg={24} xl={24} xxl={24}
+                            style={{
+                                padding: 0,
+                                // border: '1px solid black',
+                            }}>
                             {/* Bottons */}
                             {bottons()}
                         </Col>
                         <Col xs={24} sm={24} md={0} lg={0} xl={0} xxl={0} style={{
-                            padding: '10px',
+                            // padding: '10px',
+                            marginTop: '10px',
+                            paddingLeft: '10px',
+                            // display: 'flex',
+                            // justifyContent: 'space-between',
                         }}>
                             {/* on mobile change style */}
                             <Popover
@@ -190,10 +203,11 @@ const GameSpace = (props) => {
                                     width: '90%',
                                 }}>
                                 <Button type="primary" shape="circle" style={{
-                                    padding: '5px',
+                                    // padding: '5px',
                                     display: 'flex',
                                     textAlign: 'center',
                                     justifyContent: 'center',
+                                    margin: 0,
                                 }} >
                                     <SettingOutlined style={{
                                         margin: 'auto',
@@ -205,7 +219,7 @@ const GameSpace = (props) => {
                     </Row>
                 </Col>
                 {!room.isPravite &&
-                    <Col xs={10} sm={11} md={6} lg={7} xl={6} xxl={5} style={{
+                    <Col xs={0} sm={11} md={6} lg={7} xl={6} xxl={5} style={{
                         height: '100%',
                     }}>
                         {/* message component */}

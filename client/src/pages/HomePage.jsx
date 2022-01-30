@@ -50,7 +50,7 @@ const HomePage = (props) => {
           const roomData = {
             roomId: 1,
             roomName: split[0],
-            isPravite: true,
+            isPravite: false,
             user: props.auth,
             status: 'waiting',
           }
