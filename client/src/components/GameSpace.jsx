@@ -49,6 +49,7 @@ const GameSpace = (props) => {
         resetGame,
         moveTetromino,
         rotateTetromino,
+        updateDropTime,
     ] = useStage();
 
     useEffect(() => {
@@ -57,8 +58,17 @@ const GameSpace = (props) => {
 
 
     const handlekeys = (e) => {
-        // console.log(e.keyCode);
+        console.log(e.keyCode);
+        const { keyCode } = e;
         if (!gameStart) return;
+        if (!(
+            keyCode === 37 ||
+            keyCode === 39 ||
+            keyCode === 40 ||
+            // keyCode === 32 ||
+            keyCode === 38
+        )) return;
+        updateDropTime(null);
         if (e.keyCode === 37) {
             moveTetromino(currentStage, currentTetromino, { x: -1, y: 0 });
         } else if (e.keyCode === 39) {
@@ -69,6 +79,8 @@ const GameSpace = (props) => {
         else if (e.keyCode === 38) {
             rotateTetromino(currentStage, currentTetromino);
         }
+
+        updateDropTime(500);
     }
 
     const handleAlertGameOver = () => {
@@ -174,7 +186,7 @@ const GameSpace = (props) => {
                     width: '100%',
                 }}>
                     {/* Current Stage */}
-                    <Stage stage={currentStage}/>
+                    <Stage stage={currentStage} />
                     <Row style={{
                         marginTop: '0',
                     }}>

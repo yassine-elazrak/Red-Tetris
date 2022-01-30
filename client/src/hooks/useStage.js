@@ -26,6 +26,7 @@ export const useStage = () => {
     });
     const [nextTetromino, setNextTetromino] = useState(randomTetromino());
     const [delay, setDelay] = useState(null);
+    const [dorpTime, setDorpTime] = useState(null);
 
     const startGame = () => {
         setGameStart(true);
@@ -40,6 +41,9 @@ export const useStage = () => {
         });
     };
     // const updateCurrentTetromino
+    const updateDropTime = (time) => {
+        setDorpTime(time);
+    };
     const pauseGame = () => { setGamePause(!gamePause); };
     const updateStage = (newStage) => { setCurrentStage([...newStage]) };
     const updateScore = (score) => { setScore(score); };
@@ -141,7 +145,7 @@ export const useStage = () => {
             });
         });
 
-        if (tetromino.collided){
+        if (tetromino.collided) {
             console.log(tetromino, 'tetromino.collided');
             newStage = swapRow(newStage);
         }
@@ -228,20 +232,23 @@ export const useStage = () => {
             return;
         // if (!currentTetromino.collided)
         // console.log(currentTetromino, 'currentTetromino');
-            updateStageWithTetromino(currentStage, currentTetromino);
+        updateStageWithTetromino(currentStage, currentTetromino);
         if (currentTetromino.collided) {
-            if (checkCollision({
-                pos: {
-                    x: Math.ceil((STAGE_WIDTH / 2) -
-                        (TETROMINOES[nextTetromino].shape.length / 2)),
-                    y: ((-1 * TETROMINOES[nextTetromino].shape.length) + 1)
-                },
-                shape: TETROMINOES[nextTetromino].shape,
-            }, currentStage, { x: 0, y: 0 })) {
+            // if (checkCollision({
+            //     pos: {
+            //         x: Math.ceil((STAGE_WIDTH / 2) -
+            //             (TETROMINOES[nextTetromino].shape.length / 2)),
+            //         y: ((-1 * TETROMINOES[nextTetromino].shape.length) + 1)
+            //     },
+            //     shape: TETROMINOES[nextTetromino].shape,
+            // }, currentStage, { x: 0, y: 0 })) {
+            //     updateGameOver(true);
+            //     return;
+            // }
+            if (currentTetromino.pos.y < 0)
                 updateGameOver(true);
-                return;
-            }
-            swapTetrominos();
+            else
+                swapTetrominos();
         }
     }, [currentTetromino]);
 
@@ -272,13 +279,13 @@ export const useStage = () => {
 
     useInterval(() => {
         drop(currentStage, currentTetromino);
-    }, delay)
+    }, dorpTime)
 
     useEffect(() => {
         if (gameStart && !gamePause && !gameOver) {
-            setDelay(500);
+            updateDropTime(500);
         } else {
-            setDelay(null);
+            updateDropTime(null);
         }
     }, [gamePause, gameOver])
 
@@ -286,9 +293,9 @@ export const useStage = () => {
     useEffect(() => {
         if (gameStart && !gamePause && !gameOver) {
             swapTetrominos();
-            setDelay(500);
+            updateDropTime(500);
         } else {
-            setDelay(null);
+            updateDropTime(null);
         }
     }, [gameStart])
 
@@ -306,5 +313,6 @@ export const useStage = () => {
         resetGame,
         moveTetromino,
         rotateTetromino,
+        updateDropTime,
     ];
 }
