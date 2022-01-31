@@ -158,9 +158,9 @@ const NotifComponent = () => {
             >
                 <Badge count={lenght} showZero className="site-badge-count-109" style={{
                     cursor: "pointer",
-                    border: "1px solid #d9d9d9",
+                    // border: "1px solid #d9d9d9",
                     backgroundColor: "#6FCF97",
-                    color: '#fff',
+                    // color: '#fff',
                     margin: 0,
                     padding: 0
                     }} >

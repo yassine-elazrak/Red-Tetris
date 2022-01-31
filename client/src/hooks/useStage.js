@@ -106,8 +106,7 @@ export const useStage = () => {
                         if (
                             stage[y + offset.y + pos.y] &&
                             stage[y + offset.y + pos.y][x + offset.x + pos.x] &&
-                            stage[y + offset.y + pos.y][x + offset.x + pos.x][1] !== "clear" &&
-                            stage[y + offset.y + pos.y][x + offset.x + pos.x][1] !== "shadow"
+                            stage[y + offset.y + pos.y][x + offset.x + pos.x][1] === "tetromino"
                         ) {
                             return true;
                         }
@@ -141,7 +140,7 @@ export const useStage = () => {
         tetromino.shape.forEach((row, y) => {
             row.forEach((value, x) => {
                 if (value !== 0) {
-                    console.log(y + tetromino.pos.y + tetromino.shadow, 'shadow');
+                    // console.log(y + tetromino.pos.y + tetromino.shadow, 'shadow');
                     if (y + tetromino.pos.y + tetromino.shadow > 0) {
                         newStage[y + tetromino.pos.y + tetromino.shadow][x + tetromino.pos.x] =
                             [value, 'shadow'];

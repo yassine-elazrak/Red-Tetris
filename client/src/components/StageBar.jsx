@@ -1,4 +1,5 @@
 import React from 'react';
+import { Badge, Space, Card } from 'antd';
 
 import { TetrominoStyle } from './styles/TetrominoStyle';
 import { TETROMINOES } from '../helpers/Tetrominoes';
@@ -8,9 +9,9 @@ const StageBar = (props) => {
     const shapeLnegth = shape.length;
 
     const mapShape = (shape) => {
-        return shape.map((row, key) => {
+        return shape.map((row) => {
             return row.map((tetromino, key) => {
-                console.log(tetromino);
+                // console.log(tetromino);
                 return <TetrominoStyle
                     key={key}
                     type={[tetromino, 'clear']}
@@ -42,7 +43,22 @@ const StageBar = (props) => {
             }} >
                 {mapShape(shape)}
             </div>
-            <span>{`SCORE ${score}`}</span>
+            {/* SCORE */}
+            <Badge
+                className="site-badge-count-109"
+                count={100}
+                overflowCount={9999}
+                showZero
+                // text={`${score}`}
+                // status='success'
+                
+                style={{
+                    background: '#6FCF97',
+                    color: '#fff',
+                    
+                }}
+            >
+            </Badge>
             <span>{`ROWS ${rows}`}</span>
         </div>
     )
