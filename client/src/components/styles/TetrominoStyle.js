@@ -7,9 +7,10 @@ export const TetrominoStyle = styled.div`
         ${props => props.type[0] === 0
         ? 0.4
         : props.type[0] === 'D' ? 1 :
-            props.type[1] === 'shadow' ? 0.4
+            props.type[1] === 'shadow' ? 0.5
                 : 0.8});
-    border: ${props => props.type[0] === 0 ? "0px" : "1px solid"};
+    border: ${props => props.type[0] === 0 || props.type[1] === 'shadow'
+        ? "0px" : "1px solid"};
     border-bottom-color: rgba(${props => props.color}, 0.1);
     border-right-color: rgba(${props => props.color}, 1);
     border-top-color: rgba(${props => props.color}, 1);

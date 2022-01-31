@@ -141,6 +141,7 @@ export const useStage = () => {
         tetromino.shape.forEach((row, y) => {
             row.forEach((value, x) => {
                 if (value !== 0) {
+                    console.log(y + tetromino.pos.y + tetromino.shadow, 'shadow');
                     if (y + tetromino.pos.y + tetromino.shadow > 0) {
                         newStage[y + tetromino.pos.y + tetromino.shadow][x + tetromino.pos.x] =
                             [value, 'shadow'];
@@ -164,12 +165,12 @@ export const useStage = () => {
 
     // calculate the goole position of the tetromino
     const gooleDrop = (stage, tetromino) => {
-        let drop = STAGE_HEIGHT - 1 - tetromino.pos.y;
-        while (checkCollision(stage, tetromino, { x: 0, y: drop })) {
-            drop--;
+        let drop = 0;
+        while (!checkCollision(stage, tetromino, { x: 0, y: drop })) {
+            drop++;
         }
         console.log(drop, 'drop');
-        return drop;
+        return drop ? drop - 1 : 0;
     };
 
 
@@ -206,8 +207,8 @@ export const useStage = () => {
                 // shadow,
             });
         }
-        else
-            console.log(newTetromino, tetromino, 'newTetromino');
+        // else
+        //     console.log(newTetromino, tetromino, 'newTetromino');
     };
 
 
@@ -271,22 +272,6 @@ export const useStage = () => {
         return tetromino;
     };
 
-    // const drawShadow = (stage, tetromino) => {
-    //     const gool = gooleDrop(stage, tetromino);
-
-    //     console.log(gool, 'gool');
-    //     tetromino.shape.forEach((row, y) => {
-    //         row.forEach((value, x) => {
-    //             stage[y + tetromino.pos.y + gool][x + tetromino.pos.x] = [value, 'shadow'];
-    //         });
-    //     });
-    //     return stage;
-    // };
-
-
-
-
-
 
     useInterval(() => {
         drop(currentStage, currentTetromino);
@@ -294,7 +279,7 @@ export const useStage = () => {
 
     useEffect(() => {
         if (!gameStart || gameOver || gameWon || gamePause) return;
-        console.log(currentTetromino, 'currentTetromino');
+        // console.log(currentTetromino, 'currentTetromino');
         let shadow = gooleDrop(currentStage, currentTetromino);
         // let tetromino = {
         //     ...currentTetromino,
@@ -319,7 +304,15 @@ export const useStage = () => {
         } else {
             updateDropTime(null);
         }
-    }, [gameStart, gamePause, gameOver])
+    }, [gameStart])
+
+    useEffect(() => {
+        if (gameStart && !gamePause && !gameOver) {
+            updateDropTime(500);
+        } else {
+            updateDropTime(null);
+        }
+    }, [gamePause])
 
     return [
         currentStage, updateStage,

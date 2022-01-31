@@ -64,33 +64,42 @@ const GameSpace = (props) => {
     }, []);
 
 
-    const handlekeys = (e) => {
-        console.log(e.keyCode);
-        const { keyCode } = e;
+    const handleKeyDown = ({ keyCode }) => {
+        // console.log(e.keyCode);
+        // const { keyCode } = e;
         if (!gameStart && keyCode === 13) {
-            console.log('enter');
             startGame();
         }
         if (!gameStart) return;
         updateDropTime(null);
-        if (e.keyCode === 37 || e.keyCode === 74) {
+        if (keyCode === 13) {
+            pauseGame(!gamePause);
+        }
+        if (keyCode === 37 || keyCode === 74) {
             // move to left
             moveTetromino(currentStage, currentTetromino, { x: -1, y: 0 });
-        } else if (e.keyCode === 39 || e.keyCode === 76) {
+        } else if (keyCode === 39 || keyCode === 76) {
             // move to right
             moveTetromino(currentStage, currentTetromino, { x: 1, y: 0 });
-        } else if (e.keyCode === 40 || e.keyCode === 75) {
+        } else if (keyCode === 40 || keyCode === 75) {
             // move to down
             moveTetromino(currentStage, currentTetromino, { x: 0, y: 1 });
-        } else if (e.keyCode === 32 || e.keyCode === 72) {
+        } else if (keyCode === 32 || keyCode === 72) {
             // move to goole drop
             moveTetromino(currentStage, currentTetromino, { x: 0, y: -1 });
-        } else if (e.keyCode === 38 || e.keyCode === 73) {
+        } else if (keyCode === 38 || keyCode === 73) {
             // rotate
             rotateTetromino(currentStage, currentTetromino);
         }
 
-        updateDropTime(500);
+        // updateDropTime(500);
+    }
+
+    const handleKeyUp = (e) => {
+        console.log('key up');
+        if (gameStart && !gamePause && !gameWon && !gameOver) {
+            updateDropTime(500);
+        }
     }
 
     const handleAlertGameOver = () => {
@@ -161,7 +170,8 @@ const GameSpace = (props) => {
             id="game-space"
             role="button"
             tabIndex="0"
-            onKeyDown={(e) => handlekeys(e)}
+            onKeyDown={(e) => handleKeyDown(e)}
+            onKeyUp={(e) => handleKeyUp(e)}
             style={{
                 background: 'rgba(0, 0, 0, 0.7)',
                 padding: 0,
