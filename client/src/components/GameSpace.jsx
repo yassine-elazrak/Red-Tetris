@@ -122,6 +122,37 @@ const GameSpace = (props) => {
     }, [gameOver]);
 
 
+    const [touchStart, setTouchStart] = useState({ x: 0, y: 0 });
+
+    const handleTouchEnd = ({ changedTouches }) => {
+        if (!gameStart) return;
+        console.log('starting');
+        const [touch] = changedTouches;
+        const { x, y } = touch;
+        const {clientX, clientY} = changedTouches[0];
+        const deltaX = clientX - touchStart.x;
+        const deltaY = clientY - touchStart.y;
+        console.log(deltaX, ' ' , deltaY);
+        if (deltaX === deltaY)
+            moveTetromino(currentStage, currentTetromino, {x: 0, y : -1})
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+            if (deltaX > 0) {
+                console.log('right');
+                moveTetromino(currentStage, currentTetromino, { x: 1, y: 0 });
+            } else {
+                moveTetromino(currentStage, currentTetromino, { x: -1, y: 0 });
+                console.log('left');
+            }
+        } else {
+            if (deltaY < 0) {
+                rotateTetromino(currentStage, currentTetromino);
+                console.log('rotate');
+            }
+        }
+        updateDropTime(500);
+    }
+
+
     const bottons = () => {
         return (
             <div style={{
@@ -172,6 +203,20 @@ const GameSpace = (props) => {
             tabIndex="0"
             onKeyDown={(e) => handleKeyDown(e)}
             onKeyUp={(e) => handleKeyUp(e)}
+            onTouchStart={(e) => {
+                if (gameStart) updateDropTime(null);
+              setTouchStart({
+                  x: e.changedTouches[0].clientX,
+                  y: e.changedTouches[0].clientY,
+              })
+            }}
+            onTouchEnd={(e) => {
+                console.log(
+                    touchStart.x - e.changedTouches[0].clientX
+                );
+                handleTouchEnd(e);
+            }}
+            // onTouchStart={(e) => alert(`touch start ${e.touches[0].clientX}`)}
             style={{
                 background: 'rgba(0, 0, 0, 0.7)',
                 padding: 0,
