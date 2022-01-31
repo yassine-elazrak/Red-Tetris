@@ -50,33 +50,43 @@ const GameSpace = (props) => {
         moveTetromino,
         rotateTetromino,
         updateDropTime,
+        gooleDrop,
     ] = useStage();
 
+
+    const changeFocused = () => {
+        document.getElementById('game-space').focus();
+    }
+
     useEffect(() => {
-        document.getElementById('Content').focus();
+        // document.getElementById('Content').focus();
+        changeFocused();
     }, []);
 
 
     const handlekeys = (e) => {
         console.log(e.keyCode);
         const { keyCode } = e;
-        if (!gameStart) return;
-        if (!(
-            keyCode === 37 ||
-            keyCode === 39 ||
-            keyCode === 40 ||
-            // keyCode === 32 ||
-            keyCode === 38
-        )) return;
-        updateDropTime(null);
-        if (e.keyCode === 37) {
-            moveTetromino(currentStage, currentTetromino, { x: -1, y: 0 });
-        } else if (e.keyCode === 39) {
-            moveTetromino(currentStage, currentTetromino, { x: 1, y: 0 });
-        } else if (e.keyCode === 40) {
-            moveTetromino(currentStage, currentTetromino, { x: 0, y: 1 });
+        if (!gameStart && keyCode === 13) {
+            console.log('enter');
+            startGame();
         }
-        else if (e.keyCode === 38) {
+        if (!gameStart) return;
+        updateDropTime(null);
+        if (e.keyCode === 37 || e.keyCode === 74) {
+            // move to left
+            moveTetromino(currentStage, currentTetromino, { x: -1, y: 0 });
+        } else if (e.keyCode === 39 || e.keyCode === 76) {
+            // move to right
+            moveTetromino(currentStage, currentTetromino, { x: 1, y: 0 });
+        } else if (e.keyCode === 40 || e.keyCode === 75) {
+            // move to down
+            moveTetromino(currentStage, currentTetromino, { x: 0, y: 1 });
+        } else if (e.keyCode === 32 || e.keyCode === 72) {
+            // move to goole drop
+            moveTetromino(currentStage, currentTetromino, { x: 0, y: -1 });
+        } else if (e.keyCode === 38 || e.keyCode === 73) {
+            // rotate
             rotateTetromino(currentStage, currentTetromino);
         }
 
@@ -90,6 +100,7 @@ const GameSpace = (props) => {
                 content: 'Game Over',
                 onOk() {
                     resetGame(randomTetromino());
+                    changeFocused();
                 },
             });
         }
@@ -117,6 +128,7 @@ const GameSpace = (props) => {
                         gameStart ?
                             resetGame(randomTetromino())
                             : startGame();
+                        changeFocused();
                     }}
                 > {gameStart ? 'Reset' : 'Start'}
                 </Button>
@@ -126,6 +138,7 @@ const GameSpace = (props) => {
                         type="primary"
                         onClick={() => {
                             pauseGame(!gamePause);
+                            changeFocused();
                         }}
                     > {gamePause ? 'Resume' : 'Pause'}
                     </Button>
@@ -133,7 +146,8 @@ const GameSpace = (props) => {
                 <Button
                     type="primary"
                     onClick={() => {
-                        updateTetromino();
+                        // updateTetromino();
+                        changeFocused();
                     }}
                 > Leave </Button>
             </div>
@@ -144,7 +158,7 @@ const GameSpace = (props) => {
 
     return (
         <Content
-            id="Content"
+            id="game-space"
             role="button"
             tabIndex="0"
             onKeyDown={(e) => handlekeys(e)}

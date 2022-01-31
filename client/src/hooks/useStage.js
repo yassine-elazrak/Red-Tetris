@@ -21,7 +21,8 @@ export const useStage = () => {
     const [gamePause, setGamePause] = useState(false);
     const [currentTetromino, setCurrentTetromino] = useState({
         position: { x: 0, y: 0 },
-        tetromino: [],
+        shape: [],
+        shadow: 0,
         collided: false,
     });
     const [nextTetromino, setNextTetromino] = useState(randomTetromino());
@@ -36,6 +37,7 @@ export const useStage = () => {
                 y: ((-1 * TETROMINOES[nextTetromino].shape.length) + 1)
             },
             shape: TETROMINOES[nextTetromino].shape,
+            shadow: 0,
             collided: false,
         });
     };
@@ -60,6 +62,7 @@ export const useStage = () => {
                 y: ((-1 * TETROMINOES[nextTetromino].shape.length) + 1)
             },
             shape: TETROMINOES[nextTetromino].shape,
+            shadow: 0,
             collided: false,
         });
         setNextTetromino(randomTetromino);
@@ -89,7 +92,7 @@ export const useStage = () => {
         setDropRow(0);
     };
 
-    const checkCollision = (tetromino, stage, offset) => {
+    const checkCollision = (stage, tetromino, offset) => {
         const { pos, shape } = tetromino;
         for (let y = 0; y < shape.length; y++) {
             for (let x = 0; x < shape[y].length; x++) {
@@ -103,7 +106,8 @@ export const useStage = () => {
                         if (
                             stage[y + offset.y + pos.y] &&
                             stage[y + offset.y + pos.y][x + offset.x + pos.x] &&
-                            stage[y + offset.y + pos.y][x + offset.x + pos.x][1] !== "clear"
+                            stage[y + offset.y + pos.y][x + offset.x + pos.x][1] !== "clear" &&
+                            stage[y + offset.y + pos.y][x + offset.x + pos.x][1] !== "shadow"
                         ) {
                             return true;
                         }
@@ -113,6 +117,8 @@ export const useStage = () => {
         }
         return false;
     };
+
+
 
 
     const deleteRows = (stage) => {
@@ -131,12 +137,18 @@ export const useStage = () => {
 
     const updateStageWithTetromino = (stage, tetromino) => {
         let newStage = stage.map(row => row.map(cell =>
-            cell[1] === 'clear' ? [0, 'clear'] : cell));
+            cell[1] === 'clear' || cell[1] === 'shadow' ? [0, 'clear'] : cell));
         tetromino.shape.forEach((row, y) => {
             row.forEach((value, x) => {
-                if (value !== 0 && tetromino.pos.y + y >= 0) {
-                    newStage[y + tetromino.pos.y][x + tetromino.pos.x] =
-                        [value, !tetromino.collided ? 'clear' : 'tetromino'];
+                if (value !== 0) {
+                    if (y + tetromino.pos.y + tetromino.shadow > 0) {
+                        newStage[y + tetromino.pos.y + tetromino.shadow][x + tetromino.pos.x] =
+                            [value, 'shadow'];
+                    }
+                    if (tetromino.pos.y + y >= 0) {
+                        newStage[y + tetromino.pos.y][x + tetromino.pos.x] =
+                            [value, !tetromino.collided ? 'clear' : 'tetromino'];
+                    }
                 }
             });
         });
@@ -148,6 +160,17 @@ export const useStage = () => {
 
         updateStage(newStage);
     }
+
+
+    // calculate the goole position of the tetromino
+    const gooleDrop = (stage, tetromino) => {
+        let drop = STAGE_HEIGHT - 1 - tetromino.pos.y;
+        while (checkCollision(stage, tetromino, { x: 0, y: drop })) {
+            drop--;
+        }
+        console.log(drop, 'drop');
+        return drop;
+    };
 
 
     // rotate the tetromino
@@ -167,14 +190,20 @@ export const useStage = () => {
             row.map((_, j) => newTetromino.shape[len - j][i])
         );
         if (!checkCollision(
+            stage,
             {
                 ...newTetromino,
                 shape: rotated,
-            }, stage, { x: 0, y: 0 }
+            }, { x: 0, y: 0 }
         )) {
+            // let shadow = gooleDrop(stage, {
+            //     ...newTetromino,
+            //     shape: rotated,
+            // });
             setCurrentTetromino({
                 ...newTetromino,
                 shape: rotated,
+                // shadow,
             });
         }
         else
@@ -188,13 +217,15 @@ export const useStage = () => {
 
 
     const drop = (stage, tetromino) => {
-        if (!checkCollision(tetromino, stage, { x: 0, y: 1 })) {
+        if (!checkCollision(stage, tetromino, { x: 0, y: 1 })) {
+            // let shadow = gooleDrop(stage, tetromino);
             updateCurrentTetromino(tetro => ({
                 ...tetro,
                 pos: {
                     ...tetro.pos,
                     y: tetro.pos.y + 1,
-                }
+                },
+                // shadow,
             }));
         } else {
             updateCurrentTetromino(tetro => ({
@@ -209,22 +240,53 @@ export const useStage = () => {
 
 
 
+
+
     const moveTetromino = (stage, tetromino, dir) => {
+        // drop the tetromino
         if (dir.y > 0)
             drop(stage, tetromino);
+        // move the tetromino to goole position
+        else if (dir.y === -1) {
+            updateCurrentTetromino({
+                ...tetromino,
+                pos: {
+                    ...tetromino.pos,
+                    y: tetromino.pos.y + gooleDrop(stage, tetromino),
+                }
+            });
+        }
         else {
-            if (!checkCollision(tetromino, stage, dir)) {
+            if (!checkCollision(stage, tetromino, dir)) {
+                // let shadow = gooleDrop(stage, tetromino);
                 updateCurrentTetromino(tetro => ({
                     ...tetro,
                     pos: {
                         y: tetro.pos.y += dir.y,
                         x: tetro.pos.x += dir.x,
-                    }
+                    },
                 }));
             }
         }
         return tetromino;
     };
+
+    // const drawShadow = (stage, tetromino) => {
+    //     const gool = gooleDrop(stage, tetromino);
+
+    //     console.log(gool, 'gool');
+    //     tetromino.shape.forEach((row, y) => {
+    //         row.forEach((value, x) => {
+    //             stage[y + tetromino.pos.y + gool][x + tetromino.pos.x] = [value, 'shadow'];
+    //         });
+    //     });
+    //     return stage;
+    // };
+
+
+
+
+
 
     useInterval(() => {
         drop(currentStage, currentTetromino);
@@ -232,7 +294,16 @@ export const useStage = () => {
 
     useEffect(() => {
         if (!gameStart || gameOver || gameWon || gamePause) return;
-        updateStageWithTetromino(currentStage, currentTetromino);
+        console.log(currentTetromino, 'currentTetromino');
+        let shadow = gooleDrop(currentStage, currentTetromino);
+        // let tetromino = {
+        //     ...currentTetromino,
+        //     shadow : getShadow(currentStage, currentTetromino),
+        // };
+        updateStageWithTetromino(currentStage, {
+            ...currentTetromino,
+            shadow,
+        });
         if (currentTetromino.collided) {
             (currentTetromino.pos.y < 0) ? setGameOver(true) : swapTetrominos();
         }
@@ -265,5 +336,6 @@ export const useStage = () => {
         moveTetromino,
         rotateTetromino,
         updateDropTime,
+        gooleDrop,
     ];
 }

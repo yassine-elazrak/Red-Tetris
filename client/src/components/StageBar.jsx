@@ -10,9 +10,10 @@ const StageBar = (props) => {
     const mapShape = (shape) => {
         return shape.map((row, key) => {
             return row.map((tetromino, key) => {
+                console.log(tetromino);
                 return <TetrominoStyle
                     key={key}
-                    type={tetromino}
+                    type={[tetromino, 'clear']}
                     color={TETROMINOES[tetromino].color} />
             })
         });
