@@ -1,32 +1,12 @@
-import React from 'react';
+import React from "react";
 
-import {
-    CreateStage,
-    STAGE_HEIGHT,
-    STAGE_WIDTH
-} from '../helpers/StageHelper';
+import { CreateStage, STAGE_HEIGHT, STAGE_WIDTH } from "../helpers/StageHelper";
+
+import { StageStyled } from "./styles/StageStyled";
 
 const Stage = (props) => {
-    // console.log('Stage');
-    return (
-        <div style={{
-            display: 'grid',
-            gridTemplateRows: `repeat(${STAGE_HEIGHT},
-            calc(30vh / ${STAGE_WIDTH}))`,
-            gridTemplateColumns: `repeat(${STAGE_WIDTH},
-                calc(35vh / ${STAGE_WIDTH}))`,
-            gridGap: '1px',
-            // width: '31vh',
-            // background: 'green',
-            margin: 0,
-            padding: 0,
-            // border: '1px solid black',
-            justifyContent: 'center',
-
-        }}>
-            {CreateStage(props.stage)}
-        </div>
-    )
-}
+  // console.log('Stage');
+  return <StageStyled>{CreateStage(props.stage)}</StageStyled>;
+};
 
 export default Stage;

@@ -43,8 +43,6 @@ const StageBar = (props) => {
             }} >
                 {mapShape(shape)}
             </div>
-            {/* SCORE */}
-
             <Space>
                 SCOR
                 <Badge
@@ -55,6 +53,7 @@ const StageBar = (props) => {
                     style={{
                         backgroundColor: 'rgba(0,0,0, 0.0)',
                         borderColor: 'rgba(0, 0, 0, 0)',
+                        color: 'rgba(255,255,255,0.8)',
                         fontSize: '18px',
                     }}
                 />
@@ -69,6 +68,7 @@ const StageBar = (props) => {
                     style={{
                         backgroundColor: 'rgba(0,0,0, 0.0)',
                         borderColor: 'rgba(0, 0, 0, 0)',
+                        color: 'rgba(255,255,255,0.8)',
                         fontSize: '18px',
                     }}
                 />
