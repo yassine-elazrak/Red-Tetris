@@ -44,22 +44,35 @@ const StageBar = (props) => {
                 {mapShape(shape)}
             </div>
             {/* SCORE */}
-            <Badge
-                className="site-badge-count-109"
-                count={100}
-                overflowCount={9999}
-                showZero
-                // text={`${score}`}
-                // status='success'
-                
-                style={{
-                    background: '#6FCF97',
-                    color: '#fff',
-                    
-                }}
-            >
-            </Badge>
-            <span>{`ROWS ${rows}`}</span>
+
+            <Space>
+                SCOR
+                <Badge
+                    showZero
+                    className="site-badge-count-109"
+                    count={score}
+                    overflowCount={9999}
+                    style={{
+                        backgroundColor: 'rgba(0,0,0, 0.0)',
+                        borderColor: 'rgba(0, 0, 0, 0)',
+                        fontSize: '18px',
+                    }}
+                />
+            </Space>
+            <Space>
+                ROWS
+                <Badge
+                    showZero
+                    className="site-badge-count-109"
+                    count={rows}
+                    overflowCount={9999}
+                    style={{
+                        backgroundColor: 'rgba(0,0,0, 0.0)',
+                        borderColor: 'rgba(0, 0, 0, 0)',
+                        fontSize: '18px',
+                    }}
+                />
+            </Space>
         </div>
     )
 }
