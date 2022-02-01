@@ -271,10 +271,8 @@ const GameSpace = (props) => {
         });
       }}
       onTouchEnd={(e) => {
-        console.log(touchStart.x - e.changedTouches[0].clientX);
         handleTouchEnd(e);
       }}
-      // onTouchStart={(e) => alert(`touch start ${e.touches[0].clientX}`)}
       style={{
         background: "rgba(0, 0, 0, 0.7)",
         padding: 0,
