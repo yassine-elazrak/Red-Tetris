@@ -12,9 +12,9 @@ const Stage = (props) => {
         <div style={{
             display: 'grid',
             gridTemplateRows: `repeat(${STAGE_HEIGHT},
-            calc(31vh / ${STAGE_WIDTH}))`,
+            calc(30vh / ${STAGE_WIDTH}))`,
             gridTemplateColumns: `repeat(${STAGE_WIDTH},
-                calc(40vh / ${STAGE_WIDTH}))`,
+                calc(35vh / ${STAGE_WIDTH}))`,
             gridGap: '1px',
             // width: '31vh',
             // background: 'green',

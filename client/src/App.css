@@ -1,6 +1,6 @@
 body{
     background-image: url("./img/background.jpg");
-    overflow-x: hidden;
+    overflow: hidden;
     padding: 0;
     margin: 0 ;
     font-family: 'Source Code Pro', monospace !important;
