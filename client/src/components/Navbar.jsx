@@ -14,36 +14,9 @@ import {
     removeAllInvetes,
 } from '../redux/actions'
 
-
 const NavbarComponent = (props) => {
 
     const { auth, room } = props;
-
-    // const LogOut = () => {
-    //     props.leaveRoom(auth.id);
-    //     props.removeAllInvetes();
-    //     props.logout();
-    // }
-
-
-    // const menu = (
-    //     <Menu>
-    //         <Menu.Item key={"logout"} onClick={LogOut} >
-    //             <span>logout</span>
-    //         </Menu.Item>
-    //     </Menu>
-    // );
-
-    // const userName = (
-    //     <Dropdown overlay={menu} >
-    //         <div style={{
-    //             cursor: "pointer",
-    //         }}>
-    //             {auth.name}
-    //         </div>
-    //     </Dropdown>
-    // )
-
 
     return (
         <Affix>

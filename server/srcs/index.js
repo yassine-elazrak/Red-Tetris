@@ -43,6 +43,12 @@ io.on('connection', (socket) => {
 
   console.log("A new user just connected");
 
+  socket.on('login', (user) => {
+    console.log("user", user);
+    socket.join(user.id);
+    socket.emit('login', socket.id);
+  });
+
   /**
    * create new room or join room
    */
