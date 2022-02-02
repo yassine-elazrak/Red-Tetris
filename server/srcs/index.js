@@ -88,9 +88,10 @@ io.on('connection', (socket) => {
    */
 
   socket.on('disconnect', () => {
-    const user = removeUser(socket.id);
-    if (user) 
-      io.to(user.room).emit('message', `${user.name} has left ${user.room}  room.`);
+    console.log('user disconnected');
+    // const user = removeUser(socket.id);
+    // if (user) 
+    //   io.to(user.room).emit('message', `${user.name} has left ${user.room}  room.`);
   })
 
   /**
@@ -100,7 +101,7 @@ io.on('connection', (socket) => {
 
 
 app.get('/', (req, res) => {
-    res.send('Hello World!')
+    res.send('Hello World!2')
 })
  
 server.listen(5000);

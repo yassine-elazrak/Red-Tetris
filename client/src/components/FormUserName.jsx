@@ -89,14 +89,13 @@ const FormUserName = (props) => {
                         type="primary"
                         className="login-form-button"
                         style={{
-                            width: '90px',
-                            display: 'inline-block',
                             background:'#6FCF97',
                             color: '#fff',
 
                         }}
                         onClick={handleSubmit}
                         disabled={input.error || input.value.length < 3 || props.auth.isLoading}
+                        loading={props.auth.isLoading}
                         >
                         Create
                     </Button>
