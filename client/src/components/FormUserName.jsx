@@ -44,25 +44,9 @@ const FormUserName = (props) => {
             message.error(props.auth.error);
         }
     }, [props.auth.error]);
-   
-
-
-    // useEffect(() => {
-    //     const { hash } = window.location;
-    //     if (hash){
-    //         const Regx = /(^#[\w\-]+\[[\w\-]+\]$)|(^#[\w\-]+$)/g
-    //         const match = hash.match(Regx);
-    //         console.log(hash, hash.match(Regx) );
-    //         !match && message.error(`Invalid hash-basd url`)
-    //     }
-        
-    // }, [window.location.hash])
-
-
-
 
     return (
-        <Form
+        <Form size="large"
             style={{
                 width: '100%',
                 display: 'flex',
@@ -77,7 +61,7 @@ const FormUserName = (props) => {
             onSubmit={handleSubmit}
             >
             
-            <Input.Group size="large"
+            <Input.Group compact
                 style={{
                     display: 'flex',
                     justifyContent: 'center',
@@ -88,9 +72,6 @@ const FormUserName = (props) => {
                     style={{
                         width: 'calc(100% - 90px)',
                         maxWidth: '40vh',
-                        display: 'inline-block',
-                        pading: '0px',
-                        margin: '0px',
                     }}
                     help={input.error ? input.errorMessage : ''}
                     hasFeedback
@@ -100,9 +81,9 @@ const FormUserName = (props) => {
                         onChange={handleChange}
                         placeholder="Enter your name" 
                         name="username"
+                        autoFocus
                     />
                 </Form.Item>
-                <Form.Item>
                     <Button
                         htmlType="submit"
                         type="primary"
@@ -114,13 +95,11 @@ const FormUserName = (props) => {
                             color: '#fff',
 
                         }}
-                        size="large"
                         onClick={handleSubmit}
                         disabled={input.error || input.value.length < 3 || props.auth.isLoading}
                         >
                         Create
                     </Button>
-                </Form.Item>
             </Input.Group>
         </Form>
     );

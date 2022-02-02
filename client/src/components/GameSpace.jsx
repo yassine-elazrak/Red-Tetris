@@ -274,7 +274,7 @@ const GameSpace = (props) => {
         handleTouchEnd(e);
       }}
       style={{
-        background: "rgba(0, 0, 0, 0.7)",
+        // background: "rgba(0, 0, 0, 0.7)",
         padding: 0,
         margin: 0,
         height: "calc(100vh - 90px)",

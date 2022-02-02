@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Form, Input, Button, message, Checkbox} from "antd";
 import { connect } from "react-redux";
 import { createRoom } from "../redux/actions";
+import { createGlobalStyle } from "styled-components";
 
 // import { useSider } from "../hooks/SiderBar";
 
@@ -29,7 +30,7 @@ const FormRoomName = (props) => {
         const data = {
             roomId: fackId,
             roomName: input.value,
-            isPravite: checked,
+            isPravite: !checked,
             user: props.auth,
 
         }
@@ -50,14 +51,10 @@ const FormRoomName = (props) => {
             message.error(props.room.error);
         }
     }, [props.room.error]);
-
-    // useEffect(() => {
-
-    // }, [props.room.name])
-
     
     return (
         <Form
+        size="large"
         style={{
             width: '100%',
             display: 'flex',
@@ -72,7 +69,7 @@ const FormRoomName = (props) => {
         onSubmit={handleSubmit}
         >
             <Form.Item
-                name="onlyOnePlayer"
+                name="Multi Player"
                 style={{
                     display: 'inline-block',
                     width: '100%',
@@ -89,10 +86,10 @@ const FormRoomName = (props) => {
                     maxWidth: '49vh',
                 }}
                 
-                >Only One Player</Checkbox>
+                >Multi Player</Checkbox>
             </Form.Item>
         
-        <Input.Group size="large"
+        <Input.Group compact
             style={{
                 display: 'flex',
                 justifyContent: 'center',
@@ -105,9 +102,6 @@ const FormRoomName = (props) => {
                 style={{
                     width: 'calc(100% - 90px)',
                     maxWidth: '40vh',
-                    display: 'inline-block',
-                    pading: '0px',
-                    margin: '0px',
                 }}
                 help={input.error ? input.errorMessage : ''}
                 hasFeedback
@@ -117,28 +111,23 @@ const FormRoomName = (props) => {
                     onChange={handleChange}
                     placeholder="Enter room name" 
                     name="roomname"
+                    autoFocus
                 />
             </Form.Item>
-            <Form.Item>
                 <Button loading={props.room.isLoading}
                     htmlType="submit"
                     type="primary"
                     className="login-form-button"
                     style={{
-                        flex: '1',
-                        display: 'inline-block',
                         background:'#6FCF97',
                         color: '#fff',
 
                     }}
-                    size="large"
                     onClick={handleSubmit}
                     disabled={input.error || input.value.length < 3 || props.room.isLoading}
                     >
                     Create
                 </Button>
-            </Form.Item>
-
         </Input.Group>
     </Form>
 );
