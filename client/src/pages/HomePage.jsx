@@ -61,16 +61,6 @@ const HomePage = (props) => {
     hashBased();
   }, []);
 
-
-  // useEffect(() => {
-  //   console.log('room', room);
-  //   if (room.is_joined)
-  //   window.location.hash = `#${room.name}[${auth.name}]`;
-  // } , [room.is_joined]);
-
-
-
-
   return (
     <Layout style={{
       // background: "none",
@@ -100,8 +90,8 @@ const HomePage = (props) => {
             <Page404 />
             : !auth.isAuth ? <FormUserName /> : !room.is_joined ?
               <FormRoomName />
-              // : !room.isPravite && room.status === "waiting" ?
-              //   <InviteUsers />
+              : !room.isPravite && room.status === "waiting" ?
+                <InviteUsers />
                 : <GameSpace />
           }
         </Content>
