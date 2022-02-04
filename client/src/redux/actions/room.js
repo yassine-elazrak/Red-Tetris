@@ -20,7 +20,6 @@ export const joinRoom = (room) => {
 }
 
 export const leaveRoom = (userId) => {
-    // if room users length is 1, delete room
     return (dispatch) => {
         dispatch(success({userId}, ROOM_LEAVE));
     }

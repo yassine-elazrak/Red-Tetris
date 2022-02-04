@@ -25,7 +25,7 @@ app.use((request, response, next) => {
 });
 const io = socketIo(server, {
   cors: {
-    origin: "*",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -54,12 +54,12 @@ io.on("connection", (socket) => {
 
   socket.on("login", (user, callback) => {
     console.log("login", user);
-    setTimeout(() => {
+    if (typeof callback === "function") {
       callback({
         name: user,
         id: socket.id,
       });
-    }, 10000);
+    }
   });
 
   /**
