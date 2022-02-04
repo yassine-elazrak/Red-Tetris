@@ -3,10 +3,16 @@ const socketIo = require("./socket/io");
 const http = require("http");
 const app = express();
 
-class Sever {
+require('dotenv').config();
+
+
+class App {
+  server = null;
+  
   constructor() {
     this.server = http.createServer(app);
     this.io = new socketIo(this.server);
+    this.io.start();
     app.use((request, response, next) => {
       response.header("Access-Control-Allow-Origin", "*");
       response.header(
@@ -17,11 +23,11 @@ class Sever {
     });
   }
   start() {
-    this.server.listen(5000, () => {
-      console.log("server is running on port 5000");
+    this.server.listen(process.env.PORT || 5000, () => {
+      console.log(`server is running on port ${process.env.PORT || 5000}`);
     });
   }
 }
 
-let server = new Sever();
+let server = new App();
 server.start();

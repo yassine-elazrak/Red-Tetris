@@ -1,4 +1,5 @@
 const socketIo = require("socket.io");
+const Users = require("../users/users");
 
 class Socket {
   constructor(server) {
@@ -6,50 +7,58 @@ class Socket {
       cors: {
         origin: "http://localhost:3000",
         methods: ["GET", "POST"],
-        // credentials: true,
       },
     });
+  }
 
+  start = async () => {
+    const users = new Users();
+    
     this.io.on("connection", (socket) => {
       console.log("A new user just connected");
-
       /**
-       * create new user
-       **/
+       * listen new user login
+      */
       socket.on("login", (user, callback) => {
         console.log("login", user);
-        socket.join("usersOnline");
-        if (typeof callback === "function") {
-            let allUsrs = Array.from(this.io.sockets.adapter.rooms.get("usersOnline"));
-          callback({
-            name: user,
-            id: socket.id,
-            users: allUsrs,
+        let allUsers = users.getUsers();
+        users.addNewUser(socket.id, user)
+          .then((user) => {
+            if (typeof callback === "function") {
+              callback({
+                name: user.name,
+                id: socket.id,
+                allUsers,
+              }, null);
+            }
+          })
+          .catch((err) => {
+            if (typeof callback === "function") {
+              console.log("err", err);
+              callback(null, err);
+            }
           });
-        }
       });
 
       /**
-       * create new room
-       */
+       * create new room or join room
+       * args: {
+       * name: '',
+       * room: ''
+       * }
+       * callback: (error, user) => {}
+       * */
 
-        socket.on("create", (args, callback) => {
 
-
-        });
-
-        /**
-         * join room
-         **/
-
-        socket.on("join", (args, callback) => {
-            console.log(args);
-
-        });
+      socket.on("disconnect", () => {
+        users.removeUser(socket.id);
+        console.log(`user disconnected ${socket.id}`);
+        this.io.emit("updateUsers", users.getUsers());
+      });
 
 
     });
-  }
+  };
 }
 
 module.exports = Socket;
