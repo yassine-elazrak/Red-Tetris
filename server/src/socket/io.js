@@ -13,6 +13,10 @@ class Socket {
 
   start = async () => {
     const users = new Users();
+
+    this.io.of("/roomCreat").use((socket, next) => {
+      
+    });
     
     this.io.on("connection", (socket) => {
       console.log("A new user just connected");
