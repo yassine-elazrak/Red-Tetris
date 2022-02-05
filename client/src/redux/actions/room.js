@@ -1,15 +1,25 @@
+import socket from '../../socket/Socket';
 import {
     ROOM_CREATE,
     ROOM_JOIN,
     ROOM_LEAVE,
     ROOM_ERROR,
     ROOM_CLOSE,
+    LOADING_ROOM,
 } from '../types';
 
 
 export const createRoom = (room) => {
+    console.log(room);
     return async (dispatch) => {
-        dispatch(success(room, ROOM_CREATE));
+        dispatch({ type: LOADING_ROOM });
+        try {
+            const res = await socket('room/create', room);
+            console.log(res, 'res');
+            dispatch(success(res, ROOM_CREATE));
+        } catch (err) {
+            dispatch(error(err, ROOM_ERROR));
+        }
     }
 }
 

@@ -21,7 +21,7 @@ export const SUCESS_RECEIVE_MESSAGE = 'SUCESS_RECEIVE_MESSAGE';
 
 
 // Room actions
-export const LOADING_ROOMS = 'LOADING_ROOMS';
+export const LOADING_ROOM = 'LOADING_ROOMS';
 export const ROOM_REFRESH = "ROOM_REFRESH";
 export const ROOM_CREATE = 'ROOM_CREATE';
 export const ROOM_JOIN = 'ROOM_JOIN';

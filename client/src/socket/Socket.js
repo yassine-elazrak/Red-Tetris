@@ -6,7 +6,11 @@ const ENDPOINT = "http://localhost:5000";
 
 const socket = (event, data) => {
   return new Promise((resolve, reject) => {
-    const manager = io(ENDPOINT);
+    const manager = io(`${ENDPOINT}/${event}`, {
+      auth: {
+        id: data.auth,
+      },
+    });
     manager.on("timeout", () => {
       return reject("timeout");
     });
@@ -28,12 +32,13 @@ const socket = (event, data) => {
 
     manager.on("connect", () => {
       manager.emit(event, data, (res, err) => {
-        console.log(res, err, "reserro");
+        console.log(data, "reserro");
         if (err) {
           return reject(err.message);
         }
         return resolve(res);
       });
+
     });
   });
 };
