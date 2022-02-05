@@ -63,6 +63,11 @@ export const STAGE_UPDATE = 'STAGE_UPDATE';
 // updateTetromino actions
 export const TETROMINOES_UPDATE = 'TETROMINOES_UPDATE';
 
+// socket actions
+export const SOCKET_CONNECT = 'SOCKET_CONNECT';
+export const SOCKET_ERROR = 'SOCKET_ERROR';
+export const LOADING_SOCKET = 'LOADING_SOCKET';
+
 
 
 

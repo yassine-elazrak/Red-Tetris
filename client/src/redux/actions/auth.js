@@ -4,12 +4,12 @@ import { SUCESS_LOGIN, IS_LOADING, FAIL_LOGIN } from "../types";
 export const login = (user) => {
   return async (dispatch) => {
     dispatch({ type: IS_LOADING });
-    try {
-      const res = await socket("login", user);
-      dispatch(success(res, SUCESS_LOGIN));
-    } catch (err) {
-      dispatch(error(err, FAIL_LOGIN));
-    }
+    // try {
+    //   const res = await socket("user", "login", user);
+    //   dispatch(success(res, SUCESS_LOGIN));
+    // } catch (err) {
+      dispatch(error('test', FAIL_LOGIN));
+    // }
   };
 };
 

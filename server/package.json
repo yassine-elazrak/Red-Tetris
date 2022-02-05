@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "coverage": "jest --coverage",
-    "start": "nodemon src/index.js  --trace-warnings",
+    "start": "nodemon src/app.js  --trace-warnings",
     "start-gendoc": "node srcs/swagger.js"
   },
   "repository": {

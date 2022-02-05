@@ -1,8 +1,4 @@
-import {
-  SUCESS_LOGIN,
-  IS_LOADING,
-  FAIL_LOGIN,
-} from "../types";
+import { SUCESS_LOGIN, IS_LOADING, FAIL_LOGIN } from "../types";
 
 const initialState = {
   isLoading: false,

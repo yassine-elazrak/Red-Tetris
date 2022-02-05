@@ -13,28 +13,20 @@ class Socket {
   }
 
   login = async (user, callback) => {
-
     console.log("login", user);
-
-  }
+  };
 
   start = async () => {
     const users = new Users();
+    const rooms = new Rooms();
 
-<<<<<<< HEAD
-=======
-    this.io.of("/roomCreat").use((socket, next) => {
-      
-    });
->>>>>>> 36a43c7fb2f8b860295b94020dc9eb3c9a865a75
-    
-    this.io.of('/login').on("connection", (socket) => {
+    /**
+     * User namespace
+     **/
+    this.io.on("connection", (socket) => {
       console.log("A new user just connected");
       socket.on("login", (user, callback) => {
-
-
-        console.log("login", user);
-        let allUsers = users.getUsers();
+        console.log("login", socket.id);
         users
           .addNewUser(socket.id, user)
           .then((user) => {
@@ -43,7 +35,6 @@ class Socket {
                 {
                   name: user.name,
                   id: socket.id,
-                  allUsers,
                 },
                 null
               );
@@ -52,10 +43,14 @@ class Socket {
           .catch((err) => {
             if (typeof callback === "function") {
               console.log("err", { err });
-              callback(null, {message: err});
+              callback(null, { message: err });
             }
           });
       });
+
+      // socket.on("rooms",  (callback) => {
+      //   console.log("rooms", socket.id);
+      // });
 
       socket.on("disconnect", () => {
         users.removeUser(socket.id);
@@ -63,23 +58,40 @@ class Socket {
         this.io.emit("updateUsers", users.getUsers());
       });
     });
-    
-    
-    
-    
-    this.io.of('/room/create').use((socket, next) => {
-      console.log('socket room', socket.handshake);
-      if (users.getUser(socket.handshake.auth.id)) {
-        return next();
-      }
-      return next(new Error('authentication error'));
-    }).on('connection', (socket) => {
-      console.log('connection to rome');
-    });
 
+    /**
+     * Room namespace
+     **/
+    this.io
+      .of("/room")
+      .use((socket, next) => {
+        let user = users.getUser(socket.handshake.auth.id);
+        if (user) {
+          if (user.isJoined)
+            return next(new Error("you are already joined in other room"));
+          return next();
+        }
+        return next(new Error("authentication error"));
+      })
+      .on("connection", (socket) => {
+        socket.on("create", (room, callback) => {
+          socket.join(room.name);
+          socket.to(room.name).emit("rooms", `new user user joined`);
+          console.log("create room", socket.id);
+          callback(
+            {
+              name: room,
+              id: socket.id,
+              user: users.getUser(socket.id),
+            },
+            null
+          );
+        });
 
-
-
+        socket.on("disconnect", () => {
+          console.log(`user disconnected room ${socket.id}`);
+        });
+      });
   };
 }
 
