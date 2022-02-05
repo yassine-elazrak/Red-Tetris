@@ -1,3 +1,5 @@
+const 
+
 class Piece {
   constructor(id, x, y, color, shape) {
     this.id = id;
@@ -8,6 +10,10 @@ class Piece {
     //x, y, cordonnees piece in board piece start from 0 , 0
   }
 }
+
+// const generatePiece = (max, min) => {
+//   return Math.floor(Math.random() * (max - min) + min);
+// };
 
 class Game {
   constructor() {
@@ -75,4 +81,8 @@ class Game {
   }
 }
 
-// module.exports = Game;
+game = new Game();
+
+console.log(game.Board);
+module.exports = game;
+export 
