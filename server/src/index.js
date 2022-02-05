@@ -13,7 +13,7 @@ const app = express();
 const { UsersService } = require("./users/user.service");
 
 const server = http.createServer(app);
-const { isRealString } = require("./utils/isRealString");
+// const isRealString = require("./utils/utils");
 
 app.use((request, response, next) => {
   response.header("Access-Control-Allow-Origin", "*");
@@ -74,9 +74,9 @@ io.on("connection", (socket) => {
      * callback: (error, user) => {}
      */
     console.log(args);
-    if (!isRealString(args.name) || !isRealString(args.room)) {
-      return callback("Name and room are required");
-    }
+    // if (!isRealString(args.name) || !isRealString(args.room)) {
+    //   return callback("Name and room are required");
+    // }
     const { error, user } = addUser({ id: socket.id, ...args });
     if (error) {
     }
@@ -122,4 +122,7 @@ app.get("/", (req, res) => {
   res.send("Hello World!2");
 });
 
-server.listen(5000);
+server.listen(3000, () => {
+  console.log("server is running on port 3000");
+}
+  );
