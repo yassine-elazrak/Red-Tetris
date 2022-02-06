@@ -4,9 +4,8 @@ import { SOCKET_CONNECT, SOCKET_ERROR, LOADING_SOCKET } from "../types";
 
 export const socketConnet = () => {
   return async (dispatch) => {
-    dispatch({ type: LOADING_SOCKET });
+    // dispatch({ type: LOADING_SOCKET });
     try {
-        // console.log("connect");
         let socket = await connect();
         console.log("socket", socket);
         dispatch(success(socket, SOCKET_CONNECT));
@@ -14,6 +13,12 @@ export const socketConnet = () => {
       console.log("err", err);
       dispatch(error(err, SOCKET_ERROR));
     }
+  };
+};
+
+export const startSocket = () => {
+  return (dispatch) => {
+    dispatch({ type: 'startSocket' });
   };
 };
 

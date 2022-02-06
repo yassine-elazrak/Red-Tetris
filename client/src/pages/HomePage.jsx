@@ -11,25 +11,19 @@ import GameSpace from "../components/GameSpace";
 import InviteUsers from "../components/InviteUsers";
 
 import { connect } from "react-redux";
-import { login, createRoom, socketConnet } from "../redux/actions";
+import { login, createRoom } from "../redux/actions";
 
 import "./styles/HeaderStyled.css";
 
 const { Header, Content, Footer } = Layout;
 
 const HomePage = (props) => {
-  const { auth, room, socketConnet, login, createRoom } = props;
+  const { auth, room, login, createRoom} = props;
   const [hash, setHash] = useState({
     name: null,
     room: null,
     error: "",
   });
-
-  
-  useEffect(() => {
-    socketConnet();
-    console.log("update socket");
-  }, [socketConnet]);
 
   useEffect(() => {
     if (hash.error) message.error(hash.error);
@@ -143,6 +137,7 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { socketConnet, login, createRoom })(
-  HomePage
-);
+export default connect(mapStateToProps, {
+  login,
+  createRoom,
+})(HomePage);
