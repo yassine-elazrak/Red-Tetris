@@ -3,9 +3,6 @@ import connect from "../../socket/connection";
 
 const middleware = (store) => (next) => (action) => {
   let io = store.getState().socket;
-
-  console.log("action");
-
   if (
     !io.socket &&
     !io.isLoading &&
@@ -16,11 +13,13 @@ const middleware = (store) => (next) => (action) => {
     store.dispatch({ type: LOADING_SOCKET });
     connect()
       .then((socket) => {
+        console.log("socket connected");
         store.dispatch(success(socket, SOCKET_CONNECT));
         next(action);
       })
       .catch((err) => {
-        next(error(err, SOCKET_ERROR));
+        console.log("socket error", err);
+        next(error("socket error", SOCKET_ERROR));
       });
   } else if (
     io.socket ||

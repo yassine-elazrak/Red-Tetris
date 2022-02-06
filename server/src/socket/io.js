@@ -24,9 +24,9 @@ class Socket {
      * User namespace
      **/
     this.io.on("connection", (socket) => {
-      console.log("A new user just connected");
+      console.log(`User connected: ${socket.id}`);
       socket.on("login", (user, callback) => {
-        console.log("login", socket.id);
+        // console.log("login", socket.id);
         users
           .addNewUser(socket.id, user)
           .then((user) => {

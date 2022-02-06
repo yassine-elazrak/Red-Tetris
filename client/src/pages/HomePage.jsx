@@ -64,7 +64,7 @@ const HomePage = (props) => {
       };
       hashBased();
     } else if (props.socket.error) {
-      console.log(props.socket.error, "socket error");
+      // console.log(props.socket.error, "socket error");
       message.error(props.socket.error);
     }
   }, [props.socket]);

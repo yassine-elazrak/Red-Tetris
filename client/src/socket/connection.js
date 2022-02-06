@@ -1,30 +1,44 @@
-import { io } from "socket.io-client";
+import { Manager } from "socket.io-client";
 
 const ENDPOINT = "http://localhost:5000";
 
-const socket = () => {
+const initSocket = () => {
   return new Promise((resolve, reject) => {
-    const manager = io(ENDPOINT);
-    manager.on("timeout", () => {
+    const manager = new Manager(ENDPOINT, {reconnection: false});
+    
+    const socket = manager.socket("/");
+    manager.open((err) => {
+      if (err) {
+        console.log("err", err);
+        return reject(err.message);
+      }
+    });
+
+    socket.on("timeout", () => {
+      console.log("timeout");
       return reject("timeout");
     });
-    manager.on("connect_error", (error) => {
-      manager.close();
+    socket.on("connect_error", (error) => {
+      console.log("connect_error", error);
+      socket.close();
       return reject(error.message);
     });
-    manager.on("connect_failed", (error) => {
-      manager.close();
+    socket.on("connect_failed", (error) => {
+      console.log("connect_failed", error);
+      socket.close();
       return reject(error.message);
     });
-    manager.on("error", (error) => {
-      manager.close();
+    socket.on("error", (error) => {
+      console.log("error", error);
+      socket.close();
       return reject(error.message);
     });
 
-    manager.on("connect", () => {
-      resolve(manager);
+    socket.on("connect", () => {
+      console.log("connect");
+      resolve(socket);
     });
   });
 };
 
-export default socket;
+export default initSocket;
