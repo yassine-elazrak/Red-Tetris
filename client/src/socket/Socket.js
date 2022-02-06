@@ -1,5 +1,5 @@
 import { io } from "socket.io-client";
-import axios from "axios";
+// import axios from "axios";
 
 // const ENDPOINT = process.env.REACT_APP_IO_ENDPOINT || "http://localhost:5000";
 const ENDPOINT = "http://localhost:5000";

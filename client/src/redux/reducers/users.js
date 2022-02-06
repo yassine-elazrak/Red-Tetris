@@ -6,6 +6,7 @@ import {
 
 const initialState = {
     isLoading: false,
+    error: null,
     online: [
         // userId: userId,
         // userName: userName,
@@ -41,6 +42,7 @@ export default function usersReducer(state = initialState, action) {
             return {
                 ...state,
                 isLoading: true,
+                error: null,
             };
         default:
             return state;

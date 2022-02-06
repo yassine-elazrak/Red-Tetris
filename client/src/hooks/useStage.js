@@ -1,4 +1,3 @@
-import Password from "antd/lib/input/Password";
 import { useEffect, useState } from "react";
 import { STAGE_HEIGHT, STAGE_WIDTH, InitStage } from "../helpers/StageHelper";
 import { TETROMINOES, randomTetromino } from "../helpers/Tetrominoes";
@@ -8,7 +7,7 @@ export const useStage = () => {
   // console.log("useStage");
   // useEffect(() => {
   const [currentStage, setCurrentStage] = useState(InitStage());
-  const [dropRow, setDropRow] = useState(0);
+  // const [dropRow, setDropRow] = useState(0);
   const [score, setScore] = useState(0);
   const [rows, setRows] = useState(0);
   const [gameOver, setGameOver] = useState(false);
@@ -16,7 +15,7 @@ export const useStage = () => {
   const [gameStart, setGameStart] = useState(false);
   const [gamePause, setGamePause] = useState(false);
   const [currentTetromino, setCurrentTetromino] = useState({
-    position: { x: 0, y: 0 },
+    pos: { x: 0, y: 0 },
     shape: [],
     shadow: 0,
     collided: false,
@@ -54,12 +53,12 @@ export const useStage = () => {
   const updateRows = (rows) => {
     setRows(rows);
   };
-  const updateGameOver = (gameOver) => {
-    setGameOver(gameOver);
-  };
-  const updateGameWon = (gameWon) => {
-    setGameWon(gameWon);
-  };
+  // const updateGameOver = (gameOver) => {
+  //   setGameOver(gameOver);
+  // };
+  // const updateGameWon = (gameWon) => {
+  //   setGameWon(gameWon);
+  // };
   const updateCurrentTetromino = (tetromino) => {
     setCurrentTetromino(tetromino);
   };
@@ -77,9 +76,9 @@ export const useStage = () => {
     });
     setNextTetromino(randomTetromino);
   };
-  const updateDropRow = (dropRow) => {
-    setDropRow(dropRow);
-  };
+  // const updateDropRow = (dropRow) => {
+  //   setDropRow(dropRow);
+  // };
 
   const clearStage = () => {
     setCurrentStage((stage) => {
@@ -101,7 +100,7 @@ export const useStage = () => {
       collided: false,
     });
     setNextTetromino(NTetro);
-    setDropRow(0);
+    // setDropRow(0);
   };
 
   const checkCollision = (stage, tetromino, offset) => {
@@ -149,8 +148,8 @@ export const useStage = () => {
     }, []);
     if (rows > 0) {
       score = rows * 10;
-      percent = Math.round(((rows / 100) * 4) * 10) * 10;
-    //   console.log(Math.round(((rows / 100) * 4) * 10), 'percent', (rows / 100) * 3);
+      percent = Math.round((rows / 100) * 4 * 10) * 10;
+      //   console.log(Math.round(((rows / 100) * 4) * 10), 'percent', (rows / 100) * 3);
       updateScore((prevScore) => prevScore + score + percent);
       updateRows((prevRows) => prevRows + rows);
     }
@@ -228,30 +227,22 @@ export const useStage = () => {
         { x: 0, y: 0 }
       )
     ) {
-      // let shadow = gooleDrop(stage, {
-      //     ...newTetromino,
-      //     shape: rotated,
-      // });
       setCurrentTetromino({
         ...newTetromino,
         shape: rotated,
-        // shadow,
       });
     }
-    // else
-    //     console.log(newTetromino, tetromino, 'newTetromino');
+    console.log(newTetromino, tetromino, "newTetromino");
   };
 
   const drop = (stage, tetromino) => {
     if (!checkCollision(stage, tetromino, { x: 0, y: 1 })) {
-      // let shadow = gooleDrop(stage, tetromino);
       updateCurrentTetromino((tetro) => ({
         ...tetro,
         pos: {
           ...tetro.pos,
           y: tetro.pos.y + 1,
         },
-        // shadow,
       }));
     } else {
       updateCurrentTetromino((tetro) => ({
@@ -295,12 +286,7 @@ export const useStage = () => {
 
   useEffect(() => {
     if (!gameStart || gameOver || gameWon || gamePause) return;
-    // console.log(currentTetromino, 'currentTetromino');
     let shadow = gooleDrop(currentStage, currentTetromino);
-    // let tetromino = {
-    //     ...currentTetromino,
-    //     shadow : getShadow(currentStage, currentTetromino),
-    // };
     updateStageWithTetromino(currentStage, {
       ...currentTetromino,
       shadow,
@@ -329,28 +315,19 @@ export const useStage = () => {
 
   return [
     currentStage,
-    updateStage,
-    dropRow,
-    setDropRow,
     score,
-    updateScore,
     rows,
-    updateRows,
     gameOver,
-    updateGameOver,
     gameWon,
-    updateGameWon,
     gameStart,
     startGame,
     gamePause,
     pauseGame,
     currentTetromino,
-    updateCurrentTetromino,
     nextTetromino,
     resetGame,
     moveTetromino,
     rotateTetromino,
     updateDropTime,
-    gooleDrop,
   ];
 };

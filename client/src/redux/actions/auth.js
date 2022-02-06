@@ -1,9 +1,9 @@
 import socket from "../../socket/Socket";
-import { SUCESS_LOGIN, IS_LOADING, FAIL_LOGIN } from "../types";
+import { SUCESS_LOGIN, LOADING_USER, FAIL_LOGIN } from "../types";
 
 export const login = (user) => {
   return async (dispatch) => {
-    dispatch({ type: IS_LOADING });
+    dispatch({ type: LOADING_USER });
     // try {
     //   const res = await socket("user", "login", user);
     //   dispatch(success(res, SUCESS_LOGIN));

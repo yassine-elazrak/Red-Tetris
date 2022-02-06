@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { connect } from 'react-redux';
 
-import { Form, Input, Button, message, Card, Select, Row } from 'antd';
+import { Form, Input, Button, message, Card, Select } from 'antd';
 
 import { gold, red } from '@ant-design/colors';
 import {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Badge, Space, Card } from 'antd';
+import { Badge, Space } from 'antd';
 
 import { TetrominoStyle } from './styles/TetrominoStyle';
 import { TETROMINOES } from '../helpers/Tetrominoes';

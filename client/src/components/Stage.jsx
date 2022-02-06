@@ -1,6 +1,6 @@
 import React from "react";
 
-import { CreateStage, STAGE_HEIGHT, STAGE_WIDTH } from "../helpers/StageHelper";
+import { CreateStage } from "../helpers/StageHelper";
 
 import { StageStyled } from "./styles/StageStyled";
 

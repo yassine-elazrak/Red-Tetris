@@ -7,18 +7,16 @@ import {
   Button,
   Popover,
   Modal,
-  Popconfirm,
-  ConfigProvider,
 } from "antd";
 import { SettingOutlined, CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
-import {
-  InitStage,
-  CreateStage,
-  STAGE_HEIGHT,
-  STAGE_WIDTH,
-} from "../helpers/StageHelper";
+// import {
+//   InitStage,
+//   CreateStage,
+//   STAGE_HEIGHT,
+//   STAGE_WIDTH,
+// } from "../helpers/StageHelper";
 import { TETROMINOES, randomTetromino } from "../helpers/Tetrominoes";
-import { TetrominoStyle } from "./styles/TetrominoStyle";
+// import { TetrominoStyle } from "./styles/TetrominoStyle";
 
 import Message from "./Message";
 import Players from "./Players";
@@ -33,38 +31,29 @@ import {
 } from "../redux/actions";
 
 import { useStage } from "../hooks/useStage";
-import { usePlayer } from "../hooks/useplayer";
+// import { usePlayer } from "../hooks/useplayer";
 
 const { Content } = Layout;
 
 const GameSpace = (props) => {
-  const { room, stage } = props;
+  const { room } = props;
 
   const [
     currentStage,
-    updateStage,
-    dropRow,
-    setDropRow,
     score,
-    updateScore,
     rows,
-    updateRows,
     gameOver,
-    updateGameOver,
     gameWon,
-    updateGameWon,
     gameStart,
     startGame,
     gamePause,
     pauseGame,
     currentTetromino,
-    updateCurrentTetromino,
     nextTetromino,
     resetGame,
     moveTetromino,
     rotateTetromino,
     updateDropTime,
-    gooleDrop,
   ] = useStage();
 
   const changeFocused = () => {
@@ -119,12 +108,13 @@ const GameSpace = (props) => {
     console.log("handleLiveRoom");
   };
 
-  // show modal when game over
-  const handleAlertGameOver = () => {
+  useEffect(() => {
+
+    const modal = () => {
       Modal.confirm({
         width: "500px",
-        title: "Game Over",
-        content: "You lose!",
+        title: gameOver ? "Game Over" : "Game Won",
+        content: gameOver ? "You lose!" : "You win!",
         onOk() {
           resetGame(randomTetromino());
           changeFocused();
@@ -140,51 +130,23 @@ const GameSpace = (props) => {
         style: {
           justifyContent: "space-around",
         },
-        icon: <CloseCircleOutlined style={{
-            color: "red",
-        }}/>
+        icon: gameOver ?
+        <CloseCircleOutlined 
+          style={{ fontSize: "50px", color: "red" }}
+        /> :
+        <CheckCircleOutlined 
+        style={{ fontSize: "50px", color: "green" }}
+        />, 
       });
-  };
-
-    // show modal when game won
-  const handleAlertGameWon = () => {
-    Modal.confirm({
-      width: "500px",
-      title: "Game Won",
-      content: "You win!",
-      onOk() {
-        resetGame(randomTetromino());
-        changeFocused();
-      },
-      onCancel() {
-        handleLiveRoom();
-      },
-      okText: "Continue",
-      cancelText: "Live Room",
-      cancelButtonProps: {
-        type: "danger",
-      },
-      style: {
-        justifyContent: "space-around",
-      },
-      icon: <CheckCircleOutlined style={{
-        color: '#52c41a',
-      }} />,
-    });
-  };
-
-  useEffect(() => {
-    if (gameOver) handleAlertGameOver();
-    else if (gameWon) handleAlertGameWon();
-  }, [gameOver, gameWon]);
+    };
+    if (gameOver || gameWon) modal();
+  }, [gameOver, gameWon, resetGame]);
 
   const [touchStart, setTouchStart] = useState({ x: 0, y: 0 });
 
   const handleTouchEnd = ({ changedTouches }) => {
     if (!gameStart) return;
     console.log("starting");
-    const [touch] = changedTouches;
-    const { x, y } = touch;
     const { clientX, clientY } = changedTouches[0];
     const deltaX = clientX - touchStart.x;
     const deltaY = clientY - touchStart.y;
@@ -423,7 +385,6 @@ const mapStateToProps = (state) => {
   return {
     auth: state.auth,
     room: state.room,
-    stage: state.stage,
   };
 };
 

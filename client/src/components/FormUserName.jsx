@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import socketio from 'socket.io-client';
+// import socketio from 'socket.io-client';
 
 
 import { Form, Input, Button, message} from "antd";
@@ -7,7 +7,6 @@ import { Form, Input, Button, message} from "antd";
 import { connect } from "react-redux";
 import { login } from "../redux/actions";
 
-// const io = socketio.connect('http://localhost:5000');
 const FormUserName = (props) => {
 
     const [input, setInput] = useState({
@@ -38,10 +37,12 @@ const FormUserName = (props) => {
         if (input.value.length > 2 && !input.error) {
             props.login(input.value);
         }
+        console.log(input.value);
     }
 
 
     useEffect(() => {
+        // console.log(props.auth);
         if (props.auth.error){
             message.error(props.auth.error);
         }

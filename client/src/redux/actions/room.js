@@ -9,12 +9,12 @@ import {
 } from "../types";
 
 export const createRoom = (room) => {
-  console.log(room);
+  // console.log(room);
   return async (dispatch) => {
     dispatch({ type: LOADING_ROOM });
     try {
       const res = await socket("room", "create", room);
-      console.log(res, "res");
+      // console.log(res, "res");
       dispatch(success(res, ROOM_CREATE));
     } catch (err) {
       dispatch(error(err, ROOM_ERROR));

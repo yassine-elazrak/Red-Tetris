@@ -1,29 +1,22 @@
-import socket from "../../socket/connection";
+import {
+  LOADING_SOCKET,
+  SOCKET_CONNECT,
+  SOCKET_ERROR,
+} from "../types";
 
 const middleware = (store) => (next) => (action) => {
-  // let result = next(action);
-  // console.log("middleware", store.getState());
   let io = store.getState().socket;
 
-  console.log("middleware1", io.socket);
-  if (!io.socket) {
-    // if (!io.isConnecting) store.dispatch({ type: "LOADING_SOCKET" });
-   
-    socket()
-      .then((socket) => {
-        console.log("socket", socket);
-        store.dispatch({
-          type: "SOCKET_CONNECT",
-          payload: socket,
-        });
-        next(action);
-      })
-      .catch((err) => {
-        console.log("err", err);
-      });
+  console.log("middleware1", action);
+  if (
+    !io.socket &&
+    action.type !== SOCKET_CONNECT &&
+    action.type !== LOADING_SOCKET &&
+    action.type !== SOCKET_ERROR
+    )  {
+    return next( { type: "SOCKET_ERROR", payload: "socket is not connected" } );
   }
-    console.log("middleware2", store.getState());
-  // return result;
+  else return next(action);
 };
 
 export default middleware;

@@ -11,13 +11,7 @@ const initialState = {
     isLoading: false,
     error: null,
     room_id: null,
-    invites: [
-        // status: waiting, accepted, declined
-        // userId: userId,
-        // userName: userName,
-        // roomId: roomId,
-        // roomName: roomName,
-    ],
+    invites: [],
 }
 
 const newInvite = (state, action) => {

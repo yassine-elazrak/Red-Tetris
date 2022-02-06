@@ -9,17 +9,14 @@ const socket = () => {
       return reject("timeout");
     });
     manager.on("connect_error", (error) => {
-      console.log("connect_error", error);
       manager.close();
       return reject(error.message);
     });
     manager.on("connect_failed", (error) => {
-      console.log(error, "failed");
       manager.close();
       return reject(error.message);
     });
     manager.on("error", (error) => {
-      console.log(error, "error");
       manager.close();
       return reject(error.message);
     });

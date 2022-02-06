@@ -1,4 +1,4 @@
-import { SUCESS_LOGIN, IS_LOADING, FAIL_LOGIN } from "../types";
+import { SUCESS_LOGIN, LOADING_USER, FAIL_LOGIN } from "../types";
 
 const initialState = {
   isLoading: false,
@@ -10,7 +10,7 @@ const initialState = {
 
 export default function authReducer(state = initialState, action) {
   switch (action.type) {
-    case IS_LOADING:
+    case LOADING_USER:
       return {
         ...state,
         isLoading: true,
