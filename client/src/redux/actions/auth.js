@@ -1,6 +1,5 @@
 import socket from "../../socket/Socket";
 import { SUCESS_LOGIN, LOADING_USER, FAIL_LOGIN } from "../types";
-import { useSelector } from "react-redux";
 
 export const login = (user) => {
   return async (dispatch, getState) => {
@@ -10,6 +9,7 @@ export const login = (user) => {
       const res = await socket(io, "login", user);
       dispatch(success(res, SUCESS_LOGIN));
     } catch (err) {
+      console.log(err);
       dispatch(error(err, FAIL_LOGIN));
     }
   };

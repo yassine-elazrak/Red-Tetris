@@ -107,9 +107,10 @@ const HomePage = (props) => {
             <Page404 />
           ) : !auth.isAuth ? (
             <FormUserName />
-          ) : !room.is_joined ? (
+          ) : !room.name ? (
             <FormRoomName />
-          ) : !room.isPravite && room.status === "waiting" ? (
+          ) : !room.isPravite && room.status === "waiting"
+             && auth.id === room.admin? (
             <InviteUsers />
           ) : (
             <GameSpace />

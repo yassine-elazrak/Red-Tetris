@@ -5,6 +5,7 @@
   "scripts": {
     "server": "npm run start --prefix server/",
     "client": "npm start --prefix client/",
+    "socket": "npm start --prefix socket/",
     "build": "npm run build --prefix client/"
   },
   "rules": {

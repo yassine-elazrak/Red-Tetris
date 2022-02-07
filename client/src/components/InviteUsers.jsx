@@ -93,7 +93,7 @@ const InviteUsers = (props) => {
 
     const startGame = () => {
         // console.log(props.room);
-        props.closeRoom(props.room);
+        props.closeRoom(props.room.name);
     }
 
     // filter the dataSource to only show the users that are included value
@@ -220,13 +220,7 @@ const InviteUsers = (props) => {
 
         ]}
         style={{
-            // width: '99%',
-            // padding: 0,
-            // margin: 0,
-            // display: 'inline-block',
-            // alignItems: 'center',
             justifyContent: 'center',
-            // border: 'none',
             }}>
 
 

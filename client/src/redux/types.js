@@ -27,6 +27,7 @@ export const ROOM_LEAVE = 'ROOM_LEAVE';
 export const ROOM_ERROR = 'ROOM_ERROR';
 export const ROOM_CLOSE = 'ROOM_CLOSE';
 export const ROOM_CLEAR_ERROR = 'ROOM_CLEAR_ERROR';
+export const ROOM_UPDATE_STATUS = 'ROOM_UPDATE_STATUS';
 
 // Notification actions
 export const NOTIFICATION_RECEIVE = 'NOTIFICATION_RECEIVE';

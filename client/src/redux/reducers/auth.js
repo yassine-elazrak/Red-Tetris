@@ -4,6 +4,7 @@ const initialState = {
   isLoading: false,
   isAuth: false,
   error: null,
+  isJoned: false,
   id: null,
   name: null,
 };

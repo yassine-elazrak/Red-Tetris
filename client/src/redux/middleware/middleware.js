@@ -19,7 +19,7 @@ const middleware = (store) => (next) => (action) => {
       })
       .catch((err) => {
         console.log("socket error", err);
-        next(error("socket error", SOCKET_ERROR));
+        next(error(err, SOCKET_ERROR));
       });
   } else if (
     io.socket ||

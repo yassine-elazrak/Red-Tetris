@@ -4,19 +4,21 @@ import {
   ROOM_JOIN,
   ROOM_LEAVE,
   ROOM_ERROR,
-  ROOM_CLOSE,
+  ROOM_UPDATE_STATUS,
   LOADING_ROOM,
 } from "../types";
 
 export const createRoom = (room) => {
   // console.log(room);
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     dispatch({ type: LOADING_ROOM });
     try {
-      const res = await socket("room", "create", room);
-      // console.log(res, "res");
+      const io = getState().socket.socket;
+      const res = await socket(io, "roomCreate", room);
+      console.log(res, "resRoom");
       dispatch(success(res, ROOM_CREATE));
     } catch (err) {
+      console.log(err, 'roomCreateerror');
       dispatch(error(err, ROOM_ERROR));
     }
   };
@@ -35,16 +37,16 @@ export const leaveRoom = (userId) => {
 };
 
 export const closeRoom = (room) => {
-  return (dispatch) => {
-    const data = {
-      ...room,
-      status: "closed",
-    };
-    if (room.status === "waiting") {
-      room.isAdmin
-        ? dispatch(success(data, ROOM_CLOSE))
-        : dispatch(error("You are not admin", ROOM_ERROR));
-    } else dispatch(error("room error"), ROOM_ERROR);
+  return async (dispatch, getState) => {
+    console.log(room, "roomclose");
+    try {
+      const io = getState().socket.socket;
+      const res = await socket(io, "closeRoom", room);
+      dispatch(success(res, ROOM_UPDATE_STATUS));
+    } catch (error) {
+      console.log(error, "roomcloseerror");
+      dispatch(error(error, ROOM_ERROR));
+    }
   };
 };
 

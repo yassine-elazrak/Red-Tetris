@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Form, Input, Button, message, Checkbox } from "antd";
 import { connect } from "react-redux";
 import { createRoom } from "../redux/actions";
-import io from "socket.io-client";
 
 const FormRoomName = (props) => {
   const [input, setInput] = useState({
@@ -23,12 +22,10 @@ const FormRoomName = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // const fackId = Math.floor(Math.random() * 10);
     const data = {
-      // roomId: fackId,
       roomName: input.value,
       isPravite: !checked,
-      auth: props.auth.id,
+      userId: props.auth.id,
     };
     input.value.length > 2
       ? setInput({
@@ -49,14 +46,6 @@ const FormRoomName = (props) => {
       message.error(props.room.error);
     }
   }, [props.room.error]);
-
-  useEffect(() => {
-    const socket = io("http://localhost:5000");
-
-    socket.on("rooms", (data) => {
-      console.log(data);
-    });
-  }, []);
 
   return (
     <Form
