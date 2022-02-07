@@ -78,18 +78,18 @@ class Rooms {
     });
   };
 
-  leaveRoom = (data) => {
+  leaveRoom = (userId, roomName) => {
     return new Promise((resolve, reject) => {
-      let trimName = data.name.trim().toLowerCase();
-      if (!this.regx.test(trimName))
-        return reject({ message: "Room name is invalid" });
-      let existingRoom = this.rooms.find((room) => room.name === trimName);
-      if (!existingRoom) return reject({ message: "Room not found" });
-      let user = existingRoom.users.find((user) => user === data.userId);
-      if (!user) return reject({ message: "User is not joined" });
-      let index = existingRoom.users.findIndex((user) => user === data.userId);
-      existingRoom.users.splice(index, 1);
-      return resolve(existingRoom);
+      let indexRoom = this.rooms.findIndex((room) => room.name === roomName);
+      if (indexRoom === -1) return reject({ message: "Room not found" });
+      let indexuser = this.rooms[indexRoom].users.findIndex(
+        (user) => user === userId
+      );
+      if (indexuser === -1) return reject({ message: "User is not joined" });
+      this.rooms[indexRoom].users.splice(indexuser, 1);
+      if (this.rooms[indexRoom].users.length === 0)
+          this.rooms.splice(indexRoom, 1);
+      return resolve();
     });
   };
 

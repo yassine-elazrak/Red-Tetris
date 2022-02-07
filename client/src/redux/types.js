@@ -54,6 +54,8 @@ export const INVITE_REMOVE_ALL = 'INVITE_REMOVE_ALL';
 // Online User actions
 export const LOADING_ONLINE_USERS = 'LOADING_ONLINE_USERS';
 export const CURRENT_ONLINE_USERS = 'CURRENT_ONLINE_USERS';
+export const ONLINE_USERS_ERROR = 'ONLINE_USERS_ERROR';
+export const ONLINE_USERS_UPDATE = 'ONLINE_USERS_UPDATE';
 
 // Stage actions
 export const STAGE_CREATE = 'STAGE_CREATE';

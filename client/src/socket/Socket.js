@@ -21,7 +21,6 @@ const socket = (manager, event, data) => {
         console.log(`socket ${event}, ${data}`, res);
         resolve(res);
       });
-    // });
     io.on("error", (err) => {
       console.log("error", err);
       reject(err.message);
@@ -36,16 +35,6 @@ const socket = (manager, event, data) => {
       reject(err.message);
     });
   });
-    // io.on("connect", () => {
-    //   io.emit(event, data, (res, err) => {
-    //     if (err) {
-    //       console.log(err);
-    //       reject(err);
-    //     }
-    //     resolve(res);
-    //   })
-    // });
-  // });
 };
 
 export default socket;

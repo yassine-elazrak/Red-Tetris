@@ -1,16 +1,30 @@
+import socket from "../../socket/Socket";
 import {
     CURRENT_ONLINE_USERS,
     LOADING_ONLINE_USERS,
+    ONLINE_USERS_ERROR,
 } from '../types';
 
 
-export const currentUser = (value) => {
-    return (dispatch) => {
+export const onlineUsers = () => {
+    return async (dispatch, getState) => {
         dispatch({type: LOADING_ONLINE_USERS});
-        dispatch(success({value: value}, CURRENT_ONLINE_USERS));
+        try {
+            const io = getState().socket.socket;
+            const res = await socket(io, "onlineUsers", null);
+            dispatch(success(res, CURRENT_ONLINE_USERS));
+        } catch (error) {
+            dispatch(error(error, ONLINE_USERS_ERROR));
+        }
     }
 }
 
+
+export const onlineUsersUpdate = (data) => {
+    return (dispatch) => {
+        dispatch(success(data, CURRENT_ONLINE_USERS));
+    }
+}
 
 
 
@@ -22,9 +36,9 @@ const success = (data, type) => {
     }
 }
 
-// const error = (data, type) => {
-//     return {
-//         type: type,
-//         payload: data,
-//     }
-// }
+const error = (data, type) => {
+    return {
+        type: type,
+        payload: data,
+    }
+}

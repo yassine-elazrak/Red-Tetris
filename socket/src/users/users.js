@@ -33,6 +33,7 @@ class Users {
     return new Promise((resolve, reject) => {
       const index = this.users.findIndex((user) => user.id === id);
       if (index !== -1) {
+          console.log(this.users.splice(index, 1)[0], 'logout');
         return resolve(this.users.splice(index, 1)[0]);
       }
       return reject("User not found");
