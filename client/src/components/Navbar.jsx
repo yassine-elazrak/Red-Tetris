@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import logD from "../img/logo.svg";
 import logM from "../img/logoMobile.svg";
 
@@ -17,6 +17,20 @@ import { connect } from "react-redux";
 const NavbarComponent = (props) => {
 
     const { auth, room } = props;
+
+    // useEffect(() => {
+    //     console.log("props updatedwww");
+    //     if (props.socket){
+    //         props.socket.socket("/").on("updateProfile", (data) => {
+    //             console.log(data, "updateProfile");
+    //         });
+    //         return () => {
+    //             props.socket.socket("/").off("updateUsers");
+    //         }
+    //     }
+    // }, [props.socket, props.room, props.auth]);
+
+
 
     return (
         <Affix>
@@ -49,7 +63,8 @@ const NavbarComponent = (props) => {
 const mapStateToProps = (state) => {
     return {
         room: state.room,
-        auth: state.auth
+        auth: state.auth,
+        socket: state.socket.socket,
     }
 }
 

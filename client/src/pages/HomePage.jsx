@@ -11,7 +11,7 @@ import GameSpace from "../components/GameSpace";
 import InviteUsers from "../components/InviteUsers";
 
 import { connect } from "react-redux";
-import { login, createRoom } from "../redux/actions";
+import { login, createRoom, updateUser } from "../redux/actions";
 
 import "./styles/HeaderStyled.css";
 
@@ -24,6 +24,23 @@ const HomePage = (props) => {
     room: null,
     error: "",
   });
+  const [collapsed, setCollapsed] = useState(true);
+
+
+  useEffect(() => {
+    // if (props.auth.isAuth && !props.auth.isJoind){
+    //   setCollapsed(false);
+    // }
+    //  else
+    //  setCollapsed(true);
+
+    setCollapsed(!(props.auth.isAuth && !props.auth.isJoned));
+
+     console.log(props.auth, "props.auth.isAuth");
+    return () => {
+      setCollapsed(true);
+    };
+  }, [props.auth]);
 
   useEffect(() => {
     if (hash.error) message.error(hash.error);
@@ -41,7 +58,7 @@ const HomePage = (props) => {
   }, [hash]);
 
   useEffect(() => {
-    if (props.socket.isConnected) {
+    if (props.socket.socket) {
       const hashBased = () => {
         const { hash } = window.location;
         if (hash) {
@@ -63,8 +80,16 @@ const HomePage = (props) => {
         }
       };
       hashBased();
-    } else if (props.socket.error) {
-      // console.log(props.socket.error, "socket error");
+
+      props.socket.socket.socket("/").on("updateProfile", (data) => {
+        console.log(data, "updateProfile");
+        props.updateUser(data);
+      });
+      return () => {
+        props.socket.socket.socket("/").off("updateProfile");
+      }
+    }
+    if (props.socket.error) {
       message.error(props.socket.error);
     }
   }, [props.socket]);
@@ -75,15 +100,15 @@ const HomePage = (props) => {
         background : 'none',
         color: 'white',
       }}>
-        <Menu.Item>
+        <Menu.Item key={1}>
           <span> Room Name</span>
           <Button>join</Button>
         </Menu.Item>
-        <Menu.Item>
+        <Menu.Item key={2}>
           <span> Room Name</span>
           <Button>join</Button>
         </Menu.Item>
-        <Menu.Item>
+        <Menu.Item key={3}>
           <span> Room Name</span>
           <Button>join</Button>
         </Menu.Item>
@@ -140,8 +165,10 @@ const HomePage = (props) => {
           )}
         </Content>
         <Sider
-        breakpoint="lg"
+        // breakpoint="xl"
         collapsedWidth="0"
+        collapsible
+        collapsed={collapsed}
         style={{
           background: "rgba(0, 0, 0, 0.6)",
 
@@ -172,5 +199,6 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps, {
   login,
+  updateUser,
   createRoom,
 })(HomePage);

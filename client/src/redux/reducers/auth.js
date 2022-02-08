@@ -1,4 +1,4 @@
-import { SUCESS_LOGIN, LOADING_USER, FAIL_LOGIN } from "../types";
+import { SUCESS_LOGIN, LOADING_USER, FAIL_LOGIN, UPDATE_USER } from "../types";
 
 const initialState = {
   isLoading: false,
@@ -7,7 +7,16 @@ const initialState = {
   isJoned: false,
   id: null,
   name: null,
+  room: null,
 };
+
+// id: "WhDk4XTSWUC47pv6AAAD"
+// ​
+// isJoned: false
+// ​
+// name: "dsafff"
+// ​
+// room: null
 
 export default function authReducer(state = initialState, action) {
   switch (action.type) {
@@ -32,6 +41,18 @@ export default function authReducer(state = initialState, action) {
         isLoading: false,
         isAuth: false,
         error: action.payload,
+      };
+    case UPDATE_USER:
+      console.log(action.payload, 'action.payload>>>>>>>>>>>>');
+      return {
+        ...state,
+        isLoading: false,
+        isAuth: true,
+        id: action.payload.id,
+        name: action.payload.name,
+        isJoned: action.payload.isJoned,
+        room: action.payload.room,
+        error: null,
       };
 
     default:

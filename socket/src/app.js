@@ -74,13 +74,12 @@ class App {
           return callback(null, { message: "You are not authorized" });
         try {
           let user = await users.getUser(socket.id);
-          // console.log(user, "user");
+          let allUsers = users.getUsers();
           if (user.isJoned)
             return callback(null, { message: "You are already in a room" });
           let res = await rooms.createRoom(data, socket.id);
-          await users.joinRoom(socket.id, res.id);
-
-          let allUsers = users.getUsers();
+          let userUpdate = await users.joinRoom(socket.id, res.id);
+          this.io.to(user.id).emit("updateProfile", userUpdate);
           this.io.emit("updateUsers", allUsers);
           if (typeof callback === "function") callback(res, null);
         } catch (error) {
@@ -116,7 +115,7 @@ class App {
             this.io.emit("updateRooms", rooms.getRooms());
           } else
             this.io.emit("updateRoom", room);
-          socket.emit("updateProfile", user);
+          this.io.to(user.id).emit("updateProfile", user);
           this.io.emit("updateUsers", allUsers);
           if (typeof callback === "function") callback(null, null);
         } catch (error) {

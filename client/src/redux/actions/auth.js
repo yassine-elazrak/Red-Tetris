@@ -1,5 +1,5 @@
 import socket from "../../socket/Socket";
-import { SUCESS_LOGIN, LOADING_USER, FAIL_LOGIN } from "../types";
+import { SUCESS_LOGIN, LOADING_USER, FAIL_LOGIN, UPDATE_USER } from "../types";
 
 export const login = (user) => {
   return async (dispatch, getState) => {
@@ -14,6 +14,14 @@ export const login = (user) => {
     }
   };
 };
+
+export const updateUser = (user) => {
+  console.log(user, "userUpdates<<<<<<<<<<<<");
+  return (dispatch) => {
+    dispatch(success(user, UPDATE_USER));
+  };
+};
+
 
 const success = (data, type) => {
   return {

@@ -72,7 +72,6 @@ class Users {
         return reject({ message: "User not found" });
       }
       this.users[index] = { ...this.users[index], room, isJoned: true };
-      //   this.users.update(user);
       return resolve(this.users[index]);
     });
   }

@@ -5,6 +5,7 @@ export const IS_LOADING = 'IS_LOADING';
 export const LOADING_USER = 'LOADING_USER';
 export const SUCESS_LOGIN = 'SUCESS_LOGIN';
 export const FAIL_LOGIN = 'FAIL_LOGIN';
+export const UPDATE_USER = 'UPDATE_USER';
 
 
 // Notifications actions
