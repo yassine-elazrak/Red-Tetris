@@ -2,7 +2,8 @@ const { Server } = require("socket.io");
 const { createServer } = require("http");
 const Users = require("./users/users");
 const Rooms = require("./rooms/rooms");
-const { emit } = require("process");
+const AuthMiddleware = require("./middleware/auth");
+
 
 require("dotenv").config();
 
@@ -20,17 +21,41 @@ class App {
   start() {
     const users = new Users();
     const rooms = new Rooms();
+    const authMiddleware = new AuthMiddleware(this.io);
     this.server.listen(process.env.PORT || 5000, () => {
       console.log(`server is running on port ${process.env.PORT || 5000}`);
     });
 
+    // this.io.of("/").on("connection", (socket) => {
+    //   console.log(`user connected ${socket.id}`);
+    // });
+
+    // this.io.of("/auth").on("connection", (socket) => {
+    //   console.log(`user connected ${socket.id}`);
+    // });
+
     this.io.on("connection", (socket) => {
       console.log(`User connected: ${socket.id}`);
+
+
+
+      // // try to config middleware
+      // socket.use((packet, next) => {
+      //   console.log(`packet: ${packet[0]}`);
+      //   next();
+      // });
+
+      socket.use(authMiddleware.auth(socket));
+
+
+
+
       socket.on("login", async (data, callback) => {
         console.log(`User ${socket.id} is trying to login`);
         try {
           let res = await users.login(socket.id, data);
           let allUsers = users.getUsers();
+          socket.join('online');
           this.io.emit("updateUsers", allUsers);
           if (typeof callback === "function") callback(res, null);
         } catch (error) {
@@ -38,11 +63,7 @@ class App {
         }
       });
 
-      socket.use((packet, next) => {
-        console.log(`User ${socket.id} is trying to use ${socket.request}`);
-        console.log(socket.request);
-        next();
-      });
+     
 
       socket.on("roomCreate", async (data, callback) => {
         console.log(`User ${socket.id} is trying to create a room`);
