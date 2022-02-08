@@ -15,7 +15,7 @@ const initialState = {
     // isAdmin : false,
     admin: null,
     status: '',
-    // id: null,
+    id: null,
     name: null,
     users: [
         // userId: userId,
@@ -29,6 +29,7 @@ const createRoom = (state, action) => {
         ...state,
         isLoading: false,
         error: null,
+        id: action.payload.id,
         admin: action.payload.admin,
         status: action.payload.status,
         isPravite: action.payload.isPravite,

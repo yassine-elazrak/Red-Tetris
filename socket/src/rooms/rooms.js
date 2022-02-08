@@ -42,6 +42,7 @@ class Rooms {
         name: trimName,
         isPravite: data.isPravite,
         admin: userId,
+        id: userId,
         status: "waiting",
         users: [userId],
       };
@@ -78,27 +79,23 @@ class Rooms {
     });
   };
 
-  leaveRoom = (userId, roomName) => {
+  leaveRoom = (userId, roomId) => {
     return new Promise((resolve, reject) => {
-      let indexRoom = this.rooms.findIndex((room) => room.name === roomName);
-      if (indexRoom === -1) return reject({ message: "Room not found" });
-      let indexuser = this.rooms[indexRoom].users.findIndex(
-        (user) => user === userId
-      );
-      if (indexuser === -1) return reject({ message: "User is not joined" });
-      this.rooms[indexRoom].users.splice(indexuser, 1);
-      if (this.rooms[indexRoom].users.length === 0)
-          this.rooms.splice(indexRoom, 1);
-      return resolve();
+      let roomIndex = this.rooms.findIndex((room) => room.id === roomId);
+      if (roomIndex === -1) return reject({ message: "Room not found" });
+      console.log(this.rooms[roomIndex], userId);
+      let userIndex = this.rooms[roomIndex].users.findIndex((user) => user === userId);
+      if (userIndex === -1) return reject({ message: "User is not joined" });
+      this.rooms[roomIndex].users.splice(userIndex, 1);
+      return resolve(this.rooms[roomIndex]);
     });
   };
 
   deleteRoom = (id) => {
     return new Promise((resolve, reject) => {
-      let existingRoom = this.rooms.find((room) => room.id === id);
-      if (!existingRoom) return reject({ message: "Room not found" });
-      let index = this.rooms.findIndex((room) => room.id === id);
-      this.rooms.splice(index, 1);
+      let roomIndex = this.rooms.findIndex((room) => room.id === id);
+      if (roomIndex === -1) return reject({ message: "Room not found" });
+      this.rooms.splice(roomIndex, 1);
       return resolve(this.rooms);
     });
   };

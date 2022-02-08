@@ -105,7 +105,7 @@ const FormUserName = (props) => {
                         disabled={input.error || input.value.length < 3 || props.auth.isLoading}
                         loading={props.auth.isLoading}
                         >
-                        Create
+                        Log in
                     </Button>
             </Input.Group>
         </Form>

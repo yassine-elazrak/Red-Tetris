@@ -2,6 +2,7 @@ const socket = (manager, event, data) => {
   return new Promise((resolve, reject) => {
     let io = manager.socket("/");
     console.log(`socket ${io.connected}`);
+    
     if (!io.connected) {
       console.log("socket not connected", io.io);
       io.connect((err) => {
@@ -12,15 +13,14 @@ const socket = (manager, event, data) => {
         }
       });
     }
-    // io.on("connect", () => {
-      io.emit(event, data, (res, err) => {
-        if (err) {
-          console.log("err", err);
-          return reject(err.message);
-        }
-        console.log(`socket ${event}, ${data}`, res);
-        resolve(res);
-      });
+    io.emit(event, data, (res, err) => {
+      if (err) {
+        console.log("err", err);
+        return reject(err.message);
+      }
+      console.log(`socket ${event}, ${data}`, res);
+      resolve(res);
+    });
     io.on("error", (err) => {
       console.log("error", err);
       reject(err.message);

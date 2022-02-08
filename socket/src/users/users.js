@@ -19,25 +19,26 @@ class Users {
       if (existingUser) {
         return reject({ message: "Username is already taken" });
       }
-      let user = { id, name: trimName, isJoned: false, room : null };
+      let user = { id, name: trimName, isJoned: false, room: null };
       this.users.push(user);
       return resolve(user);
     });
   };
 
-  getUsers = () => {
-    return this.users;
+  logout = (id) => {
+    return new Promise((resolve, reject) => {
+      let index = this.users.findIndex((user) => user.id === id);
+      if (index !== -1) {
+        this.users.splice(index, 1);
+        return resolve(this.users);
+      }
+      return reject({ message: "User not found" });
+    });
   };
 
-  removeUser = (id) => {
-    return new Promise((resolve, reject) => {
-      const index = this.users.findIndex((user) => user.id === id);
-      if (index !== -1) {
-          console.log(this.users.splice(index, 1)[0], 'logout');
-        return resolve(this.users.splice(index, 1)[0]);
-      }
-      return reject("User not found");
-    });
+
+  getUsers = () => {
+    return this.users;
   };
 
   getUser = (id) => {
@@ -52,12 +53,13 @@ class Users {
 
   joinRoom = (id, room) => {
     return new Promise((resolve, reject) => {
+    ;
       const index = this.users.findIndex((user) => user.id === id);
       if (!index === -1) {
         return reject({ message: "User not found" });
       }
-        this.users[index] = { ...this.users[index], room, isJoned: true };
-    //   this.users.update(user);
+      this.users[index] = { ...this.users[index], room, isJoned: true };
+      //   this.users.update(user);
       return resolve(this.users[index]);
     });
   }

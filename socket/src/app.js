@@ -3,6 +3,7 @@ const { createServer } = require("http");
 const Users = require("./users/users");
 const Rooms = require("./rooms/rooms");
 const AuthMiddleware = require("./middleware/auth");
+const { wrap } = require("module");
 
 
 require("dotenv").config();
@@ -26,28 +27,17 @@ class App {
       console.log(`server is running on port ${process.env.PORT || 5000}`);
     });
 
-    // this.io.of("/").on("connection", (socket) => {
-    //   console.log(`user connected ${socket.id}`);
-    // });
 
-    // this.io.of("/auth").on("connection", (socket) => {
-    //   console.log(`user connected ${socket.id}`);
-    // });
+
+
+
+
+
+    // this.io.use(wrap(authMiddleware.auth));
+
 
     this.io.on("connection", (socket) => {
       console.log(`User connected: ${socket.id}`);
-
-
-
-      // // try to config middleware
-      // socket.use((packet, next) => {
-      //   console.log(`packet: ${packet[0]}`);
-      //   next();
-      // });
-
-      socket.use(authMiddleware.auth(socket));
-
-
 
 
       socket.on("login", async (data, callback) => {
@@ -56,6 +46,8 @@ class App {
           let res = await users.login(socket.id, data);
           let allUsers = users.getUsers();
           socket.join('online');
+          // console.log('online', socket.rooms);
+          console.log('online', this.io.sockets.adapter.rooms);
           this.io.emit("updateUsers", allUsers);
           if (typeof callback === "function") callback(res, null);
         } catch (error) {
@@ -63,17 +55,18 @@ class App {
         }
       });
 
-     
 
       socket.on("roomCreate", async (data, callback) => {
-        console.log(`User ${socket.id} is trying to create a room`);
+        if (!socket.rooms.has("online"))
+          return callback(null, { message: "You are not authorized" });
         try {
           let user = await users.getUser(socket.id);
           // console.log(user, "user");
           if (user.isJoned)
             return callback(null, { message: "You are already in a room" });
           let res = await rooms.createRoom(data, socket.id);
-          await users.joinRoom(socket.id, res.name);
+          await users.joinRoom(socket.id, res.id);
+
           let allUsers = users.getUsers();
           this.io.emit("updateUsers", allUsers);
           if (typeof callback === "function") callback(res, null);
@@ -81,39 +74,47 @@ class App {
           console.log(error, "error");
           if (typeof callback === "function") callback(null, error);
         }
+
       });
 
       socket.on("closeRoom", async (room, callback) => {
         console.log(`User ${socket.id} is trying to close a room`);
+        if (!socket.rooms.has("online"))
+          return callback(null, { message: "You are not authorized" });
         try {
           let res = await rooms.closeRoom(room, socket.id);
-          // emit to all users in room
           if (typeof callback === "function") callback(res, null);
         } catch (error) {
           if (typeof callback === "function") callback(null, error);
         }
       });
 
-      socket.on("onlineUsers", (data, callback) => {
+      socket.on("onlineUsers", async (_, callback) => {
         console.log(`User ${socket.id} is trying to get online users`);
+        if (!socket.rooms.has("online"))
+          return callback(null, { message: "You are not authorized" });
         try {
           let res = users.getUsers();
-          console.log(res, "res");
           if (typeof callback === "function") callback(res, null);
         } catch (error) {
-          console.log(error, "error");
           if (typeof callback === "function") callback(null, error);
         }
+
+
       });
 
-      socket.on("disconnect", () => {
+      socket.on("disconnect", async () => {
         console.log(`User disconnected: ${socket.id}`);
         try {
-          let user = users.getUser(socket.id);
-          if (!user) return;
-          if (user.isJoned) rooms.leaveRoom(socket.id, user.room);
-          users.removeUser(socket.id);
-          let allUsers = users.getUsers();
+          let user = await users.getUser(socket.id);
+          if (user.isJoned) {
+            let room = await rooms.leaveRoom(socket.id, user.room);
+            if (room.users.length === 0) {
+              let currntRooms = await rooms.deleteRoom(room.id);
+              this.io.emit("updateRooms", currntRooms);
+            }
+          }
+          let allUsers = await users.logout(socket.id);
           this.io.emit("updateUsers", allUsers);
         } catch (error) {
           console.log(error, "error");
