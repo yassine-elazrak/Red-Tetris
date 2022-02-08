@@ -13,7 +13,7 @@ export const inviteRequest = (invite) => {
         dispatch({type: LOADING_INVITES});
         try {
             const io = getState().socket.socket;
-            const res = await socket(io, "newInvitation", invite);
+            const res = await socket(io, "invitation", invite);
             dispatch(success(res, INVITE_REQUEST));
         } catch (err) {
             console.log(err);

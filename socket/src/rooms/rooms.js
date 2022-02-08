@@ -3,7 +3,17 @@ class Rooms {
     if (Rooms.instance instanceof Rooms) {
       return Rooms.instance;
     }
-    this.rooms = [];
+    this.rooms = [
+      /**
+       * @content
+       * @param {string} id - room id
+       * @param {string} name - room name
+       * @param {string} status - room status
+       * @param {string} admin - room admin
+       * @param {array} users - room users
+       * @param {array} invit - room invit
+       */
+    ];
     this.regx = /^[a-zA-Z0-9\s]{3,15}$/;
     Rooms.instance = this;
   }

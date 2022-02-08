@@ -2,8 +2,6 @@ const { Server } = require("socket.io");
 const { createServer } = require("http");
 const Users = require("./users/users");
 const Rooms = require("./rooms/rooms");
-const AuthMiddleware = require("./middleware/auth");
-const { wrap } = require("module");
 
 
 require("dotenv").config();
@@ -22,24 +20,20 @@ class App {
   start() {
     const users = new Users();
     const rooms = new Rooms();
-    const authMiddleware = new AuthMiddleware(this.io);
     this.server.listen(process.env.PORT || 5000, () => {
       console.log(`server is running on port ${process.env.PORT || 5000}`);
     });
 
 
-
-
-
-
-
-    // this.io.use(wrap(authMiddleware.auth));
-
-
     this.io.on("connection", (socket) => {
       console.log(`User connected: ${socket.id}`);
 
-
+      /**
+       * @description Create new user
+       * @param {string} event - login
+       * @param {object} data - { username }
+       * @param {function} callback - (user, err)
+       */
       socket.on("login", async (data, callback) => {
         console.log(`User ${socket.id} is trying to login`);
         try {
@@ -55,7 +49,12 @@ class App {
         }
       });
 
-
+      /**
+       * @description get online users
+       * @param {string} event - onlineUsers
+       * @param {object} data - null
+       * @param {function} callback - (users, err)
+       */
       socket.on("onlineUsers", async (_, callback) => {
         console.log(`User ${socket.id} is trying to get online users`);
         if (!socket.rooms.has("online"))
@@ -69,6 +68,12 @@ class App {
       });
 
 
+      /**
+       * @description get all rooms
+       * @param {string} event - currentRooms
+       * @param {object} data - null
+       * @param {function} callback - (rooms, err)
+       */
       socket.on("currentRooms", async (_, callback) => {
         console.log(`User ${socket.id} is trying to get current rooms`);
         if (!socket.rooms.has("online"))
@@ -82,14 +87,21 @@ class App {
       });
 
 
-      // new Invitetion
-      socket.on("newInvitation", async (data, callback) => {
+      /**
+       * @description invite user to room 
+       * @param {string} event - newInvetation
+       * @param {object} data - { roomId, userId }
+       * @param {function} callback - (listUsersInvets, err)
+       */
+      socket.on("invitation", async (data, callback) => {
         if (!socket.rooms.has("online"))
           return callback(null, { message: "You are not authorized" });
         try {
           let room = await rooms.getRoom(data.roomId);
           let user = await users.getUser(data.userId);
           let currentUser = users.getUser(socket.id);
+          if (room.invit.findIndex((invit) => invit.userId === data.userId) !== -1)
+            return callback(null, { message: "User already invited" });
           console.log(room, 'room', room.status);
           if (user.isJoned)
             return callback(null, { message: `${user.name} is already in room` });
@@ -104,17 +116,17 @@ class App {
             userStatus: "waiting",
           });
 
-          await users.newInvit(user.id, {
+          await users.invitation(user.id, {
             id: currentUser.id,
             name: currentUser.name,
             roomId: room.id,
             read: false,
           });
           this.io.to(user.id).emit("notification", {
-              id: currentUser.id,
-              name: currentUser.name,
-              roomId: room.id
-            });
+            id: currentUser.id,
+            name: currentUser.name,
+            roomId: room.id
+          });
           this.io.to(room.users).emit("updateRoom", room);
           if (typeof callback === "function") callback(res.invit, null);
         } catch (error) {
@@ -123,6 +135,12 @@ class App {
         }
       });
 
+      /**
+       * @description create new room
+       * @param {string} event - roomCreate
+       * @param {object} data - { roomName, roomType }
+       * @param {function} callback - (room, err)
+       */
       socket.on("roomCreate", async (data, callback) => {
         if (!socket.rooms.has("online"))
           return callback(null, { message: "You are not authorized" });
@@ -145,6 +163,12 @@ class App {
 
       });
 
+      /**
+       * @description close room
+       * @param {string} event - closeRoom
+       * @param {object} data - roomId
+       * @param {function} callback - (room, err)
+       */
       socket.on("closeRoom", async (roomId, callback) => {
         console.log(`User ${socket.id} is trying to close a room`);
         if (!socket.rooms.has("online"))
@@ -158,6 +182,12 @@ class App {
         }
       });
 
+      /**
+       * @description leave room
+       * @param {string} event - leaveRoom
+       * @param {object} data - roomId
+       * @param {function} callback - (null, err)
+       */
       socket.on("leaveRoom", async (roomId, callback) => {
         console.log(`User ${socket.id} is trying to leave a room`);
         if (!socket.rooms.has("online"))
@@ -180,8 +210,10 @@ class App {
         }
       });
 
-
-
+      /**
+       * @description disconnect user
+       * @param {string} event - disconnect
+       */
       socket.on("disconnect", async () => {
         console.log(`User disconnected: ${socket.id}`);
         try {
