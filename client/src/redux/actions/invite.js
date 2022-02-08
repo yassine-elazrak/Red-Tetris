@@ -1,19 +1,24 @@
+import socket from "../../socket/Socket";
 import {
     INVITE_REQUEST,
     INVITE_REFRESH,
     INVITE_REMOVE_ALL,
     LOADING_INVITES,
+    INVITE_FAILURE,
 } from '../types';
 
 
 export const inviteRequest = (invite) => {
-    // const data = {
-    //     ...user,
-    //     state: 'waiting',
-    // }
-    return (dispatch) => {
+    return async (dispatch, getState) => {
         dispatch({type: LOADING_INVITES});
-        dispatch(success(invite, INVITE_REQUEST));
+        try {
+            const io = getState().socket.socket;
+            const res = await socket(io, "newInvitation", invite);
+            dispatch(success(res, INVITE_REQUEST));
+        } catch (err) {
+            console.log(err);
+            dispatch(error(err, INVITE_FAILURE));
+        }
     }
 }
 
@@ -37,9 +42,9 @@ const success = (data, type) => {
     }
 }
 
-// const error = (data, type) => {
-//     return {
-//         type: type,
-//         payload: data,
-//     }
-// }
+const error = (data, type) => {
+    return {
+        type: type,
+        payload: data,
+    }
+}

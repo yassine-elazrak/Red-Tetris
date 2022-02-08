@@ -81,6 +81,48 @@ class App {
         }
       });
 
+
+      // new Invitetion
+      socket.on("newInvitation", async (data, callback) => {
+        if (!socket.rooms.has("online"))
+          return callback(null, { message: "You are not authorized" });
+        try {
+          let room = await rooms.getRoom(data.roomId);
+          let user = await users.getUser(data.userId);
+          let currentUser = users.getUser(socket.id);
+          console.log(room, 'room', room.status);
+          if (user.isJoned)
+            return callback(null, { message: `${user.name} is already in room` });
+          if (room.status !== "waiting")
+            callback(null, { message: "Room is closed2" });
+          if (room.admin !== socket.id)
+            callback(null, { message: "You are not admin" });
+          let res = await rooms.inviteUser({
+            roomId: data.roomId,
+            userId: user.id,
+            userName: user.name,
+            userStatus: "waiting",
+          });
+
+          await users.newInvit(user.id, {
+            id: currentUser.id,
+            name: currentUser.name,
+            roomId: room.id,
+            read: false,
+          });
+          this.io.to(user.id).emit("notification", {
+              id: currentUser.id,
+              name: currentUser.name,
+              roomId: room.id
+            });
+          this.io.to(room.users).emit("updateRoom", room);
+          if (typeof callback === "function") callback(res.invit, null);
+        } catch (error) {
+          console.log(error);
+          if (typeof callback === "function") callback(null, error);
+        }
+      });
+
       socket.on("roomCreate", async (data, callback) => {
         if (!socket.rooms.has("online"))
           return callback(null, { message: "You are not authorized" });

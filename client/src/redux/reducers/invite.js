@@ -10,7 +10,7 @@ import {
 const initialState = {
     isLoading: false,
     error: null,
-    room_id: null,
+    // room_id: null,
     invites: [],
 }
 
@@ -29,7 +29,7 @@ const newInvite = (state, action) => {
             ...state,
             error: null,
             isLoading: false,
-            room_id: action.payload.roomId,
+            // room_id: action.payload.roomId,
     }
     } else {
         return {
@@ -88,7 +88,13 @@ export default function inviteReducer(state = initialState, action) {
                 isLoading: true,
             }
         case INVITE_REQUEST:
-            return newInvite(state, action);
+            console.log(action.payload,'invite request');
+            return {
+                ...state,
+                isLoading: false,
+                error: null,
+                invites: action.payload,
+            };
         case INVITE_FAILURE:
             return {
                 ...state,

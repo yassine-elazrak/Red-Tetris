@@ -27,28 +27,7 @@ const HomePage = (props) => {
     error: "",
   });
   const [collapsed, setCollapsed] = useState(false);
-  const [rooms, setRooms] = useState([
-    // {
-    //   id: 1,
-    //   name: "Room 1",
-    //   status: "open",
-    // },
-    // {
-    //   id: 1,
-    //   name: "Room 1",
-    //   status: "waiting",
-    // },
-    // {
-    //   id: 1,
-    //   name: "Room 1",
-    //   status: "open",
-    // },
-    // {
-    //   id: 1,
-    //   name: "Room 1",
-    //   status: "waiting",
-    // },
-  ]);
+  const [rooms, setRooms] = useState([]);
 
   useEffect(() => {
     setCollapsed(!(props.auth.isAuth && !props.auth.isJoned));

@@ -22,16 +22,11 @@ class Rooms {
     });
   };
 
-  getRoom = (name) => {
+  getRoom = (id) => {
     return new Promise((resolve, reject) => {
-      let trimName = name.trim().toLowerCase();
-      if (!this.regx.test(trimName)) {
-        return reject({ message: "Name is invalid" });
-      }
-      let existingRoom = this.rooms.find((room) => room.name === trimName);
-      if (existingRoom) {
-        return resolve(existingRoom);
-      }
+      let index = this.rooms.findIndex((room) => room.id === id);
+      if (index !== -1)
+        return resolve(this.rooms[index]);
       return reject({ message: "Room not found" });
     });
   };
@@ -55,9 +50,31 @@ class Rooms {
         id: userId,
         status: "waiting",
         users: [userId],
+        invit: [],
       };
       this.rooms.push(room);
       return resolve(room);
+    });
+  };
+
+  inviteUser = (data) => {
+    return new Promise((resolve, reject) => {
+      let index = this.rooms.findIndex((room) => room.id === data.roomId);
+      if (index !== -1) {
+        let room = {
+          ...this.rooms[index],
+          invit: [...this.rooms[index].invit,
+          {
+            userId: data.userId,
+            userName: data.userName,
+            status: 'wating',
+            // read: false,
+          }]
+        };
+        this.rooms[index] = room;
+        return resolve(room);
+      }
+      return reject({ message: "Room not found" });
     });
   };
 

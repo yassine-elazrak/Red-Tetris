@@ -16,7 +16,6 @@ export const login = (user) => {
 };
 
 export const updateUser = (user) => {
-  console.log(user, "userUpdates<<<<<<<<<<<<");
   return (dispatch) => {
     dispatch(success(user, UPDATE_USER));
   };

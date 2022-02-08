@@ -19,7 +19,7 @@ class Users {
       if (existingUser) {
         return reject({ message: "Username is already taken" });
       }
-      let user = { id, name: trimName, isJoned: false, room: null };
+      let user = { id, name: trimName, isJoned: false, room: null, notif: [] };
       this.users.push(user);
       return resolve(user);
     });
@@ -35,21 +35,6 @@ class Users {
       return reject({ message: "User not found" });
     });
   };
-
-
-  leaveRoom = (id) => {
-    return new Promise((resolve, reject) => {
-      let index = this.users.findIndex((user) => user.id === id);
-      if (index !== -1) {
-        let user = { ...this.users[index], room: null, isJoned: false };
-        this.users[index] = user;
-        return resolve(this.users[index]);
-      } 
-      return reject({ message: "User not found" });
-    });
-  };
-
-
   getUsers = () => {
     return this.users;
   };
@@ -64,9 +49,20 @@ class Users {
     });
   };
 
+  leaveRoom = (id) => {
+    return new Promise((resolve, reject) => {
+      let index = this.users.findIndex((user) => user.id === id);
+      if (index !== -1) {
+        let user = { ...this.users[index], room: null, isJoned: false };
+        this.users[index] = user;
+        return resolve(this.users[index]);
+      }
+      return reject({ message: "User not found" });
+    });
+  };
   joinRoom = (id, room) => {
     return new Promise((resolve, reject) => {
-    ;
+      ;
       const index = this.users.findIndex((user) => user.id === id);
       if (!index === -1) {
         return reject({ message: "User not found" });
@@ -75,6 +71,21 @@ class Users {
       return resolve(this.users[index]);
     });
   }
+
+  newInvit = (id, invit) => {
+    return new Promise((resolve, reject) => {
+      let index = this.users.findIndex((user) => user.id === id);
+      if (index !== -1) {
+        this.users[index] = { ...this.users[index], invit };
+        return resolve(this.users[index]);
+      }
+      return reject({ message: "User not found" });
+    });
+  }
+
+
+
+
 }
 
 module.exports = Users;
