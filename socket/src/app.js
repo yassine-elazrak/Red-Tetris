@@ -69,6 +69,18 @@ class App {
       });
 
 
+      socket.on("currentRooms", async (_, callback) => {
+        console.log(`User ${socket.id} is trying to get current rooms`);
+        if (!socket.rooms.has("online"))
+          return callback(null, { message: "You are not authorized" });
+        try {
+          let res = rooms.getRooms();
+          callback(res, null);
+        } catch (error) {
+          if (typeof callback === "function") callback(null, error);
+        }
+      });
+
       socket.on("roomCreate", async (data, callback) => {
         if (!socket.rooms.has("online"))
           return callback(null, { message: "You are not authorized" });
@@ -79,8 +91,10 @@ class App {
             return callback(null, { message: "You are already in a room" });
           let res = await rooms.createRoom(data, socket.id);
           let userUpdate = await users.joinRoom(socket.id, res.id);
+          let allRooms = rooms.getRooms();
           this.io.to(user.id).emit("updateProfile", userUpdate);
           this.io.emit("updateUsers", allUsers);
+          this.io.emit("updateRooms", allRooms);
           if (typeof callback === "function") callback(res, null);
         } catch (error) {
           console.log(error, "error");

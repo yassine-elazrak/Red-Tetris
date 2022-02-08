@@ -7,6 +7,7 @@ import invite from "./invite";
 import users from "./users";
 import stage from "./stage";
 import socket from "./socket";
+import rooms from "./rooms";
 
 export default combineReducers({
     auth,
@@ -17,4 +18,5 @@ export default combineReducers({
     users,
     stage,
     socket,
+    rooms,
 });

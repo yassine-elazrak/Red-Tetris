@@ -65,7 +65,6 @@ const InviteUsers = (props) => {
   }, [props.invite.error]);
 
   useEffect(() => {
-    // console.log(props.socket, 'props.socket');
     props.socket.socket("/").on("updateUsers", (data) => {
       console.log(data, "updateUsers");
       props.onlineUsersUpdate(data);

@@ -6,3 +6,4 @@ export * from './invite';
 export * from './users';
 export * from './stage';
 export * from './socket';
+export * from './rooms';

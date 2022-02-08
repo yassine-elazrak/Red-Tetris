@@ -30,9 +30,7 @@ export const joinRoom = (room) => {
 };
 
 export const leaveRoom = () => {
-  // console.log(roomId, "roomId");
   return async (dispatch, getState) => {
-    // dispatch(success({ userId }, ROOM_LEAVE));
     try {
       const io = getState().socket.socket;
       const roomId = getState().room.id;

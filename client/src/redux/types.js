@@ -71,6 +71,13 @@ export const SOCKET_ERROR = 'SOCKET_ERROR';
 export const LOADING_SOCKET = 'LOADING_SOCKET';
 
 
+// Rooms actions
+
+export const ROOMS_REFRESH = 'ROOMS_REFRESH';
+export const ROOMS_ERROR = 'ROOMS_ERROR';
+export const ROOMS_LOADING = 'ROOMS_LOADING';
+
+
 
 
 
