@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Layout, message } from "antd";
+import { Layout, message, Menu, Button } from "antd";
 
 import Nabar from "../components/Navbar";
 import FooterComponent from "../components/Footer";
@@ -15,10 +15,10 @@ import { login, createRoom } from "../redux/actions";
 
 import "./styles/HeaderStyled.css";
 
-const { Header, Content, Footer } = Layout;
+const { Header, Content, Footer, Sider } = Layout;
 
 const HomePage = (props) => {
-  const { auth, room, login, createRoom} = props;
+  const { auth, room, login, createRoom } = props;
   const [hash, setHash] = useState({
     name: null,
     room: null,
@@ -69,6 +69,28 @@ const HomePage = (props) => {
     }
   }, [props.socket]);
 
+  const menu = () => {
+    return (
+      <Menu style={{
+        background : 'none',
+        color: 'white',
+      }}>
+        <Menu.Item>
+          <span> Room Name</span>
+          <Button>join</Button>
+        </Menu.Item>
+        <Menu.Item>
+          <span> Room Name</span>
+          <Button>join</Button>
+        </Menu.Item>
+        <Menu.Item>
+          <span> Room Name</span>
+          <Button>join</Button>
+        </Menu.Item>
+      </Menu>
+    );
+  };
+
   return (
     <Layout
       style={{
@@ -109,13 +131,23 @@ const HomePage = (props) => {
             <FormUserName />
           ) : !room.name ? (
             <FormRoomName />
-          ) : !room.isPravite && room.status === "waiting"
-             && auth.id === room.admin? (
+          ) : !room.isPravite &&
+            room.status === "waiting" &&
+            auth.id === room.admin ? (
             <InviteUsers />
           ) : (
             <GameSpace />
           )}
         </Content>
+        <Sider
+        breakpoint="lg"
+        collapsedWidth="0"
+        style={{
+          background: "rgba(0, 0, 0, 0.6)",
+
+        }}
+        
+        > {menu()} </Sider>
       </Layout>
       <Footer
         style={{

@@ -9,6 +9,7 @@ import {
   onlineUsers,
   closeRoom,
   onlineUsersUpdate,
+  leaveRoom,
 } from "../redux/actions";
 
 const { Meta } = Card;
@@ -130,7 +131,6 @@ const InviteUsers = (props) => {
       >
         <Form.Item
           name="inviteUsers"
-          // onBlur={() => props.onlineUsers()}
           help={input.error ? props.invite.error : ""}
           validateStatus={
             input.error ? "error" : input.value.length > 2 ? "success" : ""
@@ -224,6 +224,7 @@ const InviteUsers = (props) => {
       type="inner"
       actions={[
         <Button
+          onClick={() => props.leaveRoom()}
           type="primary"
           style={{
             display: "flex",
@@ -235,7 +236,7 @@ const InviteUsers = (props) => {
         </Button>,
         <Button
           type="primary"
-          onClick={() => props.closeRoom(props.room.name)}
+          onClick={() => props.closeRoom(props.room.id)}
           style={{
             display: "flex",
             margin: "auto",
@@ -323,4 +324,5 @@ export default connect(mapStateToProps, {
   onlineUsers,
   closeRoom,
   onlineUsersUpdate,
+  leaveRoom,
 })(InviteUsers);

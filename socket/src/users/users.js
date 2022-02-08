@@ -37,6 +37,19 @@ class Users {
   };
 
 
+  leaveRoom = (id) => {
+    return new Promise((resolve, reject) => {
+      let index = this.users.findIndex((user) => user.id === id);
+      if (index !== -1) {
+        let user = { ...this.users[index], room: null, isJoned: false };
+        this.users[index] = user;
+        return resolve(this.users[index]);
+      } 
+      return reject({ message: "User not found" });
+    });
+  };
+
+
   getUsers = () => {
     return this.users;
   };

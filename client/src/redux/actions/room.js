@@ -9,7 +9,6 @@ import {
 } from "../types";
 
 export const createRoom = (room) => {
-  // console.log(room);
   return async (dispatch, getState) => {
     dispatch({ type: LOADING_ROOM });
     try {
@@ -30,18 +29,28 @@ export const joinRoom = (room) => {
   };
 };
 
-export const leaveRoom = (userId) => {
-  return (dispatch) => {
-    dispatch(success({ userId }, ROOM_LEAVE));
+export const leaveRoom = () => {
+  // console.log(roomId, "roomId");
+  return async (dispatch, getState) => {
+    // dispatch(success({ userId }, ROOM_LEAVE));
+    try {
+      const io = getState().socket.socket;
+      const roomId = getState().room.id;
+      await socket(io, "leaveRoom", roomId);
+      dispatch(success(null, ROOM_LEAVE));
+    } catch (error) {
+      dispatch(error(error, ROOM_ERROR));
+    }
   };
 };
 
-export const closeRoom = (room) => {
+export const closeRoom = () => {
   return async (dispatch, getState) => {
-    console.log(room, "roomclose");
+    console.log( "roomclose");
     try {
       const io = getState().socket.socket;
-      const res = await socket(io, "closeRoom", room);
+      const roomId = getState().room.id;
+      const res = await socket(io, "closeRoom", roomId);
       dispatch(success(res, ROOM_UPDATE_STATUS));
     } catch (error) {
       console.log(error, "roomcloseerror");

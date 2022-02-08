@@ -9,10 +9,10 @@ import { Affix, Dropdown, Menu } from "antd";
 
 import { connect } from "react-redux";
 // actions
-import {
-    leaveRoom,
-    removeAllInvetes,
-} from '../redux/actions'
+// import {
+//     leaveRoom,
+//     removeAllInvetes,
+// } from '../redux/actions'
 
 const NavbarComponent = (props) => {
 
@@ -54,6 +54,6 @@ const mapStateToProps = (state) => {
 }
 
 export default connect(mapStateToProps, {
-    leaveRoom,
-    removeAllInvetes
+    // leaveRoom,
+    // removeAllInvetes
 })(NavbarComponent);

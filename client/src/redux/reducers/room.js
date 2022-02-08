@@ -10,17 +10,12 @@ import {
 const initialState = {
     isLoading: false,
     error: null,
-    // isJoned: false,
     isPravite: false,
-    // isAdmin : false,
     admin: null,
     status: '',
     id: null,
     name: null,
     users: [
-        // userId: userId,
-        // userName: userName,
-        // joinedAt: joinedAt,
     ],
 };
 

@@ -28,6 +28,8 @@ import {
   updateStage,
   // updateCell,
   updateTetromino,
+
+  leaveRoom,
 } from "../redux/actions";
 
 import { useStage } from "../hooks/useStage";
@@ -61,13 +63,10 @@ const GameSpace = (props) => {
   };
 
   useEffect(() => {
-    // document.getElementById('Content').focus();
     changeFocused();
   }, []);
 
   const handleKeyDown = ({ keyCode }) => {
-    // console.log(e.keyCode);
-    // const { keyCode } = e;
     if (!gameStart && keyCode === 13) {
       startGame();
     }
@@ -174,7 +173,6 @@ const GameSpace = (props) => {
     return (
       <div
         style={{
-          // border: '1px solid black',
           padding: "10px",
           margin: 0,
           display: "flex",
@@ -183,36 +181,32 @@ const GameSpace = (props) => {
       >
         <Button
           type="primary"
+          disabled={props.room.admin === props.auth.id}
           onClick={() => {
             gameStart ? resetGame(randomTetromino()) : startGame();
             changeFocused();
           }}
         >
-          {" "}
           {gameStart ? "Reset" : "Start"}
         </Button>
 
         {gameStart && (
           <Button
             type="primary"
+            disabled={!props.room.admin === props.auth.id}
             onClick={() => {
               pauseGame(!gamePause);
               changeFocused();
             }}
           >
-            {" "}
             {gamePause ? "Resume" : "Pause"}
           </Button>
         )}
         <Button
           type="primary"
-          onClick={() => {
-            // updateTetromino();
-            changeFocused();
-          }}
+          onClick={() => {props.leaveRoom()}}
         >
-          {" "}
-          Leave{" "}
+          Leave
         </Button>
       </div>
     );
@@ -236,7 +230,6 @@ const GameSpace = (props) => {
         handleTouchEnd(e);
       }}
       style={{
-        // background: "rgba(0, 0, 0, 0.7)",
         padding: 0,
         margin: 0,
         height: "calc(100vh - 90px)",
@@ -261,7 +254,6 @@ const GameSpace = (props) => {
           height: "calc(100vh - 220px)",
         }}
       >
-        {/* if rome dos't private show maps palyers  */}
         {!room.isPravite && (
           <Col
             xs={0}
@@ -286,12 +278,10 @@ const GameSpace = (props) => {
           xxl={9}
           style={{
             padding: "0px",
-            // backgroundColor: '#000',
             margin: "auto",
             width: "100%",
           }}
         >
-          {/* Current Stage */}
           <Stage stage={currentStage} />
           <Row
             style={{
@@ -307,10 +297,8 @@ const GameSpace = (props) => {
               xxl={24}
               style={{
                 padding: 0,
-                // border: '1px solid black',
               }}
             >
-              {/* Bottons */}
               {bottons()}
             </Col>
             <Col
@@ -321,14 +309,10 @@ const GameSpace = (props) => {
               xl={0}
               xxl={0}
               style={{
-                // padding: '10px',
                 marginTop: "10px",
                 paddingLeft: "10px",
-                // display: 'flex',
-                // justifyContent: 'space-between',
               }}
             >
-              {/* on mobile change style */}
               <Popover
                 trigger={"click"}
                 content={bottons()}
@@ -392,4 +376,6 @@ export default connect(mapStateToProps, {
   createStage,
   updateStage,
   updateTetromino,
+
+  leaveRoom,
 })(GameSpace);

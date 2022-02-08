@@ -12,6 +12,16 @@ class Rooms {
     return this.rooms;
   };
 
+  getRoomUsers = (id) => {
+    return new Promise((resolve, reject) => {
+      const room = this.rooms.find((room) => room.id === id);
+      if (room) {
+        return resolve(room.users);
+      }
+      return reject({ message: "Room not found" });
+    });
+  };
+
   getRoom = (name) => {
     return new Promise((resolve, reject) => {
       let trimName = name.trim().toLowerCase();
@@ -65,17 +75,14 @@ class Rooms {
     });
   };
 
-  closeRoom = (roomName, userId) => {
+  closeRoom = (roomId, userId) => {
     return new Promise((resolve, reject) => {
-      let trimName = roomName.trim().toLowerCase();
-      if (!this.regx.test(trimName))
-        return reject({ message: "Room name is invalid" });
-      let indexRoom = this.rooms.findIndex((room) => room.name === trimName);
-      if (indexRoom === -1) return reject({ message: "Room not found" });
-      let user = this.rooms[indexRoom].users.find((user) => user === userId);
-      if (!user) return reject({ message: "User is not joined" });
-      this.rooms[indexRoom].status = "closed";
-      return resolve(this.rooms[indexRoom]);
+      let roomIndex = this.rooms.findIndex((room) => room.id === roomId);
+      if (roomIndex === -1) return reject({ message: "Room not found" });
+      if (this.rooms[roomIndex].admin !== userId)
+        return reject({ message: "You are not admin" });
+      this.rooms[roomIndex].status = "closed";
+      return resolve(this.rooms[roomIndex]);
     });
   };
 
