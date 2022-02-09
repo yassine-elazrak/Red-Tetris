@@ -6,11 +6,12 @@ export const socketConnet = () => {
   return async (dispatch) => {
     // dispatch({ type: LOADING_SOCKET });
     try {
-        let socket = await connect();
-        console.log("socket", socket);
-        dispatch(success(socket, SOCKET_CONNECT));
+      dispatch({ type: LOADING_SOCKET });
+      let socket = await connect();
+      // console.log("socket", socket);
+      dispatch(success(socket, SOCKET_CONNECT));
     } catch (err) {
-      console.log("err", err);
+      // console.log("err", err);
       dispatch(error(err, SOCKET_ERROR));
     }
   };

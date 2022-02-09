@@ -27,7 +27,7 @@ class App {
 
     this.io.on("connection", (socket) => {
       console.log(`User connected: ${socket.id}`);
-
+      
       /**
        * @description Create new user
        * @param {string} event - login
@@ -122,7 +122,8 @@ class App {
             roomName: room.name,
             read: false,
           });
-          console.log(notif, 'notif');
+          // console.log(notif, 'notif');
+
           this.io.to(user.id).emit("notification", notif);
           this.io.to(room.users).emit("updateRoom", room);
           if (typeof callback === "function") callback(res.invit, null);

@@ -31,7 +31,7 @@ export const refreshNotifications = (notifications) => {
 export const pushNotification = (notification) => {
     return (dispatch) => {
         dispatch({ type: NOTIFICATION_LOADING });
-        dispatch({ type: NOTIFICATION_PUSH, payload: notification });
+        dispatch(success(notification, NOTIFICATION_PUSH));
     };
 };
 

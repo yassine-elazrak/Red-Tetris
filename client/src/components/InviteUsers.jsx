@@ -6,6 +6,7 @@ import { Form, Input, Button, message, Card, Select } from "antd";
 import { gold, red } from "@ant-design/colors";
 import {
   inviteRequest,
+  refreshInvite,
   onlineUsers,
   closeRoom,
   onlineUsersUpdate,
@@ -59,19 +60,21 @@ const InviteUsers = (props) => {
     // console.log(input.id, props.room.id, "input.value");
     props.inviteRequest({
       userId: input.id,
-      roomId: props.room.id
+      roomId: props.room.id,
     });
   };
 
   // listen for changes in the invite error
   useEffect(() => {
-    if (props.invite.error) {
-      // roomId, userId
-      message.error(props.invite.error);
-    }
+    props.invite.error && message.error(props.invite.error);
   }, [props.invite.error]);
 
   useEffect(() => {
+    props.room.error && message.error(props.room.error);
+  }, [props.room.error]);
+
+  useEffect(() => {
+    props.refreshInvite();
     props.socket.socket("/").on("updateUsers", (data) => {
       console.log(data, "updateUsers");
       props.onlineUsersUpdate(data);
@@ -326,6 +329,7 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps, {
   inviteRequest,
+  refreshInvite,
   onlineUsers,
   closeRoom,
   onlineUsersUpdate,

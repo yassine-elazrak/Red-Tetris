@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Layout, message, Menu, Button, List } from "antd";
+import { Layout, message, Button, List, Tooltip } from "antd";
 
 import Nabar from "../components/Navbar";
 import FooterComponent from "../components/Footer";
@@ -26,12 +26,15 @@ const HomePage = (props) => {
     room: null,
     error: "",
   });
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
+  const [tooltipVisible, setTooltipVisible] = useState(true);
   const [rooms, setRooms] = useState([]);
 
   useEffect(() => {
-    setCollapsed(!(props.auth.isAuth && !props.auth.isJoned));
     if (props.auth.isAuth && !props.auth.isJoned){
+      setTimeout(() => {
+        setTooltipVisible(false);
+      }, 3000)
       props.refreshRooms();
     }
   }, [props.auth]);
@@ -204,7 +207,16 @@ const HomePage = (props) => {
               }}
             >
               {collapsed ? (
+                <Tooltip
+                title="Current Rooms"
+                placement="right"
+                defaultVisible={true}
+                mouseEnterDelay={1}
+                visible={tooltipVisible}
+                
+                >
                 <MenuFoldOutlined onClick={() => setCollapsed(false)} />
+                </Tooltip>
               ) : (
                 <MenuUnfoldOutlined onClick={() => setCollapsed(true)} />
               )}

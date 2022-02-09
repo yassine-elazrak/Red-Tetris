@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Menu, Badge, Popover } from "antd";
+import { Menu, Badge, Popover, notification } from "antd";
 import { BellOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
 
@@ -15,53 +15,6 @@ const NotifComponent = (props) => {
   // don't forget to create a new action of newNotification
   // push notification to the user
 
-  const testnotif = [
-    {
-      title: "New message from John Doe",
-      time: "3 minutes ago",
-      read: false,
-    },
-    {
-      title: "New message from John Doe",
-      time: "3 minutes ago",
-      read: false,
-    },
-    {
-      title: "New message from John Doe",
-      time: "3 minutes ago",
-      read: false,
-    },
-    {
-      title: "New message from John Doe",
-      time: "3 minutes ago",
-      read: false,
-    },
-    {
-      title: "New message from John Doe",
-      time: "3 minutes ago",
-      read: false,
-    },
-    {
-      title: "New message from John Doe",
-      time: "3 minutes ago",
-      read: false,
-    },
-    {
-      title: "New message from John Doe",
-      time: "3 minutes ago",
-      read: false,
-    },
-    {
-      title: "New message from John Doe",
-      time: "3 minutes ago",
-      read: false,
-    },
-    {
-      title: "New message from John Doe",
-      time: "3 minutes ago",
-      read: false,
-    },
-  ];
   const [notifs, setNotifs] = useState([]);
   const [contNotifs, setContNotifs] = useState(0);
 
@@ -77,35 +30,36 @@ const NotifComponent = (props) => {
   };
 
   useEffect(() => {
-    console.log(notifs, "notifs <>");
     if (!notifs.length) return;
     let cont = notifs.filter((notif) => notif.read === false).length;
     setContNotifs(cont);
   }, [notifs]);
 
   useEffect(() => {
-    console.log('notifsupdated', notifs);
-    console.log('notifsupdated', props.notifications);
     setNotifs(props.notifications);
   }, [props.notifications]);
+
+//   id: "832NhjV0cGTWFo3-AAAJ"
+// name: "dasfdas"
+// read: false
+// roomId: "832NhjV0cGTWFo3-AAAJ"
+// roomName: "das"
 
   useEffect(() => {
     if (props.socket.socket) {
       props.socket.socket.socket("/").on("notification", (data) => {
+        console.log("notification", data);
+        notification.info({
+          message: "New notification",
+          description: `${data.name} invited you to join ${data.roomName}`,
+        });
         props.pushNotification(data);
-        console.log(data, "notification");
       });
       return () => {
         props.socket.socket.socket("/").off("notification");
       };
     }
   }, [props.socket]);
-
-  //   id: "75t2XwAUdZl7rA5mAAA_"
-  // name: "room"
-  // read: false
-  // roomId: "75t2XwAUdZl7rA5mAAA_"
-  // roomName: "sdafff"
 
   const mapnotifs = notifs.map((item, key) => {
     console.log(item, "item");
@@ -163,9 +117,6 @@ const NotifComponent = (props) => {
             <p>
               {`${item.name} invited you to join ${item.roomName}`}
             </p>
-            {/* <span style={{ fontSize: "12px", color: "#8c8c8c" }}>
-              {notif.time}
-            </span> */}
           </div>
         </div>
       </Menu.Item>

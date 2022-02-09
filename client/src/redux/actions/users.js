@@ -8,13 +8,13 @@ import {
 
 export const onlineUsers = () => {
     return async (dispatch, getState) => {
-        dispatch({type: LOADING_ONLINE_USERS});
         try {
+            dispatch({ type: LOADING_ONLINE_USERS });
             const io = getState().socket.socket;
             const res = await socket(io, "onlineUsers", null);
             dispatch(success(res, CURRENT_ONLINE_USERS));
-        } catch (error) {
-            dispatch(error(error, ONLINE_USERS_ERROR));
+        } catch (err) {
+            dispatch(error(err, ONLINE_USERS_ERROR));
         }
     }
 }
