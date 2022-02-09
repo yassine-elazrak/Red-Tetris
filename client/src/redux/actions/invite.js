@@ -16,7 +16,6 @@ export const inviteRequest = (invite) => {
             const res = await socket(io, "invitation", invite);
             dispatch(success(res, INVITE_REQUEST));
         } catch (err) {
-            // console.log(err);
             dispatch(error(err, INVITE_FAILURE));
         }
     }

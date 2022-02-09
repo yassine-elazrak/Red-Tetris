@@ -89,7 +89,6 @@ export default function inviteReducer(state = initialState, action) {
                 isLoading: true,
             }
         case INVITE_REQUEST:
-            console.log(action.payload,'invite request');
             return {
                 ...state,
                 isLoading: false,

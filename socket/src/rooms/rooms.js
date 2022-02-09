@@ -8,6 +8,7 @@ class Rooms {
        * @content
        * @param {string} id - room id
        * @param {string} name - room name
+       * @param {boolean} isPrivate - is room private
        * @param {string} status - room status
        * @param {string} admin - room admin
        * @param {array} users - room users
@@ -19,7 +20,7 @@ class Rooms {
   }
 
   getRooms = () => {
-    return this.rooms;
+    return this.rooms.filter((room) => room.isPravite === false);
   };
 
   getRoomUsers = (id) => {

@@ -20,6 +20,7 @@ const InviteUsers = (props) => {
   // console.log(props, 'props2');
 
   const [dataSource, setDataSource] = useState([]);
+  // const [inveted, setInveted] = useState([]);
   const [input, setInput] = useState({
     value: "",
     id: null,
@@ -34,14 +35,15 @@ const InviteUsers = (props) => {
   };
   // listen for changes in the online users
   useEffect(() => {
-    console.log(props.users, "props.users");
     const data = props.users.online.map((user) => {
-      return {
+      return{
         value: user.name,
         id: user.id,
         isJoned: user.isJoned,
+        inveted: false,
       };
     });
+    console.log(data, 'data');
     setDataSource(data);
   }, [props.users]);
 
@@ -62,12 +64,30 @@ const InviteUsers = (props) => {
       userId: input.id,
       roomId: props.room.id,
     });
+    setInput({
+      ...input,
+      value: "",
+      id: null,
+    });
+    // setInveted([...inveted, input.id]);
   };
 
   // listen for changes in the invite error
   useEffect(() => {
     props.invite.error && message.error(props.invite.error);
   }, [props.invite.error]);
+
+  useEffect(() => {
+    const data = dataSource.map((user) => {
+      return{
+        ...user,
+        inveted: props.invite.invites.find((invited) => invited.userId === user.id) ? true : false,
+      }
+    });
+
+    setDataSource(data);
+
+  },[props.invite.invites]);
 
   useEffect(() => {
     props.room.error && message.error(props.room.error);
@@ -87,7 +107,6 @@ const InviteUsers = (props) => {
   }, []);
 
   const handleSelect = (id) => {
-    console.log(id, "id");
     const value = dataSource.filter((item) => item.id === id);
     setInput({
       ...input,
@@ -111,7 +130,7 @@ const InviteUsers = (props) => {
 
   const options = dataSource.map((item) => {
     return (
-      item.id !== props.auth.id && (
+      item.id !== props.auth.id && !item.inveted && (
         <Option key={item.id} value={item.id} disabled={item.isJoned}>
           {item.value}
           <span
@@ -262,7 +281,6 @@ const InviteUsers = (props) => {
         style={{
           margin: 0,
           padding: 0,
-          // height: '100%',
           width: "100%",
           display: "inline-block",
           flexWrap: "wrap",
