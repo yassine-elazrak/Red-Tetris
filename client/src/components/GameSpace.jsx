@@ -175,7 +175,9 @@ const GameSpace = (props) => {
         {props.auth.id === props.room.admin && (
           <Button
             type="primary"
-            // disabled={props.room.admin === props.auth.id}
+            hidden={gameStart}
+            // hiddenit when game start
+            // disabled={props.room.admin !== props.auth.id && !props.room.isPravite && gameStart}
             onClick={() => {
               gameStart ? resetGame(randomTetromino()) : startGame();
               changeFocused();

@@ -131,7 +131,7 @@ const HomePage = (props) => {
         {rooms.map((room, key) => {
           return (
             <List.Item
-              key={room.id}
+              key={key}
               style={{
                 display: "flex",
                 justifyContent: "space-between",

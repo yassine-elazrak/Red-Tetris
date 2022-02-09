@@ -180,7 +180,7 @@ class App {
           let user = await users.getUser(socket.id);
           if (user.isJoned)
             return callback(null, { message: "You are already in a room" });
-          let res = await rooms.createRoom(data, socket.id);
+          let res = await rooms.createRoom(data, { id: user.id, name: user.name });
           let userUpdate = await users.userJoin(socket.id, res.id);
           this.io.to(user.id).emit("updateProfile", userUpdate);
           this.io.emit("updateUsers", users.getUsers());
@@ -209,7 +209,7 @@ class App {
           if (user.isJoned) return callback(null, { message: "You are already in a room" });
           if (user.isJoned)
             return callback(null, { message: "You are already in a room" });
-          let updateRoom = await rooms.joinRoom({ roomId, userId: socket.id });
+          let updateRoom = await rooms.joinRoom({ roomId, userId: user.id, userName: user.name });
           let updateProfile = await users.userJoin(socket.id, roomId);
           let res = (({ id, name, isPravite, admin, status }) => ({ id, name, isPravite, admin, status }))(updateRoom);
           this.io.to(user.id).emit("updateProfile", updateProfile);
@@ -220,7 +220,6 @@ class App {
           if (typeof callback === "function") callback(null, error);
         }
       });
-
 
 
 
@@ -256,12 +255,23 @@ class App {
           return callback(null, { message: "You are not authorized" });
         try {
           let room = await rooms.leaveRoom(socket.id, roomId);
+          console.log("admin1", room.admin);
+          console.log("roomUsers>>", room.users);
           let user = await users.userLeave(socket.id);
           if (room.users.length === 0) {
             await rooms.deleteRoom(roomId);
             this.io.emit("updateRooms", rooms.getRooms());
-          } else
-            this.io.emit("updateRoom", room);
+          } else {
+            let usersRoom = await rooms.getRoomUsers(roomId);
+            if (room.admin === socket.id) {
+              let updateRoom = rooms.switchAdmin(room.id);
+              console.log("admin2", room.admin);
+              console.log("roomUsers switch admin>>", updateRoom.users);
+              this.io.to(usersRoom).emit("updateRoom", updateRoom);
+            }
+            else
+              this.io.to(usersRoom).emit("updateRoom", room);
+          }
           this.io.to(user.id).emit("updateProfile", user);
           this.io.emit("updateUsers", users.getUsers());
           if (typeof callback === "function") callback(null, null);
@@ -296,6 +306,9 @@ class App {
             if (room.users.length === 0) {
               let currntRooms = await rooms.deleteRoom(room.id);
               this.io.emit("updateRooms", currntRooms);
+            } else {
+              let updateRoom = rooms.switchAdmin(room.id);
+              this.io.to(updateRoom.users).emit("updateRoom", updateRoom);
             }
           }
           let allUsers = await users.logout(socket.id);

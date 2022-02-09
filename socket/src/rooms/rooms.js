@@ -33,7 +33,12 @@ class Rooms {
     return new Promise((resolve, reject) => {
       const room = this.rooms.find((room) => room.id === id);
       if (room) {
-        return resolve(room.users);
+        let users = room.users.map((user) => {
+          return (
+            (({ id }) => ({ id }))(user)
+          )
+        });
+        return resolve(users);
       }
       return reject({ message: "Room not found" });
     });
@@ -48,7 +53,7 @@ class Rooms {
     });
   };
 
-  createRoom = (data, userId) => {
+  createRoom = (data, user) => {
     return new Promise((resolve, reject) => {
       let trimName = data.roomName.trim().toLowerCase();
       if (!this.regx.test(trimName)) {
@@ -63,10 +68,17 @@ class Rooms {
       let room = {
         name: trimName,
         isPravite: data.isPravite,
-        admin: userId,
-        id: userId,
+        admin: user.id,
+        id: user.id,
         status: "waiting",
-        users: [userId],
+        users: [{
+          name: user.name,
+          id: user.id,
+          score: 0,
+          rows: 0,
+          map: [],
+          tetrominos: [],
+        }],
         invit: [],
       };
       this.rooms.push(room);
@@ -78,36 +90,36 @@ class Rooms {
     return new Promise((resolve, reject) => {
       let index = this.rooms.findIndex((room) => room.id === data.roomId);
       if (index !== -1) {
-        let room = {
-          ...this.rooms[index],
-          invit: [...this.rooms[index].invit,
-          {
-            userId: data.userId,
-            userName: data.userName,
-            status: 'wating',
-          }]
-        };
-        this.rooms[index] = room;
-        return resolve(room);
+        let newUser = {
+          userId: data.userId,
+          userName: data.userName,
+          status: 'wating',
+        }
+        this.rooms[index].invit.push(newUser);
+        return resolve(this.rooms[index]);
       }
       return reject({ message: "Room not found" });
     });
   };
 
   joinRoom = (data) => {
-    console.log(data, 'dataJoin', this.rooms);
     return new Promise((resolve, reject) => {
       let Index = this.rooms.findIndex((room) => room.id === data.roomId);
       if (Index === -1) reject({ message: "Room not found" });
       if (this.rooms[Index].status !== "waiting") reject({ message: "Room is closed" });
-      if (this.rooms[Index].users.findIndex((user) => user === data.userId) !== -1)
+      if (this.rooms[Index].users.findIndex((user) => user.id === data.userId) !== -1)
         reject({ message: "User is already in room" });
-      let room = {
-        ...this.rooms[Index],
-        users: [...this.rooms[Index].users, data.userId],
-      };
-      this.rooms[Index] = room;
-      return resolve(room);
+      let newUser = {
+        name: data.userName,
+        id: data.userId,
+        score: 0,
+        rows: 0,
+        map: [],
+        tetrominos: [],
+      }
+      this.rooms[Index].users.push(newUser);
+      // console.log(data, 'dataJoin', this.rooms);
+      return resolve(this.rooms[Index]);
     });
   };
 
@@ -126,13 +138,19 @@ class Rooms {
     return new Promise((resolve, reject) => {
       let roomIndex = this.rooms.findIndex((room) => room.id === roomId);
       if (roomIndex === -1) return reject({ message: "Room not found" });
-      console.log(this.rooms[roomIndex], userId);
-      let userIndex = this.rooms[roomIndex].users.findIndex((user) => user === userId);
+      // console.log(this.rooms[roomIndex], userId);
+      let userIndex = this.rooms[roomIndex].users.findIndex((user) => user.id === userId);
       if (userIndex === -1) return reject({ message: "User is not joined" });
       this.rooms[roomIndex].users.splice(userIndex, 1);
       return resolve(this.rooms[roomIndex]);
     });
   };
+
+  switchAdmin = (roomId) => {
+    let roomIndex = this.rooms.findIndex((room) => room.id === roomId);
+    this.rooms[roomIndex].admin = this.rooms[roomIndex].users[0].id;
+    return this.rooms[roomIndex];
+  }
 
   deleteRoom = (id) => {
     return new Promise((resolve, reject) => {
