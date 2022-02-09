@@ -39,11 +39,9 @@ class App {
         console.log(`User ${socket.id} is trying to login`);
         try {
           let res = await users.login(socket.id, data);
-          let allUsers = users.getUsers();
           socket.join('online');
-          // console.log('online', socket.rooms);
           console.log('online', this.io.sockets.adapter.rooms);
-          this.io.emit("updateUsers", allUsers);
+          this.io.emit("updateUsers", users.getUsers());
           if (typeof callback === "function") callback(res, null);
         } catch (error) {
           if (typeof callback === "function") callback(null, error);
@@ -62,10 +60,7 @@ class App {
         if (!socket.rooms.has("online"))
           return callback(null, { message: "You are not authorized" });
         try {
-          let allUsers = users.getUsers();
-          let res = allUsers.map((user) => {return(
-            (({ id, name, isJoned}) => ({ id, name, isJoned }))(user)
-          )});
+          let res = users.getUsers();
           if (typeof callback === "function") callback(res, null);
         } catch (error) {
           if (typeof callback === "function") callback(null, error);
@@ -183,21 +178,13 @@ class App {
           return callback(null, { message: "You are not authorized" });
         try {
           let user = await users.getUser(socket.id);
-          let allUsers = users.getUsers();
           if (user.isJoned)
             return callback(null, { message: "You are already in a room" });
           let res = await rooms.createRoom(data, socket.id);
           let userUpdate = await users.userJoin(socket.id, res.id);
-          let allRooms = rooms.getRooms();
-          let filterRoom = allRooms.map((room) => {
-            return (
-              (({ id, name, isPravite, admin, status }) => ({ id, name, isPravite, admin, status }))(room)
-            )
-          });
-          console.log("filterRoom", filterRoom);
           this.io.to(user.id).emit("updateProfile", userUpdate);
-          this.io.emit("updateUsers", allUsers);
-          this.io.emit("updateRooms", filterRoom);
+          this.io.emit("updateUsers", users.getUsers());
+          this.io.emit("updateRooms", rooms.getRooms());
           if (typeof callback === "function") callback(res, null);
         } catch (error) {
           console.log(error, "error");
@@ -210,10 +197,11 @@ class App {
       /**
        * @description join room
        * @param {string} event - joinRoom
-       * @param {object} data - { roomId }
+       * @param {object} roomId - roomId
        * @param {function} callback - (room, err)
        */
-      socket.on("joinRoom", async (data, callback) => {
+      socket.on("joinRoom", async (roomId, callback) => {
+        console.log(`User ${socket.id} is trying to join room ${roomId}`);
         if (!socket.rooms.has("online"))
           return callback(null, { message: "You are not authorized" });
         try {
@@ -221,13 +209,14 @@ class App {
           if (user.isJoned) return callback(null, { message: "You are already in a room" });
           if (user.isJoned)
             return callback(null, { message: "You are already in a room" });
-          let updateRoom = await rooms.joinRoom({ roomId: data.roomId, userId: socket.id });
-          let updateProfile = await users.userJoin(socket.id, res.id);
+          let updateRoom = await rooms.joinRoom({ roomId, userId: socket.id });
+          let updateProfile = await users.userJoin(socket.id, roomId);
           let res = (({ id, name, isPravite, admin, status }) => ({ id, name, isPravite, admin, status }))(updateRoom);
           this.io.to(user.id).emit("updateProfile", updateProfile);
           this.io.to(updateRoom.users).emit("userJoind", updateRoom);
           if (typeof callback === "function") callback(res, null);
         } catch (error) {
+          console.log(error, "error");
           if (typeof callback === "function") callback(null, error);
         }
       });
@@ -248,14 +237,7 @@ class App {
           return callback(null, { message: "You are not authorized" });
         try {
           let res = await rooms.closeRoom(roomId, socket.id);
-          let allRooms = rooms.getRooms();
-          let filterRoom = allRooms.map((room) => {
-            return (
-              (({ id, name, isPravite, admin, status }) => ({ id, name, isPravite, admin, status }))(room)
-            )
-          });
-          console.log("filterRoom", filterRoom);
-          this.io.emit("updateRooms", filterRoom);
+          this.io.emit("updateRooms", rooms.getRooms());
           if (typeof callback === "function") callback(res, null);
         } catch (error) {
           if (typeof callback === "function") callback(null, error);
@@ -275,14 +257,13 @@ class App {
         try {
           let room = await rooms.leaveRoom(socket.id, roomId);
           let user = await users.userLeave(socket.id);
-          let allUsers = users.getUsers();
           if (room.users.length === 0) {
             await rooms.deleteRoom(roomId);
             this.io.emit("updateRooms", rooms.getRooms());
           } else
             this.io.emit("updateRoom", room);
           this.io.to(user.id).emit("updateProfile", user);
-          this.io.emit("updateUsers", allUsers);
+          this.io.emit("updateUsers", users.getUsers());
           if (typeof callback === "function") callback(null, null);
         } catch (error) {
           console.log(error, "error");

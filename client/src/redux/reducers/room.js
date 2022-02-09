@@ -19,20 +19,20 @@ const initialState = {
     ],
 };
 
-const createRoom = (state, action) => {
-    const data = {
-        ...state,
-        isLoading: false,
-        error: null,
-        id: action.payload.id,
-        admin: action.payload.admin,
-        status: action.payload.status,
-        isPravite: action.payload.isPravite,
-        name: action.payload.name,
-        users: [action.payload.users],
-    };
-    return data;
-};
+// const createRoom = (state, action) => {
+//     const data = {
+//         ...state,
+//         isLoading: false,
+//         error: null,
+//         id: action.payload.id,
+//         admin: action.payload.admin,
+//         status: action.payload.status,
+//         isPravite: action.payload.isPravite,
+//         name: action.payload.name,
+//         users: [action.payload.users],
+//     };
+//     return data;
+// };
 
 const pushUser = (state, action) => {
     const index = state.users.findIndex(user => user.id === action.payload.userId);
@@ -73,9 +73,30 @@ export default function roomReducer(state = initialState, action) {
                 error: null,
             };
         case ROOM_CREATE:
-            return createRoom(state, action);
+            return {
+                ...state,
+                isLoading: false,
+                error: null,
+                id: action.payload.id,
+                admin: action.payload.admin,
+                status: action.payload.status,
+                isPravite: action.payload.isPravite,
+                name: action.payload.name,
+                users: [action.payload.users],
+            }
+
+            // id, name, isPravite, admin, status
         case ROOM_JOIN:
-            return pushUser(state, action);
+            return {
+                ...state,
+                isLoading: false,
+                error: null,
+                id: action.payload.id,
+                name: action.payload.name,
+                isPravite: action.payload.isPravite,
+                admin: action.payload.admin,
+                status: action.payload.state,
+            };
         case ROOM_LEAVE:
             return initialState;
         case ROOM_UPDATE_STATUS:

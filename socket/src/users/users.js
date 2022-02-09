@@ -50,7 +50,7 @@ class Users {
       let index = this.users.findIndex((user) => user.id === id);
       if (index !== -1) {
         this.users.splice(index, 1);
-        return resolve(this.users);
+        return resolve(this.getUsers());
       }
       return reject({ message: "User not found" });
     });
@@ -61,7 +61,10 @@ class Users {
    * @returns online users object
    */
   getUsers = () => {
-    return this.users;
+    let res = this.users.map((user) => {return(
+      (({id, name, isJoned}) => ({id, name, isJoned}))(user)
+    )});
+    return res;
   };
 
 

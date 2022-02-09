@@ -20,7 +20,13 @@ class Rooms {
   }
 
   getRooms = () => {
-    return this.rooms.filter((room) => room.isPravite === false);
+    let rooms = this.rooms.filter((room) => room.isPravite === false);
+    let res = rooms.map((room) => {
+      return (
+        (({ id, name, isPravite, admin, status }) => ({ id, name, isPravite, admin, status }))(room)
+      )
+    });
+    return res;
   };
 
   getRoomUsers = (id) => {
@@ -79,7 +85,6 @@ class Rooms {
             userId: data.userId,
             userName: data.userName,
             status: 'wating',
-            // read: false,
           }]
         };
         this.rooms[index] = room;
@@ -90,10 +95,11 @@ class Rooms {
   };
 
   joinRoom = (data) => {
+    console.log(data, 'dataJoin', this.rooms);
     return new Promise((resolve, reject) => {
       let Index = this.rooms.findIndex((room) => room.id === data.roomId);
-      if (Index !== -1) reject({ message: "Room not found" });
-      if (this.rooms[Index].status === "waiting") reject({ message: "Room is closed" });
+      if (Index === -1) reject({ message: "Room not found" });
+      if (this.rooms[Index].status !== "waiting") reject({ message: "Room is closed" });
       if (this.rooms[Index].users.findIndex((user) => user === data.userId) !== -1)
         reject({ message: "User is already in room" });
       let room = {
@@ -133,7 +139,7 @@ class Rooms {
       let roomIndex = this.rooms.findIndex((room) => room.id === id);
       if (roomIndex === -1) return reject({ message: "Room not found" });
       this.rooms.splice(roomIndex, 1);
-      return resolve(this.rooms);
+      return resolve(this.getRooms());
     });
   };
 }

@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import { Layout, Row, Col, Button, Popover, Modal } from "antd";
 import {
-  Layout,
-  Row,
-  Col,
-  Button,
-  Popover,
-  Modal,
-} from "antd";
-import { SettingOutlined, CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
+  SettingOutlined,
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+} from "@ant-design/icons";
 // import {
 //   InitStage,
 //   CreateStage,
@@ -28,7 +25,6 @@ import {
   updateStage,
   // updateCell,
   updateTetromino,
-
   leaveRoom,
 } from "../redux/actions";
 
@@ -108,7 +104,6 @@ const GameSpace = (props) => {
   };
 
   useEffect(() => {
-
     const modal = () => {
       Modal.confirm({
         width: "500px",
@@ -129,13 +124,11 @@ const GameSpace = (props) => {
         style: {
           justifyContent: "space-around",
         },
-        icon: gameOver ?
-        <CloseCircleOutlined 
-          style={{ fontSize: "50px", color: "red" }}
-        /> :
-        <CheckCircleOutlined 
-        style={{ fontSize: "50px", color: "green" }}
-        />, 
+        icon: gameOver ? (
+          <CloseCircleOutlined style={{ fontSize: "50px", color: "red" }} />
+        ) : (
+          <CheckCircleOutlined style={{ fontSize: "50px", color: "green" }} />
+        ),
       });
     };
     if (gameOver || gameWon) modal();
@@ -179,17 +172,18 @@ const GameSpace = (props) => {
           justifyContent: "space-between",
         }}
       >
-        <Button
-          type="primary"
-          disabled={props.room.admin === props.auth.id}
-          onClick={() => {
-            gameStart ? resetGame(randomTetromino()) : startGame();
-            changeFocused();
-          }}
-        >
-          {gameStart ? "Reset" : "Start"}
-        </Button>
-
+        {props.auth.id === props.room.admin && (
+          <Button
+            type="primary"
+            // disabled={props.room.admin === props.auth.id}
+            onClick={() => {
+              gameStart ? resetGame(randomTetromino()) : startGame();
+              changeFocused();
+            }}
+          >
+            {gameStart ? "Reset" : "Start"}
+          </Button>
+        )}
         {gameStart && (
           <Button
             type="primary"
@@ -204,7 +198,9 @@ const GameSpace = (props) => {
         )}
         <Button
           type="primary"
-          onClick={() => {props.leaveRoom()}}
+          onClick={() => {
+            props.leaveRoom();
+          }}
         >
           Leave
         </Button>
@@ -326,7 +322,6 @@ const GameSpace = (props) => {
                   type="primary"
                   shape="circle"
                   style={{
-                    // padding: '5px',
                     display: "flex",
                     textAlign: "center",
                     justifyContent: "center",
@@ -356,7 +351,6 @@ const GameSpace = (props) => {
               height: "100%",
             }}
           >
-            {/* message component */}
             <Message />
           </Col>
         )}

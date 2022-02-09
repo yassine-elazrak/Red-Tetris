@@ -13,7 +13,13 @@ import InviteUsers from "../components/InviteUsers";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
 
 import { connect } from "react-redux";
-import { login, createRoom, updateUser, refreshRooms, joinRoom } from "../redux/actions";
+import {
+  login,
+  createRoom,
+  updateUser,
+  refreshRooms,
+  joinRoom,
+} from "../redux/actions";
 
 import "./styles/HeaderStyled.css";
 
@@ -31,12 +37,13 @@ const HomePage = (props) => {
   const [rooms, setRooms] = useState([]);
 
   useEffect(() => {
-    if (props.auth.isAuth && !props.auth.isJoned){
+    if (props.auth.isAuth && !props.auth.isJoned) {
       setTimeout(() => {
         setTooltipVisible(false);
-      }, 3000)
+      }, 3000);
       props.refreshRooms();
     }
+    else setCollapsed(true);
   }, [props.auth]);
 
   useEffect(() => {
@@ -101,9 +108,15 @@ const HomePage = (props) => {
   }, [props.socket]);
 
   const handleJoinToRoom = (room) => {
-
+    props.joinRoom(room.id);
+    // roomId: data.roomId, userId: socket.id
+    // admin: "KzHq7Xd610cL2copAAAH"
+    // id: "KzHq7Xd610cL2copAAAH"
+    // isPravite: false
+    // name: "sadfdas"
+    // status: "waiting"
+    // const data = (({roomId, userId}) => ({}))(room);
     console.log(room, "room want to join");
-
   };
 
   const menu = () => {
@@ -123,19 +136,24 @@ const HomePage = (props) => {
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                background: key % 2 === 0 ? "rgba(255, 255, 255, 0.3)" : "rgba(255, 255, 255, 0.1)",
+                background:
+                  key % 2 === 0
+                    ? "rgba(255, 255, 255, 0.3)"
+                    : "rgba(255, 255, 255, 0.1)",
                 padding: "10px",
                 margin: 0,
-                border: "none"
+                border: "none",
               }}
             >
               <span>{room.name}</span>
               <span>{room.status}</span>
               <Button
-              type="primary"
-              disabled={room.status !== "waiting"}
-              onClick={() => handleJoinToRoom(room)}
-              >join</Button>
+                type="primary"
+                disabled={room.status !== "waiting"}
+                onClick={() => handleJoinToRoom(room)}
+              >
+                join
+              </Button>
             </List.Item>
           );
         })}
@@ -216,14 +234,13 @@ const HomePage = (props) => {
             >
               {collapsed ? (
                 <Tooltip
-                title="Current Rooms"
-                placement="right"
-                defaultVisible={true}
-                mouseEnterDelay={1}
-                visible={tooltipVisible}
-                
+                  title="Current Rooms"
+                  placement="right"
+                  defaultVisible={true}
+                  mouseEnterDelay={1}
+                  visible={tooltipVisible}
                 >
-                <MenuFoldOutlined onClick={() => setCollapsed(false)} />
+                  <MenuFoldOutlined onClick={() => setCollapsed(false)} />
                 </Tooltip>
               ) : (
                 <MenuUnfoldOutlined onClick={() => setCollapsed(true)} />
