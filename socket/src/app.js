@@ -24,9 +24,25 @@ class App {
       console.log(`server is running on port ${process.env.PORT || 5000}`);
     });
 
+    // this.io.use((socket, next) => {
+    //   console.log("socket.handshake", socket.handshake);
+    //   next();
+    // });
+
 
     this.io.on("connection", (socket) => {
       console.log(`User connected: ${socket.id}`);
+
+      // socket.use((packet, next) => {
+      //   console.log("packet", packet);
+      //   let err = new Error("Not authorized");
+      //   err.status = 401;
+      //   console.log(err.message);
+      //   // err.mesg = "Not authorized";
+      //   // err.status = 401;
+      //   // err.message = "Not authorized";
+      //   next(err);
+      // })
 
       /********************** Auth ************************************/
       /**
@@ -40,7 +56,7 @@ class App {
         try {
           let res = await users.login(socket.id, data);
           socket.join('online');
-          console.log('online', this.io.sockets.adapter.rooms);
+          // console.log('online', this.io.sockets.adapter.rooms);
           this.io.emit("updateUsers", users.getUsers());
           if (typeof callback === "function") callback(res, null);
         } catch (error) {
@@ -317,6 +333,14 @@ class App {
           console.log(error, "error");
         }
       });
+
+      socket.on("error", (error) => {
+        console.log(`Error: ${error}`);
+        socket.emit("error", error.message);
+
+      });
+
+
     });
   }
 }

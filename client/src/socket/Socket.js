@@ -34,6 +34,11 @@ const socket = (manager, event, data) => {
       io.close();
       reject(err.message);
     });
+    io.on("disconnect", (err) => {
+      io.close();
+      reject(err.message);
+      console.log("pong", err);
+    });
   });
 };
 
