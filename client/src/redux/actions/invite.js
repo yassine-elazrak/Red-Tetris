@@ -1,7 +1,6 @@
 import socket from "../../socket/Socket";
 import {
     INVITE_REQUEST,
-    INVITE_REFRESH,
     INVITE_REMOVE_ALL,
     LOADING_INVITES,
     INVITE_FAILURE,

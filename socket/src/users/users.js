@@ -85,7 +85,7 @@ class Users {
    * @param {string} id - user id 
    * @returns user profile object or error object
    */
-  leaveRoom = (id) => {
+  userLeave = (id) => {
     return new Promise((resolve, reject) => {
       let index = this.users.findIndex((user) => user.id === id);
       if (index !== -1) {
@@ -100,10 +100,10 @@ class Users {
   /**
    * @description join user to room
    * @param {string} id - user id
-   * @param {string} room 
+   * @param {string} room - room id
    * @returns 
    */
-  joinRoom = (id, room) => {
+  userJoin = (id, room) => {
     return new Promise((resolve, reject) => {
       ;
       const index = this.users.findIndex((user) => user.id === id);
@@ -118,11 +118,11 @@ class Users {
 
   /**
    * @description invetify user to join room
-   * @param {string} id 
-   * @param {object} invit 
+   * @param {string} id - user id
+   * @param {object} invit - user invite object
    * @returns 
    */
-   invitation = (id, invit) => {
+   userInvitation = (id, invit) => {
     return new Promise((resolve, reject) => {
       let index = this.users.findIndex((user) => user.id === id);
       if (index !== -1) {

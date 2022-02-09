@@ -13,7 +13,7 @@ export const createRoom = (room) => {
     try {
       dispatch({ type: LOADING_ROOM });
       const io = getState().socket.socket;
-      const res = await socket(io, "roomCreate", room);
+      const res = await socket(io, "createRoom", room);
       dispatch(success(res, ROOM_CREATE));
     } catch (err) {
       dispatch(error(err, ROOM_ERROR));
@@ -24,6 +24,7 @@ export const createRoom = (room) => {
 export const joinRoom = (room) => {
   return async (dispatch) => {
     dispatch({ type: LOADING_ROOM });
+    console.log("joinRoom", room);
     dispatch(success(room, ROOM_JOIN));
   };
 };

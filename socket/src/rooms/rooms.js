@@ -91,15 +91,17 @@ class Rooms {
 
   joinRoom = (data) => {
     return new Promise((resolve, reject) => {
-      let trimName = data.name.trim().toLowerCase();
-      if (!this.regx.test(trimName))
-        return reject({ message: "Room name is invalid" });
-      let existingRoom = this.rooms.find((room) => room.name === trimName);
-      if (!existingRoom) return reject({ message: "Room not found" });
-      let user = existingRoom.users.find((user) => user === data.userId);
-      if (user) return reject({ message: "User is already joined" });
-      existingRoom.users.push(data.userId);
-      return resolve(existingRoom);
+      let Index = this.rooms.findIndex((room) => room.id === data.roomId);
+      if (Index !== -1) reject({ message: "Room not found" });
+      if (this.rooms[Index].status === "waiting") reject({ message: "Room is closed" });
+      if (this.rooms[Index].users.findIndex((user) => user === data.userId) !== -1)
+        reject({ message: "User is already in room" });
+      let room = {
+        ...this.rooms[Index],
+        users: [...this.rooms[Index].users, data.userId],
+      };
+      this.rooms[Index] = room;
+      return resolve(room);
     });
   };
 

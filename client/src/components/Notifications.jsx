@@ -92,7 +92,7 @@ const NotifComponent = (props) => {
             Accept
           </Menu.Item>
           <Menu.Item
-            key={`cancel-${key}`}
+            key={`decline-${key}`}
             className="ant-btn ant-btn-primary ant-btn-dangerous"
             onClick={handnotif}
             style={{
@@ -106,7 +106,7 @@ const NotifComponent = (props) => {
               border: "none",
             }}
           >
-            Cancel
+            Decline
           </Menu.Item>
         </MenuItemGroup>
       </SubMenu>

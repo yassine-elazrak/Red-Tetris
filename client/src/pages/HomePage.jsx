@@ -13,7 +13,7 @@ import InviteUsers from "../components/InviteUsers";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
 
 import { connect } from "react-redux";
-import { login, createRoom, updateUser, refreshRooms } from "../redux/actions";
+import { login, createRoom, updateUser, refreshRooms, joinRoom } from "../redux/actions";
 
 import "./styles/HeaderStyled.css";
 
@@ -41,7 +41,7 @@ const HomePage = (props) => {
 
   useEffect(() => {
     setRooms(props.rooms.rooms);
-    console.log(props.rooms.rooms, "props.rooms.rooms");
+    // console.log(props.rooms.rooms, "props.rooms.rooms");
   }, [props.rooms.rooms]);
 
   useEffect(() => {
@@ -87,6 +87,7 @@ const HomePage = (props) => {
         props.updateUser(data);
       });
       props.socket.socket.socket("/").on("updateRooms", (data) => {
+        console.log(data, "dataRooms");
         props.refreshRooms(data);
       });
       return () => {
@@ -98,6 +99,12 @@ const HomePage = (props) => {
       message.error(props.socket.error);
     }
   }, [props.socket]);
+
+  const handleJoinToRoom = (room) => {
+
+    console.log(room, "room want to join");
+
+  };
 
   const menu = () => {
     return (
@@ -127,6 +134,7 @@ const HomePage = (props) => {
               <Button
               type="primary"
               disabled={room.status !== "waiting"}
+              onClick={() => handleJoinToRoom(room)}
               >join</Button>
             </List.Item>
           );
@@ -263,4 +271,5 @@ export default connect(mapStateToProps, {
   updateUser,
   createRoom,
   refreshRooms,
+  joinRoom,
 })(HomePage);
