@@ -10,14 +10,6 @@ const initialState = {
   room: null,
 };
 
-// id: "WhDk4XTSWUC47pv6AAAD"
-// ​
-// isJoned: false
-// ​
-// name: "dsafff"
-// ​
-// room: null
-
 export default function authReducer(state = initialState, action) {
   switch (action.type) {
     case LOADING_USER:

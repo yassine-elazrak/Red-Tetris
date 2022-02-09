@@ -1,9 +1,9 @@
 import { combineReducers } from "redux";
 import auth from "./auth";
 import message from "./message";
-import notif from "./notif";
+import notifications from "./notif";
 import room from "./room";
-import invite from "./invite";
+import invitation from "./invite";
 import users from "./users";
 import stage from "./stage";
 import socket from "./socket";
@@ -12,9 +12,9 @@ import rooms from "./rooms";
 export default combineReducers({
     auth,
     message,
-    notif,
+    notifications,
     room,
-    invite,
+    invitation,
     users,
     stage,
     socket,

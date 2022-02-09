@@ -5,6 +5,10 @@ import { connect } from "react-redux";
 
 import "./styles/NotificationsStyled.css";
 
+import {
+  pushNotification,
+} from "../redux/actions";
+
 const { SubMenu } = Menu;
 const MenuItemGroup = Menu.ItemGroup;
 const NotifComponent = (props) => {
@@ -58,7 +62,8 @@ const NotifComponent = (props) => {
       read: false,
     },
   ];
-  const [notifs, setNotifs] = useState(testnotif);
+  const [notifs, setNotifs] = useState([]);
+  const [contNotifs, setContNotifs] = useState(0);
 
   const handnotif = (e) => {
     const id = parseInt(e.key.split("-")[1]);
@@ -71,11 +76,23 @@ const NotifComponent = (props) => {
     setNotifs(newNotifs);
   };
 
-  const lenght = notifs.filter((notif) => notif.read === false).length;
+  useEffect(() => {
+    console.log(notifs, "notifs <>");
+    if (!notifs.length) return;
+    let cont = notifs.filter((notif) => notif.read === false).length;
+    setContNotifs(cont);
+  }, [notifs]);
+
+  useEffect(() => {
+    console.log('notifsupdated', notifs);
+    console.log('notifsupdated', props.notifications);
+    setNotifs(props.notifications);
+  }, [props.notifications]);
 
   useEffect(() => {
     if (props.socket.socket) {
       props.socket.socket.socket("/").on("notification", (data) => {
+        props.pushNotification(data);
         console.log(data, "notification");
       });
       return () => {
@@ -84,12 +101,21 @@ const NotifComponent = (props) => {
     }
   }, [props.socket]);
 
-  const mapnotifs = notifs.map((notif, key) => {
-    return !notif.read ? (
+  //   id: "75t2XwAUdZl7rA5mAAA_"
+  // name: "room"
+  // read: false
+  // roomId: "75t2XwAUdZl7rA5mAAA_"
+  // roomName: "sdafff"
+
+  const mapnotifs = notifs.map((item, key) => {
+    console.log(item, "item");
+    return !item.read ? (
       <SubMenu
         key={`notif-${key}`}
         expandIcon
-        title={<p style={{}}>{notif.title}</p>}
+        title={<p style={{}}>
+          {`${item.name} invited you to join ${item.roomName}`}
+        </p>}
       >
         <MenuItemGroup className="ulNotif">
           <Menu.Item
@@ -134,15 +160,17 @@ const NotifComponent = (props) => {
       <Menu.Item key={`notif-${key}`} disabled>
         <div style={{ height: 30 }}>
           <div>
-            <p>{notif.title}</p>
-            <span style={{ fontSize: "12px", color: "#8c8c8c" }}>
+            <p>
+              {`${item.name} invited you to join ${item.roomName}`}
+            </p>
+            {/* <span style={{ fontSize: "12px", color: "#8c8c8c" }}>
               {notif.time}
-            </span>
+            </span> */}
           </div>
         </div>
       </Menu.Item>
     );
-  });
+  })
 
   const menu = (
     <Menu
@@ -175,7 +203,7 @@ const NotifComponent = (props) => {
       }}
     >
       <Popover
-        content={menu}
+        content={notifs.length ? menu : null}
         trigger="click"
         placement="bottomRight"
         overlayClassName="notif-popover"
@@ -187,7 +215,7 @@ const NotifComponent = (props) => {
         }
       >
         <Badge
-          count={lenght}
+          count={contNotifs}
           showZero
           className="site-badge-count-109"
           style={{
@@ -212,7 +240,10 @@ const mapStateToProps = (state) => {
   return {
     auth: state.auth,
     socket: state.socket,
+    notifications: state.notifications.notifications,
   };
 };
 
-export default connect(mapStateToProps, {})(NotifComponent);
+export default connect(mapStateToProps, {
+  pushNotification,
+})(NotifComponent);

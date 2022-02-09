@@ -126,8 +126,8 @@ class Users {
     return new Promise((resolve, reject) => {
       let index = this.users.findIndex((user) => user.id === id);
       if (index !== -1) {
-        this.users[index] = { ...this.users[index], invit };
-        return resolve(this.users[index]);
+        this.users[index].invetation = { ...this.users[index].invetation, invit };
+        return resolve(invit);
       }
       return reject({ message: "User not found" });
     });

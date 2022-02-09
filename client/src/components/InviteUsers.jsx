@@ -318,7 +318,7 @@ const mapStateToProps = (state) => {
   return {
     room: state.room,
     auth: state.auth,
-    invite: state.invite,
+    invite: state.invitation,
     users: state.users,
     socket: state.socket.socket,
   };

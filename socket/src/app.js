@@ -99,10 +99,9 @@ class App {
         try {
           let room = await rooms.getRoom(data.roomId);
           let user = await users.getUser(data.userId);
-          let currentUser = users.getUser(socket.id);
+          let currentUser = await users.getUser(socket.id);
           if (room.invit.findIndex((invit) => invit.userId === data.userId) !== -1)
             return callback(null, { message: "User already invited" });
-          console.log(room, 'room', room.status);
           if (user.isJoned)
             return callback(null, { message: `${user.name} is already in room` });
           if (room.status !== "waiting")
@@ -116,17 +115,15 @@ class App {
             userStatus: "waiting",
           });
 
-          await users.invitation(user.id, {
-            id: currentUser.id,
+          let notif = await users.invitation(user.id, {
+            id: socket.id,
             name: currentUser.name,
             roomId: room.id,
+            roomName: room.name,
             read: false,
           });
-          this.io.to(user.id).emit("notification", {
-            id: currentUser.id,
-            name: currentUser.name,
-            roomId: room.id
-          });
+          console.log(notif, 'notif');
+          this.io.to(user.id).emit("notification", notif);
           this.io.to(room.users).emit("updateRoom", room);
           if (typeof callback === "function") callback(res.invit, null);
         } catch (error) {
