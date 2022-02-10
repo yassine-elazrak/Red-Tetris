@@ -138,7 +138,6 @@ class Rooms {
     return new Promise((resolve, reject) => {
       let roomIndex = this.rooms.findIndex((room) => room.id === roomId);
       if (roomIndex === -1) return reject({ message: "Room not found" });
-      // console.log(this.rooms[roomIndex], userId);
       let userIndex = this.rooms[roomIndex].users.findIndex((user) => user.id === userId);
       if (userIndex === -1) return reject({ message: "User is not joined" });
       this.rooms[roomIndex].users.splice(userIndex, 1);

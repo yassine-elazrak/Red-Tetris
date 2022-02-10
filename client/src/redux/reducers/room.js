@@ -5,6 +5,7 @@ import {
     ROOM_ERROR,
     ROOM_UPDATE_STATUS,
     LOADING_ROOM,
+    ROOM_REFRESH,
 } from "../types";
 
 const initialState = {
@@ -84,21 +85,31 @@ export default function roomReducer(state = initialState, action) {
             return {
                 ...state,
                 isLoading: false,
-                error: null,
+                // error: null,
                 id: action.payload.id,
+                name: action.payload.name,
                 admin: action.payload.admin,
                 status: action.payload.status,
                 isPravite: action.payload.isPravite,
-                name: action.payload.name,
                 users: action.payload.users,
             }
-
-            // id, name, isPravite, admin, status
+        case ROOM_REFRESH:
+            return {
+                ...state,
+                isLoading: false,
+                // error: null,
+                id: action.payload.id,
+                name: action.payload.name,
+                admin: action.payload.admin,
+                status: action.payload.status,
+                isPravite: action.payload.isPravite,
+                users: action.payload.users,
+            }
         case ROOM_JOIN:
             return {
                 ...state,
                 isLoading: false,
-                error: null,
+                // error: null,
                 id: action.payload.id,
                 name: action.payload.name,
                 isPravite: action.payload.isPravite,
@@ -111,7 +122,7 @@ export default function roomReducer(state = initialState, action) {
             return {
                 ...state,
                 isLoading: false,
-                error: null,
+                // error: null,
                 status: action.payload.status,
             };
         case ROOM_ERROR:

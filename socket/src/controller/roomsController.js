@@ -80,9 +80,15 @@ class RoomController {
     closeRoom = (socketId) => async (roomId, callback) => {
         try {
             let res = await this.rooms.closeRoom(roomId, socketId);
+            let ids = this.selector.Data(res.users, (({id}) => (id)));
+            let admin = res.users.find(user => user.id === res.admin);
+            // console.log(admin, "update rooms");
+            
             this.io.emit("updateRooms", this.rooms.getRooms());
+            this.io.to(ids).emit("roomClosed", admin.name)
             if (typeof callback === "function") callback(res, null);
         } catch (error) {
+            // console.log(error, "<<<<");
             if (typeof callback === "function") callback(null, error);
         }
     }
@@ -96,8 +102,6 @@ class RoomController {
     leaveRoom = (socketId) => async (roomId, callback) => {
         try {
             let room = await this.rooms.leaveRoom(socketId, roomId);
-            // console.log("admin1", room.admin);
-            // console.log("roomUsers>>", room.users);
             let user = await this.users.userLeave(socketId);
             if (room.users.length === 0) {
                 await this.rooms.deleteRoom(roomId);
@@ -106,8 +110,7 @@ class RoomController {
                 let usersRoom = this.selector.Data(room.users, (({id}) => (id)))
                 if (room.admin === socketId) {
                     let updateRoom = this.rooms.switchAdmin(room.id);
-                    // console.log(usersRoom, '<<<<<<<<<<');
-                    this.io.to(usersRoom).emit("updateRoom", updateRoom);
+                    this.io.to(usersRoom).emit("switchAdmin", updateRoom);
                 }
                 else
                     this.io.to(usersRoom).emit("updateRoom", room);

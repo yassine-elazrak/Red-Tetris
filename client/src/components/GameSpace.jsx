@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Layout, Row, Col, Button, Popover, Modal } from "antd";
+import { Layout, Row, Col, Button, Popover, Modal, message, notification } from "antd";
 import {
   SettingOutlined,
   CheckCircleOutlined,
@@ -30,8 +30,6 @@ import {
 } from "../redux/actions";
 
 import { useStage } from "../hooks/useStage";
-import socket from "../socket/Socket";
-// import { usePlayer } from "../hooks/useplayer";
 
 const { Content } = Layout;
 
@@ -62,10 +60,41 @@ const GameSpace = (props) => {
 
   useEffect(() => {
     changeFocused();
-    props.socket.socket("/").on("updateRoom", room => {
-      props.refreshRoom(room);
-      console.log("room <<<<<<<<<<<", room);
+    props.socket.socket("/").on("updateRoom", data => {
+      props.refreshRoom(data);
     })
+    props.socket.socket("/").on("switchAdmin", data => {
+      props.refreshRoom(data)
+      if (data.admin === props.auth.id){
+        notification.success({
+          message: 'Admin Switched',
+          description: "your admin of this room now you can start/puase game"
+        })
+      }
+      else{
+        let admin = data.users.find(user => user.id === data.admin)
+        console.log('users ===>', admin);
+        notification.info({
+          message: "Admin Switched",
+          description: `the new admin of this room is ${admin.name}`,
+        })
+      }
+    })
+
+    props.socket.socket("/").on("roomClosed", data => {
+      if (data.id !== props.auth.id){
+        notification.info({
+          message: "Room status changed",
+          description: `this room closed by ${data.name}`
+        })
+      }
+    })
+
+    return() => {
+      props.socket.socket("/").off("updateRoom");
+      props.socket.socket("/").off("switchAdmin");
+
+    }
 
   }, []);
 
@@ -183,8 +212,6 @@ const GameSpace = (props) => {
           <Button
             type="primary"
             hidden={gameStart}
-            // hiddenit when game start
-            // disabled={props.room.admin !== props.auth.id && !props.room.isPravite && gameStart}
             onClick={() => {
               gameStart ? resetGame(randomTetromino()) : startGame();
               changeFocused();

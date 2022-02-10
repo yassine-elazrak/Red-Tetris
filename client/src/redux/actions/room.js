@@ -6,6 +6,7 @@ import {
   ROOM_ERROR,
   ROOM_UPDATE_STATUS,
   LOADING_ROOM,
+  ROOM_REFRESH,
 } from "../types";
 
 export const createRoom = (room) => {
@@ -66,7 +67,7 @@ export const closeRoom = () => {
 export const refreshRoom = (room) => {
   return (dispatch) => {
     dispatch({ type: LOADING_ROOM });
-    dispatch(success(room, ROOM_CREATE))
+    dispatch(success(room, ROOM_REFRESH))
   }
 }
 
