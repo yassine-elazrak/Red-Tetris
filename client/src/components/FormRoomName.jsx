@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Button, message, Checkbox } from "antd";
+import { Form, Input, Button, message, Checkbox, Modal } from "antd";
 import { connect } from "react-redux";
 import { createRoom } from "../redux/actions";
 
@@ -11,6 +11,7 @@ const FormRoomName = (props) => {
   });
 
   const [checked, setChecked] = useState(false);
+  // const [model, con]
 
   const handleChange = (e) => {
     setInput({
@@ -43,7 +44,15 @@ const FormRoomName = (props) => {
 
   useEffect(() => {
     if (props.room.error) {
-      message.error(props.room.error);
+      if (props.room.error === "Room is already exists do you want to join") {
+        Modal.confirm({
+          title: props.room.error,
+          cancelText: "No",
+          okText: "Yes",
+          onOk() {console.log('click ok');},
+          onCancel(){},
+        });
+      } else message.error(props.room.error);
     }
   }, [props.room.error]);
 

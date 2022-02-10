@@ -61,6 +61,11 @@ class Rooms {
       }
       let existingRoom = this.rooms.find((room) => room.name === trimName);
       if (existingRoom) {
+        if (existingRoom.status !== 'waiting')
+          return reject({
+            message: "Room is already exists and closed",
+          });
+
         return reject({
           message: "Room is already exists do you want to join",
         });
@@ -70,7 +75,7 @@ class Rooms {
         isPravite: data.isPravite,
         admin: user.id,
         id: user.id,
-        status: "waiting",
+        status: data.isPravite ? "closed" : "waiting",
         users: [{
           name: user.name,
           id: user.id,
