@@ -11,6 +11,7 @@ import {
   closeRoom,
   onlineUsersUpdate,
   leaveRoom,
+  refreshRoom,
 } from "../redux/actions";
 
 const { Meta } = Card;
@@ -99,10 +100,18 @@ const InviteUsers = (props) => {
       console.log(data, "updateUsers");
       props.onlineUsersUpdate(data);
     });
+    props.socket.socket("/").on("userJoind", (data) => {
+      console.log("new user Joind", data);
+    });
+    props.socket.socket("/").on("updateRoom", (data) => {
+      props.refreshRoom(data);
+      console.log("update Room", data);
+    });
     props.onlineUsers();
 
     return () => {
       props.socket.socket("/").off("updateUsers");
+      props.socket.socket("/").off("userJoind");
     };
   }, []);
 
@@ -352,4 +361,5 @@ export default connect(mapStateToProps, {
   closeRoom,
   onlineUsersUpdate,
   leaveRoom,
+  refreshRoom,
 })(InviteUsers);

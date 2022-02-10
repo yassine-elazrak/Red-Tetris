@@ -26,9 +26,11 @@ import {
   // updateCell,
   updateTetromino,
   leaveRoom,
+  refreshRoom,
 } from "../redux/actions";
 
 import { useStage } from "../hooks/useStage";
+import socket from "../socket/Socket";
 // import { usePlayer } from "../hooks/useplayer";
 
 const { Content } = Layout;
@@ -60,6 +62,11 @@ const GameSpace = (props) => {
 
   useEffect(() => {
     changeFocused();
+    props.socket.socket("/").on("updateRoom", room => {
+      props.refreshRoom(room);
+      console.log("room <<<<<<<<<<<", room);
+    })
+
   }, []);
 
   const handleKeyDown = ({ keyCode }) => {
@@ -365,6 +372,7 @@ const mapStateToProps = (state) => {
   return {
     auth: state.auth,
     room: state.room,
+    socket: state.socket.socket,
   };
 };
 
@@ -374,4 +382,5 @@ export default connect(mapStateToProps, {
   updateTetromino,
 
   leaveRoom,
+  refreshRoom
 })(GameSpace);

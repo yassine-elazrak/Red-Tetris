@@ -15,8 +15,8 @@ const initialState = {
     status: '',
     id: null,
     name: null,
-    users: [
-    ],
+    // invit: [],
+    users: [],
 };
 
 // const createRoom = (state, action) => {
@@ -63,6 +63,14 @@ const pushUser = (state, action) => {
     }
 };
 
+// admin: "ueEsMClGO1PSPijbAAAF"
+// id: "ueEsMClGO1PSPijbAAAF"
+// invit: []
+// isPravite: false
+// name: "dsafsd"
+// status: "waiting"
+// users: (2
+
 
 export default function roomReducer(state = initialState, action) {
     switch (action.type) {
@@ -82,7 +90,7 @@ export default function roomReducer(state = initialState, action) {
                 status: action.payload.status,
                 isPravite: action.payload.isPravite,
                 name: action.payload.name,
-                users: [action.payload.users],
+                users: action.payload.users,
             }
 
             // id, name, isPravite, admin, status

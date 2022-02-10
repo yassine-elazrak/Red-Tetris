@@ -63,6 +63,13 @@ export const closeRoom = () => {
   };
 };
 
+export const refreshRoom = (room) => {
+  return (dispatch) => {
+    dispatch({ type: LOADING_ROOM });
+    dispatch(success(room, ROOM_CREATE))
+  }
+}
+
 const success = (data, type) => {
   return {
     type: type,

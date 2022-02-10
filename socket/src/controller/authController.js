@@ -21,7 +21,7 @@ class AuthController {
         try {
             let res = await this.users.login(socket.id, data);
             socket.join('online');
-            this.io.emit("updateUsers", this.users.getUsers());
+            this.io.in('online').emit("updateUsers", this.users.getUsers());
             console.log("res", res);
             if (typeof callback === "function") callback(res, null);
         } catch (error) {

@@ -70,7 +70,7 @@ class App {
        * @param {object} data - { roomId, userId }
        * @param {function} callback - (listUsersInvets, err)
        */
-      socket.on("invitation",this.InviteController.invitation(socket));
+      socket.on("invitation", this.InviteController.invitation(socket));
 
 
       /**
@@ -163,7 +163,7 @@ class App {
       socket.on("disconnect", this.AuthController.logout(socket));
       socket.on("error", (error) => {
         console.log(`Error: ---> ${error.message}`);
-        socket.emit("error", { message: error.message});
+        socket.emit("error", { message: error.message });
       });
 
 

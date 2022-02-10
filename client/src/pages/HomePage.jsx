@@ -97,9 +97,13 @@ const HomePage = (props) => {
         console.log(data, "dataRooms");
         props.refreshRooms(data);
       });
+      // props.socket.socket("/").on("updateRoom", (data) => {
+      //   console.log("room update", data);
+      // })
       return () => {
         props.socket.socket.socket("/").off("updateProfile");
         props.socket.socket.socket("/").off("updateRooms");
+        // props.socket.socket.socket("/").off("updateRoom");
       };
     }
     if (props.socket.error) {
@@ -118,6 +122,18 @@ const HomePage = (props) => {
     // const data = (({roomId, userId}) => ({}))(room);
     console.log(room, "room want to join");
   };
+
+
+  // useEffect(() => {
+  //   props.socket.socket("/").on("updateRoom", (data) => {
+  //     console.log("update Room", data);
+  //   });
+  //   props.onlineUsers();
+
+  //   return () => {
+  //     props.socket.socket("/").off("updateRoom");
+  //   };
+  // },[]);
 
   const menu = () => {
     return (
