@@ -1,10 +1,12 @@
 const { Server } = require("socket.io");
 const { createServer } = require("http");
-const Users = require("./users/users");
-const Rooms = require("./rooms/rooms");
+// const Users = require("./users/users");
+// const Rooms = require("./rooms/rooms");
 const Middleware = require("./middleware/auth");
 const AuthController = require("./controller/authController");
 const UsersController = require("./controller/usersController");
+const InviteController = require("./controller/inviteController");
+const RoomsController = require("./controller/roomsController")
 
 require("dotenv").config();
 
@@ -19,20 +21,17 @@ class App {
     });
     this.AuthController = new AuthController(this.io);
     this.UsersController = new UsersController(this.io);
+    this.InviteController = new InviteController(this.io);
+    this.RoomsController = new RoomsController(this.io);
   }
 
   start() {
-    const users = new Users();
-    const rooms = new Rooms();
+    // const users = new Users();
+    // const rooms = new Rooms();
     const AuthMiddleware = new Middleware();
     this.server.listen(process.env.PORT || 5000, () => {
       console.log(`server is running on port ${process.env.PORT || 5000}`);
     });
-
-    // this.io.use((socket, next) => {
-    //   console.log("socket.handshake", socket.handshake);
-    //   next();
-    // });
 
 
     this.io.on("connection", (socket) => {
@@ -40,17 +39,6 @@ class App {
 
       // console.log('this socket', this);
       socket.use(AuthMiddleware.auth(socket));
-
-      // socket.use((packet, next) => {
-      //   console.log("packet", packet);
-      //   let err = new Error("Not authorized");
-      //   err.status = 401;
-      //   console.log(err.message);
-      //   err.message = "Not authorized";
-      //   // err.status = 401;
-      //   err.message = "Not authorized";
-      //   next(err);
-      // })
 
       /********************** Auth ************************************/
       /**
@@ -69,18 +57,7 @@ class App {
        * @param {object} data - null
        * @param {function} callback - (users, err)
        */
-      socket.on("onlineUsers", this.UsersController.onlineUsers);
-      // async (_, callback) => {
-      //   console.log(`User ${socket.id} is trying to get online users`);
-      //   // if (!socket.rooms.has("online"))
-      //   //   return callback(null, { message: "You are not authorized" });
-      //   try {
-      //     let res = users.getUsers();
-      //     if (typeof callback === "function") callback(res, null);
-      //   } catch (error) {
-      //     if (typeof callback === "function") callback(null, error);
-      //   }
-      // });
+      socket.on("onlineUsers", this.UsersController.onlineUsers());
 
 
 
@@ -93,43 +70,7 @@ class App {
        * @param {object} data - { roomId, userId }
        * @param {function} callback - (listUsersInvets, err)
        */
-      socket.on("invitation", async (data, callback) => {
-        // if (!socket.rooms.has("online"))
-        //   return callback(null, { message: "You are not authorized" });
-        try {
-          let room = await rooms.getRoom(data.roomId);
-          let user = await users.getUser(data.userId);
-          let currentUser = await users.getUser(socket.id);
-          if (room.invit.findIndex((invit) => invit.userId === data.userId) !== -1)
-            return callback(null, { message: "User already invited" });
-          if (user.isJoned)
-            return callback(null, { message: `${user.name} is already in room` });
-          if (room.status !== "waiting")
-            callback(null, { message: "Room is closed2" });
-          if (room.admin !== socket.id)
-            callback(null, { message: "You are not admin" });
-          let res = await rooms.inviteUser({
-            roomId: data.roomId,
-            userId: user.id,
-            userName: user.name,
-            userStatus: "waiting",
-          });
-
-          let notif = await users.userInvitation(user.id, {
-            id: socket.id,
-            name: currentUser.name,
-            roomId: room.id,
-            roomName: room.name,
-            read: false,
-          });
-          this.io.to(user.id).emit("notification", notif);
-          this.io.to(room.users).emit("updateRoom", room);
-          if (typeof callback === "function") callback(res.invit, null);
-        } catch (error) {
-          console.log(error);
-          if (typeof callback === "function") callback(null, error);
-        }
-      });
+      socket.on("invitation",this.InviteController.invitation(socket));
 
 
       /**
@@ -164,21 +105,7 @@ class App {
        * @param {object} data - null
        * @param {function} callback - (rooms, err)
        */
-      socket.on("currentRooms", async (_, callback) => {
-        console.log(`User ${socket.id} is trying to get current rooms`);
-        try {
-          let allRooms = rooms.getRooms();
-          let filterRoom = allRooms.map((room) => {
-            return (
-              (({ id, name, isPravite, admin, status }) =>
-                ({ id, name, isPravite, admin, status }))(room)
-            )
-          });
-          callback(filterRoom, null);
-        } catch (error) {
-          if (typeof callback === "function") callback(null, error);
-        }
-      });
+      socket.on("currentRooms", this.RoomsController.currentRoom());
 
 
       /**
@@ -187,23 +114,7 @@ class App {
        * @param {object} data - { roomName, roomType }
        * @param {function} callback - (room, err)
        */
-      socket.on("createRoom", async (data, callback) => {
-        try {
-          let user = await users.getUser(socket.id);
-          if (user.isJoned)
-            return callback(null, { message: "You are already in a room" });
-          let res = await rooms.createRoom(data, { id: user.id, name: user.name });
-          let userUpdate = await users.userJoin(socket.id, res.id);
-          this.io.to(user.id).emit("updateProfile", userUpdate);
-          this.io.emit("updateUsers", users.getUsers());
-          this.io.emit("updateRooms", rooms.getRooms());
-          if (typeof callback === "function") callback(res, null);
-        } catch (error) {
-          console.log(error, "error");
-          if (typeof callback === "function") callback(null, error);
-        }
-
-      });
+      socket.on("createRoom", this.RoomsController.createRoom(socket.id));
 
 
       /**
@@ -212,24 +123,7 @@ class App {
        * @param {object} roomId - roomId
        * @param {function} callback - (room, err)
        */
-      socket.on("joinRoom", async (roomId, callback) => {
-        console.log(`User ${socket.id} is trying to join room ${roomId}`);
-        try {
-          let user = await users.getUser(socket.id);
-          if (user.isJoned) return callback(null, { message: "You are already in a room" });
-          if (user.isJoned)
-            return callback(null, { message: "You are already in a room" });
-          let updateRoom = await rooms.joinRoom({ roomId, userId: user.id, userName: user.name });
-          let updateProfile = await users.userJoin(socket.id, roomId);
-          let res = (({ id, name, isPravite, admin, status }) => ({ id, name, isPravite, admin, status }))(updateRoom);
-          this.io.to(user.id).emit("updateProfile", updateProfile);
-          this.io.to(updateRoom.users).emit("userJoind", updateRoom);
-          if (typeof callback === "function") callback(res, null);
-        } catch (error) {
-          console.log(error, "error");
-          if (typeof callback === "function") callback(null, error);
-        }
-      });
+      socket.on("joinRoom", this.RoomsController.joinRoom(socket.id))
 
 
 
@@ -240,18 +134,7 @@ class App {
        * @param {object} data - roomId
        * @param {function} callback - (room, err)
        */
-      socket.on("closeRoom", async (roomId, callback) => {
-        console.log(`User ${socket.id} is trying to close a room`);
-        // if (!socket.rooms.has("online"))
-        //   return callback(null, { message: "You are not authorized" });
-        try {
-          let res = await rooms.closeRoom(roomId, socket.id);
-          this.io.emit("updateRooms", rooms.getRooms());
-          if (typeof callback === "function") callback(res, null);
-        } catch (error) {
-          if (typeof callback === "function") callback(null, error);
-        }
-      });
+      socket.on("closeRoom", this.RoomsController.closeRoom(socket.id));
 
       /**
        * @description leave room
@@ -259,37 +142,7 @@ class App {
        * @param {object} data - roomId
        * @param {function} callback - (null, err)
        */
-      socket.on("leaveRoom", async (roomId, callback) => {
-        console.log(`User ${socket.id} is trying to leave a room`);
-        // if (!socket.rooms.has("online"))
-        //   return callback(null, { message: "You are not authorized" });
-        try {
-          let room = await rooms.leaveRoom(socket.id, roomId);
-          console.log("admin1", room.admin);
-          console.log("roomUsers>>", room.users);
-          let user = await users.userLeave(socket.id);
-          if (room.users.length === 0) {
-            await rooms.deleteRoom(roomId);
-            this.io.emit("updateRooms", rooms.getRooms());
-          } else {
-            let usersRoom = await rooms.getRoomUsers(roomId);
-            if (room.admin === socket.id) {
-              let updateRoom = rooms.switchAdmin(room.id);
-              console.log("admin2", room.admin);
-              console.log("roomUsers switch admin>>", updateRoom.users);
-              this.io.to(usersRoom).emit("updateRoom", updateRoom);
-            }
-            else
-              this.io.to(usersRoom).emit("updateRoom", room);
-          }
-          this.io.to(user.id).emit("updateProfile", user);
-          this.io.emit("updateUsers", users.getUsers());
-          if (typeof callback === "function") callback(null, null);
-        } catch (error) {
-          console.log(error, "error");
-          if (typeof callback === "function") callback(null, error);
-        }
-      });
+      socket.on("leaveRoom", this.RoomsController.leaveRoom(socket.id))
 
 
       /*************************** Notifictions ************************************/

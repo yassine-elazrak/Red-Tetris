@@ -9,6 +9,12 @@ class AuthController {
         this.rooms = new Rooms;
     }
 
+    /**
+     * @description accept invetation join room
+     * @param {object} socket - socket object
+     * @param {object} data - {userName} 
+     * @param {function} callback - (res, err)
+     */
     login = (socket) => async (data, callback) => {
         // console.log("socket id=>", socket.id, this.io);
         console.log(`User ${socket.id} is trying to login`);
@@ -23,6 +29,10 @@ class AuthController {
         }
     };
 
+    /**
+     * @description logout user and delet room if empty
+     * @param {object} socket - socket object 
+     */
     logout = (socket) => async () => {
         try {
             let user = await this.users.getUser(socket.id);
@@ -32,11 +42,11 @@ class AuthController {
                     let currntRooms = await this.rooms.deleteRoom(room.id);
                     this.io.emit("updateRooms", currntRooms);
                 } else {
-                    let updateRoom = rooms.switchAdmin(room.id);
+                    let updateRoom = this.rooms.switchAdmin(room.id);
                     this.io.to(updateRoom.users).emit("updateRoom", updateRoom);
                 }
             }
-            let allUsers = await users.logout(socket.id);
+            let allUsers = await this.users.logout(socket.id);
             this.io.emit("updateUsers", allUsers);
         } catch (error) {
             console.log("error", error);
