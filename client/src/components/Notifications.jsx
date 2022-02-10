@@ -60,67 +60,56 @@ const NotifComponent = (props) => {
   }, [props.socket]);
 
   const mapnotifs = notifs.map((item, key) => {
-    console.log(item, "item");
-    // if (item.type === "invitation") {
-      return item.type === "invitation" && !item.read ? (
-        <SubMenu
-          key={`notif-${key}`}
-          expandIcon
-          title={
-            <p style={{}}>
-              {item.message}
-            </p>
-          }
-        >
-          <MenuItemGroup className="ulNotif">
-            <Menu.Item
-              key={`accept-${key}`}
-              className="ant-btn ant-btn-primary"
-              onClick={handnotif}
-              style={{
-                background: "#6FCF97",
-                border: "none",
-                margin: 5,
-                textAlign: "center",
-                alignItems: "center",
-                display: "inline-flex",
-                justifyContent: "center",
-                padding: 0,
-                color: "#fff",
-                height: 35,
-              }}
-            >
-              Accept
-            </Menu.Item>
-            <Menu.Item
-              key={`decline-${key}`}
-              className="ant-btn ant-btn-primary ant-btn-dangerous"
-              onClick={handnotif}
-              style={{
-                margin: 5,
-                textAlign: "center",
-                alignItems: "center",
-                display: "inline-flex",
-                justifyContent: "center",
-                padding: 0,
-                height: 35,
-                border: "none",
-              }}
-            >
-              Decline
-            </Menu.Item>
-          </MenuItemGroup>
-        </SubMenu>
-      ) : (
-        <div key={`notif-${key}`} disabled>
-          <div style={{ height: 30 }}>
-            <div>
-              <p>{item.message}</p>
-            </div>
-          </div>
-        </div>
-      );
-    // }
+    // console.log(item, "item");
+    return item.type === "invitation" && !item.read ? (
+      <SubMenu key={`notif-${key}`} title={item.message}>
+        <MenuItemGroup className="ulNotif">
+          <Menu.Item
+            key={`accept-${key}`}
+            className="ant-btn ant-btn-primary"
+            onClick={handnotif}
+            style={{
+              background: "#6FCF97",
+              border: "none",
+              margin: 5,
+              textAlign: "center",
+              alignItems: "center",
+              display: "inline-flex",
+              justifyContent: "center",
+              padding: 0,
+              color: "#fff",
+              height: 35,
+            }}
+          >
+            Accept
+          </Menu.Item>
+          <Menu.Item
+            key={`decline-${key}`}
+            className="ant-btn ant-btn-primary ant-btn-dangerous"
+            onClick={handnotif}
+            style={{
+              margin: 5,
+              textAlign: "center",
+              alignItems: "center",
+              display: "inline-flex",
+              justifyContent: "center",
+              padding: 0,
+              height: 35,
+              border: "none",
+            }}
+          >
+            Decline
+          </Menu.Item>
+        </MenuItemGroup>
+      </SubMenu>
+    ) : (
+      <SubMenu
+        disabled={true}
+        expandIcon
+        key={`notif-${key}`}
+        title={item.message}
+      />
+    );
   });
 
   const menu = (
