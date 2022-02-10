@@ -118,7 +118,6 @@ class Rooms {
         tetrominos: [],
       }
       this.rooms[Index].users.push(newUser);
-      // console.log(data, 'dataJoin', this.rooms);
       return resolve(this.rooms[Index]);
     });
   };
