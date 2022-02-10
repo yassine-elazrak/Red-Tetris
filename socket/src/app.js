@@ -3,7 +3,8 @@ const { createServer } = require("http");
 const Users = require("./users/users");
 const Rooms = require("./rooms/rooms");
 const Middleware = require("./middleware/auth");
-
+const AuthController = require("./controller/authController");
+const UsersController = require("./controller/usersController");
 
 require("dotenv").config();
 
@@ -16,6 +17,8 @@ class App {
         methods: ["GET", "POST"],
       },
     });
+    this.AuthController = new AuthController(this.io);
+    this.UsersController = new UsersController(this.io);
   }
 
   start() {
@@ -35,6 +38,7 @@ class App {
     this.io.on("connection", (socket) => {
       console.log(`User connected: ${socket.id}`);
 
+      // console.log('this socket', this);
       socket.use(AuthMiddleware.auth(socket));
 
       // socket.use((packet, next) => {
@@ -55,18 +59,8 @@ class App {
        * @param {object} data - { username }
        * @param {function} callback - (user, err)
        */
-      socket.on("login", async (data, callback) => {
-        console.log(`User ${socket.id} is trying to login`);
-        try {
-          let res = await users.login(socket.id, data);
-          socket.join('online');
-          // console.log('online', this.io.sockets.adapter.rooms);
-          this.io.emit("updateUsers", users.getUsers());
-          if (typeof callback === "function") callback(res, null);
-        } catch (error) {
-          if (typeof callback === "function") callback(null, error);
-        }
-      });
+      socket.on("login", this.AuthController.login(socket));
+
 
       /**************************** Users ************************************/
       /**
@@ -75,17 +69,18 @@ class App {
        * @param {object} data - null
        * @param {function} callback - (users, err)
        */
-      socket.on("onlineUsers", async (_, callback) => {
-        console.log(`User ${socket.id} is trying to get online users`);
-        // if (!socket.rooms.has("online"))
-        //   return callback(null, { message: "You are not authorized" });
-        try {
-          let res = users.getUsers();
-          if (typeof callback === "function") callback(res, null);
-        } catch (error) {
-          if (typeof callback === "function") callback(null, error);
-        }
-      });
+      socket.on("onlineUsers", this.UsersController.onlineUsers);
+      // async (_, callback) => {
+      //   console.log(`User ${socket.id} is trying to get online users`);
+      //   // if (!socket.rooms.has("online"))
+      //   //   return callback(null, { message: "You are not authorized" });
+      //   try {
+      //     let res = users.getUsers();
+      //     if (typeof callback === "function") callback(res, null);
+      //   } catch (error) {
+      //     if (typeof callback === "function") callback(null, error);
+      //   }
+      // });
 
 
 
@@ -171,8 +166,6 @@ class App {
        */
       socket.on("currentRooms", async (_, callback) => {
         console.log(`User ${socket.id} is trying to get current rooms`);
-        // if (!socket.rooms.has("online"))
-        //   return callback(null, { message: "You are not authorized" });
         try {
           let allRooms = rooms.getRooms();
           let filterRoom = allRooms.map((room) => {
@@ -195,8 +188,6 @@ class App {
        * @param {function} callback - (room, err)
        */
       socket.on("createRoom", async (data, callback) => {
-        // if (!socket.rooms.has("online"))
-        //   return callback(null, { message: "You are not authorized" });
         try {
           let user = await users.getUser(socket.id);
           if (user.isJoned)
@@ -223,8 +214,6 @@ class App {
        */
       socket.on("joinRoom", async (roomId, callback) => {
         console.log(`User ${socket.id} is trying to join room ${roomId}`);
-        // if (!socket.rooms.has("online"))
-        //   return callback(null, { message: "You are not authorized" });
         try {
           let user = await users.getUser(socket.id);
           if (user.isJoned) return callback(null, { message: "You are already in a room" });
@@ -318,27 +307,7 @@ class App {
        * @description disconnect user
        * @param {string} event - disconnect
        */
-      socket.on("disconnect", async () => {
-        console.log(`User disconnected: ${socket.id}`);
-        try {
-          let user = await users.getUser(socket.id);
-          if (user.isJoned) {
-            let room = await rooms.leaveRoom(socket.id, user.room);
-            if (room.users.length === 0) {
-              let currntRooms = await rooms.deleteRoom(room.id);
-              this.io.emit("updateRooms", currntRooms);
-            } else {
-              let updateRoom = rooms.switchAdmin(room.id);
-              this.io.to(updateRoom.users).emit("updateRoom", updateRoom);
-            }
-          }
-          let allUsers = await users.logout(socket.id);
-          this.io.emit("updateUsers", allUsers);
-        } catch (error) {
-          console.log(error, "error");
-        }
-      });
-
+      socket.on("disconnect", this.AuthController.logout(socket));
       socket.on("error", (error) => {
         console.log(`Error: ---> ${error.message}`);
         socket.emit("error", { message: error.message});
