@@ -22,7 +22,7 @@ const socket = (manager, event, data) => {
       resolve(res);
     });
     io.on("error", (err) => {
-      console.log("error", err);
+      // console.log("error", err);
       reject(err.message);
     });
     io.on("connect_error", (err) => {
@@ -37,7 +37,7 @@ const socket = (manager, event, data) => {
     io.on("disconnect", (err) => {
       io.close();
       reject(err.message);
-      console.log("pong", err);
+      // console.log("pong", err);
     });
   });
 };

@@ -1,21 +1,14 @@
+
 class AuthMiddleware {
 
-    constructor(io) {
-        if (AuthMiddleware.instance instanceof AuthMiddleware)
-            return AuthMiddleware.instance;
-        this.io = io;
-        this.instance = this;
-    }
-
-    auth = (socket) => async (packet, next) => {
+    auth = (socket) => (packet, next) => {
 
 
-        console.log("auth", packet[0]);
+        // console.log("auth", packet);
 
         console.log(packet[0] !== "login", !socket.rooms.has('online'))
         if (packet[0] !== "login" && !socket.rooms.has('online')){
-            let err = new Error("You are not authorized");
-            err.code = 401;
+            const err = new Error("You are not authorized");
             return next(err);
         }
         return next();

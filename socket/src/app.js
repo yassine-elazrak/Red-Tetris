@@ -2,6 +2,7 @@ const { Server } = require("socket.io");
 const { createServer } = require("http");
 const Users = require("./users/users");
 const Rooms = require("./rooms/rooms");
+const Middleware = require("./middleware/auth");
 
 
 require("dotenv").config();
@@ -20,6 +21,7 @@ class App {
   start() {
     const users = new Users();
     const rooms = new Rooms();
+    const AuthMiddleware = new Middleware();
     this.server.listen(process.env.PORT || 5000, () => {
       console.log(`server is running on port ${process.env.PORT || 5000}`);
     });
@@ -33,14 +35,16 @@ class App {
     this.io.on("connection", (socket) => {
       console.log(`User connected: ${socket.id}`);
 
+      socket.use(AuthMiddleware.auth(socket));
+
       // socket.use((packet, next) => {
       //   console.log("packet", packet);
       //   let err = new Error("Not authorized");
       //   err.status = 401;
       //   console.log(err.message);
-      //   // err.mesg = "Not authorized";
+      //   err.message = "Not authorized";
       //   // err.status = 401;
-      //   // err.message = "Not authorized";
+      //   err.message = "Not authorized";
       //   next(err);
       // })
 
@@ -73,8 +77,8 @@ class App {
        */
       socket.on("onlineUsers", async (_, callback) => {
         console.log(`User ${socket.id} is trying to get online users`);
-        if (!socket.rooms.has("online"))
-          return callback(null, { message: "You are not authorized" });
+        // if (!socket.rooms.has("online"))
+        //   return callback(null, { message: "You are not authorized" });
         try {
           let res = users.getUsers();
           if (typeof callback === "function") callback(res, null);
@@ -95,8 +99,8 @@ class App {
        * @param {function} callback - (listUsersInvets, err)
        */
       socket.on("invitation", async (data, callback) => {
-        if (!socket.rooms.has("online"))
-          return callback(null, { message: "You are not authorized" });
+        // if (!socket.rooms.has("online"))
+        //   return callback(null, { message: "You are not authorized" });
         try {
           let room = await rooms.getRoom(data.roomId);
           let user = await users.getUser(data.userId);
@@ -140,8 +144,8 @@ class App {
       * @param {function} callback - (room, err)
       */
       socket.on("acceptInvitation", async (data, callback) => {
-        if (!socket.rooms.has("online"))
-          return callback(null, { message: "You are not authorized" });
+        // if (!socket.rooms.has("online"))
+        //   return callback(null, { message: "You are not authorized" });
       });
 
 
@@ -153,8 +157,8 @@ class App {
       * @param {function} callback - (room, err)
       */
       socket.on("declineInvitation", async (data, callback) => {
-        if (!socket.rooms.has("online"))
-          return callback(null, { message: "You are not authorized" });
+        // if (!socket.rooms.has("online"))
+        //   return callback(null, { message: "You are not authorized" });
       });
 
       /******************************** Rooms ***********************************/
@@ -167,13 +171,14 @@ class App {
        */
       socket.on("currentRooms", async (_, callback) => {
         console.log(`User ${socket.id} is trying to get current rooms`);
-        if (!socket.rooms.has("online"))
-          return callback(null, { message: "You are not authorized" });
+        // if (!socket.rooms.has("online"))
+        //   return callback(null, { message: "You are not authorized" });
         try {
           let allRooms = rooms.getRooms();
           let filterRoom = allRooms.map((room) => {
             return (
-              (({ id, name, isPravite, admin, status }) => ({ id, name, isPravite, admin, status }))(room)
+              (({ id, name, isPravite, admin, status }) =>
+                ({ id, name, isPravite, admin, status }))(room)
             )
           });
           callback(filterRoom, null);
@@ -190,8 +195,8 @@ class App {
        * @param {function} callback - (room, err)
        */
       socket.on("createRoom", async (data, callback) => {
-        if (!socket.rooms.has("online"))
-          return callback(null, { message: "You are not authorized" });
+        // if (!socket.rooms.has("online"))
+        //   return callback(null, { message: "You are not authorized" });
         try {
           let user = await users.getUser(socket.id);
           if (user.isJoned)
@@ -218,8 +223,8 @@ class App {
        */
       socket.on("joinRoom", async (roomId, callback) => {
         console.log(`User ${socket.id} is trying to join room ${roomId}`);
-        if (!socket.rooms.has("online"))
-          return callback(null, { message: "You are not authorized" });
+        // if (!socket.rooms.has("online"))
+        //   return callback(null, { message: "You are not authorized" });
         try {
           let user = await users.getUser(socket.id);
           if (user.isJoned) return callback(null, { message: "You are already in a room" });
@@ -248,8 +253,8 @@ class App {
        */
       socket.on("closeRoom", async (roomId, callback) => {
         console.log(`User ${socket.id} is trying to close a room`);
-        if (!socket.rooms.has("online"))
-          return callback(null, { message: "You are not authorized" });
+        // if (!socket.rooms.has("online"))
+        //   return callback(null, { message: "You are not authorized" });
         try {
           let res = await rooms.closeRoom(roomId, socket.id);
           this.io.emit("updateRooms", rooms.getRooms());
@@ -267,8 +272,8 @@ class App {
        */
       socket.on("leaveRoom", async (roomId, callback) => {
         console.log(`User ${socket.id} is trying to leave a room`);
-        if (!socket.rooms.has("online"))
-          return callback(null, { message: "You are not authorized" });
+        // if (!socket.rooms.has("online"))
+        //   return callback(null, { message: "You are not authorized" });
         try {
           let room = await rooms.leaveRoom(socket.id, roomId);
           console.log("admin1", room.admin);
@@ -335,9 +340,8 @@ class App {
       });
 
       socket.on("error", (error) => {
-        console.log(`Error: ${error}`);
-        socket.emit("error", error.message);
-
+        console.log(`Error: ---> ${error.message}`);
+        socket.emit("error", { message: error.message});
       });
 
 
