@@ -5,9 +5,7 @@ import { connect } from "react-redux";
 
 import "./styles/NotificationsStyled.css";
 
-import {
-  pushNotification,
-} from "../redux/actions";
+import { pushNotification } from "../redux/actions";
 
 const { SubMenu } = Menu;
 const MenuItemGroup = Menu.ItemGroup;
@@ -39,11 +37,11 @@ const NotifComponent = (props) => {
     setNotifs(props.notifications);
   }, [props.notifications]);
 
-//   id: "832NhjV0cGTWFo3-AAAJ"
-// name: "dasfdas"
-// read: false
-// roomId: "832NhjV0cGTWFo3-AAAJ"
-// roomName: "das"
+  //   id: "832NhjV0cGTWFo3-AAAJ"
+  // name: "dasfdas"
+  // read: false
+  // roomId: "832NhjV0cGTWFo3-AAAJ"
+  // roomName: "das"
 
   useEffect(() => {
     if (props.socket.socket) {
@@ -51,7 +49,7 @@ const NotifComponent = (props) => {
         console.log("notification", data);
         notification.info({
           message: "New notification",
-          description: `${data.name} invited you to join ${data.roomName}`,
+          description: data.message,
         });
         props.pushNotification(data);
       });
@@ -63,65 +61,67 @@ const NotifComponent = (props) => {
 
   const mapnotifs = notifs.map((item, key) => {
     console.log(item, "item");
-    return !item.read ? (
-      <SubMenu
-        key={`notif-${key}`}
-        expandIcon
-        title={<p style={{}}>
-          {`${item.name} invited you to join ${item.roomName}`}
-        </p>}
-      >
-        <MenuItemGroup className="ulNotif">
-          <Menu.Item
-            key={`accept-${key}`}
-            className="ant-btn ant-btn-primary"
-            onClick={handnotif}
-            style={{
-              background: "#6FCF97",
-              border: "none",
-              margin: 5,
-              textAlign: "center",
-              alignItems: "center",
-              display: "inline-flex",
-              justifyContent: "center",
-              padding: 0,
-              color: "#fff",
-              height: 35,
-            }}
-          >
-            Accept
-          </Menu.Item>
-          <Menu.Item
-            key={`decline-${key}`}
-            className="ant-btn ant-btn-primary ant-btn-dangerous"
-            onClick={handnotif}
-            style={{
-              margin: 5,
-              textAlign: "center",
-              alignItems: "center",
-              display: "inline-flex",
-              justifyContent: "center",
-              padding: 0,
-              height: 35,
-              border: "none",
-            }}
-          >
-            Decline
-          </Menu.Item>
-        </MenuItemGroup>
-      </SubMenu>
-    ) : (
-      <Menu.Item key={`notif-${key}`} disabled>
-        <div style={{ height: 30 }}>
-          <div>
-            <p>
-              {`${item.name} invited you to join ${item.roomName}`}
+    // if (item.type === "invitation") {
+      return item.type === "invitation" && !item.read ? (
+        <SubMenu
+          key={`notif-${key}`}
+          expandIcon
+          title={
+            <p style={{}}>
+              {item.message}
             </p>
+          }
+        >
+          <MenuItemGroup className="ulNotif">
+            <Menu.Item
+              key={`accept-${key}`}
+              className="ant-btn ant-btn-primary"
+              onClick={handnotif}
+              style={{
+                background: "#6FCF97",
+                border: "none",
+                margin: 5,
+                textAlign: "center",
+                alignItems: "center",
+                display: "inline-flex",
+                justifyContent: "center",
+                padding: 0,
+                color: "#fff",
+                height: 35,
+              }}
+            >
+              Accept
+            </Menu.Item>
+            <Menu.Item
+              key={`decline-${key}`}
+              className="ant-btn ant-btn-primary ant-btn-dangerous"
+              onClick={handnotif}
+              style={{
+                margin: 5,
+                textAlign: "center",
+                alignItems: "center",
+                display: "inline-flex",
+                justifyContent: "center",
+                padding: 0,
+                height: 35,
+                border: "none",
+              }}
+            >
+              Decline
+            </Menu.Item>
+          </MenuItemGroup>
+        </SubMenu>
+      ) : (
+        <div key={`notif-${key}`} disabled>
+          <div style={{ height: 30 }}>
+            <div>
+              <p>{item.message}</p>
+            </div>
           </div>
         </div>
-      </Menu.Item>
-    );
-  })
+      );
+    // }
+  });
 
   const menu = (
     <Menu

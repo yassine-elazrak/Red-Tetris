@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Layout, message, Button, List, Tooltip } from "antd";
+import { Layout, message, Button, List, Tooltip, notification } from "antd";
 
 import Nabar from "../components/Navbar";
 import FooterComponent from "../components/Footer";
@@ -97,6 +97,9 @@ const HomePage = (props) => {
         console.log(data, "dataRooms");
         props.refreshRooms(data);
       });
+      // props.socket.socket.socket("/").on("notification", (notif) =>{
+      //   console.log("new notifcation", notif);
+      // })
       // props.socket.socket("/").on("updateRoom", (data) => {
       //   console.log("room update", data);
       // })

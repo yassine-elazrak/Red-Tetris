@@ -43,6 +43,8 @@ class InviteController {
                 roomId: room.id,
                 roomName: room.name,
                 read: false,
+                message: `${currentUser.name} invite you to join ${room.name}`,
+                type: "invitation",
             });
             this.io.to(user.id).emit("notification", notif);
             this.io.to(room.users).emit("updateRoom", room);

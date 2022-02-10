@@ -100,9 +100,9 @@ const InviteUsers = (props) => {
       console.log(data, "updateUsers");
       props.onlineUsersUpdate(data);
     });
-    props.socket.socket("/").on("userJoind", (data) => {
-      console.log("new user Joind", data);
-    });
+    // props.socket.socket("/").on("userJoind", (data) => {
+    //   console.log("new user Joind", data);
+    // });
     props.socket.socket("/").on("updateRoom", (data) => {
       props.refreshRoom(data);
       console.log("update Room", data);
@@ -111,7 +111,7 @@ const InviteUsers = (props) => {
 
     return () => {
       props.socket.socket("/").off("updateUsers");
-      props.socket.socket("/").off("userJoind");
+      // props.socket.socket("/").off("userJoind");
     };
   }, []);
 
