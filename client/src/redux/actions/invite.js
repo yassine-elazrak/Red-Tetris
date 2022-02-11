@@ -4,7 +4,11 @@ import {
     INVITE_REMOVE_ALL,
     LOADING_INVITES,
     INVITE_FAILURE,
+    UPDATE_USER,
     INVITE_REFRESH,
+    INVITE_SUCCESS,
+    INVITE_ACCEPT,
+    INVITE_DECLINE,
 } from '../types';
 
 
@@ -25,6 +29,20 @@ export const refreshInvite = (data) => {
     return (dispatch) => {
         dispatch({type: LOADING_INVITES});
         dispatch(success(data, INVITE_REQUEST));
+    }
+}
+
+export const acceptInvite = (data) => {
+    return async (dispatch, getState) => {
+        try {
+            dispatch({type: LOADING_INVITES});
+            const io = getState().socket.socket;
+            const res = await socket(io, "acceptInvitation", data);
+            dispatch({type: INVITE_ACCEPT});
+            dispatch(success(res, UPDATE_USER));
+        } catch (err) {
+            dispatch(error(err, INVITE_FAILURE));
+        }
     }
 }
 

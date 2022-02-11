@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 
 import "./styles/NotificationsStyled.css";
 
-import { pushNotification } from "../redux/actions";
+import { pushNotification, acceptInvite } from "../redux/actions";
 
 const { SubMenu } = Menu;
 const MenuItemGroup = Menu.ItemGroup;
@@ -17,10 +17,15 @@ const NotifComponent = (props) => {
   const [contNotifs, setContNotifs] = useState(0);
 
   const handnotif = (e) => {
-    const id = parseInt(e.key.split("-")[1]);
+    let split = e.key.split("-");
+    const id = parseInt(split[1]);
+    // const id = split[1];
+    const action = split[0];
+    console.log(action, id , '-------------------');
     const newNotifs = notifs.map((notif, key) => {
       if (id === key) {
         notif.read = true;
+        console.log(notif, "<<<<<<<notif>>>>>>>>>>>>");
       }
       return notif;
     });
@@ -186,4 +191,5 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps, {
   pushNotification,
+  acceptInvite,
 })(NotifComponent);

@@ -5,7 +5,8 @@ import {
     INVITE_DECLINE,
     INVITE_REMOVE_ALL,
     LOADING_INVITES,
-    INVITE_REFRESH
+    INVITE_REFRESH,
+    INVITE_SUCCESS
 } from '../types';
 
 const initialState = {
@@ -103,9 +104,17 @@ export default function inviteReducer(state = initialState, action) {
                 error: action.payload,
             };
         case INVITE_ACCEPT:
-            return accept(state, action);
+            return {
+                ...state,
+                isLoading: false,
+                error: null,
+            };
         case INVITE_DECLINE:
-            return decline(state, action);
+            return {
+                ...state,
+                isLoading: false,
+                error: null,
+            };
         case INVITE_REMOVE_ALL:
             return removeAll(state);
         default:

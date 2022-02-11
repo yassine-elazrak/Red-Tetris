@@ -28,9 +28,9 @@ class InviteController {
             if (user.isJoned)
                 return callback(null, { message: `${user.name} is already in room` });
             if (room.status !== "waiting")
-                callback(null, { message: "Room is closed2" });
+                return callback(null, { message: "Room is closed2" });
             if (room.admin !== socket.id)
-                callback(null, { message: "You are not admin" });
+                return callback(null, { message: "You are not admin" });
             let res = await this.rooms.inviteUser({
                 roomId: data.roomId,
                 userId: user.id,
@@ -48,10 +48,10 @@ class InviteController {
                 type: "invitation",
             });
             this.io.to(user.id).emit("notification", notif);
-            if (typeof callback === "function") callback(res.invit, null);
+            if (typeof callback === "function") return callback(res.invit, null);
         } catch (error) {
             console.log(error);
-            if (typeof callback === "function") callback(null, error);
+            if (typeof callback === "function") return callback(null, error);
         }
     }
 
@@ -70,6 +70,36 @@ class InviteController {
      * @param {function} callback - (res, err)
      */
     declineInvitation = (socket) => async (data, callback) => { }
+
+
+    changeStatusInvitation = (socketId, status) => async (roomId, callback) => {
+        // 'accepted', 'declined', 'waiting'
+        try {
+            let user = await this.users.getUser(socketId);
+            if (user.isJoned) return callback(null, {message: "You are already in a room"});
+            let updateRoom = this.rooms.changeStatusInvitation({roomId, userId : socketId, status});
+            if (status === 'accepted'){
+                let userInfo = updateRoom.users.findIndex(user => user.id === socketId)
+                let notif = {
+                    message: `${userInfo.name} joind to this room`,
+                    type: "notif",
+                }
+                let ids = this.selector.Data(updateRoom.users, ({id}) => id);
+                ids.filter(id => id !== socketId);
+                ids.length && this.io.to(ids).emit("notification", notif);
+                this.io.to(updateRoom.admin).emit("updateInvit", updateRoom.invit);
+                let profile = await this.users.userJoin(socketId, updateRoom.id);
+                return callback(profile, null);
+                // this.io.emit("updateUsers", this.users.getUsers());
+            } else {
+                let profile = this.users.userLeave(socketId);
+                return callback(profile, null);
+            }
+            
+        } catch (error) {
+            return callback(null, error);
+        }
+    }
 
 }
 

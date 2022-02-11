@@ -93,8 +93,6 @@ class RoomController {
             let user = await this.users.getUser(socketId);
             if (user.isJoned)
                 return callback(null, { message: "You are already in a room" });
-            if (user.isJoned)
-                return callback(null, { message: "You are already in a room" });
             let updateRoom = await this.rooms.joinRoom({
                 roomId,
                 userId: user.id,
@@ -105,7 +103,7 @@ class RoomController {
                 .Data(updateRoom.users, ({ id }) => id)
                 .filter((id) => id !== socketId);
             let notif = {
-                message: `${user.name} is joind to this room`,
+                message: `${user.name} joind to this room`,
                 type: "notif",
             };
             let invit = updateRoom.invit;
@@ -131,9 +129,9 @@ class RoomController {
      * @param {id} roomId - room id
      * @param {function} callback - (res, err)
      */
-    closeRoom = (socketId) => async (roomId, callback) => {
+    changeStatusRoom = (socketId, status) => async (roomId, callback) => {
         try {
-            let res = await this.rooms.closeRoom(roomId, socketId);
+            let res = await this.rooms.changeStatusRoom({roomId, userId: socketId, status});
             let ids = this.selector
                 .Data(res.users, ({ id }) => id)
                 .filter((id) => id !== socketId);
@@ -152,6 +150,7 @@ class RoomController {
             ids.length && this.io.to(ids).emit("updateRoom", roomInfo);
             if (typeof callback === "function") callback(res, null);
         } catch (error) {
+            console.log(error);
             if (typeof callback === "function") callback(null, error);
         }
     };

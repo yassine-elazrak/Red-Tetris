@@ -107,6 +107,31 @@ class Rooms {
     });
   };
 
+
+  changeStatusInvitation = (data) => {
+    return new Promise((resolve, reject) => {
+      let roomIndex = this.rooms.findIndex((room) => room.id === data.roomId);
+      if (roomIndex === -1) return reject({message: "Room not found"});
+      let invitIndex = this.rooms[roomIndex].invit.findIndex(item => item.userId === data.userId);
+      if (invitIndex === -1) return reject({message: "Your are not invited in this room"});
+      this.rooms[roomIndex].invit[invitIndex].status = data.status;
+      if (data.status === "accepted"){
+        let user = {
+          name : this.rooms[roomIndex].invit[invitIndex].userName,
+          id: data.userId,
+          score: 0,
+          rows: 0,
+          map: [],
+          tetrominos: [],
+        }
+        this.rooms[roomIndex].users.push(user);
+      }
+      resolve(this.rooms[roomIndex]);
+    })
+  }
+
+
+
   joinRoom = (data) => {
     return new Promise((resolve, reject) => {
       let Index = this.rooms.findIndex((room) => room.id === data.roomId);
@@ -132,13 +157,14 @@ class Rooms {
     });
   };
 
-  closeRoom = (roomId, userId) => {
+  changeStatusRoom = (data) => {
     return new Promise((resolve, reject) => {
-      let roomIndex = this.rooms.findIndex((room) => room.id === roomId);
+      console.log(data);
+      let roomIndex = this.rooms.findIndex((room) => room.id === data.roomId);
       if (roomIndex === -1) return reject({ message: "Room not found" });
-      if (this.rooms[roomIndex].admin !== userId)
+      if (this.rooms[roomIndex].admin !== data.userId)
         return reject({ message: "You are not admin" });
-      this.rooms[roomIndex].status = "closed";
+      this.rooms[roomIndex].status = data.status;
       return resolve(this.rooms[roomIndex]);
     });
   };
