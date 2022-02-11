@@ -60,11 +60,11 @@ class AuthController {
                             message: `you are admin of this room`,
                             type: 'notif',
                         })
-                        this.io.to(newAdmin.id).emit('updateRoom', updateRoom);
+                        this.io.to([...usersIds ,newAdmin.id]).emit('updateRoom', updateRoom);
                     }
                     else {
                         // notif users in this room
-                        this.io.to(room.admin).emit("updateRoom", room);
+                        this.io.to(usersIds).emit("updateRoom", room);
                         this.io.to(usersIds).emit("notification", {
                             message: `${user.name} left this room`,
                             type: "notif",

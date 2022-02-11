@@ -114,7 +114,8 @@ export default function roomReducer(state = initialState, action) {
                 name: action.payload.name,
                 isPravite: action.payload.isPravite,
                 admin: action.payload.admin,
-                status: action.payload.state,
+                status: action.payload.status,
+                users: action.payload.users,
             };
         case ROOM_LEAVE:
             return initialState;

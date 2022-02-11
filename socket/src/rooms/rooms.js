@@ -111,6 +111,7 @@ class Rooms {
     return new Promise((resolve, reject) => {
       let Index = this.rooms.findIndex((room) => room.id === data.roomId);
       if (Index === -1) reject({ message: "Room not found" });
+      console.log(this.rooms[Index]);
       if (this.rooms[Index].status !== "waiting") reject({ message: "Room is closed" });
       if (this.rooms[Index].users.findIndex((user) => user.id === data.userId) !== -1)
         reject({ message: "User is already in room" });
