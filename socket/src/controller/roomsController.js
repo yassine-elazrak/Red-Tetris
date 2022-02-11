@@ -5,9 +5,9 @@ const Selector = require("../utils/selector");
 class RoomController {
     constructor(io) {
         this.io = io;
-        this.users = new Users();
-        this.rooms = new Rooms();
-        this.selector = new Selector();
+        this.users = new Users;
+        this.rooms = new Rooms;
+        this.selector = new Selector;
     }
 
     // filterData = (data, select) => {
@@ -146,16 +146,17 @@ class RoomController {
                     };
                     usersRoom = usersRoom.filter((id) => id !== newAdmin.id);
                     usersRoom.length && this.io.to(usersRoom).emit("notification", notif);
-                    notif = { ...notif, message: `your are admin of this room` };
+                    notif = { ...notif, message: `you are admin of this room` };
+                    this.io.to(newAdmin.id).emit("updateRoom", room);
                     this.io.to(newAdmin.id).emit("notification", notif);
                 } else {
                     let notif = {
                         message: `${user.name} left this room`,
                         type: "notif",
                     };
-                    this.io.to(usersRoom).emit("notification", notif);
-                    this.io.to(usersRoom).emit("updateRoom", room);
+                    usersRoom.length && this.io.to(usersRoom).emit("notification", notif);
                 }
+                console.log("room=>", room, "socketId=>", socketId, "users=>", usersRoom);
             }
             this.io.to(user.id).emit("updateProfile", user);
             this.io.emit("updateUsers", this.users.getUsers());
