@@ -1,6 +1,6 @@
 const Users = require("../users/users");
 const Rooms = require("../rooms/rooms");
-
+const Selector = require("../utils/selector")
 
 class InviteController {
 
@@ -8,6 +8,7 @@ class InviteController {
         this.io = io;
         this.users = new Users;
         this.rooms = new Rooms;
+        this.selector = new Selector;
     }
 
     /**
@@ -47,7 +48,6 @@ class InviteController {
                 type: "invitation",
             });
             this.io.to(user.id).emit("notification", notif);
-            this.io.to(room.users).emit("updateRoom", room);
             if (typeof callback === "function") callback(res.invit, null);
         } catch (error) {
             console.log(error);

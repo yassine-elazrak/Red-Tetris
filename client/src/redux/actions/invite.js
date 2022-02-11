@@ -4,6 +4,7 @@ import {
     INVITE_REMOVE_ALL,
     LOADING_INVITES,
     INVITE_FAILURE,
+    INVITE_REFRESH,
 } from '../types';
 
 
@@ -20,10 +21,10 @@ export const inviteRequest = (invite) => {
     }
 }
 
-export const refreshInvite = () => {
+export const refreshInvite = (data) => {
     return (dispatch) => {
         dispatch({type: LOADING_INVITES});
-        dispatch(success([], INVITE_REQUEST));
+        dispatch(success(data, INVITE_REQUEST));
     }
 }
 

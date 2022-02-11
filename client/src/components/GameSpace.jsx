@@ -27,6 +27,7 @@ import {
   updateTetromino,
   leaveRoom,
   refreshRoom,
+  refreshInvite,
 } from "../redux/actions";
 
 import { useStage } from "../hooks/useStage";
@@ -63,36 +64,12 @@ const GameSpace = (props) => {
     props.socket.socket("/").on("updateRoom", data => {
       props.refreshRoom(data);
     })
-    props.socket.socket("/").on("switchAdmin", data => {
-      props.refreshRoom(data)
-      if (data.admin === props.auth.id){
-        notification.success({
-          message: 'Admin Switched',
-          description: "your admin of this room now you can start/puase game"
-        })
-      }
-      else{
-        let admin = data.users.find(user => user.id === data.admin)
-        console.log('users ===>', admin);
-        notification.info({
-          message: "Admin Switched",
-          description: `the new admin of this room is ${admin.name}`,
-        })
-      }
-    })
-
-    props.socket.socket("/").on("roomClosed", data => {
-      if (data.id !== props.auth.id){
-        notification.info({
-          message: "Room status changed",
-          description: `this room closed by ${data.name}`
-        })
-      }
-    })
-
+    // props.socket.socket("/").on("updateInvit", data => {
+    //   console.log('update invit ==========>', data);
+    //   props.refreshInvite(data);
+    // })
     return() => {
       props.socket.socket("/").off("updateRoom");
-      props.socket.socket("/").off("switchAdmin");
 
     }
 
@@ -409,5 +386,6 @@ export default connect(mapStateToProps, {
   updateTetromino,
 
   leaveRoom,
-  refreshRoom
+  refreshRoom,
+  refreshInvite,
 })(GameSpace);

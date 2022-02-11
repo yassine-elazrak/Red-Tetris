@@ -46,9 +46,14 @@ class AuthController {
                     let currntRooms = await this.rooms.deleteRoom(room.id);
                     this.io.emit("updateRooms", currntRooms);
                 } else {
+                    let invit = room.invit;
+                    room = (({
+                        id, name,admin, isPravite, status, users
+                    }) => ({
+                        id, name, admin, isPravite, status, users
+                    }))(room);
                     let usersIds = this.selector.Data(room.users, (({id}) => id));
                     if (user.id === room.admin){
-                        // switch admin
                         let updateRoom = this.rooms.switchAdmin(room.id);
                         let newAdmin = updateRoom.users.find(user => user.id === updateRoom.admin)
                         usersIds = usersIds.filter(id => id !== updateRoom.admin);
@@ -60,6 +65,7 @@ class AuthController {
                             message: `you are admin of this room`,
                             type: 'notif',
                         })
+                        this.io.to(newAdmin.id).emit("updateInvit", invit);
                         this.io.to([...usersIds ,newAdmin.id]).emit('updateRoom', updateRoom);
                     }
                     else {

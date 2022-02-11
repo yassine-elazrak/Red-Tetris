@@ -5,6 +5,7 @@ import {
     INVITE_DECLINE,
     INVITE_REMOVE_ALL,
     LOADING_INVITES,
+    INVITE_REFRESH
 } from '../types';
 
 const initialState = {

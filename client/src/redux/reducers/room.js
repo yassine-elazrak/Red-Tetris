@@ -16,61 +16,9 @@ const initialState = {
     status: '',
     id: null,
     name: null,
-    // invit: [],
     users: [],
 };
 
-// const createRoom = (state, action) => {
-//     const data = {
-//         ...state,
-//         isLoading: false,
-//         error: null,
-//         id: action.payload.id,
-//         admin: action.payload.admin,
-//         status: action.payload.status,
-//         isPravite: action.payload.isPravite,
-//         name: action.payload.name,
-//         users: [action.payload.users],
-//     };
-//     return data;
-// };
-
-const pushUser = (state, action) => {
-    const index = state.users.findIndex(user => user.id === action.payload.userId);
-    if (index === -1) {
-        const user = {
-            id: action.payload.userId,
-            name: action.payload.userName,
-        };
-        const data = {
-            ...state,
-            isLoading: false,
-            error: null,
-            // isJoned: true,
-            // isAdmin: false,
-            isPravite: action.payload.isPravite,
-            id: action.payload.roomId,
-            name: action.payload.roomName,
-            status: action.payload.status,
-            users: [...state.users, user],
-        };
-        return data;
-    } else {
-        return {
-            ...state,
-            isLoading: false,
-            error: `${action.payload.userName} is already in the room`,
-        };
-    }
-};
-
-// admin: "ueEsMClGO1PSPijbAAAF"
-// id: "ueEsMClGO1PSPijbAAAF"
-// invit: []
-// isPravite: false
-// name: "dsafsd"
-// status: "waiting"
-// users: (2
 
 
 export default function roomReducer(state = initialState, action) {
@@ -85,7 +33,7 @@ export default function roomReducer(state = initialState, action) {
             return {
                 ...state,
                 isLoading: false,
-                // error: null,
+                error: null,
                 id: action.payload.id,
                 name: action.payload.name,
                 admin: action.payload.admin,
@@ -97,7 +45,7 @@ export default function roomReducer(state = initialState, action) {
             return {
                 ...state,
                 isLoading: false,
-                // error: null,
+                error: null,
                 id: action.payload.id,
                 name: action.payload.name,
                 admin: action.payload.admin,
@@ -109,7 +57,7 @@ export default function roomReducer(state = initialState, action) {
             return {
                 ...state,
                 isLoading: false,
-                // error: null,
+                error: null,
                 id: action.payload.id,
                 name: action.payload.name,
                 isPravite: action.payload.isPravite,
@@ -123,7 +71,7 @@ export default function roomReducer(state = initialState, action) {
             return {
                 ...state,
                 isLoading: false,
-                // error: null,
+                error: null,
                 status: action.payload.status,
             };
         case ROOM_ERROR:

@@ -71,10 +71,10 @@ class Rooms {
         });
       }
       let room = {
-        name: trimName,
-        isPravite: data.isPravite,
-        admin: user.id,
         id: user.id,
+        name: trimName,
+        admin: user.id,
+        isPravite: data.isPravite,
         status: data.isPravite ? "closed" : "waiting",
         users: [{
           name: user.name,
@@ -123,6 +123,10 @@ class Rooms {
         map: [],
         tetrominos: [],
       }
+      let isInveted = this.rooms[Index].invit.findIndex(user => user.userId === data.userId);
+      if (isInveted !== -1)
+        this.rooms[Index].invit[isInveted].status = "accepted";
+      console.log('isInveted', isInveted, '=>', this.rooms[Index].invit);
       this.rooms[Index].users.push(newUser);
       return resolve(this.rooms[Index]);
     });

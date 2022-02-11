@@ -12,6 +12,7 @@ import {
   onlineUsersUpdate,
   leaveRoom,
   refreshRoom,
+  removeAllInvetes
 } from "../redux/actions";
 
 const { Meta } = Card;
@@ -74,7 +75,6 @@ const InviteUsers = (props) => {
     // setInveted([...inveted, input.id]);
   };
 
-  // listen for changes in the invite error
   useEffect(() => {
     props.invite.error && message.error(props.invite.error);
   }, [props.invite.error]);
@@ -99,18 +99,19 @@ const InviteUsers = (props) => {
   }, [props.room.error]);
 
   useEffect(() => {
-    props.refreshInvite();
+    // props.removeAllInvetes();
     props.socket.socket("/").on("updateUsers", (data) => {
       console.log(data, "updateUsers");
       props.onlineUsersUpdate(data);
     });
-    // props.socket.socket("/").on("userJoind", (data) => {
-    //   console.log("new user Joind", data);
-    // });
     props.socket.socket("/").on("updateRoom", (data) => {
       props.refreshRoom(data);
       console.log("update Room", data);
     });
+    props.socket.socket("/").on("updateInvit", data => {
+      props.refreshInvite(data);
+    })
+
     props.onlineUsers();
 
     return () => {
@@ -381,4 +382,5 @@ export default connect(mapStateToProps, {
   onlineUsersUpdate,
   leaveRoom,
   refreshRoom,
+  removeAllInvetes
 })(InviteUsers);
