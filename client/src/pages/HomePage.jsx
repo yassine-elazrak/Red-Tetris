@@ -19,6 +19,7 @@ import {
   updateUser,
   refreshRooms,
   joinRoom,
+  createOrJoinRoom,
 } from "../redux/actions";
 
 import "./styles/HeaderStyled.css";
@@ -42,54 +43,38 @@ const HomePage = (props) => {
         setTooltipVisible(false);
       }, 3000);
       props.refreshRooms();
-    }
-    else setCollapsed(true);
+    } else setCollapsed(true);
   }, [props.auth]);
 
   useEffect(() => {
     setRooms(props.rooms.rooms);
-    // console.log(props.rooms.rooms, "props.rooms.rooms");
   }, [props.rooms.rooms]);
 
   useEffect(() => {
+    console.log("hash", hash);
     if (hash.error) message.error(hash.error);
     else if (hash.name && hash.room) {
-      login(hash.name);
-      let roomInfo = {
-        roomId: 1,
-        roomName: hash.room,
-        isPravite: false,
-        user: hash.name,
-        status: "waiting",
-      };
-      createRoom(roomInfo);
+      console.log("login by url-hash", hash);
+      props.login(hash.name);
     }
   }, [hash]);
 
   useEffect(() => {
-    if (props.socket.socket) {
-      const hashBased = () => {
-        const { hash } = window.location;
-        if (hash) {
-          const Regx = new RegExp(/(^#[\w-]+\[[\w-]+\]$)/g);
-          const match = hash.match(Regx);
-          if (!match) {
-            setHash({
-              ...hash,
-              error: "Invalid hash-based url",
-            });
-          } else {
-            const split = hash.match(/([\w-]+)/g);
-            setHash({
-              name: split[1],
-              room: split[2],
-              error: "",
-            });
-          }
-        }
+    if (props.auth.isAuth && !props.auth.isJoned && !hash.error && hash.room) {
+      console.log('don1');
+      let roomInfo = {
+        roomName: hash.room,
+        isPravite: false,
+        userId: props.auth.id,
       };
-      hashBased();
 
+      props.createOrJoinRoom(roomInfo);
+    }
+  }, [props.auth]);
+
+  useEffect(() => {
+    if (props.socket.socket) {
+      // MOVE THIS LISTENERS TO GAME SPACE
       props.socket.socket.socket("/").on("updateProfile", (data) => {
         props.updateUser(data);
       });
@@ -97,16 +82,9 @@ const HomePage = (props) => {
         console.log(data, "dataRooms");
         props.refreshRooms(data);
       });
-      // props.socket.socket.socket("/").on("notification", (notif) =>{
-      //   console.log("new notifcation", notif);
-      // })
-      // props.socket.socket("/").on("updateRoom", (data) => {
-      //   console.log("room update", data);
-      // })
       return () => {
         props.socket.socket.socket("/").off("updateProfile");
         props.socket.socket.socket("/").off("updateRooms");
-        // props.socket.socket.socket("/").off("updateRoom");
       };
     }
     if (props.socket.error) {
@@ -114,29 +92,38 @@ const HomePage = (props) => {
     }
   }, [props.socket]);
 
+  useEffect(() => {
+    console.log("done");
+    const hashBased = () => {
+      const { hash } = window.location;
+      if (hash) {
+        const Regx = new RegExp(/(^#[\w-]+\[[\w-]+\]$)/g);
+        const match = hash.match(Regx);
+        console.log("match", match);
+        if (!match) {
+          setHash({
+            ...hash,
+            error: "Invalid hash-based url",
+          });
+        } else {
+          const split = hash.match(/([\w-]+)/g);
+          console.log("split", split);
+          setHash({
+            room: split[0],
+            name: split[1],
+            error: "",
+          });
+        }
+        window.location.hash = '';
+      }
+    };
+    hashBased();
+  }, []);
+
   const handleJoinToRoom = (room) => {
     props.joinRoom(room.id);
-    // roomId: data.roomId, userId: socket.id
-    // admin: "KzHq7Xd610cL2copAAAH"
-    // id: "KzHq7Xd610cL2copAAAH"
-    // isPravite: false
-    // name: "sadfdas"
-    // status: "waiting"
-    // const data = (({roomId, userId}) => ({}))(room);
     console.log(room, "room want to join");
   };
-
-
-  // useEffect(() => {
-  //   props.socket.socket("/").on("updateRoom", (data) => {
-  //     console.log("update Room", data);
-  //   });
-  //   props.onlineUsers();
-
-  //   return () => {
-  //     props.socket.socket("/").off("updateRoom");
-  //   };
-  // },[]);
 
   const menu = () => {
     return (
@@ -144,7 +131,6 @@ const HomePage = (props) => {
         style={{
           background: "transparent",
           color: "white",
-          // padding: "5px",
         }}
       >
         {rooms.map((room, key) => {
@@ -308,4 +294,5 @@ export default connect(mapStateToProps, {
   createRoom,
   refreshRooms,
   joinRoom,
+  createOrJoinRoom,
 })(HomePage);

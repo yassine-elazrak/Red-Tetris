@@ -126,6 +126,9 @@ class App {
       socket.on("joinRoom", this.RoomsController.joinRoom(socket.id))
 
 
+      socket.on("createOrJoin", this.RoomsController.createOrJoinRoom(socket.id))
+
+
 
 
       /**

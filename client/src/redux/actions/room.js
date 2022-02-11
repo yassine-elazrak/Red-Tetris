@@ -22,6 +22,19 @@ export const createRoom = (room) => {
   };
 };
 
+export const createOrJoinRoom = (room) => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch({type: LOADING_ROOM});
+      const io = getState().socket.socket;
+      const res = await socket(io, "createOrJoin", room);
+      dispatch(success(res, ROOM_CREATE));
+    } catch (err) {
+      dispatch(error(err, ROOM_ERROR));
+    }
+  }
+}
+
 export const joinRoom = (roomId) => {
   // console.log("joinRoom", roomId);
   return async (dispatch, getState) => {

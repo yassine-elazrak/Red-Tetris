@@ -47,6 +47,51 @@ class RoomController {
         }
     };
 
+
+    createOrJoinRoom = (socketId) => async (data, callback) => {
+        console.log(`${socketId} try to creat or join room data =>`, data);
+        try {
+            let user = await this.users.getUser(socketId);
+            if (user.isJoned)
+                return callback(null, { message: "You are already in a room" });
+            let allRooms = this.rooms.getRooms();
+            let trimNameRoom = data.roomName.trim().toLowerCase();
+            let room = allRooms.find(room => room.name === trimNameRoom);
+            let res = null;
+            if (room) {
+                res = await this.rooms.joinRoom({
+                    roomId: room.id,
+                    userId: user.id,
+                    userName: user.name,
+                })
+                console.log('res', res);
+                let ids = this.selector
+                    .Data(res.users, (({ id }) => id))
+                    .filter(id => id !== socketId)
+                res = (({ id, name, isPravite, admin, status }) => ({
+                    id,
+                    name,
+                    isPravite,
+                    admin,
+                    status,
+                }))(res);
+                this.io.to(ids).emit("notification", {
+                    message: `${user.name} is joind to this room`,
+                    type: "notif",
+                })
+            } else {
+                res = await this.rooms.createRoom(data, user);
+                this.io.emit("updateRooms", this.rooms.getRooms());
+            }
+            let updateProfile = await this.users.userJoin(socketId, res.id);
+            this.io.to(socketId).emit("updateProfile", updateProfile);
+            callback(res, null);
+        } catch (error) {
+            console.log(error);
+            if (typeof callback === "fucntion") callback(null, error);
+        }
+    }
+
     /**
      * @description join to room
      * @param {string} socketId - socket id

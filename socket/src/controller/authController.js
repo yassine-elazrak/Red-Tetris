@@ -36,11 +36,13 @@ class AuthController {
      * @param {object} socket - socket object 
      */
     logout = (socket) => async () => {
+        console.log(`${socket.id} try to logout <<<<<<<<<<<<<<<<<<<<<<<`);
         try {
             let user = await this.users.getUser(socket.id);
             if (user.isJoned) {
                 let room = await this.rooms.leaveRoom(socket.id, user.room);
                 if (room.users.length === 0) {
+                    console.log('delet room => ', room);
                     let currntRooms = await this.rooms.deleteRoom(room.id);
                     this.io.emit("updateRooms", currntRooms);
                 } else {
