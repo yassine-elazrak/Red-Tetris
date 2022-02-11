@@ -64,6 +64,7 @@ class AuthController {
                     }
                     else {
                         // notif users in this room
+                        this.io.to(room.admin).emit("updateRoom", room);
                         this.io.to(usersIds).emit("notification", {
                             message: `${user.name} left this room`,
                             type: "notif",

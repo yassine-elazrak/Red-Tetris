@@ -58,15 +58,16 @@ class RoomController {
             let trimNameRoom = data.roomName.trim().toLowerCase();
             let room = allRooms.find(room => room.name === trimNameRoom);
             let res = null;
+            console.log(room , '<<<<<<<<<<<<<< room >>>>>>>>>>>>>>>');
             if (room) {
-                res = await this.rooms.joinRoom({
+                let updateRoom = await this.rooms.joinRoom({
                     roomId: room.id,
                     userId: user.id,
                     userName: user.name,
                 })
-                console.log('res', res);
+                console.log('res', updateRoom.users);
                 let ids = this.selector
-                    .Data(res.users, (({ id }) => id))
+                    .Data(updateRoom.users, (({ id }) => id))
                     .filter(id => id !== socketId)
                 res = (({ id, name, isPravite, admin, status }) => ({
                     id,
@@ -74,13 +75,16 @@ class RoomController {
                     isPravite,
                     admin,
                     status,
-                }))(res);
+                }))(updateRoom);
+                updateRoom.users = this.selector.Data(updateRoom.users, (({id, name}) => ({id, name})))
                 this.io.to(ids).emit("notification", {
                     message: `${user.name} is joind to this room`,
                     type: "notif",
                 })
+                this.io.to(updateRoom.admin).emit("updateRoom", updateRoom);
             } else {
                 res = await this.rooms.createRoom(data, user);
+                console.log(res , '<<<<<< create new room>>>>>>>>>>');
                 this.io.emit("updateRooms", this.rooms.getRooms());
             }
             let updateProfile = await this.users.userJoin(socketId, res.id);
@@ -199,6 +203,7 @@ class RoomController {
                         message: `${user.name} left this room`,
                         type: "notif",
                     };
+                    this.io.to(room.admin).emit("updateRoom", room)
                     usersRoom.length && this.io.to(usersRoom).emit("notification", notif);
                 }
                 console.log("room=>", room, "socketId=>", socketId, "users=>", usersRoom);

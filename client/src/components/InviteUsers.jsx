@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 
-import { Form, Input, Button, message, Card, Select } from "antd";
+import { Form, Input, Button, message, Card, Select, Tabs } from "antd";
 
 import { gold, red } from "@ant-design/colors";
 import {
@@ -16,6 +16,7 @@ import {
 
 const { Meta } = Card;
 const { Option } = Select;
+const { TabPane } = Tabs;
 
 const InviteUsers = (props) => {
   // console.log(props, 'props2');
@@ -37,14 +38,14 @@ const InviteUsers = (props) => {
   // listen for changes in the online users
   useEffect(() => {
     const data = props.users.online.map((user) => {
-      return{
+      return {
         value: user.name,
         id: user.id,
         isJoned: user.isJoned,
         inveted: false,
       };
     });
-    console.log(data, 'data');
+    console.log(data, "data");
     setDataSource(data);
   }, [props.users]);
 
@@ -80,15 +81,18 @@ const InviteUsers = (props) => {
 
   useEffect(() => {
     const data = dataSource.map((user) => {
-      return{
+      return {
         ...user,
-        inveted: props.invite.invites.find((invited) => invited.userId === user.id) ? true : false,
-      }
+        inveted: props.invite.invites.find(
+          (invited) => invited.userId === user.id
+        )
+          ? true
+          : false,
+      };
     });
 
     setDataSource(data);
-
-  },[props.invite.invites]);
+  }, [props.invite.invites]);
 
   useEffect(() => {
     props.room.error && message.error(props.room.error);
@@ -139,7 +143,8 @@ const InviteUsers = (props) => {
 
   const options = dataSource.map((item) => {
     return (
-      item.id !== props.auth.id && !item.inveted && (
+      item.id !== props.auth.id &&
+      !item.inveted && (
         <Option key={item.id} value={item.id} disabled={item.isJoned}>
           {item.value}
           <span
@@ -286,60 +291,74 @@ const InviteUsers = (props) => {
         justifyContent: "center",
       }}
     >
-      <div
-        style={{
-          margin: 0,
-          padding: 0,
-          width: "100%",
-          display: "inline-block",
-          flexWrap: "wrap",
-          justifyContent: "center",
-          alignItems: "center",
-          borderRadius: "5px",
-          boxShadow: "0px 0px 5px #d9d9d9",
-          maxHeight: "60vh",
-          overflowY: "auto",
-        }}
-      >
-        <Meta
-          type="inner"
-          title={
-            <div
-              style={{
-                width: "100%",
-                display: "inline-block",
-                flexWrap: "wrap",
-                justifyContent: "center",
-                alignItems: "center",
-                textAlign: "center",
-                paddingTop: "5px",
-              }}
-            >
+      {/* Tabs Start */}
+      <Tabs defaultActiveKey="1">
+        <TabPane
+        tab="Users inveted"
+        key='1'
+        type="card"
+        >
+        <div
+          style={{
+            margin: 0,
+            padding: 0,
+            width: "100%",
+            display: "inline-block",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            alignItems: "center",
+            borderRadius: "5px",
+            boxShadow: "0px 0px 5px #d9d9d9",
+            maxHeight: "60vh",
+            overflowY: "auto",
+          }}
+        >
+          <Meta
+            type="inner"
+            title={
               <div
                 style={{
                   width: "100%",
-                  display: "flex",
-                  justifyContent: "space-around",
+                  display: "inline-block",
+                  flexWrap: "wrap",
+                  justifyContent: "center",
                   alignItems: "center",
-                  padding: 0,
-                  margin: 0,
+                  textAlign: "center",
+                  paddingTop: "5px",
                 }}
               >
-                <p>UserId</p>
-                <p>Name</p>
-                <p>Status</p>
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "space-around",
+                    alignItems: "center",
+                    padding: 0,
+                    margin: 0,
+                  }}
+                >
+                  <p>UserId</p>
+                  <p>Name</p>
+                  <p>Status</p>
+                </div>
               </div>
-            </div>
-          }
-          style={{
-            backgroundColor: "#f0f0f0",
-            padding: 0,
-            margin: 0,
-            width: "100%",
-          }}
-        />
-        {inviteList}
-      </div>
+            }
+            style={{
+              backgroundColor: "#f0f0f0",
+              padding: 0,
+              margin: 0,
+              width: "100%",
+            }}
+          />
+          {inviteList}
+        </div>
+        </TabPane>
+        <TabPane
+        tab="Users joind"
+        key='2'
+        >test</TabPane>
+        {/* Tabs End */}
+      </Tabs>
     </Card>
   );
 };
