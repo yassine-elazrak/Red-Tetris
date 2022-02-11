@@ -59,43 +59,43 @@ class RoomController {
                 return callback(null, { message: "You are already in a room" });
             let allRooms = this.rooms.getRooms();
             let trimNameRoom = data.roomName.trim().toLowerCase();
-            let room = allRooms.find(room => room.name === trimNameRoom);
-            let res = null;
+            let room = allRooms.find(item => item.name === trimNameRoom);
+            // let updateRoom = null;
             console.log(room , '<<<<<<<<<<<<<< room >>>>>>>>>>>>>>>');
             if (room) {
                 if (room.status !== 'waiting') return callback(null, {message: "Room is closed"})
-                let updateRoom = await this.rooms.joinRoom({
+                room = await this.rooms.joinRoom({
                     roomId: room.id,
                     userId: user.id,
                     userName: user.name,
                 })
-                console.log('res', updateRoom.users);
+                console.log('res', room.users);
                 let ids = this.selector
-                    .Data(updateRoom.users, (({ id }) => id))
+                    .Data(room.users, (({ id }) => id))
                     .filter(id => id !== socketId)
-                res = (({ id, name, isPravite, admin, status, users }) => ({
-                    id,
-                    name,
-                    isPravite,
-                    admin,
-                    status,
-                    users,
-                }))(updateRoom);
+                // res = (({ id, name, isPravite, admin, status, users }) => ({
+                //     id,
+                //     name,
+                //     isPravite,
+                //     admin,
+                //     status,
+                //     users,
+                // }))(updateRoom);
                 // updateRoom.users = this.selector.Data(updateRoom.users,
                 //     (({id, name, score, rows, map}) => ({id, name, score, rows, map})))
                 this.io.to(ids).emit("notification", {
                     message: `${user.name} is joind to this room`,
                     type: "notif",
                 })
-                this.io.to(ids).emit("updateRoom", updateRoom);
+                this.io.to(ids).emit("updateRoom", room);
             } else {
-                res = await this.rooms.createRoom(data, user);
-                console.log(res , '<<<<<< create new room>>>>>>>>>>');
+                room = await this.rooms.createRoom(data, user);
+                console.log(room , '<<<<<< create new room>>>>>>>>>>');
                 this.io.emit("updateRooms", this.rooms.getRooms());
             }
-            let updateProfile = await this.users.userJoin(socketId, res.id);
+            let updateProfile = await this.users.userJoin(socketId, room.id);
             this.io.to(socketId).emit("updateProfile", updateProfile);
-            return callback(res, null);
+            return callback(room, null);
         } catch (error) {
             console.log(error);
             if (typeof callback === "fucntion") return callback(null, error);
@@ -228,7 +228,7 @@ class RoomController {
                     isPravite,
                     admin,
                     status,
-                    users,
+                    // users,
                 })
             );
             callback(allRooms, null);
