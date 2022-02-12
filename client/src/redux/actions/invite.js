@@ -9,6 +9,7 @@ import {
     INVITE_SUCCESS,
     INVITE_ACCEPT,
     INVITE_DECLINE,
+    NOTIFICATION_FAILURE,
 } from '../types';
 
 
@@ -38,10 +39,11 @@ export const acceptInvite = (data) => {
             dispatch({type: LOADING_INVITES});
             const io = getState().socket.socket;
             const res = await socket(io, "acceptInvitation", data);
+            // console.log(res, '<<<<<<<res>');
             dispatch({type: INVITE_ACCEPT});
             dispatch(success(res, UPDATE_USER));
         } catch (err) {
-            dispatch(error(err, INVITE_FAILURE));
+            dispatch(error(err, NOTIFICATION_FAILURE));
         }
     }
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Menu, Badge, Popover, notification } from "antd";
+import { Menu, Badge, Popover, notification, message } from "antd";
 import { BellOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
 
@@ -21,11 +21,12 @@ const NotifComponent = (props) => {
     const id = parseInt(split[1]);
     // const id = split[1];
     const action = split[0];
-    console.log(action, id , '-------------------');
+    // console.log(action, id , '-------------------');
     const newNotifs = notifs.map((notif, key) => {
       if (id === key) {
         notif.read = true;
-        console.log(notif, "<<<<<<<notif>>>>>>>>>>>>");
+        // console.log(notif, "<<<<<<<notif>>>>>>>>>>>>");
+        props.acceptInvite(notif.roomId);
       }
       return notif;
     });
@@ -39,7 +40,11 @@ const NotifComponent = (props) => {
   }, [notifs]);
 
   useEffect(() => {
-    setNotifs(props.notifications);
+    if (props.notifications.error){
+      message.error(props.notifications.error);
+    }else{
+      setNotifs(props.notifications.notifications);
+    }
   }, [props.notifications]);
 
   //   id: "832NhjV0cGTWFo3-AAAJ"
@@ -185,7 +190,7 @@ const mapStateToProps = (state) => {
   return {
     auth: state.auth,
     socket: state.socket,
-    notifications: state.notifications.notifications,
+    notifications: state.notifications,
   };
 };
 

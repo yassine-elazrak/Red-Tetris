@@ -76,27 +76,34 @@ class InviteController {
         // 'accepted', 'declined', 'waiting'
         try {
             let user = await this.users.getUser(socketId);
-            if (user.isJoned) return callback(null, {message: "You are already in a room"});
-            let updateRoom = this.rooms.changeStatusInvitation({roomId, userId : socketId, status});
-            if (status === 'accepted'){
-                let userInfo = updateRoom.users.findIndex(user => user.id === socketId)
+            if (user.isJoned) return callback(null, { message: "You are already in a room" });
+            let updateRoom = await this.rooms.changeStatusInvitation({ roomId, userId: socketId, status });
+            console.log(updateRoom.users, socketId, '<<<<<<<<<<<<<<<<<<<<<');
+            if (status === 'accepted') {
+                let userInfo = updateRoom.users.find(item => item.id === socketId)
                 let notif = {
                     message: `${userInfo.name} joind to this room`,
                     type: "notif",
                 }
-                let ids = this.selector.Data(updateRoom.users, ({id}) => id);
-                ids.filter(id => id !== socketId);
+                let ids = this.selector.Data(updateRoom.users, ({ id }) => id)
+                    .filter(id => id !== socketId);
                 ids.length && this.io.to(ids).emit("notification", notif);
-                this.io.to(updateRoom.admin).emit("updateInvit", updateRoom.invit);
                 let profile = await this.users.userJoin(socketId, updateRoom.id);
+                this.io.to(updateRoom.admin).emit("updateInvit", updateRoom.invit);
+                updateRoom = (({ id, name, admin, isPravite, status, users
+                }) => ({
+                    id, name, admin, isPravite, status, users
+                }))(updateRoom)
+                this.io.to([...ids, socketId]).emit("updateRoom", updateRoom);
                 return callback(profile, null);
                 // this.io.emit("updateUsers", this.users.getUsers());
             } else {
                 let profile = this.users.userLeave(socketId);
                 return callback(profile, null);
             }
-            
+
         } catch (error) {
+            console.log(error);
             return callback(null, error);
         }
     }

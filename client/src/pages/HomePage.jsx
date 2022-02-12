@@ -20,6 +20,7 @@ import {
   refreshRooms,
   joinRoom,
   createOrJoinRoom,
+  refreshRoom,
 } from "../redux/actions";
 
 import "./styles/HeaderStyled.css";
@@ -81,6 +82,10 @@ const HomePage = (props) => {
       props.socket.socket.socket("/").on("updateRooms", (data) => {
         console.log(data, "dataRooms");
         props.refreshRooms(data);
+      });
+      props.socket.socket.socket("/").on("updateRoom", (data) => {
+        props.refreshRoom(data);
+        console.log("update Room", data);
       });
       return () => {
         props.socket.socket.socket("/").off("updateProfile");
@@ -295,4 +300,5 @@ export default connect(mapStateToProps, {
   refreshRooms,
   joinRoom,
   createOrJoinRoom,
+  refreshRoom,
 })(HomePage);

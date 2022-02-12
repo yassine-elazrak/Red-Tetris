@@ -99,15 +99,15 @@ const InviteUsers = (props) => {
   }, [props.room.error]);
 
   useEffect(() => {
-    // props.removeAllInvetes();
+    props.removeAllInvetes();
     props.socket.socket("/").on("updateUsers", (data) => {
       console.log(data, "updateUsers");
       props.onlineUsersUpdate(data);
     });
-    props.socket.socket("/").on("updateRoom", (data) => {
-      props.refreshRoom(data);
-      console.log("update Room", data);
-    });
+    // props.socket.socket("/").on("updateRoom", (data) => {
+    //   props.refreshRoom(data);
+    //   console.log("update Room", data);
+    // });
     props.socket.socket("/").on("updateInvit", data => {
       props.refreshInvite(data);
     })

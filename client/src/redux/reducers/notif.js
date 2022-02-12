@@ -3,6 +3,7 @@ import {
     NOTIFICATION_REFRESH,
     NOTIFICATION_LOADING,
     NOTIFICATION_PUSH,
+    NOTIFICATION_FAILURE,
 } from '../types';
 
 
@@ -40,12 +41,12 @@ const notifReducer = (state = initialState, action) => {
                     action.payload,
                 ],
             };
-        // case NOTIFICATION_RECEIVE:
-        //     return {
-        //         ...state,
-        //         isLoading: false,
-        //         notifications: [...state.notifications, action.payload]
-        //     };
+        case NOTIFICATION_FAILURE:
+            return {
+                ...state,
+                isLoading: false,
+                error: action.payload,
+            }
         case NOTIFICATION_REFRESH:
             return {
                 ...state,
