@@ -18,13 +18,11 @@ class AuthController {
      * @param {function} callback - (res, err)
      */
     login = (socket) => async (data, callback) => {
-        // console.log("socket id=>", socket.id, this.io);
         console.log(`User ${socket.id} is trying to login`);
         try {
             let res = await this.users.login(socket.id, data);
             socket.join('online');
             this.io.in('online').emit("updateUsers", this.users.getUsers());
-            console.log("res", res);
             if (typeof callback === "function") callback(res, null);
         } catch (error) {
             if (typeof callback === "function") callback(null, error);
@@ -36,22 +34,14 @@ class AuthController {
      * @param {object} socket - socket object 
      */
     logout = (socket) => async () => {
-        console.log(`${socket.id} try to logout <<<<<<<<<<<<<<<<<<<<<<<`);
         try {
             let user = await this.users.getUser(socket.id);
             if (user.isJoned) {
                 let room = await this.rooms.leaveRoom(socket.id, user.room);
                 if (room.users.length === 0) {
-                    console.log('delet room => ', room);
                     let currntRooms = await this.rooms.deleteRoom(room.id);
                     this.io.emit("updateRooms", currntRooms);
                 } else {
-                    let invit = room.invit;
-                    room = (({
-                        id, name,admin, isPravite, status, users
-                    }) => ({
-                        id, name, admin, isPravite, status, users
-                    }))(room);
                     let usersIds = this.selector.Data(room.users, (({id}) => id));
                     if (user.id === room.admin){
                         let updateRoom = this.rooms.switchAdmin(room.id);
@@ -65,11 +55,12 @@ class AuthController {
                             message: `you are admin of this room`,
                             type: 'notif',
                         })
-                        this.io.to(newAdmin.id).emit("updateInvit", invit);
-                        this.io.to([...usersIds ,newAdmin.id]).emit('updateRoom', updateRoom);
+                        this.io.to(newAdmin.id).emit("updateRoom", updateRoom);
+                        let resUsers = {...updateRoom}
+                        ["invit", "message"].forEach(e => delete resUsers[e]);
+                        this.io.to(usersIds).emit('updateRoom', resUsers);
                     }
                     else {
-                        // notif users in this room
                         this.io.to(usersIds).emit("updateRoom", room);
                         this.io.to(usersIds).emit("notification", {
                             message: `${user.name} left this room`,

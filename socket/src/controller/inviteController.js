@@ -51,7 +51,6 @@ class InviteController {
             this.io.to(user.id).emit("updateNotifications", notifs)
             if (typeof callback === "function") return callback(res.invit, null);
         } catch (error) {
-            console.log(error);
             if (typeof callback === "function") return callback(null, error);
         }
     }

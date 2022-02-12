@@ -84,6 +84,7 @@ class Rooms {
           map: [],
           tetrominos: [],
         }],
+        message: [],
         invit: [],
       };
       this.rooms.push(room);
@@ -98,7 +99,7 @@ class Rooms {
         let newUser = {
           userId: data.userId,
           userName: data.userName,
-          status: 'wating',
+          status: 'waiting',
         }
         this.rooms[index].invit.push(newUser);
         return resolve(this.rooms[index]);
@@ -136,7 +137,6 @@ class Rooms {
     return new Promise((resolve, reject) => {
       let Index = this.rooms.findIndex((room) => room.id === data.roomId);
       if (Index === -1) reject({ message: "Room not found" });
-      console.log(this.rooms[Index]);
       if (this.rooms[Index].status !== "waiting") reject({ message: "Room is closed" });
       if (this.rooms[Index].users.findIndex((user) => user.id === data.userId) !== -1)
         reject({ message: "User is already in room" });
@@ -148,10 +148,10 @@ class Rooms {
         map: [],
         tetrominos: [],
       }
+      console.log("room" ,this.rooms[Index]);
       let isInveted = this.rooms[Index].invit.findIndex(user => user.userId === data.userId);
       if (isInveted !== -1)
         this.rooms[Index].invit[isInveted].status = "accepted";
-      console.log('isInveted', isInveted, '=>', this.rooms[Index].invit);
       this.rooms[Index].users.push(newUser);
       return resolve(this.rooms[Index]);
     });
@@ -159,7 +159,6 @@ class Rooms {
 
   changeStatusRoom = (data) => {
     return new Promise((resolve, reject) => {
-      console.log(data);
       let roomIndex = this.rooms.findIndex((room) => room.id === data.roomId);
       if (roomIndex === -1) return reject({ message: "Room not found" });
       if (this.rooms[roomIndex].admin !== data.userId)
@@ -173,9 +172,11 @@ class Rooms {
     return new Promise((resolve, reject) => {
       let roomIndex = this.rooms.findIndex((room) => room.id === roomId);
       if (roomIndex === -1) return reject({ message: "Room not found" });
+      console.log('leave room1 => ', this.rooms[roomIndex]);
       let userIndex = this.rooms[roomIndex].users.findIndex((user) => user.id === userId);
       if (userIndex === -1) return reject({ message: "User is not joined" });
       this.rooms[roomIndex].users.splice(userIndex, 1);
+      console.log('leave room => ', this.rooms[roomIndex]);
       return resolve(this.rooms[roomIndex]);
     });
   };

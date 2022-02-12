@@ -26,13 +26,11 @@ class RoomController {
                 name: user.name,
             });
             let userUpdate = await this.users.userJoin(socketId, res.id);
-            console.log('create Room', res);
             this.io.to(user.id).emit("updateProfile", userUpdate);
             this.io.emit("updateUsers", this.users.getUsers());
             this.io.emit("updateRooms", this.rooms.getRooms());
             if (typeof callback === "function") callback(res, null);
         } catch (error) {
-            console.log(error, "error");
             if (typeof callback === "function") callback(null, error);
         }
     };
@@ -48,33 +46,35 @@ class RoomController {
             let trimNameRoom = data.roomName.trim().toLowerCase();
             let room = allRooms.find(item => item.name === trimNameRoom);
             if (room) {
-                if (room.status !== 'waiting') return callback(null, {message: "Room is closed"})
+                if (room.status !== 'waiting') return callback(null, { message: "Room is closed" })
                 room = await this.rooms.joinRoom({
                     roomId: room.id,
                     userId: user.id,
                     userName: user.name,
                 })
-                console.log('res', room.users);
                 let ids = this.selector
                     .Data(room.users, (({ id }) => id))
-                    .filter(id => id !== socketId)
-                this.io.to(ids).emit("notification", {
+                    .filter(id => id !== socketId && id !== room.admin)
+                ids.length && this.io.to([...ids, room.admin]).emit("notification", {
                     message: `${user.name} is joind to this room`,
                     type: "notif",
                 })
-                room = (({
-                    id, name,admin, isPravite, status, users
-                }) => ({
-                    id, name, admin, isPravite, status, users
-                }))(room)
-                this.io.to(ids).emit("updateRoom", room);
+                this.io.to(room.admin).emit("updateRoom", room);
+                let resUser = { ...room };
+                ["invit", "message"].forEach(e => delete resUser[e]);
+                ids.length && this.io.to(ids).emit("updateRoom", resUser);
+                let updateProfile = await this.users.userJoin(socketId, room.id);
+                this.io.to(socketId).emit("updateProfile", updateProfile);
+                return callback(resUser, null);
+
             } else {
                 room = await this.rooms.createRoom(data, user);
                 this.io.emit("updateRooms", this.rooms.getRooms());
+                let updateProfile = await this.users.userJoin(socketId, room.id);
+                this.io.to(socketId).emit("updateProfile", updateProfile);
+                return callback(room, null);
             }
-            let updateProfile = await this.users.userJoin(socketId, room.id);
-            this.io.to(socketId).emit("updateProfile", updateProfile);
-            return callback(room, null);
+
         } catch (error) {
             console.log(error);
             if (typeof callback === "fucntion") return callback(null, error);
@@ -106,19 +106,14 @@ class RoomController {
                 message: `${user.name} joind to this room`,
                 type: "notif",
             };
-            let invit = updateRoom.invit;
-            updateRoom = (({
-                id, name,admin, isPravite, status, users
-            }) => ({
-                id, name, admin, isPravite, status, users
-            }))(updateRoom)
             this.io.to(ids).emit("notification", notif);
             this.io.to(user.id).emit("updateProfile", updateProfile);
-            this.io.to(updateRoom.admin).emit("updateInvit", invit)
-            this.io.to(ids).emit("updateRoom", updateRoom);
-            if (typeof callback === "function") callback(updateRoom, null);
+            this.io.to(updateRoom.admin).emit("updateRoom", updateRoom)
+            let resUsers = { ...updateRoom }
+            ["invit", "message"].forEach(e => delete resUsers[e]);
+            this.io.to(ids).emit("updateRoom", resUsers);
+            if (typeof callback === "function") callback(resUsers, null);
         } catch (error) {
-            console.log(error, "error");
             if (typeof callback === "function") callback(null, error);
         }
     };
@@ -131,7 +126,7 @@ class RoomController {
      */
     changeStatusRoom = (socketId, status) => async (roomId, callback) => {
         try {
-            let res = await this.rooms.changeStatusRoom({roomId, userId: socketId, status});
+            let res = await this.rooms.changeStatusRoom({ roomId, userId: socketId, status });
             let ids = this.selector
                 .Data(res.users, ({ id }) => id)
                 .filter((id) => id !== socketId);
@@ -141,16 +136,12 @@ class RoomController {
                 type: "notif",
             };
             ids.length && this.io.to(ids).emit("notification", notif);
-            let roomInfo = (({
-                id, name,admin, isPravite, status, users
-            }) => ({
-                id, name, admin, isPravite, status, users
-            }))(res);
+            let roomInfo = { ...res };
+            ["invit", "message"].forEach(e => delete roomInfo[e]);
             this.io.emit("updateRooms", this.rooms.getRooms());
             ids.length && this.io.to(ids).emit("updateRoom", roomInfo);
             if (typeof callback === "function") callback(res, null);
         } catch (error) {
-            console.log(error);
             if (typeof callback === "function") callback(null, error);
         }
     };
@@ -172,12 +163,6 @@ class RoomController {
                 let usersRoom = this.selector.Data(room.users, ({ id }) => id);
                 if (room.admin === socketId) {
                     let updateRoom = this.rooms.switchAdmin(room.id);
-                    let invites = updateRoom.invit;
-                    updateRoom = (({
-                        id, name,admin, isPravite, status, users
-                    }) => ({
-                        id, name, admin, isPravite, status, users
-                    }))(updateRoom);
                     let newAdmin = updateRoom.users.find(
                         (user) => user.id === updateRoom.admin
                     );
@@ -188,13 +173,14 @@ class RoomController {
                     usersRoom = usersRoom.filter((id) => id !== newAdmin.id);
                     usersRoom.length && this.io.to(usersRoom).emit("notification", notif);
                     notif = { ...notif, message: `you are admin of this room` };
-                    
-                    this.io.to([...usersRoom, newAdmin.id]).emit("updateRoom", updateRoom);
-                    this.io.to(newAdmin.id).emit('updateInvit', invites);
+                    this.io.to(newAdmin.id).emit('updateRoom', updateRoom);
+                    let resUses = { ...updateRoom }
+                    ["invit", "message"].forEach(e => delete resUses[e]);
+                    usersRoom && this.io.to(...usersRoom).emit("updateRoom", resUses);
                     this.io.to(newAdmin.id).emit("notification", notif);
                 } else {
                     room = (({
-                        id, name,admin, isPravite, status, users
+                        id, name, admin, isPravite, status, users
                     }) => ({
                         id, name, admin, isPravite, status, users
                     }))(room);
@@ -205,13 +191,11 @@ class RoomController {
                     this.io.to(usersRoom).emit("updateRoom", room)
                     usersRoom.length && this.io.to(usersRoom).emit("notification", notif);
                 }
-                console.log("room=>", room, "socketId=>", socketId, "users=>", usersRoom);
             }
             this.io.to(user.id).emit("updateProfile", user);
             this.io.emit("updateUsers", this.users.getUsers());
             if (typeof callback === "function") callback(null, null);
         } catch (error) {
-            console.log(error, "error");
             if (typeof callback === "function") callback(null, error);
         }
     };
@@ -231,7 +215,6 @@ class RoomController {
                     isPravite,
                     admin,
                     status,
-                    // users,
                 })
             );
             callback(allRooms, null);

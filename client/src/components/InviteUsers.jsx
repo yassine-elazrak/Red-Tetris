@@ -230,7 +230,7 @@ const InviteUsers = (props) => {
             flexWrap: "wrap",
             justifyContent: "center",
             alignItems: "center",
-            flex: 2,
+            // flex: 2,
             backgroundColor: index % 2 === 0 ? "#fafafa" : "#f0f0f0",
           }}
         >
@@ -279,7 +279,6 @@ const InviteUsers = (props) => {
             justifyContent: "center",
             alignItems: "center",
             padding: "10px",
-            // flex: 2,
             backgroundColor: key % 2 === 0 ? "#fafafa" : "#f0f0f0",
           }}
         >

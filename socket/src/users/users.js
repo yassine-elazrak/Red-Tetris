@@ -149,7 +149,6 @@ class Users {
   }
 
   userCahngeNotifStatus = (userId, notifId, status) => {
-
     return new Promise((resolve, reject) => {
       let userIndex = this.users.findIndex(item => item.id === userId);
       // if (user === -1) return reject({message: "User not found"});

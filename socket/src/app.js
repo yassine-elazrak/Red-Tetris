@@ -36,8 +36,6 @@ class App {
 
     this.io.on("connection", (socket) => {
       console.log(`User connected: ${socket.id}`);
-
-      // console.log('this socket', this);
       socket.use(AuthMiddleware.auth(socket));
 
       /********************** Auth ************************************/
@@ -157,7 +155,6 @@ class App {
        */
       socket.on("disconnect", this.AuthController.logout(socket));
       socket.on("error", (error) => {
-        console.log(`Error: ---> ${error.message}`);
         socket.emit("error", { message: error.message });
       });
 
