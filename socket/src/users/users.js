@@ -61,9 +61,11 @@ class Users {
    * @returns online users object
    */
   getUsers = () => {
-    let res = this.users.map((user) => {return(
-      (({id, name, isJoned}) => ({id, name, isJoned}))(user)
-    )});
+    let res = this.users.map((user) => {
+      return (
+        (({ id, name, isJoned }) => ({ id, name, isJoned }))(user)
+      )
+    });
     return res;
   };
 
@@ -125,18 +127,41 @@ class Users {
    * @param {object} invit - user invite object
    * @returns 
    */
-   userInvitation = (id, invit) => {
+  userInvitation = (id, notif) => {
     return new Promise((resolve, reject) => {
       let index = this.users.findIndex((user) => user.id === id);
       if (index !== -1) {
-        this.users[index].invetation = {invit, ...this.users[index].invetation};
-        return resolve(invit);
+        this.users[index].notif = { invit, ...this.users[index].notif };
+        return resolve(notif);
       }
       return reject({ message: "User not found" });
     });
   }
 
 
+  userNotifications = (id, notif) => {
+    return new Promise((resolve, reject) => {
+      let index = this.users.findIndex((user) => user.id === id);
+      if (index === -1) return reject({ message: "User not found" });
+      this.users[index].notif = { notif, ...this.users[index].notif };
+      return resolve(this.users[index].notif);
+    });
+  }
+
+  userCahngeNotifStatus = (userId, notifId, status) => {
+
+    return new Promise((resolve, reject) => {
+      let userIndex = this.users.findIndex(item => item.id === userId);
+      // if (user === -1) return reject({message: "User not found"});
+      let notifIndex = this.users[userIndex].notif.findIndex(item => item.id === notifId);
+      if (notifId === -1) return reject({message: "Notification not found"});
+      if (this.users[userIndex].notif[notifIndex].read) return reject({message: "This notification is already read"});
+      this.users[userIndex].notif[notifIndex].status = status;
+      this.users[userIndex].notif[notifIndex].read = true;
+      resolve(this.users[userIndex].notif);
+    })
+
+  }
 
 }
 

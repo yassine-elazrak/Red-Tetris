@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 
 import "./styles/NotificationsStyled.css";
 
-import { pushNotification, acceptInvite } from "../redux/actions";
+import { pushNotification, changeStatusInvite } from "../redux/actions";
 
 const { SubMenu } = Menu;
 const MenuItemGroup = Menu.ItemGroup;
@@ -26,7 +26,7 @@ const NotifComponent = (props) => {
       if (id === key) {
         notif.read = true;
         // console.log(notif, "<<<<<<<notif>>>>>>>>>>>>");
-        props.acceptInvite(notif.roomId);
+        props.changeStatusInvite({event: action + 'Invitation', roomId: notif.roomId});
       }
       return notif;
     });
@@ -196,5 +196,5 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps, {
   pushNotification,
-  acceptInvite,
+  changeStatusInvite,
 })(NotifComponent);

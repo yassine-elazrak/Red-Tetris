@@ -81,18 +81,13 @@ class App {
       */
       socket.on("acceptInvitation", this.InviteController.changeStatusInvitation(socket.id, "accepted"));
 
-
-
       /**
       * @description decline invitation
       * @param {string} event - declineInvitation
       * @param {object} data - { roomId }
       * @param {function} callback - (room, err)
       */
-      socket.on("declineInvitation", async (data, callback) => {
-        // if (!socket.rooms.has("online"))
-        //   return callback(null, { message: "You are not authorized" });
-      });
+      socket.on("declineInvitation", this.InviteController.changeStatusInvitation(socket.id, "decline"));
 
       /******************************** Rooms ***********************************/
 

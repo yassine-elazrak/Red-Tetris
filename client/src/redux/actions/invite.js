@@ -33,12 +33,13 @@ export const refreshInvite = (data) => {
     }
 }
 
-export const acceptInvite = (data) => {
+export const changeStatusInvite = (data) => {
     return async (dispatch, getState) => {
         try {
             dispatch({type: LOADING_INVITES});
             const io = getState().socket.socket;
-            const res = await socket(io, "acceptInvitation", data);
+            console.log(data);
+            const res = await socket(io, data.event, data.roomId);
             // console.log(res, '<<<<<<<res>');
             dispatch({type: INVITE_ACCEPT});
             dispatch(success(res, UPDATE_USER));

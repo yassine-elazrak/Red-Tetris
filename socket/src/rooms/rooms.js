@@ -71,7 +71,7 @@ class Rooms {
         });
       }
       let room = {
-        id: user.id,
+        id: Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2),
         name: trimName,
         admin: user.id,
         isPravite: data.isPravite,
