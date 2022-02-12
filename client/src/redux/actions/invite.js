@@ -10,6 +10,7 @@ import {
     INVITE_ACCEPT,
     INVITE_DECLINE,
     NOTIFICATION_FAILURE,
+    ROOM_REFRESH,
 } from '../types';
 
 
@@ -42,7 +43,8 @@ export const changeStatusInvite = (data) => {
             const res = await socket(io, data.event, data.roomId);
             // console.log(res, '<<<<<<<res>');
             dispatch({type: INVITE_ACCEPT});
-            dispatch(success(res, UPDATE_USER));
+            dispatch(success(res.profile, UPDATE_USER));
+            res.room && dispatch(success(res.room, ROOM_REFRESH));
         } catch (err) {
             dispatch(error(err, NOTIFICATION_FAILURE));
         }

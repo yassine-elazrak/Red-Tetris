@@ -64,10 +64,6 @@ const GameSpace = (props) => {
     props.socket.socket("/").on("updateRoom", data => {
       props.refreshRoom(data);
     })
-    // props.socket.socket("/").on("updateInvit", data => {
-    //   console.log('update invit ==========>', data);
-    //   props.refreshInvite(data);
-    // })
     return() => {
       props.socket.socket("/").off("updateRoom");
 

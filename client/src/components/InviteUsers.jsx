@@ -12,7 +12,7 @@ import {
   onlineUsersUpdate,
   leaveRoom,
   refreshRoom,
-  removeAllInvetes
+  removeAllInvetes,
 } from "../redux/actions";
 
 const { Meta } = Card;
@@ -23,7 +23,8 @@ const InviteUsers = (props) => {
   // console.log(props, 'props2');
 
   const [dataSource, setDataSource] = useState([]);
-  // const [inveted, setInveted] = useState([]);
+  const [inveted, setInveted] = useState([]);
+  const [usersRoom, setUsersRoom] = useState([]);
   const [input, setInput] = useState({
     value: "",
     id: null,
@@ -46,7 +47,7 @@ const InviteUsers = (props) => {
         inveted: false,
       };
     });
-    console.log(data, "data");
+    // console.log(data, "data");
     setDataSource(data);
   }, [props.users]);
 
@@ -80,6 +81,10 @@ const InviteUsers = (props) => {
   }, [props.invite.error]);
 
   useEffect(() => {
+    setUsersRoom(props.room.users);
+  }, [props.room.users]);
+
+  useEffect(() => {
     const data = dataSource.map((user) => {
       return {
         ...user,
@@ -92,6 +97,7 @@ const InviteUsers = (props) => {
     });
 
     setDataSource(data);
+    setInveted(props.invite.invites);
   }, [props.invite.invites]);
 
   useEffect(() => {
@@ -108,9 +114,9 @@ const InviteUsers = (props) => {
     //   props.refreshRoom(data);
     //   console.log("update Room", data);
     // });
-    props.socket.socket("/").on("updateInvit", data => {
+    props.socket.socket("/").on("updateInvit", (data) => {
       props.refreshInvite(data);
-    })
+    });
 
     props.onlineUsers();
 
@@ -213,51 +219,87 @@ const InviteUsers = (props) => {
     </Form>
   );
 
-  const inviteList = props.invite.invites.map((invite, index) => {
-    return (
-      <div
-        key={index}
-        style={{
-          width: "100%",
-          display: "inline-block",
-          flexWrap: "wrap",
-          justifyContent: "center",
-          alignItems: "center",
-          flex: 2,
-          backgroundColor: index % 2 === 0 ? "#fafafa" : "#f0f0f0",
-        }}
-      >
+  const inviteList = () => {
+    return inveted.map((invite, index) => {
+      return (
         <div
+          key={index}
           style={{
             width: "100%",
-            display: "flex",
+            display: "inline-block",
             flexWrap: "wrap",
-            justifyContent: "space-around",
+            justifyContent: "center",
             alignItems: "center",
             flex: 2,
+            backgroundColor: index % 2 === 0 ? "#fafafa" : "#f0f0f0",
           }}
         >
-          <span>{invite.userId}</span>
-          <span>{invite.userName}</span>
-          <span
+          <div
             style={{
-              color:
-                invite.status === "accepted"
-                  ? "#6FCF97"
-                  : invite.status === "waiting"
-                  ? gold.primary
-                  : red[4],
-              padding: "5px",
-              borderRadius: "5px",
-              margin: "5px",
+              width: "100%",
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "space-around",
+              alignItems: "center",
+              flex: 2,
             }}
           >
-            {invite.status.charAt(0).toUpperCase() + invite.status.slice(1)}
-          </span>
+            <span>{invite.userId}</span>
+            <span>{invite.userName}</span>
+            <span
+              style={{
+                color:
+                  invite.status === "accepted"
+                    ? "#6FCF97"
+                    : invite.status === "waiting"
+                    ? gold.primary
+                    : red[4],
+                padding: "5px",
+                borderRadius: "5px",
+                margin: "5px",
+              }}
+            >
+              {invite.status.charAt(0).toUpperCase() + invite.status.slice(1)}
+            </span>
+          </div>
         </div>
-      </div>
-    );
-  });
+      );
+    });
+  };
+
+  const UsersInRoom = () => {
+    return usersRoom.map((user, key) => {
+      return (
+        <div
+          key={key}
+          style={{
+            width: "100%",
+            display: "inline-block",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "10px",
+            // flex: 2,
+            backgroundColor: key % 2 === 0 ? "#fafafa" : "#f0f0f0",
+          }}
+        >
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              flexWrap: "wrap",
+              justifyContent: "space-around",
+              alignItems: "center",
+              flex: 2,
+            }}
+          >
+            <span>{user.id}</span>
+            <span>{user.name}</span>
+          </div>
+        </div>
+      );
+    });
+  };
 
   return (
     <Card
@@ -294,70 +336,117 @@ const InviteUsers = (props) => {
     >
       {/* Tabs Start */}
       <Tabs defaultActiveKey="1">
-        <TabPane
-        tab="Users inveted"
-        key='1'
-        type="card"
-        >
-        <div
-          style={{
-            margin: 0,
-            padding: 0,
-            width: "100%",
-            display: "inline-block",
-            flexWrap: "wrap",
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: "5px",
-            boxShadow: "0px 0px 5px #d9d9d9",
-            maxHeight: "60vh",
-            overflowY: "auto",
-          }}
-        >
-          <Meta
-            type="inner"
-            title={
-              <div
-                style={{
-                  width: "100%",
-                  display: "inline-block",
-                  flexWrap: "wrap",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  textAlign: "center",
-                  paddingTop: "5px",
-                }}
-              >
+        <TabPane tab="Users inveted" key="1" type="card">
+          <div
+            style={{
+              margin: 0,
+              padding: 0,
+              width: "100%",
+              display: "inline-block",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: "5px",
+              boxShadow: "0px 0px 5px #d9d9d9",
+              maxHeight: "60vh",
+              overflowY: "auto",
+            }}
+          >
+            <Meta
+              type="inner"
+              title={
                 <div
                   style={{
                     width: "100%",
-                    display: "flex",
-                    justifyContent: "space-around",
+                    display: "inline-block",
+                    flexWrap: "wrap",
+                    justifyContent: "center",
                     alignItems: "center",
-                    padding: 0,
-                    margin: 0,
+                    textAlign: "center",
+                    paddingTop: "5px",
                   }}
                 >
-                  <p>UserId</p>
-                  <p>Name</p>
-                  <p>Status</p>
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "space-around",
+                      alignItems: "center",
+                      padding: 0,
+                      margin: 0,
+                    }}
+                  >
+                    <p>UserId</p>
+                    <p>Name</p>
+                    <p>Status</p>
+                  </div>
                 </div>
-              </div>
-            }
-            style={{
-              backgroundColor: "#f0f0f0",
-              padding: 0,
-              margin: 0,
-              width: "100%",
-            }}
-          />
-          {inviteList}
-        </div>
+              }
+              style={{
+                backgroundColor: "#f0f0f0",
+                padding: 0,
+                margin: 0,
+                width: "100%",
+              }}
+            />
+            {inviteList()}
+          </div>
         </TabPane>
-        <TabPane
-        tab="Users joind"
-        key='2'
-        >test</TabPane>
+        <TabPane tab="Users joind" key="2">
+          <div
+            style={{
+              margin: 0,
+              padding: 0,
+              width: "100%",
+              display: "inline-block",
+              flexWrap: "wrap",
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: "5px",
+              boxShadow: "0px 0px 5px #d9d9d9",
+              maxHeight: "60vh",
+              overflowY: "auto",
+            }}
+          >
+            <Meta
+              type="inner"
+              title={
+                <div
+                  style={{
+                    width: "100%",
+                    display: "inline-block",
+                    flexWrap: "wrap",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    textAlign: "center",
+                    paddingTop: "5px",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "space-around",
+                      alignItems: "center",
+                      padding: 0,
+                      margin: 0,
+                    }}
+                  >
+                    <p>UserId</p>
+                    <p>Name</p>
+                  </div>
+                </div>
+              }
+              style={{
+                backgroundColor: "#f0f0f0",
+                padding: 0,
+                margin: 0,
+                width: "100%",
+              }}
+            />
+            {UsersInRoom()}
+          </div>
+        </TabPane>
         {/* Tabs End */}
       </Tabs>
     </Card>
@@ -382,5 +471,5 @@ export default connect(mapStateToProps, {
   onlineUsersUpdate,
   leaveRoom,
   refreshRoom,
-  removeAllInvetes
+  removeAllInvetes,
 })(InviteUsers);
