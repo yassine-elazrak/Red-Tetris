@@ -153,7 +153,7 @@ class Users {
       let index = this.users.findIndex((user) => user.id === id);
       if (index === -1) return reject({ message: "User not found" });
       this.users[index].notif.push(notif);
-      return resolve(this.users[index].notif);
+      return resolve(this.users[index]);
     });
   }
 

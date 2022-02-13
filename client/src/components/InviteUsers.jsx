@@ -82,7 +82,8 @@ const InviteUsers = (props) => {
 
   useEffect(() => {
     setUsersRoom(props.room.users);
-  }, [props.room.users]);
+    setInveted(props.room.invit);
+  }, [props.room]);
 
   useEffect(() => {
     const data = dataSource.map((user) => {

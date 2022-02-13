@@ -90,6 +90,12 @@ export default function inviteReducer(state = initialState, action) {
                 error: null,
                 isLoading: true,
             }
+        case INVITE_SUCCESS:
+            return {
+                ...state,
+                error: null,
+                isLoading: false,
+            };
         case INVITE_REQUEST:
             return {
                 ...state,

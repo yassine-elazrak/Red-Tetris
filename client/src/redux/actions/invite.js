@@ -21,6 +21,7 @@ export const inviteRequest = (invite) => {
             const io = getState().socket.socket;
             const res = await socket(io, "invitation", invite);
             dispatch(success(res, ROOM_REFRESH));
+            dispatch(success(res, INVITE_SUCCESS));
         } catch (err) {
             dispatch(error(err, INVITE_FAILURE));
         }
