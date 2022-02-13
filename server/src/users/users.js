@@ -19,7 +19,7 @@ class Users {
       if (existingUser) {
         return reject("Username is already taken");
       }
-      const user = { id, name: trimNmae, isJoned: false };
+      const user = { id, name: trimNmae, isJoined: false };
       this.users.push(user);
       return resolve(user);
     });

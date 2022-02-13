@@ -5,7 +5,7 @@ export const IS_LOADING = 'IS_LOADING';
 export const LOADING_USER = 'LOADING_USER';
 export const SUCESS_LOGIN = 'SUCESS_LOGIN';
 export const FAIL_LOGIN = 'FAIL_LOGIN';
-export const UPDATE_USER = 'UPDATE_USER';
+export const UPDATE_PROFILE = 'UPDATE_PROFILE';
 
 // Message actions
 export const SUCESS_SEND_MESSAGE = 'SUCESS_SEND_MESSAGE';

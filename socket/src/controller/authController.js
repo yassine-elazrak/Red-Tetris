@@ -36,7 +36,7 @@ class AuthController {
     logout = (socket) => async () => {
         try {
             let user = await this.users.getUser(socket.id);
-            if (user.isJoned) {
+            if (user.isJoined) {
                 let room = await this.rooms.leaveRoom(socket.id, user.room);
                 if (room.users.length === 0) {
                     let currntRooms = await this.rooms.deleteRoom(room.id);

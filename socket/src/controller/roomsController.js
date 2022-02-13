@@ -12,20 +12,20 @@ class RoomController {
 
     /**
      * @description create new room
-     * @param {string} socketId - socket id
+     * @param {string} socket - socke object
      * @param {object} data - room data
      * @param {function} callback - (res, err)
      */
-    createRoom = (socketId) => async (data, callback) => {
+    createRoom = (socket) => async (data, callback) => {
         try {
-            let user = await this.users.getUser(socketId);
-            if (user.isJoned)
+            let user = await this.users.getUser(socket.id);
+            if (user.isJoined)
                 return callback(null, { message: "You are already in a room" });
             let res = await this.rooms.createRoom(data, {
                 id: user.id,
                 name: user.name,
             });
-            let userUpdate = await this.users.userJoin(socketId, res.id);
+            let userUpdate = await this.users.userJoin(socket.id, res.id);
             this.io.to(user.id).emit("updateProfile", userUpdate);
             this.io.emit("updateUsers", this.users.getUsers());
             this.io.emit("updateRooms", this.rooms.getRooms());
@@ -36,11 +36,11 @@ class RoomController {
     };
 
 
-    createOrJoinRoom = (socketId) => async (data, callback) => {
-        console.log(`${socketId} try to creat or join room data =>`, data);
+    createOrJoinRoom = (socket) => async (data, callback) => {
+        console.log(`${socket.id} try to creat or join room data =>`, data);
         try {
-            let user = await this.users.getUser(socketId);
-            if (user.isJoned)
+            let user = await this.users.getUser(socket.id);
+            if (user.isJoined)
                 return callback(null, { message: "You are already in a room" });
             let allRooms = this.rooms.getRooms();
             let trimNameRoom = data.roomName.trim().toLowerCase();
@@ -54,7 +54,7 @@ class RoomController {
                 })
                 let ids = this.selector
                     .Data(room.users, (({ id }) => id))
-                    .filter(id => id !== socketId && id !== room.admin)
+                    .filter(id => id !== socket.id && id !== room.admin)
                 ids.length && this.io.to([...ids, room.admin]).emit("notification", {
                     message: `${user.name} is joind to this room`,
                     type: "notif",
@@ -63,15 +63,15 @@ class RoomController {
                 let resUser = { ...room };
                 ["invit", "message"].forEach(e => delete resUser[e]);
                 ids.length && this.io.to(ids).emit("updateRoom", resUser);
-                let updateProfile = await this.users.userJoin(socketId, room.id);
-                this.io.to(socketId).emit("updateProfile", updateProfile);
+                let updateProfile = await this.users.userJoin(socket.id, room.id);
+                this.io.to(socket.id).emit("updateProfile", updateProfile);
                 return callback(resUser, null);
 
             } else {
                 room = await this.rooms.createRoom(data, user);
                 this.io.emit("updateRooms", this.rooms.getRooms());
-                let updateProfile = await this.users.userJoin(socketId, room.id);
-                this.io.to(socketId).emit("updateProfile", updateProfile);
+                let updateProfile = await this.users.userJoin(socket.id, room.id);
+                this.io.to(socket.id).emit("updateProfile", updateProfile);
                 return callback(room, null);
             }
 
@@ -83,25 +83,25 @@ class RoomController {
 
     /**
      * @description join to room
-     * @param {string} socketId - socket id
+     * @param {string} socket.id - socket id
      * @param {id} roomId - room id
      * @param {function} callback - (res, err)
      */
-    joinRoom = (socketId) => async (roomId, callback) => {
-        console.log(`User ${socketId} is trying to join room ${roomId}`);
+    joinRoom = (socket) => async (roomId, callback) => {
+        console.log(`User ${socket.id} is trying to join room ${roomId}`);
         try {
-            let user = await this.users.getUser(socketId);
-            if (user.isJoned)
+            let user = await this.users.getUser(socket.id);
+            if (user.isJoined)
                 return callback(null, { message: "You are already in a room" });
             let updateRoom = await this.rooms.joinRoom({
                 roomId,
                 userId: user.id,
                 userName: user.name,
             });
-            let updateProfile = await this.users.userJoin(socketId, roomId);
+            let updateProfile = await this.users.userJoin(socket.id, roomId);
             let ids = this.selector
                 .Data(updateRoom.users, ({ id }) => id)
-                .filter((id) => id !== socketId);
+                .filter((id) => id !== socket.id);
             let notif = {
                 message: `${user.name} joind to this room`,
                 type: "notif",
@@ -120,16 +120,16 @@ class RoomController {
 
     /**
      * @description  close room
-     * @param {string} socketId - socket id
+     * @param {string} socket.id - socket id
      * @param {id} roomId - room id
      * @param {function} callback - (res, err)
      */
-    changeStatusRoom = (socketId, status) => async (roomId, callback) => {
+    changeStatusRoom = (socket, status) => async (roomId, callback) => {
         try {
-            let res = await this.rooms.changeStatusRoom({ roomId, userId: socketId, status });
+            let res = await this.rooms.changeStatusRoom({ roomId, userId: socket.id, status });
             let ids = this.selector
                 .Data(res.users, ({ id }) => id)
-                .filter((id) => id !== socketId);
+                .filter((id) => id !== socket.id);
             let admin = res.users.find((user) => user.id === res.admin);
             let notif = {
                 message: `this room closed by ${admin.name}`,
@@ -148,20 +148,20 @@ class RoomController {
 
     /**
      * @description create new room
-     * @param {string} socketId - socket id
+     * @param {string} socket.id - socket id
      * @param {id} roomId - room id
      * @param {function} callback - (res, err)
      */
-    leaveRoom = (socketId) => async (roomId, callback) => {
+    leaveRoom = (socket) => async (roomId, callback) => {
         try {
-            let room = await this.rooms.leaveRoom(socketId, roomId);
-            let user = await this.users.userLeave(socketId);
+            let room = await this.rooms.leaveRoom(socket.id, roomId);
+            let user = await this.users.userLeave(socket.id);
             if (room.users.length === 0) {
                 await this.rooms.deleteRoom(roomId);
                 this.io.emit("updateRooms", this.rooms.getRooms());
             } else {
                 let usersRoom = this.selector.Data(room.users, ({ id }) => id);
-                if (room.admin === socketId) {
+                if (room.admin === socket.id) {
                     let updateRoom = this.rooms.switchAdmin(room.id);
                     let newAdmin = updateRoom.users.find(
                         (user) => user.id === updateRoom.admin

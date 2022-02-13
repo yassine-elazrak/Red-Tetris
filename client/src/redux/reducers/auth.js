@@ -1,13 +1,14 @@
-import { SUCESS_LOGIN, LOADING_USER, FAIL_LOGIN, UPDATE_USER } from "../types";
+import { SUCESS_LOGIN, LOADING_USER, FAIL_LOGIN, UPDATE_PROFILE } from "../types";
 
 const initialState = {
   isLoading: false,
   isAuth: false,
   error: null,
-  isJoned: false,
+  isJoined: false,
   id: null,
   name: null,
   room: null,
+  notif: [],
 };
 
 export default function authReducer(state = initialState, action) {
@@ -34,16 +35,13 @@ export default function authReducer(state = initialState, action) {
         isAuth: false,
         error: action.payload,
       };
-    case UPDATE_USER:
+    case UPDATE_PROFILE:
       return {
         ...state,
         isLoading: false,
         isAuth: true,
-        id: action.payload.id,
-        name: action.payload.name,
-        isJoned: action.payload.isJoned,
-        room: action.payload.room,
         error: null,
+        ...action.payload,
       };
 
     default:

@@ -43,7 +43,7 @@ const InviteUsers = (props) => {
       return {
         value: user.name,
         id: user.id,
-        isJoned: user.isJoned,
+        isJoined: user.isJoined,
         inveted: false,
       };
     });
@@ -152,7 +152,7 @@ const InviteUsers = (props) => {
     return (
       item.id !== props.auth.id &&
       !item.inveted && (
-        <Option key={item.id} value={item.id} disabled={item.isJoned}>
+        <Option key={item.id} value={item.id} disabled={item.isJoined}>
           {item.value}
           <span
             style={{
@@ -162,7 +162,7 @@ const InviteUsers = (props) => {
               position: "absolute",
               right: "20px",
             }}
-          >{`Status: ${item.isJoned ? "is Joind" : "is Free"}`}</span>
+          >{`Status: ${item.isJoined ? "is Joind" : "is Free"}`}</span>
         </Option>
       )
     );

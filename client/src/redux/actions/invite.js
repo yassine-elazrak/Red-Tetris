@@ -4,7 +4,7 @@ import {
     INVITE_REMOVE_ALL,
     LOADING_INVITES,
     INVITE_FAILURE,
-    UPDATE_USER,
+    UPDATE_PROFILE,
     INVITE_REFRESH,
     INVITE_SUCCESS,
     INVITE_ACCEPT,
@@ -20,7 +20,7 @@ export const inviteRequest = (invite) => {
             dispatch({type: LOADING_INVITES});
             const io = getState().socket.socket;
             const res = await socket(io, "invitation", invite);
-            dispatch(success(res, INVITE_REQUEST));
+            dispatch(success(res, ROOM_REFRESH));
         } catch (err) {
             dispatch(error(err, INVITE_FAILURE));
         }
@@ -40,10 +40,10 @@ export const changeStatusInvite = (data) => {
             dispatch({type: LOADING_INVITES});
             const io = getState().socket.socket;
             console.log(data);
-            const res = await socket(io, data.event, data.roomId);
+            const res = await socket(io, data.event, data);
             // console.log(res, '<<<<<<<res>');
             dispatch({type: INVITE_ACCEPT});
-            dispatch(success(res.profile, UPDATE_USER));
+            dispatch(success(res.profile, UPDATE_PROFILE));
             res.room && dispatch(success(res.room, ROOM_REFRESH));
         } catch (err) {
             dispatch(error(err, NOTIFICATION_FAILURE));

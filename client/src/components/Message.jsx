@@ -39,7 +39,6 @@ const Message = (props) => {
     })
 
     const [messages, setMessages] = useState(fackeMessage());
-
     const handleChange = (e) => {
         setInput({
             ...input,
@@ -69,7 +68,7 @@ const Message = (props) => {
         const chat = document.getElementById('chatBox');
         chat.scrollTop = chat.scrollHeight;
     }, [messages])
-    
+
 
 
     const MessageSide = () => {

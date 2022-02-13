@@ -32,7 +32,7 @@ const newInvite = (state, action) => {
             error: null,
             isLoading: false,
             // room_id: action.payload.roomId,
-    }
+        }
     } else {
         return {
             ...state,

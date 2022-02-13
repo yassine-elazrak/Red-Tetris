@@ -39,7 +39,7 @@ const HomePage = (props) => {
   const [rooms, setRooms] = useState([]);
 
   useEffect(() => {
-    if (props.auth.isAuth && !props.auth.isJoned) {
+    if (props.auth.isAuth && !props.auth.isJoined) {
       setTimeout(() => {
         setTooltipVisible(false);
       }, 3000);
@@ -61,7 +61,7 @@ const HomePage = (props) => {
   }, [hash]);
 
   useEffect(() => {
-    if (props.auth.isAuth && !props.auth.isJoned && !hash.error && hash.room) {
+    if (props.auth.isAuth && !props.auth.isJoined && !hash.error && hash.room) {
       console.log('don1');
       let roomInfo = {
         roomName: hash.room,
@@ -234,7 +234,7 @@ const HomePage = (props) => {
             fontSize: "20px",
           }}
         >
-          {props.auth.isAuth && !props.auth.isJoned && (
+          {props.auth.isAuth && !props.auth.isJoined && (
             <div
               style={{
                 color: "white",

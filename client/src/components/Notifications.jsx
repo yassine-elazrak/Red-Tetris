@@ -26,7 +26,7 @@ const NotifComponent = (props) => {
       if (id === key) {
         notif.read = true;
         // console.log(notif, "<<<<<<<notif>>>>>>>>>>>>");
-        props.changeStatusInvite({event: action + 'Invitation', roomId: notif.roomId});
+        props.changeStatusInvite({event: action + 'Invitation', roomId: notif.roomId, notifId: notif.id});
       }
       return notif;
     });

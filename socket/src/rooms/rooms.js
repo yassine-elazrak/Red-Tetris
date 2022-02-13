@@ -112,13 +112,13 @@ class Rooms {
   changeStatusInvitation = (data) => {
     return new Promise((resolve, reject) => {
       let roomIndex = this.rooms.findIndex((room) => room.id === data.roomId);
-      if (roomIndex === -1) return reject({message: "Room not found"});
+      if (roomIndex === -1) return reject({ message: "Room not found" });
       let invitIndex = this.rooms[roomIndex].invit.findIndex(item => item.userId === data.userId);
-      if (invitIndex === -1) return reject({message: "Your are not invited in this room"});
+      if (invitIndex === -1) return reject({ message: "Your are not invited in this room" });
       this.rooms[roomIndex].invit[invitIndex].status = data.status;
-      if (data.status === "accepted"){
+      if (data.status === "accepted") {
         let user = {
-          name : this.rooms[roomIndex].invit[invitIndex].userName,
+          name: this.rooms[roomIndex].invit[invitIndex].userName,
           id: data.userId,
           score: 0,
           rows: 0,
@@ -148,7 +148,7 @@ class Rooms {
         map: [],
         tetrominos: [],
       }
-      console.log("room" ,this.rooms[Index]);
+      console.log("room", this.rooms[Index]);
       let isInveted = this.rooms[Index].invit.findIndex(user => user.userId === data.userId);
       if (isInveted !== -1)
         this.rooms[Index].invit[isInveted].status = "accepted";

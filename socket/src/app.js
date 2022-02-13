@@ -60,8 +60,7 @@ class App {
 
 
 
-
-      /************************** invitation **************************************/
+      /************************** invitation **************************************/ 
       /**
        * @description invite user to room 
        * @param {string} event - newInvetation
@@ -77,7 +76,7 @@ class App {
       * @param {object} data - { roomId }
       * @param {function} callback - (room, err)
       */
-      socket.on("acceptInvitation", this.InviteController.changeStatusInvitation(socket.id, "accepted"));
+      socket.on("acceptInvitation", this.InviteController.changeStatusInvitation(socket, "accepted"));
 
       /**
       * @description decline invitation
@@ -85,7 +84,7 @@ class App {
       * @param {object} data - { roomId }
       * @param {function} callback - (room, err)
       */
-      socket.on("declineInvitation", this.InviteController.changeStatusInvitation(socket.id, "decline"));
+      socket.on("declineInvitation", this.InviteController.changeStatusInvitation(socket, "decline"));
 
       /******************************** Rooms ***********************************/
 
@@ -104,7 +103,7 @@ class App {
        * @param {object} data - { roomName, roomType }
        * @param {function} callback - (room, err)
        */
-      socket.on("createRoom", this.RoomsController.createRoom(socket.id));
+      socket.on("createRoom", this.RoomsController.createRoom(socket));
 
 
       /**
@@ -113,10 +112,10 @@ class App {
        * @param {object} roomId - roomId
        * @param {function} callback - (room, err)
        */
-      socket.on("joinRoom", this.RoomsController.joinRoom(socket.id))
+      socket.on("joinRoom", this.RoomsController.joinRoom(socket))
 
 
-      socket.on("createOrJoin", this.RoomsController.createOrJoinRoom(socket.id))
+      socket.on("createOrJoin", this.RoomsController.createOrJoinRoom(socket))
 
 
 
@@ -127,7 +126,7 @@ class App {
        * @param {object} data - roomId
        * @param {function} callback - (room, err)
        */
-      socket.on("closeRoom", this.RoomsController.changeStatusRoom(socket.id, 'closed'));
+      socket.on("closeRoom", this.RoomsController.changeStatusRoom(socket, 'closed'));
 
       /**
        * @description leave room
@@ -135,20 +134,20 @@ class App {
        * @param {object} data - roomId
        * @param {function} callback - (null, err)
        */
-      socket.on("leaveRoom", this.RoomsController.leaveRoom(socket.id))
+      socket.on("leaveRoom", this.RoomsController.leaveRoom(socket))
 
 
-      /*************************** Notifictions ************************************/
+      /*************************** Notifictions **********************************/
 
-      /****************************** Game *****************************************/
-
-
-      /***************************** Players ***************************************/
+      /****************************** Game ************************************/
 
 
-      /***************************** Chat ******************************************/
+      /***************************** Players ***********************************/
 
-      /******************************* logout ***************************************/
+
+      /***************************** Chat *************************************/
+
+      /******************************* logout **********************************/
       /**
        * @description disconnect user
        * @param {string} event - disconnect
