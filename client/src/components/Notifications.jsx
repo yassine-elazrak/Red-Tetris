@@ -5,10 +5,7 @@ import { connect } from "react-redux";
 
 import "./styles/NotificationsStyled.css";
 
-import {
-  pushNotification,
-  changeStatusInvite
-} from "../redux/actions";
+import { pushNotification, changeStatusInvite } from "../redux/actions";
 
 const { SubMenu } = Menu;
 const MenuItemGroup = Menu.ItemGroup;
@@ -27,7 +24,11 @@ const NotifComponent = (props) => {
     // //console.log(action, id , '-------------------');
     notifs.forEach((notif, key) => {
       if (id === key) {
-        props.changeStatusInvite({ event: action + 'Invitation', roomId: notif.roomId, notifId: notif.id });
+        props.changeStatusInvite({
+          event: action + "Invitation",
+          roomId: notif.roomId,
+          notifId: notif.id,
+        });
       }
       return notif;
     });
@@ -63,6 +64,9 @@ const NotifComponent = (props) => {
         });
         props.pushNotification(data);
       });
+      // props.socket.socket.socket("/").on("updateRoom", data => {
+      //   console.log('update => ', data);
+      // })
       return () => {
         props.socket.socket.socket("/").off("notification");
       };
@@ -72,7 +76,7 @@ const NotifComponent = (props) => {
   useEffect(() => {
     //console.log(props.notifications);
     props.notifications.error && message.error(props.notifications.error);
-  }, [props.notifications.error])
+  }, [props.notifications.error]);
 
   const mapnotifs = notifs.map((item, key) => {
     // //console.log(item, "item");

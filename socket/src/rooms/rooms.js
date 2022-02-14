@@ -136,10 +136,10 @@ class Rooms {
   joinRoom = (data) => {
     return new Promise((resolve, reject) => {
       let Index = this.rooms.findIndex((room) => room.id === data.roomId);
-      if (Index === -1) reject({ message: "Room not found" });
-      if (this.rooms[Index].status !== "waiting") reject({ message: "Room is closed" });
+      if (Index === -1) return reject({ message: "Room not found" });
+      if (this.rooms[Index].status !== "waiting") return reject({ message: "Room is closed" });
       if (this.rooms[Index].users.findIndex((user) => user.id === data.userId) !== -1)
-        reject({ message: "User is already in room" });
+        return reject({ message: "User is already in room" });
       let newUser = {
         name: data.userName,
         id: data.userId,

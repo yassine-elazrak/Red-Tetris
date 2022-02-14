@@ -74,18 +74,20 @@ const HomePage = (props) => {
   }, [props.profile]);
 
   useEffect(() => {
+    console.log('socket changed');
     if (props.socket.socket) {
       // MOVE THIS LISTENERS TO GAME SPACE
       props.socket.socket.socket("/").on("updateProfile", (data) => {
+        console.log("udpate profile", data)
         props.updateUser(data);
       });
       props.socket.socket.socket("/").on("updateRooms", (data) => {
-        //console.log(data, "dataRooms");
+        console.log("update rooms", data);
         props.refreshRooms(data);
       });
       props.socket.socket.socket("/").on("updateRoom", (data) => {
         props.refreshRoom(data);
-        //console.log("update Room", data);
+        console.log("update Room ============>", data);
       });
       return () => {
         props.socket.socket.socket("/").off("updateProfile");

@@ -54,17 +54,14 @@ class RoomController {
                     userId: user.id,
                     userName: user.name,
                 })
-                let ids = this.selector
-                    .Data(room.users, (({ id }) => id))
-                    .filter(id => id !== socket.id && id !== room.admin)
-                ids.length && this.io.to([...ids, room.admin]).emit("notification", {
-                    message: `${user.name} is joind to this room`,
+                let ids = room.users.map(e => e.id).filter(id => id !== socket.id && id !== room.admin);
+                this.io.to([...ids, room.admin]).emit("notification", {
+                    message: `${user.name} is joind ${room.name}`,
                     type: "notification",
                     read: true,
                 })
                 this.io.to(room.admin).emit("updateRoom", room);
-                let resUser = { ...room };
-                ["invit", "message"].forEach(e => delete resUser[e]);
+                let resUser = _.omit(room, ["invit", "message"]);
                 ids.length && this.io.to(ids).emit("updateRoom", resUser);
                 let updateProfile = await this.users.userJoin(socket.id, room.id);
                 this.io.to(socket.id).emit("updateProfile", updateProfile);
@@ -96,27 +93,27 @@ class RoomController {
             let user = await this.users.getUser(socket.id);
             if (user.isJoined)
                 return callback(null, { message: "You are already in a room" });
-            let updateRoom = await this.rooms.joinRoom({
+            let room = await this.rooms.joinRoom({
                 roomId,
                 userId: user.id,
                 userName: user.name,
             });
             let updateProfile = await this.users.userJoin(socket.id, roomId);
-            let ids = updateRoom.users.map(e => e.id)
-                .filter(id => id !== socket.id);
+            let ids = room.users.map(e => e.id)
+                .filter(id => id !== socket.id && id !== room.admin);
             let notif = {
-                message: `${user.name} joind to this room`,
+                message: `${user.name} joind to ${room.name}`,
                 type: "notification",
                 read: true,
             };
-            this.io.to(ids).emit("notification", notif);
+            this.io.to([...ids, room.admin]).emit("notification", notif);
             this.io.to(user.id).emit("updateProfile", updateProfile);
-            this.io.to(updateRoom.admin).emit("updateRoom", updateRoom)
-            let resUsers = _.omit(updateRoom, ['invit', 'message']);
+            this.io.to(room.admin).emit("updateRoom", room)
+            let resUsers = _.omit(room, ['invit', 'message']);
             ids.length && this.io.to(ids).emit("updateRoom", resUsers);
             if (typeof callback === "function") return callback(resUsers, null);
         } catch (error) {
-            //console.log("error join room =>", error)
+            console.log("error join room =>", error)
             if (typeof callback === "function") return callback(null, error);
         }
     };
@@ -158,6 +155,7 @@ class RoomController {
     leaveRoom = (socket) => async (roomId, callback) => {
         try {
             let room = await this.rooms.leaveRoom(socket.id, roomId);
+            // console.log("room [[[[[[=>", room);
             let user = await this.users.userLeave(socket.id);
             if (room.users.length === 0) {
                 await this.rooms.deleteRoom(roomId);
@@ -165,33 +163,42 @@ class RoomController {
             } else {
                 // let ids = this.selector.Data(room.users, ({ id }) => id);
                 let ids = room.users.map(e => e.id);
+                // console.log("ids after leave room => ", ids);
                 if (room.admin === socket.id) {
                     let updateRoom = this.rooms.switchAdmin(room.id);
                     let newAdmin = updateRoom.users.find(
                         (user) => user.id === updateRoom.admin
                     );
+                    // notification for users
                     let notif = {
                         message: `admin changed to ${newAdmin.name}`,
                         type: "notification",
                         read: true,
                     };
                     ids = ids.filter((id) => id !== newAdmin.id);
+                    // notif users admin is switched!
                     ids.length && this.io.to(ids).emit("notification", notif);
-                    notif = { ...notif, message: `you are admin of this room` };
+                    // update message notification for admin
+                    notif.message=  "you are admin of this room" ;
+                    // update room at new admin
                     this.io.to(newAdmin.id).emit('updateRoom', updateRoom);
                     let resUses = _.omit(updateRoom, ['invit', 'message']);
-                    // ["invit", "message"].forEach(e => delete resUses[e]);
+                    // update room at users
                     ids.length && this.io.to(ids).emit("updateRoom", resUses);
+                    // notif new admin he is admin now
                     this.io.to(newAdmin.id).emit("notification", notif);
                 } else {
-                    room = _.omit(room, ['id', 'name', 'isPravite', 'status', 'users']);
                     let notif = {
-                        message: `${user.name} left this room`,
+                        message: `${user.name} left ${room.name}`,
                         type: "notification",
                         read: true,
                     };
+                    // nitif all users is a user leave room
+                    this.io.to([...ids, room.admin]).emit("notification", notif);
+                    this.io.to(room.admin).emit("updateRoom", room);
+                    room = _.omit(room, ['invit', 'message']);
+                    ids = ids.filter(id => id !== room.admin);
                     ids.length && this.io.to(ids).emit("updateRoom", room)
-                        && this.io.to(ids).emit("notification", notif);
                 }
             }
             this.io.to(user.id).emit("updateProfile", user);

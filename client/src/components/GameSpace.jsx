@@ -58,17 +58,17 @@ const GameSpace = (props) => {
     document.getElementById("game-space").focus();
   };
 
-  useEffect(() => {
-    changeFocused();
-    props.socket.socket("/").on("updateRoom", data => {
-      props.refreshRoom(data);
-    })
-    return() => {
-      props.socket.socket("/").off("updateRoom");
+  // useEffect(() => {
+  //   changeFocused();
+  //   props.socket.socket("/").on("updateRoom", data => {
+  //     props.refreshRoom(data);
+  //   })
+  //   return() => {
+  //     props.socket.socket("/").off("updateRoom");
 
-    }
+  //   }
 
-  }, []);
+  // }, []);
 
   const handleKeyDown = ({ keyCode }) => {
     if (!gameStart && keyCode === 13) {
