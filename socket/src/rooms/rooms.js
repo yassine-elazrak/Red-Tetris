@@ -84,7 +84,7 @@ class Rooms {
           map: [],
           tetrominos: [],
         }],
-        message: [],
+        // message: [],
         invit: [],
       };
       this.rooms.push(room);

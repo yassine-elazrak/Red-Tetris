@@ -16,7 +16,7 @@ import {
 } from './styles/BoxMessage';
 
 const Message = (props) => {
-    //console.log('Message');
+    console.log('Message');
 
     const fackeMessage = () => {
         const message = [];
@@ -44,12 +44,12 @@ const Message = (props) => {
             ...input,
             value: e.target.value
         })
-        //console.log(input.value);
+        console.log(input.value);
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // //console.log(moment().format());
+        // console.log(moment().format());
         const newMessage = {
             userId: profile.id,
             userName: profile.name,
@@ -72,9 +72,11 @@ const Message = (props) => {
 
 
     const MessageSide = () => {
-        //console.log(messages);
+        console.log(messages);
         return (
-            <BoxMessage id='chatBox'>
+            <BoxMessage id='chatBox' style={{
+                height: "calc(100vh - 200px)",
+            }}>
                 {messages?.map((item, id) => {
                     return (
                         <MessageContent

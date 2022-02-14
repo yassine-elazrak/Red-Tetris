@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Layout, Row, Col, Button, Popover, Modal, message, notification } from "antd";
+import { Layout, Row, Col, Button, Popover, Modal } from "antd";
 import {
   SettingOutlined,
   CheckCircleOutlined,
   CloseCircleOutlined,
+  MenuUnfoldOutlined,
+  MenuFoldOutlined,
 } from "@ant-design/icons";
 // import {
 //   InitStage,
@@ -31,10 +33,14 @@ import {
 
 import { useStage } from "../hooks/useStage";
 
-const { Content } = Layout;
+const { Content, Sider } = Layout;
 
 const GameSpace = (props) => {
-  const { room } = props;
+  // const { room } = props;
+  const [collapsedChat, setCollapsedChat] = useState(true);
+  const [triggerChat, setTriggerChat] = useState(true);
+  const [triggerPlayers, setTriggerPlayers] = useState(true);
+  const [collapsedPlayers, setCollapsedPlayers] = useState(true);
 
   const [
     currentStage,
@@ -57,18 +63,6 @@ const GameSpace = (props) => {
   const changeFocused = () => {
     document.getElementById("game-space").focus();
   };
-
-  // useEffect(() => {
-  //   changeFocused();
-  //   props.socket.socket("/").on("updateRoom", data => {
-  //     props.refreshRoom(data);
-  //   })
-  //   return() => {
-  //     props.socket.socket("/").off("updateRoom");
-
-  //   }
-
-  // }, []);
 
   const handleKeyDown = ({ keyCode }) => {
     if (!gameStart && keyCode === 13) {
@@ -174,6 +168,7 @@ const GameSpace = (props) => {
     return (
       <div
         style={{
+          background: "rgba(0, 0, 0, 0.3)",
           padding: "10px",
           margin: 0,
           display: "flex",
@@ -217,153 +212,121 @@ const GameSpace = (props) => {
   };
 
   return (
-    <Content
-      id="game-space"
-      role="button"
-      tabIndex="0"
-      onKeyDown={(e) => handleKeyDown(e)}
-      onKeyUp={(e) => handleKeyUp(e)}
-      onTouchStart={(e) => {
-        if (gameStart) updateDropTime(null);
-        setTouchStart({
-          x: e.changedTouches[0].clientX,
-          y: e.changedTouches[0].clientY,
-        });
-      }}
-      onTouchEnd={(e) => {
-        handleTouchEnd(e);
-      }}
+    <Layout
       style={{
-        padding: 0,
-        margin: 0,
-        height: "calc(100vh - 90px)",
-        paddingBottom: "30px",
-        marginTop: "-10px",
-        marginBottom: "-20px",
-        overflow: "hidden",
+        background: "none",
       }}
     >
-      <Row style={{}}>
-        <Col span={24}>
-          <StageBar
-            shape={TETROMINOES[nextTetromino].shape}
-            score={score}
-            rows={rows}
-            color={TETROMINOES[nextTetromino].color}
-          />
-        </Col>
-      </Row>
-      <Row
+      <Sider
+        collapsedWidth={0}
+        width={200}
+        breakpoint="lg"
         style={{
-          height: "calc(100vh - 220px)",
+          marginTop: 50,
+          padding: 0,
+          position: "absolute",
+          zIndex: 10,
+        }}
+        trigger={
+          triggerPlayers ?
+          collapsedPlayers
+          ? <MenuUnfoldOutlined />
+          : <MenuFoldOutlined />
+          :null
+        }
+      >
+        <Players />
+      </Sider>
+      <Content
+        id="game-space"
+        role="button"
+        tabIndex="0"
+        onKeyDown={(e) => handleKeyDown(e)}
+        onKeyUp={(e) => handleKeyUp(e)}
+        onTouchStart={(e) => {
+          if (gameStart) updateDropTime(null);
+          setTouchStart({
+            x: e.changedTouches[0].clientX,
+            y: e.changedTouches[0].clientY,
+          });
+        }}
+        onTouchEnd={(e) => {
+          handleTouchEnd(e);
+        }}
+        style={{
+          padding: 0,
+          margin: 0,
+          height: "calc(100vh - 90px)",
+          paddingBottom: "30px",
+          marginTop: "-10px",
+          marginBottom: "-20px",
+          overflow: "hidden",
         }}
       >
-        {!room.isPravite && (
-          <Col
-            xs={0}
-            sm={0}
-            md={6}
-            lg={7}
-            xl={6}
-            xxl={5}
-            style={{
-              margin: "auto",
-            }}
-          >
-            <Players />
+        <Row style={{}}>
+          <Col span={24}>
+            <StageBar
+              shape={TETROMINOES[nextTetromino].shape}
+              score={score}
+              rows={rows}
+              color={TETROMINOES[nextTetromino].color}
+            />
           </Col>
-        )}
-        <Col
-          xs={24}
-          sm={13}
-          md={12}
-          lg={10}
-          xl={9}
-          xxl={9}
+        </Row>
+        <Row
           style={{
-            padding: "0px",
-            margin: "auto",
-            width: "100%",
+            height: "calc(100vh - 220px)",
           }}
         >
-          <Stage stage={currentStage} />
-          <Row
-            style={{
-              marginTop: "0",
-            }}
-          >
-            <Col
-              xs={0}
-              sm={0}
-              md={24}
-              lg={24}
-              xl={24}
-              xxl={24}
-              style={{
-                padding: 0,
-              }}
-            >
-              {bottons()}
-            </Col>
-            <Col
-              xs={24}
-              sm={24}
-              md={0}
-              lg={0}
-              xl={0}
-              xxl={0}
-              style={{
-                marginTop: "10px",
-                paddingLeft: "10px",
-              }}
-            >
-              <Popover
-                trigger={"click"}
-                content={bottons()}
-                placement="topRight"
-                color={"rgba(0,0,0,0.8)"}
-                overlayStyle={{
-                  width: "90%",
-                }}
-              >
-                <Button
-                  type="primary"
-                  shape="circle"
-                  style={{
-                    display: "flex",
-                    textAlign: "center",
-                    justifyContent: "center",
-                    margin: 0,
-                  }}
-                >
-                  <SettingOutlined
-                    style={{
-                      margin: "auto",
-                      fontSize: "20px",
-                    }}
-                  />
-                </Button>
-              </Popover>
-            </Col>
-          </Row>
-        </Col>
-        {!room.isPravite && (
           <Col
-            xs={0}
-            sm={11}
-            md={6}
-            lg={7}
-            xl={6}
-            xxl={5}
+            xs={24}
+            sm={13}
+            md={12}
+            lg={10}
+            xl={9}
+            xxl={9}
             style={{
-              height: "100%",
+              padding: "0px",
+              margin: "auto",
+              width: "100%",
             }}
           >
-            <Message />
+            <Stage stage={currentStage} />
+            {bottons()}
           </Col>
-        )}
-      </Row>
-    </Content>
+        </Row>
+      </Content>
+      <Sider
+        collapsedWidth={0}
+        width={250}
+        breakpoint="lg"
+        reverseArrow={true}
+        collapsed={collapsedChat}
+        trigger={
+          // triggerChat ? (
+          //   collapsedPlayers ? (
+              <MenuFoldOutlined 
+               onClick={() => console.log('test')} />
+          //   ) : (
+          //     <MenuUnfoldOutlined
+          //       onClick={() => console.log('test')}
+          //     />
+          //   )
+          // ) : null
+        }
+        style={{
+          background: "rgba(0, 0, 0, 0.3)",
+          zIndex: 10,
+          marginTop: 50,
+          padding: 0,
+          paddingBottom: 5,
+          position: "absolute",
+          right: 0,
+        }}
+      >
+        <Message />
+      </Sider>
+    </Layout>
   );
 };
 

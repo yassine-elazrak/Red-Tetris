@@ -1,6 +1,7 @@
 const Users = require("../users/users");
 const Rooms = require("../rooms/rooms");
-const Selector = require("../utils/selector")
+const Selector = require("../utils/selector");
+const _ = require("lodash");
 
 class AuthController {
 
@@ -57,8 +58,7 @@ class AuthController {
                             type: 'notif',
                         })
                         this.io.to(newAdmin.id).emit("updateRoom", updateRoom);
-                        let resUsers = { ...updateRoom }
-                        ["invit", "message"].forEach(e => delete resUsers[e]);
+                        let resUsers = _.omit(updateRoom, ["invit"]);
                         this.io.to(usersIds).emit('updateRoom', resUsers);
                     }
                     else {

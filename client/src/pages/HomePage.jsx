@@ -217,7 +217,8 @@ const HomePage = (props) => {
           ) : !room.isPravite &&
             room.status === "waiting" &&
             profile.id === room.admin ? (
-            <InviteUsers />
+            // <InviteUsers />
+            <GameSpace />
           ) : (
             <GameSpace />
           )}
@@ -226,6 +227,8 @@ const HomePage = (props) => {
           collapsedWidth="0"
           collapsible
           collapsed={collapsed}
+          // reverseArrow={true}
+          trigger={null}
           width="300px"
           style={{
             background: "rgba(0, 0, 0, 0.5)",

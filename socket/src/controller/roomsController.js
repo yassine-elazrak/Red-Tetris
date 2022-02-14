@@ -61,7 +61,7 @@ class RoomController {
                     read: true,
                 })
                 this.io.to(room.admin).emit("updateRoom", room);
-                let resUser = _.omit(room, ["invit", "message"]);
+                let resUser = _.omit(room, ["invit"]);
                 ids.length && this.io.to(ids).emit("updateRoom", resUser);
                 let updateProfile = await this.users.userJoin(socket.id, room.id);
                 this.io.to(socket.id).emit("updateProfile", updateProfile);
@@ -136,7 +136,6 @@ class RoomController {
             };
             ids.length && this.io.to(ids).emit("notification", notif);
             let roomInfo = _.omit(res, ['invit', 'message']);
-            // ["invit", "message"].forEach(e => delete roomInfo[e]);
             this.io.emit("updateRooms", this.rooms.getRooms());
             ids.length && this.io.to(ids).emit("updateRoom", roomInfo);
             if (typeof callback === "function") callback(res, null);
