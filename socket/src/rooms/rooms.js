@@ -21,12 +21,12 @@ class Rooms {
 
   getRooms = () => {
     let rooms = this.rooms.filter((room) => room.isPravite === false);
-    let res = rooms.map((room) => {
-      return (
-        (({ id, name, isPravite, admin, status }) => ({ id, name, isPravite, admin, status }))(room)
-      )
-    });
-    return res;
+    // let res = rooms.map((room) => {
+    //   return (
+    //     (({ id, name, isPravite, admin, status }) => ({ id, name, isPravite, admin, status }))(room)
+    //   )
+    // });
+    return rooms;
   };
 
   getRoomUsers = (id) => {

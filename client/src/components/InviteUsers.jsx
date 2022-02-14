@@ -6,13 +6,10 @@ import { Form, Input, Button, message, Card, Select, Tabs } from "antd";
 import { gold, red } from "@ant-design/colors";
 import {
   inviteRequest,
-  refreshInvite,
   onlineUsers,
   closeRoom,
   onlineUsersUpdate,
   leaveRoom,
-  refreshRoom,
-  removeAllInvetes,
 } from "../redux/actions";
 
 const { Meta } = Card;
@@ -89,7 +86,7 @@ const InviteUsers = (props) => {
     const data = dataSource.map((user) => {
       return {
         ...user,
-        inveted: props.invite.invites.find(
+        inveted: props.room.invit.find(
           (invited) => invited.userId === user.id
         )
           ? true
@@ -98,25 +95,17 @@ const InviteUsers = (props) => {
     });
 
     setDataSource(data);
-    setInveted(props.invite.invites);
-  }, [props.invite.invites]);
+    setInveted(props.room.invit);
+  }, [props.room.invit]);
 
   useEffect(() => {
     props.room.error && message.error(props.room.error);
   }, [props.room.error]);
 
   useEffect(() => {
-    props.removeAllInvetes();
     props.socket.socket("/").on("updateUsers", (data) => {
       console.log(data, "updateUsers");
       props.onlineUsersUpdate(data);
-    });
-    // props.socket.socket("/").on("updateRoom", (data) => {
-    //   props.refreshRoom(data);
-    //   console.log("update Room", data);
-    // });
-    props.socket.socket("/").on("updateInvit", (data) => {
-      props.refreshInvite(data);
     });
 
     props.onlineUsers();
@@ -465,11 +454,8 @@ const mapStateToProps = (state) => {
 
 export default connect(mapStateToProps, {
   inviteRequest,
-  refreshInvite,
   onlineUsers,
   closeRoom,
   onlineUsersUpdate,
   leaveRoom,
-  refreshRoom,
-  removeAllInvetes,
 })(InviteUsers);

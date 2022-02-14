@@ -1,4 +1,13 @@
-import { SUCESS_LOGIN, LOADING_USER, FAIL_LOGIN, UPDATE_PROFILE } from "../types";
+
+import {
+  SUCESS_LOGIN,
+  LOADING_USER,
+  FAIL_LOGIN,
+  UPDATE_PROFILE,
+  NOTIFICATION_PUSH,
+  NOTIFICATION_REFRESH,
+
+} from "../types";
 
 const initialState = {
   isLoading: false,
@@ -43,6 +52,21 @@ export default function authReducer(state = initialState, action) {
         error: null,
         ...action.payload,
       };
+      case NOTIFICATION_PUSH:
+        return {
+          ...state,
+          isLoading: false,
+          error: null,
+          notif: [...state.notif, action.payload]
+        }
+
+      case NOTIFICATION_REFRESH:
+        return {
+          ...state,
+          isLoading: false,
+          error: null,
+          notif: action.payload,
+        }
 
     default:
       return state;

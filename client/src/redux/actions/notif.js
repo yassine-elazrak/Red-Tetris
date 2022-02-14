@@ -22,19 +22,7 @@ import {
 //     };
 // };
 
-export const refreshNotifications = (notifications) => {
-    return (dispatch) => {
-        dispatch({type: NOTIFICATION_LOADING});
-        dispatch({ type: NOTIFICATION_REFRESH, payload: notifications });
-    };
-};
 
-export const pushNotification = (notification) => {
-    return (dispatch) => {
-        dispatch({ type: NOTIFICATION_LOADING });
-        dispatch(success(notification, NOTIFICATION_PUSH));
-    };
-};
 
 
 

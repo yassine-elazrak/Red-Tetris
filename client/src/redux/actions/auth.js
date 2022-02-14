@@ -1,5 +1,11 @@
 import socket from "../../socket/Socket";
-import { SUCESS_LOGIN, LOADING_USER, FAIL_LOGIN, UPDATE_PROFILE } from "../types";
+import {
+  SUCESS_LOGIN,
+  LOADING_USER,
+  FAIL_LOGIN,
+  UPDATE_PROFILE,
+  NOTIFICATION_PUSH,
+} from "../types";
 
 export const login = (user) => {
   return async (dispatch, getState) => {
@@ -17,6 +23,21 @@ export const login = (user) => {
 export const updateUser = (user) => {
   return (dispatch) => {
     dispatch(success(user, UPDATE_PROFILE));
+  };
+};
+
+
+// export const refreshNotifications = (notifications) => {
+//   return (dispatch) => {
+//       dispatch({type: NOTIFICATION_LOADING});
+//       dispatch({ type: NOTIFICATION_REFRESH, payload: notifications });
+//   };
+// };
+
+export const pushNotification = (notification) => {
+  return (dispatch) => {
+      // dispatch({ type: NOTIFICATION_LOADING });
+      dispatch(success(notification, NOTIFICATION_PUSH));
   };
 };
 

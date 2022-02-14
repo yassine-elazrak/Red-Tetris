@@ -27,7 +27,6 @@ import {
   updateTetromino,
   leaveRoom,
   refreshRoom,
-  refreshInvite,
 } from "../redux/actions";
 
 import { useStage } from "../hooks/useStage";
@@ -383,5 +382,4 @@ export default connect(mapStateToProps, {
 
   leaveRoom,
   refreshRoom,
-  refreshInvite,
 })(GameSpace);

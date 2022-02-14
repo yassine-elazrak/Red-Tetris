@@ -10,17 +10,6 @@ import {
 const initialState = {
     isLoading: false,
     error: null,
-    notifications: [
-        // userId: userId,
-        // userName: userName,
-        // roomId: roomId,
-        // roomName: roomName,
-        // read: false | true,
-        // type: invite | message | ...,
-        // content: content,
-        // createdAt: createdAt,
-        // updatedAt: updatedAt,
-    ],
 };
 
 const notifReducer = (state = initialState, action) => {
@@ -36,10 +25,6 @@ const notifReducer = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 error: null,
-                notifications: [
-                    ...state.notifications,
-                    action.payload,
-                ],
             };
         case NOTIFICATION_FAILURE:
             return {
@@ -51,7 +36,6 @@ const notifReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                notifications: action.payload
             };
         default:
             return state;

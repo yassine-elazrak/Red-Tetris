@@ -5,7 +5,10 @@ import { connect } from "react-redux";
 
 import "./styles/NotificationsStyled.css";
 
-import { pushNotification, changeStatusInvite } from "../redux/actions";
+import {
+  pushNotification,
+  changeStatusInvite
+} from "../redux/actions";
 
 const { SubMenu } = Menu;
 const MenuItemGroup = Menu.ItemGroup;
@@ -22,15 +25,13 @@ const NotifComponent = (props) => {
     // const id = split[1];
     const action = split[0];
     // console.log(action, id , '-------------------');
-    const newNotifs = notifs.map((notif, key) => {
+    notifs.forEach((notif, key) => {
       if (id === key) {
-        notif.read = true;
-        // console.log(notif, "<<<<<<<notif>>>>>>>>>>>>");
-        props.changeStatusInvite({event: action + 'Invitation', roomId: notif.roomId, notifId: notif.id});
+        props.changeStatusInvite({ event: action + 'Invitation', roomId: notif.roomId, notifId: notif.id });
       }
       return notif;
     });
-    setNotifs(newNotifs);
+    // setNotifs(newNotifs);
   };
 
   useEffect(() => {
@@ -40,12 +41,11 @@ const NotifComponent = (props) => {
   }, [notifs]);
 
   useEffect(() => {
-    if (props.notifications.error){
-      message.error(props.notifications.error);
-    }else{
-      setNotifs(props.notifications.notifications);
-    }
-  }, [props.notifications]);
+    console.log('-- props auth notif--', props.auth.notif)
+    setNotifs(props.auth.notif);
+  }, [props.auth.notif]);
+
+  // useEffect(() => {}, [])
 
   //   id: "832NhjV0cGTWFo3-AAAJ"
   // name: "dasfdas"
@@ -68,6 +68,11 @@ const NotifComponent = (props) => {
       };
     }
   }, [props.socket]);
+
+  useEffect(() => {
+    console.log(props.notifications);
+    props.notifications.error && message.error(props.notifications.error);
+  }, [props.notifications.error])
 
   const mapnotifs = notifs.map((item, key) => {
     // console.log(item, "item");

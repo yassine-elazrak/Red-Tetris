@@ -42,6 +42,7 @@ export const joinRoom = (roomId) => {
       dispatch({ type: LOADING_ROOM });
       const io = getState().socket.socket;
       const res = await socket(io, "joinRoom", roomId);
+      console.log('res join room =>', res);
       dispatch(success(res, ROOM_JOIN));
     } catch (err) {
       dispatch(error(err, ROOM_ERROR));

@@ -42,21 +42,22 @@ class AuthController {
                     let currntRooms = await this.rooms.deleteRoom(room.id);
                     this.io.emit("updateRooms", currntRooms);
                 } else {
-                    let usersIds = this.selector.Data(room.users, (({id}) => id));
-                    if (user.id === room.admin){
+                    let usersIds = this.selector.Data(room.users, (({ id }) => id));
+                    if (user.id === room.admin) {
                         let updateRoom = this.rooms.switchAdmin(room.id);
                         let newAdmin = updateRoom.users.find(user => user.id === updateRoom.admin)
                         usersIds = usersIds.filter(id => id !== updateRoom.admin);
                         usersIds.length && this.io.to(usersIds).emit("notification", {
                             message: `admin changed to ${newAdmin.name}`,
-                            type: "notif",
+                            type: "notification",
+                            read: true,
                         })
                         this.io.to(newAdmin.id).emit('notification', {
                             message: `you are admin of this room`,
                             type: 'notif',
                         })
                         this.io.to(newAdmin.id).emit("updateRoom", updateRoom);
-                        let resUsers = {...updateRoom}
+                        let resUsers = { ...updateRoom }
                         ["invit", "message"].forEach(e => delete resUsers[e]);
                         this.io.to(usersIds).emit('updateRoom', resUsers);
                     }
@@ -64,7 +65,8 @@ class AuthController {
                         this.io.to(usersIds).emit("updateRoom", room);
                         this.io.to(usersIds).emit("notification", {
                             message: `${user.name} left this room`,
-                            type: "notif",
+                            type: "notification",
+                            read: true,
                         })
                     }
                 }

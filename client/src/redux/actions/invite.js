@@ -21,19 +21,19 @@ export const inviteRequest = (invite) => {
             const io = getState().socket.socket;
             const res = await socket(io, "invitation", invite);
             dispatch(success(res, ROOM_REFRESH));
-            dispatch(success(res, INVITE_SUCCESS));
+            dispatch({type: INVITE_SUCCESS});
         } catch (err) {
             dispatch(error(err, INVITE_FAILURE));
         }
     }
 }
 
-export const refreshInvite = (data) => {
-    return (dispatch) => {
-        dispatch({type: LOADING_INVITES});
-        dispatch(success(data, INVITE_REQUEST));
-    }
-}
+// export const refreshInvite = (data) => {
+//     return (dispatch) => {
+//         dispatch({type: LOADING_INVITES});
+//         dispatch(success(data, INVITE_REQUEST));
+//     }
+// }
 
 export const changeStatusInvite = (data) => {
     return async (dispatch, getState) => {
@@ -42,7 +42,7 @@ export const changeStatusInvite = (data) => {
             const io = getState().socket.socket;
             console.log(data);
             const res = await socket(io, data.event, data);
-            // console.log(res, '<<<<<<<res>');
+            console.log("res chnage status initation", res);
             dispatch({type: INVITE_ACCEPT});
             dispatch(success(res.profile, UPDATE_PROFILE));
             res.room && dispatch(success(res.room, ROOM_REFRESH));
