@@ -1,4 +1,4 @@
-export * from './auth';
+export * from './profile';
 // export * from './message';
 export * from './notif';
 export * from './room';

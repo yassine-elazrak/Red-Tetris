@@ -3,7 +3,7 @@
 // const port = process.env.PORT || 3000;
 // const app = createApp();
 // app.listen(port, () =>
-//     console.log(`Server is running!\nAPI documentation: http://localhost:${port}/doc`)
+//     //console.log(`Server is running!\nAPI documentation: http://localhost:${port}/doc`)
 // );
 
 const express = require("express");
@@ -50,10 +50,10 @@ const io = socketIo(server, {
 // }
 
 io.on("connection", (socket) => {
-  console.log("A new user just connected");
+  //console.log("A new user just connected");
 
   socket.on("login", (user, callback) => {
-    console.log("login", user);
+    //console.log("login", user);
     if (typeof callback === "function") {
       callback({
         name: user,
@@ -73,7 +73,7 @@ io.on("connection", (socket) => {
      * }
      * callback: (error, user) => {}
      */
-    console.log(args);
+    //console.log(args);
     // if (!isRealString(args.name) || !isRealString(args.room)) {
     //   return callback("Name and room are required");
     // }
@@ -93,7 +93,7 @@ io.on("connection", (socket) => {
    */
 
   socket.on("createMessage", (message, callback) => {
-    console.log(message);
+    //console.log(message);
     const user = getUser(socket.id);
     if (user) {
       io.to(user.room).emit("message", { "user.name": message });
@@ -107,7 +107,7 @@ io.on("connection", (socket) => {
    */
 
   socket.on("disconnect", () => {
-    console.log("user disconnected");
+    //console.log("user disconnected");
     // const user = removeUser(socket.id);
     // if (user)
     //   io.to(user.room).emit('message', `${user.name} has left ${user.room}  room.`);
@@ -123,5 +123,5 @@ app.get("/", (req, res) => {
 });
 
 server.listen(3000, () => {
-  console.log("server is running on port 3000");
+  //console.log("server is running on port 3000");
 });

@@ -5,7 +5,7 @@ import GameSpace from '../components/GameSpace';
 
 
 const OnePlayerMode = (props) => {
-    // console.log(props, 'props');
+    // //console.log(props, 'props');
     return (
         <GameSpace />
     )
@@ -14,7 +14,7 @@ const OnePlayerMode = (props) => {
 const mapStateToProps = (state) => {
     return {
         room: state.room,
-        auth: state.auth
+        profile: state.profile
     }
 }
 

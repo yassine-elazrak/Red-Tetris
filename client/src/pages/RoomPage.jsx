@@ -6,9 +6,9 @@ import { useSelector } from 'react-redux'
 import GameSpace from '../components/GameSpace'
 
 export const RoomPage = (props) => {
-    // console.log(props);
-    const { room, auth } = useSelector(state => state);
-    // console.log(room);
+    // //console.log(props);
+    const { room, profile } = useSelector(state => state);
+    // //console.log(room);
     return (
         <div>
             <GameSpace />

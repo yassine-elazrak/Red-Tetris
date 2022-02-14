@@ -16,7 +16,7 @@ import {
 } from './styles/BoxMessage';
 
 const Message = (props) => {
-    console.log('Message');
+    //console.log('Message');
 
     const fackeMessage = () => {
         const message = [];
@@ -32,7 +32,7 @@ const Message = (props) => {
         return message;
     }
 
-    const { auth } = props;
+    const { profile } = props;
     const [input, setInput] = useState({
         value: '',
         error: false
@@ -44,15 +44,15 @@ const Message = (props) => {
             ...input,
             value: e.target.value
         })
-        console.log(input.value);
+        //console.log(input.value);
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // console.log(moment().format());
+        // //console.log(moment().format());
         const newMessage = {
-            userId: auth.id,
-            userName: auth.name,
+            userId: profile.id,
+            userName: profile.name,
             message: input.value,
             createdAt: moment().format()
         }
@@ -72,7 +72,7 @@ const Message = (props) => {
 
 
     const MessageSide = () => {
-        console.log(messages);
+        //console.log(messages);
         return (
             <BoxMessage id='chatBox'>
                 {messages?.map((item, id) => {
@@ -80,20 +80,20 @@ const Message = (props) => {
                         <MessageContent
                             key={id}
                             userId={item.userId}
-                            authId={auth.id}>
+                            profileId={profile.id}>
                             <MessageUserName
                                 userId={item.userId}
-                                authId={auth.id}>
-                                <span>{item.userId === auth.id ? 'You' : item.userName}</span>
+                                profileId={profile.id}>
+                                <span>{item.userId === profile.id ? 'You' : item.userName}</span>
                             </MessageUserName>
                             <MessageText
                                 userId={item.userId}
-                                authId={auth.id}>
+                                profileId={profile.id}>
                                 <span>{item.message}</span>
                             </MessageText>
                             <MessageCreatedAt
                                 userId={item.userId}
-                                authId={auth.id}>
+                                profileId={profile.id}>
                                 <span>{moment(item.createdAt).fromNow()}</span>
                             </MessageCreatedAt>
                         </MessageContent>
@@ -127,7 +127,7 @@ const Message = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        auth: state.auth,
+        profile: state.profile,
         room: state.room
     }
 }

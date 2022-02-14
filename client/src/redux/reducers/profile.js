@@ -20,7 +20,7 @@ const initialState = {
   notif: [],
 };
 
-export default function authReducer(state = initialState, action) {
+export default function profileReducer(state = initialState, action) {
   switch (action.type) {
     case LOADING_USER:
       return {

@@ -70,7 +70,7 @@ export const usePlayer = () => {
                 }
             });
         });
-        console.log(newStage);
+        //console.log(newStage);
         return newStage;
     }
 
@@ -91,7 +91,7 @@ export const usePlayer = () => {
     }
 
     const playerDrop = () => {
-        console.log("playerDrop");
+        //console.log("playerDrop");
         if (
             !checkCollision(tetromino, currentStage) &&
             !gameOver &&

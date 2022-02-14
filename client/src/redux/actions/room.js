@@ -36,13 +36,13 @@ export const createOrJoinRoom = (room) => {
 }
 
 export const joinRoom = (roomId) => {
-  // console.log("joinRoom", roomId);
+  // //console.log("joinRoom", roomId);
   return async (dispatch, getState) => {
     try {
       dispatch({ type: LOADING_ROOM });
       const io = getState().socket.socket;
       const res = await socket(io, "joinRoom", roomId);
-      console.log('res join room =>', res);
+      //console.log('res join room =>', res);
       dispatch(success(res, ROOM_JOIN));
     } catch (err) {
       dispatch(error(err, ROOM_ERROR));

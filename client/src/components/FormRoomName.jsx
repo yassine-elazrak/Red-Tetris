@@ -11,8 +11,6 @@ const FormRoomName = (props) => {
   });
 
   const [checked, setChecked] = useState(false);
-  // const [model, con]
-
   const handleChange = (e) => {
     setInput({
       ...input,
@@ -26,7 +24,7 @@ const FormRoomName = (props) => {
     const data = {
       roomName: input.value,
       isPravite: !checked,
-      userId: props.auth.id,
+      userId: props.profile.id,
     };
     input.value.length > 2
       ? setInput({
@@ -49,8 +47,10 @@ const FormRoomName = (props) => {
           title: props.room.error,
           cancelText: "No",
           okText: "Yes",
-          onOk() {console.log('click ok');},
-          onCancel(){},
+          onOk() {
+            console.log("click ok");
+          },
+          onCancel() {},
         });
       } else message.error(props.room.error);
     }
@@ -145,7 +145,7 @@ const FormRoomName = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    auth: state.auth,
+    profile: state.profile,
     room: state.room,
   };
 };

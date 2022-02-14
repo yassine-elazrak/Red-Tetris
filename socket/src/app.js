@@ -30,12 +30,12 @@ class App {
     // const rooms = new Rooms();
     const AuthMiddleware = new Middleware();
     this.server.listen(process.env.PORT || 5000, () => {
-      console.log(`server is running on port ${process.env.PORT || 5000}`);
+      //console.log(`server is running on port ${process.env.PORT || 5000}`);
     });
 
 
     this.io.on("connection", (socket) => {
-      console.log(`User connected: ${socket.id}`);
+      //console.log(`User connected: ${socket.id}`);
       socket.use(AuthMiddleware.auth(socket));
 
       /********************** Auth ************************************/

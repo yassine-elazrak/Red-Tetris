@@ -16,7 +16,7 @@ import {
 
 //         }
 //         catch (err) {
-//             console.log(err);
+//             //console.log(err);
 //             dispatch(error(err, FAIL_LOGIN));
 //         }
 //     };

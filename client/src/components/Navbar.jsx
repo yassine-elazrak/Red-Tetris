@@ -16,26 +16,26 @@ import { connect } from "react-redux";
 
 const NavbarComponent = (props) => {
 
-    const { auth, room } = props;
+    const { profile, room } = props;
 
     // useEffect(() => {
-    //     console.log("props updatedwww");
+    //     //console.log("props updatedwww");
     //     if (props.socket){
     //         props.socket.socket("/").on("updateProfile", (data) => {
-    //             console.log(data, "updateProfile");
+    //             //console.log(data, "updateProfile");
     //         });
     //         return () => {
     //             props.socket.socket("/").off("updateUsers");
     //         }
     //     }
-    // }, [props.socket, props.room, props.auth]);
+    // }, [props.socket, props.room, props.profile]);
 
 
 
     return (
         <Affix>
             <NavbarStyled className='d-flex justify-content-between'>
-                {!auth.isAuth ?
+                {!profile.isAuth ?
                     <div className='d-flex justify-content-around' style={{width: '100%'}} >
                         <img src={logD} alt="logo" />
                     </div>
@@ -50,7 +50,7 @@ const NavbarComponent = (props) => {
                         <img src={logM} alt="logo" className='d-none d-sm-block'  />
                     </LogoMobile>
                     <NotifDiv>
-                        <h3  className="d-none d-sm-block" > {auth.name} </h3>
+                        <h3  className="d-none d-sm-block" > {profile.name} </h3>
                         <NotifComponent />
                     </NotifDiv>
                     </>
@@ -63,7 +63,7 @@ const NavbarComponent = (props) => {
 const mapStateToProps = (state) => {
     return {
         room: state.room,
-        auth: state.auth,
+        profile: state.profile,
         socket: state.socket.socket,
     }
 }

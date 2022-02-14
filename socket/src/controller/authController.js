@@ -18,7 +18,7 @@ class AuthController {
      * @param {function} callback - (res, err)
      */
     login = (socket) => async (data, callback) => {
-        console.log(`User ${socket.id} is trying to login`);
+        //console.log(`User ${socket.id} is trying to login`);
         try {
             let res = await this.users.login(socket.id, data);
             socket.join('online');
@@ -74,7 +74,7 @@ class AuthController {
             let allUsers = await this.users.logout(socket.id);
             this.io.emit("updateUsers", allUsers);
         } catch (error) {
-            console.log("error", error);
+            //console.log("error", error);
         }
     }
 }

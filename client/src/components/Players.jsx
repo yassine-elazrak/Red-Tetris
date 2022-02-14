@@ -7,7 +7,7 @@ import { InitStage } from '../helpers/StageHelper';
 
 
 export const Players = (props) => {
-    console.log('Players');
+    //console.log('Players');
 
     const fakeMap = [
         {

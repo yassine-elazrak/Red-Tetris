@@ -39,7 +39,7 @@ class RoomController {
 
 
     createOrJoinRoom = (socket) => async (data, callback) => {
-        console.log(`${socket.id} try to creat or join room data =>`, data);
+        //console.log(`${socket.id} try to creat or join room data =>`, data);
         try {
             let user = await this.users.getUser(socket.id);
             if (user.isJoined)
@@ -79,7 +79,7 @@ class RoomController {
             }
 
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             if (typeof callback === "fucntion") return callback(null, error);
         }
     }
@@ -91,7 +91,7 @@ class RoomController {
      * @param {function} callback - (res, err)
      */
     joinRoom = (socket) => async (roomId, callback) => {
-        console.log(`User ${socket.id} is trying to join room ${roomId}`);
+        //console.log(`User ${socket.id} is trying to join room ${roomId}`);
         try {
             let user = await this.users.getUser(socket.id);
             if (user.isJoined)
@@ -112,15 +112,11 @@ class RoomController {
             this.io.to(ids).emit("notification", notif);
             this.io.to(user.id).emit("updateProfile", updateProfile);
             this.io.to(updateRoom.admin).emit("updateRoom", updateRoom)
-            // let resUsers = { ...updateRoom }
-            // console.log("res Users =>", resUsers, updateRoom);
-            // ["invit", "message"].forEach(e => delete resUsers[e]);
             let resUsers = _.omit(updateRoom, ['invit', 'message']);
-            // console.log("join rom res =>", resUsers, updateRoom);
             ids.length && this.io.to(ids).emit("updateRoom", resUsers);
             if (typeof callback === "function") return callback(resUsers, null);
         } catch (error) {
-            console.log("error join room =>", error)
+            //console.log("error join room =>", error)
             if (typeof callback === "function") return callback(null, error);
         }
     };
@@ -134,9 +130,6 @@ class RoomController {
     changeStatusRoom = (socket, status) => async (roomId, callback) => {
         try {
             let res = await this.rooms.changeStatusRoom({ roomId, userId: socket.id, status });
-            // let ids = this.selector
-            //     .Data(res.users, ({ id }) => id)
-            //     .filter((id) => id !== socket.id);
             let ids = res.users.map(e => e.id)
                 .filter(id => id !== socket.id);
             let admin = res.users.find((user) => user.id === res.admin);
@@ -188,14 +181,10 @@ class RoomController {
                     this.io.to(newAdmin.id).emit('updateRoom', updateRoom);
                     let resUses = _.omit(updateRoom, ['invit', 'message']);
                     // ["invit", "message"].forEach(e => delete resUses[e]);
-                    ids && this.io.to(ids).emit("updateRoom", resUses);
+                    ids.length && this.io.to(ids).emit("updateRoom", resUses);
                     this.io.to(newAdmin.id).emit("notification", notif);
                 } else {
-                    room = (({
-                        id, name, admin, isPravite, status, users
-                    }) => ({
-                        id, name, admin, isPravite, status, users
-                    }))(room);
+                    room = _.omit(room, ['id', 'name', 'isPravite', 'status', 'users']);
                     let notif = {
                         message: `${user.name} left this room`,
                         type: "notification",
@@ -223,10 +212,10 @@ class RoomController {
                 .map(e => {
                     return _.pick(e, ['id', 'name', 'isPravite', 'admin', 'status']);
                 });
-            console.log(allRooms);
+            //console.log(allRooms);
             callback(allRooms, null);
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             if (typeof callback === "function") callback(null, error);
         }
     };

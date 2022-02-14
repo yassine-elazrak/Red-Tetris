@@ -25,9 +25,9 @@ export const MessageContent = styled.div`
     background: rgba(0, 0, 0, 0.5);
     width: 90%;
     padding: 0px 10px 10px 10px;
-    float: ${props => props.userId === props.authId ? 'right' : 'left'};
+    float: ${props => props.userId === props.profileId ? 'right' : 'left'};
     margin-bottom: 10px;
-    border-radius: ${props => props.userId === props.authId ? '10px 0px 10px 10px' :
+    border-radius: ${props => props.userId === props.profileId ? '10px 0px 10px 10px' :
         '0px 10px 10px 10px'};
 `;
 
@@ -35,7 +35,7 @@ export const MessageUserName = styled.div`
     font-size: 12px;
     font-weight: bold;
     color: rgba(225, 225, 225, 0.5);
-    text-align: ${props => props.userId === props.authId ? 'end' : 'start'};
+    text-align: ${props => props.userId === props.profileId ? 'end' : 'start'};
 `;
 
 export const MessageText = styled.div`
@@ -49,5 +49,5 @@ export const MessageText = styled.div`
 export const MessageCreatedAt = styled.div`
     font-size: 12px;
     color: rgba(225, 225, 225, 0.5);
-    text-align: ${props => props.userId === props.authId ? 'start' : 'end'};
+    text-align: ${props => props.userId === props.profileId ? 'start' : 'end'};
 `;

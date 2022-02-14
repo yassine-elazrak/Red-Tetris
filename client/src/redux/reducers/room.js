@@ -35,12 +35,6 @@ export default function roomReducer(state = initialState, action) {
                 isLoading: false,
                 error: null,
                 ...action.payload,
-                // id: action.payload.id,
-                // name: action.payload.name,
-                // admin: action.payload.admin,
-                // status: action.payload.status,
-                // isPravite: action.payload.isPravite,
-                // users: action.payload.users,
             }
         case ROOM_REFRESH:
             return {
@@ -48,12 +42,6 @@ export default function roomReducer(state = initialState, action) {
                 isLoading: false,
                 error: null,
                 ...action.payload,
-                // id: action.payload.id,
-                // name: action.payload.name,
-                // admin: action.payload.admin,
-                // status: action.payload.status,
-                // isPravite: action.payload.isPravite,
-                // users: action.payload.users,
             }
         case ROOM_JOIN:
             return {
@@ -61,12 +49,6 @@ export default function roomReducer(state = initialState, action) {
                 isLoading: false,
                 error: null,
                 ...action.payload,
-                // id: action.payload.id,
-                // name: action.payload.name,
-                // isPravite: action.payload.isPravite,
-                // admin: action.payload.admin,
-                // status: action.payload.status,
-                // users: action.payload.users,
             };
         case ROOM_LEAVE:
             return initialState;

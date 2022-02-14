@@ -17,7 +17,7 @@ const { Option } = Select;
 const { TabPane } = Tabs;
 
 const InviteUsers = (props) => {
-  // console.log(props, 'props2');
+  // //console.log(props, 'props2');
 
   const [dataSource, setDataSource] = useState([]);
   const [inveted, setInveted] = useState([]);
@@ -44,7 +44,7 @@ const InviteUsers = (props) => {
         inveted: false,
       };
     });
-    // console.log(data, "data");
+    // //console.log(data, "data");
     setDataSource(data);
   }, [props.users]);
 
@@ -60,7 +60,7 @@ const InviteUsers = (props) => {
           error: true,
         });
     if (input.error || !input.id) return;
-    // console.log(input.id, props.room.id, "input.value");
+    // //console.log(input.id, props.room.id, "input.value");
     props.inviteRequest({
       userId: input.id,
       roomId: props.room.id,
@@ -104,7 +104,7 @@ const InviteUsers = (props) => {
 
   useEffect(() => {
     props.socket.socket("/").on("updateUsers", (data) => {
-      console.log(data, "updateUsers");
+      //console.log(data, "updateUsers");
       props.onlineUsersUpdate(data);
     });
 
@@ -140,7 +140,7 @@ const InviteUsers = (props) => {
 
   const options = dataSource.map((item) => {
     return (
-      item.id !== props.auth.id &&
+      item.id !== props.profile.id &&
       !item.inveted && (
         <Option key={item.id} value={item.id} disabled={item.isJoined}>
           {item.value}
@@ -445,7 +445,7 @@ const InviteUsers = (props) => {
 const mapStateToProps = (state) => {
   return {
     room: state.room,
-    auth: state.auth,
+    profile: state.profile,
     invite: state.invitation,
     users: state.users,
     socket: state.socket.socket,

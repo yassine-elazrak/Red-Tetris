@@ -101,14 +101,14 @@ const GameSpace = (props) => {
   };
 
   const handleKeyUp = (e) => {
-    // console.log('key up');
+    // //console.log('key up');
     if (gameStart && !gamePause && !gameWon && !gameOver) {
       updateDropTime(500);
     }
   };
 
   const handleLiveRoom = () => {
-    console.log("handleLiveRoom");
+    //console.log("handleLiveRoom");
   };
 
   useEffect(() => {
@@ -146,25 +146,25 @@ const GameSpace = (props) => {
 
   const handleTouchEnd = ({ changedTouches }) => {
     if (!gameStart) return;
-    console.log("starting");
+    //console.log("starting");
     const { clientX, clientY } = changedTouches[0];
     const deltaX = clientX - touchStart.x;
     const deltaY = clientY - touchStart.y;
-    console.log(deltaX, " ", deltaY);
+    //console.log(deltaX, " ", deltaY);
     if (deltaX === deltaY)
       moveTetromino(currentStage, currentTetromino, { x: 0, y: -1 });
     if (Math.abs(deltaX) > Math.abs(deltaY)) {
       if (deltaX > 0) {
-        console.log("right");
+        //console.log("right");
         moveTetromino(currentStage, currentTetromino, { x: 1, y: 0 });
       } else {
         moveTetromino(currentStage, currentTetromino, { x: -1, y: 0 });
-        console.log("left");
+        //console.log("left");
       }
     } else {
       if (deltaY < 0) {
         rotateTetromino(currentStage, currentTetromino);
-        console.log("rotate");
+        //console.log("rotate");
       }
     }
     updateDropTime(500);
@@ -180,7 +180,7 @@ const GameSpace = (props) => {
           justifyContent: "space-between",
         }}
       >
-        {props.auth.id === props.room.admin && (
+        {props.profile.id === props.room.admin && (
           <Button
             type="primary"
             hidden={gameStart}
@@ -195,7 +195,7 @@ const GameSpace = (props) => {
         {gameStart && (
           <Button
             type="primary"
-            disabled={!props.room.admin === props.auth.id}
+            disabled={!props.room.admin === props.profile.id}
             onClick={() => {
               pauseGame(!gamePause);
               changeFocused();
@@ -369,7 +369,7 @@ const GameSpace = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    auth: state.auth,
+    profile: state.profile,
     room: state.room,
     socket: state.socket.socket,
   };

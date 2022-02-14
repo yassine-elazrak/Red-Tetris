@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import auth from "./auth";
+import profile from "./profile";
 import message from "./message";
 import notifications from "./notif";
 import room from "./room";
@@ -10,7 +10,7 @@ import socket from "./socket";
 import rooms from "./rooms";
 
 export default combineReducers({
-    auth,
+    profile,
     message,
     notifications,
     room,

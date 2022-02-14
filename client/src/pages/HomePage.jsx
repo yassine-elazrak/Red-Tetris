@@ -28,7 +28,7 @@ import "./styles/HeaderStyled.css";
 const { Header, Content, Footer, Sider } = Layout;
 
 const HomePage = (props) => {
-  const { auth, room, login, createRoom } = props;
+  const { profile, room, login, createRoom } = props;
   const [hash, setHash] = useState({
     name: null,
     room: null,
@@ -39,39 +39,39 @@ const HomePage = (props) => {
   const [rooms, setRooms] = useState([]);
 
   useEffect(() => {
-    if (props.auth.isAuth && !props.auth.isJoined) {
+    if (props.profile.isAuth && !props.profile.isJoined) {
       setTimeout(() => {
         setTooltipVisible(false);
       }, 3000);
       props.refreshRooms();
     } else setCollapsed(true);
-  }, [props.auth]);
+  }, [props.profile]);
 
   useEffect(() => {
     setRooms(props.rooms.rooms);
   }, [props.rooms.rooms]);
 
   useEffect(() => {
-    console.log("hash", hash);
+    //console.log("hash", hash);
     if (hash.error) message.error(hash.error);
     else if (hash.name && hash.room) {
-      console.log("login by url-hash", hash);
+      //console.log("login by url-hash", hash);
       props.login(hash.name);
     }
   }, [hash]);
 
   useEffect(() => {
-    if (props.auth.isAuth && !props.auth.isJoined && !hash.error && hash.room) {
-      console.log('don1');
+    if (props.profile.isAuth && !props.profile.isJoined && !hash.error && hash.room) {
+      //console.log('don1');
       let roomInfo = {
         roomName: hash.room,
         isPravite: false,
-        userId: props.auth.id,
+        userId: props.profile.id,
       };
 
       props.createOrJoinRoom(roomInfo);
     }
-  }, [props.auth]);
+  }, [props.profile]);
 
   useEffect(() => {
     if (props.socket.socket) {
@@ -80,16 +80,17 @@ const HomePage = (props) => {
         props.updateUser(data);
       });
       props.socket.socket.socket("/").on("updateRooms", (data) => {
-        console.log(data, "dataRooms");
+        //console.log(data, "dataRooms");
         props.refreshRooms(data);
       });
       props.socket.socket.socket("/").on("updateRoom", (data) => {
         props.refreshRoom(data);
-        console.log("update Room", data);
+        //console.log("update Room", data);
       });
       return () => {
         props.socket.socket.socket("/").off("updateProfile");
         props.socket.socket.socket("/").off("updateRooms");
+        props.socket.socket.socket("/").off("updateRoom");
       };
     }
     if (props.socket.error) {
@@ -98,13 +99,13 @@ const HomePage = (props) => {
   }, [props.socket]);
 
   useEffect(() => {
-    console.log("done");
+    //console.log("done");
     const hashBased = () => {
       const { hash } = window.location;
       if (hash) {
         const Regx = new RegExp(/(^#[\w-]+\[[\w-]+\]$)/g);
         const match = hash.match(Regx);
-        console.log("match", match);
+        //console.log("match", match);
         if (!match) {
           setHash({
             ...hash,
@@ -112,7 +113,7 @@ const HomePage = (props) => {
           });
         } else {
           const split = hash.match(/([\w-]+)/g);
-          console.log("split", split);
+          //console.log("split", split);
           setHash({
             room: split[0],
             name: split[1],
@@ -127,7 +128,7 @@ const HomePage = (props) => {
 
   const handleJoinToRoom = (room) => {
     props.joinRoom(room.id);
-    console.log(room, "room want to join");
+    //console.log(room, "room want to join");
   };
 
   const menu = () => {
@@ -207,13 +208,13 @@ const HomePage = (props) => {
         >
           {window.location.pathname !== "/" ? (
             <Page404 />
-          ) : !auth.isAuth ? (
+          ) : !profile.isAuth ? (
             <FormUserName />
           ) : !room.name ? (
             <FormRoomName />
           ) : !room.isPravite &&
             room.status === "waiting" &&
-            auth.id === room.admin ? (
+            profile.id === room.admin ? (
             <InviteUsers />
           ) : (
             <GameSpace />
@@ -234,7 +235,7 @@ const HomePage = (props) => {
             fontSize: "20px",
           }}
         >
-          {props.auth.isAuth && !props.auth.isJoined && (
+          {props.profile.isAuth && !props.profile.isJoined && (
             <div
               style={{
                 color: "white",
@@ -286,7 +287,7 @@ const HomePage = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    auth: state.auth,
+    profile: state.profile,
     room: state.room,
     socket: state.socket,
     rooms: state.rooms,

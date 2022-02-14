@@ -5,7 +5,7 @@ import InviteUsers from '../components/InviteUsers';
 import { useSelector } from 'react-redux';
 
 const MultiPlayerMode = () => {
-    const { room, auth } = useSelector(state => state);
+    const { room, profile } = useSelector(state => state);
 
 
     return (

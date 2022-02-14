@@ -148,7 +148,7 @@ class Rooms {
         map: [],
         tetrominos: [],
       }
-      console.log("room", this.rooms[Index]);
+      //console.log("room", this.rooms[Index]);
       let isInveted = this.rooms[Index].invit.findIndex(user => user.userId === data.userId);
       if (isInveted !== -1)
         this.rooms[Index].invit[isInveted].status = "accepted";
@@ -172,11 +172,11 @@ class Rooms {
     return new Promise((resolve, reject) => {
       let roomIndex = this.rooms.findIndex((room) => room.id === roomId);
       if (roomIndex === -1) return reject({ message: "Room not found" });
-      console.log('leave room1 => ', this.rooms[roomIndex]);
+      //console.log('leave room1 => ', this.rooms[roomIndex]);
       let userIndex = this.rooms[roomIndex].users.findIndex((user) => user.id === userId);
       if (userIndex === -1) return reject({ message: "User is not joined" });
       this.rooms[roomIndex].users.splice(userIndex, 1);
-      console.log('leave room => ', this.rooms[roomIndex]);
+      //console.log('leave room => ', this.rooms[roomIndex]);
       return resolve(this.rooms[roomIndex]);
     });
   };

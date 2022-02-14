@@ -37,19 +37,19 @@ const FormUserName = (props) => {
         if (input.value.length > 2 && !input.error) {
             props.login(input.value);
         }
-        console.log(input.value);
+        //console.log(input.value);
     }
 
 
     useEffect(() => {
-        // console.log(props.auth);
-        if (props.auth.error){
-            message.error(props.auth.error);
+        // //console.log(props.profile);
+        if (props.profile.error){
+            message.error(props.profile.error);
         }
-    }, [props.auth.error]);
+    }, [props.profile.error]);
 
     // useEffect(() => {
-    //     console.log(socketio, 'socketio');
+    //     //console.log(socketio, 'socketio');
 
     // }, [io]);
 
@@ -102,8 +102,8 @@ const FormUserName = (props) => {
 
                         }}
                         onClick={handleSubmit}
-                        disabled={input.error || input.value.length < 3 || props.auth.isLoading}
-                        loading={props.auth.isLoading}
+                        disabled={input.error || input.value.length < 3 || props.profile.isLoading}
+                        loading={props.profile.isLoading}
                         >
                         Log in
                     </Button>
@@ -114,7 +114,7 @@ const FormUserName = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        auth: state.auth,
+        profile: state.profile,
     }
 }
 
