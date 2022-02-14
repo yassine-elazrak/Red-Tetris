@@ -76,7 +76,6 @@ class RoomController {
             }
 
         } catch (error) {
-            //console.log(error);
             if (typeof callback === "fucntion") return callback(null, error);
         }
     }

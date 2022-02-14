@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Form, Input, Button, message, Checkbox, Modal } from "antd";
 import { connect } from "react-redux";
-import { createRoom } from "../redux/actions";
+import { createRoom, createOrJoinRoom } from "../redux/actions";
 
 const FormRoomName = (props) => {
   const [input, setInput] = useState({
@@ -48,6 +48,12 @@ const FormRoomName = (props) => {
           cancelText: "No",
           okText: "Yes",
           onOk() {
+            let data = {
+              roomName: input.value,
+              isPravite: !checked,
+              userId: props.profile.id,
+            };
+            props.createOrJoinRoom(data);
             console.log("click ok");
           },
           onCancel() {},
@@ -150,6 +156,9 @@ const mapStateToProps = (state) => {
   };
 };
 
-const RoomName = connect(mapStateToProps, { createRoom })(FormRoomName);
+const RoomName = connect(mapStateToProps, {
+  createRoom,
+  createOrJoinRoom,
+})(FormRoomName);
 
 export default RoomName;
