@@ -219,21 +219,28 @@ const GameSpace = (props) => {
     >
       <Sider
         collapsedWidth={0}
-        width={200}
+        width={280}
         breakpoint="lg"
+        onCollapse={(collapsed) => {
+          setCollapsedPlayers(collapsed);
+          window.innerWidth <= 350 && setTriggerChat(collapsed);
+        }}
+        trigger={
+          triggerPlayers ? (
+            collapsedPlayers ? (
+              <MenuUnfoldOutlined />
+            ) : (
+              <MenuFoldOutlined />
+            )
+          ) : (null)
+        }
         style={{
+          background: "rgba(0, 0, 0, 0.3)",
           marginTop: 50,
           padding: 0,
           position: "absolute",
           zIndex: 10,
         }}
-        trigger={
-          triggerPlayers ?
-          collapsedPlayers
-          ? <MenuUnfoldOutlined />
-          : <MenuFoldOutlined />
-          :null
-        }
       >
         <Players />
       </Sider>
@@ -298,21 +305,22 @@ const GameSpace = (props) => {
       </Content>
       <Sider
         collapsedWidth={0}
-        width={250}
+        width={280}
         breakpoint="lg"
         reverseArrow={true}
         collapsed={collapsedChat}
+        onCollapse={(collapsed, type) => {
+          console.log(collapsed, type);
+          setCollapsedChat(collapsed);
+          window.innerWidth <= 350 && setTriggerPlayers(collapsed);
+          // console.log(window.innerWidth);
+        }}
         trigger={
-          // triggerChat ? (
-          //   collapsedPlayers ? (
-              <MenuFoldOutlined 
-               onClick={() => console.log('test')} />
-          //   ) : (
-          //     <MenuUnfoldOutlined
-          //       onClick={() => console.log('test')}
-          //     />
-          //   )
-          // ) : null
+          triggerChat ? (
+            collapsedChat
+              ? (<MenuFoldOutlined />)
+              : (<MenuUnfoldOutlined />)
+          ) : (null)
         }
         style={{
           background: "rgba(0, 0, 0, 0.3)",

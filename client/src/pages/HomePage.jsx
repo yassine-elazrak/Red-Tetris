@@ -211,24 +211,42 @@ const HomePage = (props) => {
           {window.location.pathname !== "/" ? (
             <Page404 />
           ) : !profile.isAuth ? (
+            // <FormRoomName />
             <FormUserName />
           ) : !room.name ? (
             <FormRoomName />
           ) : !room.isPravite &&
             room.status === "waiting" &&
             profile.id === room.admin ? (
-            // <InviteUsers />
-            <GameSpace />
+            <InviteUsers />
+            // <GameSpace />
           ) : (
             <GameSpace />
           )}
         </Content>
         <Sider
-          collapsedWidth="0"
+          collapsedWidth={0}
           collapsible
           collapsed={collapsed}
-          // reverseArrow={true}
-          trigger={null}
+          reverseArrow={true}
+          // breakpoint="lg"
+          trigger={
+            props.profile.isAuth && !props.profile.isJoined ? (
+              collapsed ? (
+                <Tooltip
+                  title="Current Rooms"
+                  placement="right"
+                  defaultVisible={true}
+                  mouseEnterDelay={1}
+                  visible={tooltipVisible}
+                >
+                  <MenuFoldOutlined onClick={() => setCollapsed(false)} />
+                </Tooltip>
+              ) : (
+                <MenuUnfoldOutlined onClick={() => setCollapsed(true)} />
+              )) :  (null)
+          }
+          onCollapse={(collapsed) => setCollapsed(collapsed)}
           width="300px"
           style={{
             background: "rgba(0, 0, 0, 0.5)",
@@ -240,7 +258,7 @@ const HomePage = (props) => {
             fontSize: "20px",
           }}
         >
-          {props.profile.isAuth && !props.profile.isJoined && (
+          {/* {props.profile.isAuth && !props.profile.isJoined && (
             <div
               style={{
                 color: "white",
@@ -262,7 +280,7 @@ const HomePage = (props) => {
                 <MenuUnfoldOutlined onClick={() => setCollapsed(true)} />
               )}
             </div>
-          )}
+          )} */}
           <div
             style={{
               color: "rgba(255, 255, 255, 0.8)",
