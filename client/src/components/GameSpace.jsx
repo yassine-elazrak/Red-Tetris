@@ -168,7 +168,6 @@ const GameSpace = (props) => {
     return (
       <div
         style={{
-          background: "rgba(0, 0, 0, 0.3)",
           padding: "10px",
           margin: 0,
           display: "flex",
@@ -197,6 +196,17 @@ const GameSpace = (props) => {
             }}
           >
             {gamePause ? "Resume" : "Pause"}
+          </Button>
+        )}
+        {props.room.isPravite && (
+          <Button
+            type="primary"
+            hidden={gameStart}
+            onClick={() => {
+              console.log("swithcroom");
+            }}
+          >
+           chnage room to public
           </Button>
         )}
         <Button
@@ -232,7 +242,7 @@ const GameSpace = (props) => {
             ) : (
               <MenuFoldOutlined />
             )
-          ) : (null)
+          ) : null
         }
         style={{
           background: "rgba(0, 0, 0, 0.3)",
@@ -317,10 +327,12 @@ const GameSpace = (props) => {
         }}
         trigger={
           triggerChat ? (
-            collapsedChat
-              ? (<MenuFoldOutlined />)
-              : (<MenuUnfoldOutlined />)
-          ) : (null)
+            collapsedChat ? (
+              <MenuFoldOutlined />
+            ) : (
+              <MenuUnfoldOutlined />
+            )
+          ) : null
         }
         style={{
           background: "rgba(0, 0, 0, 0.3)",

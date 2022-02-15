@@ -1,5 +1,5 @@
 export * from './profile';
-// export * from './message';
+export * from './message';
 export * from './notif';
 export * from './room';
 export * from './invite';

@@ -6,7 +6,8 @@ const Middleware = require("./middleware/auth");
 const AuthController = require("./controller/authController");
 const UsersController = require("./controller/usersController");
 const InviteController = require("./controller/inviteController");
-const RoomsController = require("./controller/roomsController")
+const RoomsController = require("./controller/roomsController");
+const MessagesController = require("./controller/messagesController");
 
 require("dotenv").config();
 
@@ -23,6 +24,7 @@ class App {
     this.UsersController = new UsersController(this.io);
     this.InviteController = new InviteController(this.io);
     this.RoomsController = new RoomsController(this.io);
+    this.MessagesController = new MessagesController(this.io);
   }
 
   start() {
@@ -146,7 +148,7 @@ class App {
 
 
       /***************************** Chat *************************************/
-
+      socket.on("sentMessage", this.MessagesController.sentMessage(socket));
       /******************************* logout **********************************/
       /**
        * @description disconnect user
