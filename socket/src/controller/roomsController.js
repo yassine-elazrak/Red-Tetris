@@ -54,6 +54,8 @@ class RoomController {
                     userId: user.id,
                     userName: user.name,
                 })
+                // for test
+                // room = await this.rooms.NextTetromino(room.id);
                 let ids = room.users.map(e => e.id).filter(id => id !== socket.id && id !== room.admin);
                 this.io.to([...ids, room.admin]).emit("notification", {
                     message: `${user.name} is joind ${room.name}`,
@@ -61,6 +63,7 @@ class RoomController {
                     read: true,
                 })
                 this.io.to(room.admin).emit("updateRoom", room);
+                console.log('admin', room.admin);
                 let resUser = _.omit(room, ["invit"]);
                 ids.length && this.io.to(ids).emit("updateRoom", resUser);
                 let updateProfile = await this.users.userJoin(socket.id, room.id);
@@ -76,6 +79,7 @@ class RoomController {
             }
 
         } catch (error) {
+            console.log(error);
             if (typeof callback === "fucntion") return callback(null, error);
         }
     }
@@ -108,6 +112,7 @@ class RoomController {
             this.io.to([...ids, room.admin]).emit("notification", notif);
             this.io.to(user.id).emit("updateProfile", updateProfile);
             this.io.to(room.admin).emit("updateRoom", room)
+            // console.log('admin' , room.admin);
             let resUsers = _.omit(room, ['invit', 'message']);
             ids.length && this.io.to(ids).emit("updateRoom", resUsers);
             if (typeof callback === "function") return callback(resUsers, null);

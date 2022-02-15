@@ -84,7 +84,7 @@ class Rooms {
           score: 0,
           rows: 0,
           map: this.stage.initStage(),
-          tetrominos: [nextTetromino],
+          nextTetrominos: [nextTetromino],
         }],
         invit: [],
       };
@@ -100,7 +100,7 @@ class Rooms {
       let nextTetromino = this.tetromino.randomTetromino();
       this.rooms[roomIndex].nextTetromino = nextTetromino;
       this.rooms[roomIndex].users.forEach(e => {
-        e.tetrominos.push(nextTetromino);
+        e.nextTetrominos.push(nextTetromino);
       });
       resolve(this.rooms[roomIndex]);
     })
@@ -137,7 +137,7 @@ class Rooms {
           score: 0,
           rows: 0,
           map: [],
-          tetrominos: [],
+          nextTetrominos: [],
         }
         this.rooms[roomIndex].users.push(user);
       }
@@ -161,7 +161,7 @@ class Rooms {
         score: 0,
         rows: 0,
         map: [],
-        tetrominos: [this.rooms[Index].nextTetromino],
+        nextTetrominos: [this.rooms[Index].nextTetromino],
       }
       let isInveted = this.rooms[Index].invit.findIndex(user => user.userId === data.userId);
       if (isInveted !== -1)
