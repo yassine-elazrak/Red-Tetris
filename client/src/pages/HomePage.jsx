@@ -211,7 +211,6 @@ const HomePage = (props) => {
           {window.location.pathname !== "/" ? (
             <Page404 />
           ) : !profile.isAuth ? (
-            // <FormRoomName />
             <FormUserName />
           ) : !room.name ? (
             <FormRoomName />
@@ -244,7 +243,7 @@ const HomePage = (props) => {
                 </Tooltip>
               ) : (
                 <MenuUnfoldOutlined onClick={() => setCollapsed(true)} />
-              )) :  (null)
+              )) : (null)
           }
           onCollapse={(collapsed) => setCollapsed(collapsed)}
           width="300px"
@@ -253,34 +252,9 @@ const HomePage = (props) => {
             height: "100vh",
             marginTop: "-10px",
             paddingTop: "10px",
-            breakBefore: "column",
-            display: "relative",
             fontSize: "20px",
           }}
         >
-          {/* {props.profile.isAuth && !props.profile.isJoined && (
-            <div
-              style={{
-                color: "white",
-                position: "absolute",
-                left: "-30px",
-              }}
-            >
-              {collapsed ? (
-                <Tooltip
-                  title="Current Rooms"
-                  placement="right"
-                  defaultVisible={true}
-                  mouseEnterDelay={1}
-                  visible={tooltipVisible}
-                >
-                  <MenuFoldOutlined onClick={() => setCollapsed(false)} />
-                </Tooltip>
-              ) : (
-                <MenuUnfoldOutlined onClick={() => setCollapsed(true)} />
-              )}
-            </div>
-          )} */}
           <div
             style={{
               color: "rgba(255, 255, 255, 0.8)",

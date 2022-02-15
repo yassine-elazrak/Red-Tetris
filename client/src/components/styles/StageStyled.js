@@ -5,7 +5,7 @@ export const StageStyled = styled.div`
   display: grid;
   grid-template-rows: repeat(${STAGE_HEIGHT}, calc(55vh / ${STAGE_HEIGHT}));
       grid-template-columns: repeat(${STAGE_WIDTH}, calc(40vh / ${STAGE_WIDTH}));
-  grid-gap: 1px;
+  grid-gap: 1.5px;
   margin: 0;
   padding: 0;
   justify-content: center;

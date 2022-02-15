@@ -1,7 +1,7 @@
 
 export const TETROMINOES = {
     0: {
-        shape: [0],
+        shape: [[0]],
         color: "208, 211, 212",
         // type: 0,
     },

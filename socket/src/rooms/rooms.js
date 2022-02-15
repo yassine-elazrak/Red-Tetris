@@ -64,7 +64,7 @@ class Rooms {
       nextTetrominos,
       currentTetromino: {
         position: { x: 0 , y: 0, },
-        shapeIndex: null,
+        shapeIndex: 0,
         collided: false,
       }
     }

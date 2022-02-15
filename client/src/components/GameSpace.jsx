@@ -36,16 +36,19 @@ import { useStage } from "../hooks/useStage";
 const { Content, Sider } = Layout;
 
 const GameSpace = (props) => {
+  console.log("GameSpace props", props);
   // const { room } = props;
   const [collapsedChat, setCollapsedChat] = useState(true);
   const [triggerChat, setTriggerChat] = useState(true);
   const [triggerPlayers, setTriggerPlayers] = useState(true);
   const [collapsedPlayers, setCollapsedPlayers] = useState(true);
-
+  const [userStage, setUserStage] = useState(null);
   const [
     currentStage,
     score,
+    setScore,
     rows,
+    setRows,
     gameOver,
     gameWon,
     gameStart,
@@ -54,15 +57,44 @@ const GameSpace = (props) => {
     pauseGame,
     currentTetromino,
     nextTetromino,
+    setNextTetromino,
     resetGame,
     moveTetromino,
     rotateTetromino,
     updateDropTime,
   ] = useStage();
 
+  //   currentTetromino: {position: {…}, shapeIndex: 0, collided: false}
+  // id: "qW0LrTJe9XrgKj34AAAl"
+  // map: (20) [Array(10), Array(10), Array(10), Array(10), Array(10), Array(10), Array(10), Array(10), Array(10), Array(10), Array(10), Array(10), Array(10), Array(10), Array(10), Array(10), Array(10), Array(10), Array(10), Array(10)]
+  // name: "ali"
+  // nextTetrominos: "T"
+  // rows: 0
+  // scor: 0
+  // status: null
+
+  useEffect(() => {
+    const stage = props.room.users.filter(e => e.id === props.profile.id)?.[0];
+    setUserStage(stage);
+  }, [props.room.users]);
+
+  useEffect(() => {
+    console.log("test", userStage);
+    if (userStage) {
+      setScore(userStage.scor);
+      setRows(userStage.rows);
+      console.log("next",TETROMINOES[userStage.nextTetrominos], userStage.nextTetrominos);
+      setNextTetromino(userStage.nextTetrominos);
+    }
+  }, [userStage]);
+
   const changeFocused = () => {
     document.getElementById("game-space").focus();
   };
+
+  useEffect(() => {
+    changeFocused();
+  },[])
 
   const handleKeyDown = ({ keyCode }) => {
     if (!gameStart && keyCode === 13) {
@@ -95,7 +127,7 @@ const GameSpace = (props) => {
   };
 
   const handleKeyUp = (e) => {
-    // //console.log('key up');
+    console.log('key up');
     if (gameStart && !gamePause && !gameWon && !gameOver) {
       updateDropTime(500);
     }
@@ -106,6 +138,7 @@ const GameSpace = (props) => {
   };
 
   useEffect(() => {
+    console.log("GameSpace useEffect", gameOver, gameWon, resetGame);
     const modal = () => {
       Modal.confirm({
         width: "500px",
@@ -133,8 +166,11 @@ const GameSpace = (props) => {
         ),
       });
     };
-    if (gameOver || gameWon) modal();
-  }, [gameOver, gameWon, resetGame]);
+    if (gameOver || gameWon){
+      modal();
+      updateDropTime(null);
+    }
+  }, [gameOver, gameWon]);
 
   const [touchStart, setTouchStart] = useState({ x: 0, y: 0 });
 
@@ -206,7 +242,7 @@ const GameSpace = (props) => {
               console.log("swithcroom");
             }}
           >
-           chnage room to public
+            chnage room to public
           </Button>
         )}
         <Button
@@ -323,7 +359,6 @@ const GameSpace = (props) => {
           console.log(collapsed, type);
           setCollapsedChat(collapsed);
           window.innerWidth <= 350 && setTriggerPlayers(collapsed);
-          // console.log(window.innerWidth);
         }}
         trigger={
           triggerChat ? (
