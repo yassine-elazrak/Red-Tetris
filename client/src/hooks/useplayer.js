@@ -6,7 +6,6 @@ import {
     InitStage,
 } from "../helpers/StageHelper";
 import { TETROMINOES, randomTetromino } from "../helpers/Tetrominoes";
-import { useInterval } from "./useInterval";
 
 export const usePlayer = () => {
     const [currentStage, setCurrentStage] = useState(InitStage());

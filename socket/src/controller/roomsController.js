@@ -54,8 +54,6 @@ class RoomController {
                     userId: user.id,
                     userName: user.name,
                 })
-                // for test
-                // room = await this.rooms.NextTetromino(room.id);
                 let ids = room.users.map(e => e.id).filter(id => id !== socket.id && id !== room.admin);
                 this.io.to([...ids, room.admin]).emit("notification", {
                     message: `${user.name} is joind ${room.name}`,
