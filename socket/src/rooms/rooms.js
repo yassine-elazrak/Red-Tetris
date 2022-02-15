@@ -1,3 +1,5 @@
+const Stage = require('../utils/stage')
+const Tetrominoes = require('../utils/tetrominoes')
 class Rooms {
   constructor() {
     if (Rooms.instance instanceof Rooms) {
@@ -17,15 +19,12 @@ class Rooms {
     ];
     this.regx = /^[a-zA-Z0-9\s]{3,15}$/;
     Rooms.instance = this;
+    this.stage = new Stage.Stage;
+    this.tetromino = new Tetrominoes.Tetrominoes;
   }
 
   getRooms = () => {
     let rooms = this.rooms.filter((room) => room.isPravite === false);
-    // let res = rooms.map((room) => {
-    //   return (
-    //     (({ id, name, isPravite, admin, status }) => ({ id, name, isPravite, admin, status }))(room)
-    //   )
-    // });
     return rooms;
   };
 
@@ -54,6 +53,7 @@ class Rooms {
   };
 
   createRoom = (data, user) => {
+    // console.log('stage h =>', Stage.STAGE_HEIGHT);
     return new Promise((resolve, reject) => {
       let trimName = data.roomName.trim().toLowerCase();
       if (!this.regx.test(trimName)) {
@@ -70,27 +70,41 @@ class Rooms {
           message: "Room is already exists do you want to join",
         });
       }
+      let nextTetromino = this.tetromino.randomTetromino();
       let room = {
-        id: Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2),
+        id: Math.random().toString(36).substr(2) + Date.now().toString(36),
         name: trimName,
         admin: user.id,
         isPravite: data.isPravite,
         status: data.isPravite ? "closed" : "waiting",
+        nextTetromino,
         users: [{
           name: user.name,
           id: user.id,
           score: 0,
           rows: 0,
-          map: [],
-          tetrominos: [],
+          map: this.stage.initStage(),
+          tetrominos: [nextTetromino],
         }],
-        // message: [],
         invit: [],
       };
       this.rooms.push(room);
       return resolve(room);
     });
   };
+
+  NextTetromino = (roomId) => {
+    return new Promise((resolve, reject) => {
+      let roomIndex = this.rooms.findIndex(room => room.id === roomId);
+      if (roomIndex === -1) return reject({message: "Room not found"});
+      let nextTetromino = this.tetromino.randomTetromino();
+      this.rooms[roomIndex].nextTetromino = nextTetromino;
+      this.rooms[roomIndex].users.forEach(e => {
+        e.tetrominos.push(nextTetromino);
+      });
+      resolve(this.rooms[roomIndex]);
+    })
+  }
 
   inviteUser = (data) => {
     return new Promise((resolve, reject) => {
@@ -140,15 +154,15 @@ class Rooms {
       if (this.rooms[Index].status !== "waiting") return reject({ message: "Room is closed" });
       if (this.rooms[Index].users.findIndex((user) => user.id === data.userId) !== -1)
         return reject({ message: "User is already in room" });
+      // let newMap = Array.from(Array())
       let newUser = {
         name: data.userName,
         id: data.userId,
         score: 0,
         rows: 0,
         map: [],
-        tetrominos: [],
+        tetrominos: [this.rooms[Index].nextTetromino],
       }
-      //console.log("room", this.rooms[Index]);
       let isInveted = this.rooms[Index].invit.findIndex(user => user.userId === data.userId);
       if (isInveted !== -1)
         this.rooms[Index].invit[isInveted].status = "accepted";
@@ -157,6 +171,7 @@ class Rooms {
     });
   };
 
+  // start puase or close room
   changeStatusRoom = (data) => {
     return new Promise((resolve, reject) => {
       let roomIndex = this.rooms.findIndex((room) => room.id === data.roomId);

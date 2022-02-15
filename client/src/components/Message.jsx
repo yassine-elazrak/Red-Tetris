@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 
-import { Button, Input, message } from "antd";
-import { SendOutlined, LoadingOutlined } from "@ant-design/icons";
+import { Button, Input, message, Form } from "antd";
+import { RestFilled, SendOutlined } from "@ant-design/icons";
 import moment from "moment";
 
 import {
@@ -13,85 +13,40 @@ import {
   MessageCreatedAt,
 } from "./styles/BoxMessage";
 
-import {
-    sentMessage,
-    receiveMessage,
-    clearMessages,
-} from "../redux/actions"
-
-const { Search } = Input;
+import { sentMessage, receiveMessage, clearMessages } from "../redux/actions";
 const Message = (props) => {
-  console.log("Message");
-
-  const fackeMessage = () => {
-    const message = [];
-    for (let i = 0; i < 20; i++) {
-      let id = Math.floor(Math.random() * 10);
-      message.push({
-        userId: id,
-        userName: "user" + id,
-        message:
-          "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ipsam, architecto!",
-        createdAt: moment().format(),
-      });
-    }
-    return message;
-  };
-
   const { profile } = props;
-  const [input, setInput] = useState({
-    value: "",
-    error: false,
-  });
-
+  const [form] = Form.useForm();
+  const [inputError, setInputError] = useState(false);
   const [messages, setMessages] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const handleChange = (e) => {
-    setInput({
-      ...input,
-      value: e.target.value,
-    });
-    console.log(input.value);
-  };
+
+
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    // console.log(moment().format());
-    const newMessage2 = {
-      userId: profile.id,
-      userName: profile.name,
-      message: input.value,
-      createdAt: moment().format(),
-    };
     const newMessage = {
-        roomId : props.room.id,
-        message : input.value,
-    }
+      roomId: props.room.id,
+      ...e,
+    };
     props.sentMessage(newMessage);
-    // setMessages([...messages, newMessage2]);
-    setInput({
-      value: "",
-      error: false,
-    });
+    form.resetFields();
   };
 
   useEffect(() => {
-      props.clearMessages();
-      props.socket.socket('/').on('message', data => {
-          props.receiveMessage(data);
-          console.log(data);
-      })
-      return () => {
-          props.socket.socket('/').off('message');
-      }
+    props.clearMessages();
+    props.socket.socket("/").on("message", (data) => {
+      props.receiveMessage(data);
+      console.log(data);
+    });
+    return () => {
+      props.socket.socket("/").off("message");
+    };
   }, []);
 
   useEffect(() => {
-      if (props.messenger.error)
-        message.error(props.messenger.error);
-      setMessages( props.messenger.messages)
+    if (props.messenger.error) message.error(props.messenger.error);
+    setMessages(props.messenger.messages);
     console.log("messenger", props.messenger);
-  }, [props.messenger])
+  }, [props.messenger]);
 
   // scrool to bottom wheres new message
   useEffect(() => {
@@ -105,7 +60,7 @@ const Message = (props) => {
       <BoxMessage
         id="chatBox"
         style={{
-          height: "calc(100vh - 220px)",
+          height: "calc(100vh - 320px)",
         }}
       >
         {messages.map((item, id) => {
@@ -136,45 +91,42 @@ const Message = (props) => {
   return (
     <>
       {MessageSide()}
-      {/* <Input.Group compact style={{
-                background: 'red',
-            }}>
-                <Input style={{
-                }}
-                    onPressEnter={handleSubmit}
-                    onChange={handleChange}
-                    value={input.value}
-                />
-                <Button
+      <Form onFinish={handleSubmit}
+      form={form}
+      >
+       <Form.Item
+          name="message"
+         rules={[
+          () => ({
+            validator(_, value) {
+              if (!value || value.trim().length < 3) {
+                setInputError(true);
+                return Promise.reject(new Error('Please enter  at least 3 characters long!'));
+              }
+              setInputError(false);
+              return Promise.resolve();
+            },
+          })
+         ]}
+      >
+          <Input
+            allowClear={true}
+            style={{
+              padding: 0,
+            }}
+            suffix={
+              <Button
                 type="primary"
-                onClick={handleSubmit}
-                loading= {loading}
-                >
-                    {loading ? (
-                        <LoadingOutlined/>
-                    ) : (
-                        <SendOutlined />
-                    )}
-                </Button>
-                    </Input.Group> */}
-      <Input
-      allowClear={true}
-      onPressEnter={handleSubmit}
-      onChange={handleChange}
-      value={input.value}
-      style={{
-          padding: 0,
-      }}
-        suffix={
-          <Button
-          type="primary"
-          onClick={handleSubmit}
-          loading={props.messenger.loading}
-          >
-            <SendOutlined />
-          </Button>
-        }
-      />
+                htmlType="submit"
+                disabled={inputError}
+                loading={props.messenger.loading}
+              >
+                <SendOutlined />
+              </Button>
+            }
+          />
+      </Form.Item>
+      </Form>
     </>
   );
 };
@@ -183,13 +135,13 @@ const mapStateToProps = (state) => {
   return {
     profile: state.profile,
     room: state.room,
-    messenger : state.message,
-    socket : state.socket.socket,
+    messenger: state.message,
+    socket: state.socket.socket,
   };
 };
 
 export default connect(mapStateToProps, {
-    sentMessage,
-    receiveMessage,
-    clearMessages,
+  sentMessage,
+  receiveMessage,
+  clearMessages,
 })(Message);

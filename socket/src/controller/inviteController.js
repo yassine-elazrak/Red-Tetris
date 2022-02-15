@@ -64,7 +64,7 @@ class InviteController {
             let invitIndex = room.invit.findIndex((item) => item.userId === socket.id);
             if (invitIndex === -1) return callback(null, { message: "You are not invited in this room" });
             let notifAdmin = {
-                id: Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2),
+                id: Math.random().toString(36).substr(2) + Date.now().toString(36),
                 message: `${user.name} ${status} your invitation`,
                 type: "notification",
                 read: true,
@@ -74,7 +74,7 @@ class InviteController {
             if (status === "accepted") {
                 user = await this.users.userJoin(user.id, room.id);
                 let notifUsers = {
-                    id: Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2),
+                    id: Math.random().toString(36).substr(2) +Date.now().toString(36),
                     message: `${user.name} join ${room.name}`,
                     type: "notification",
                     read: true,
