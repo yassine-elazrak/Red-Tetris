@@ -38,7 +38,7 @@ const TETROMINOES = {
     D:  ['D'],
 }
 
-class Tetrominoes {
+class TetrominoesClass {
     randomTetromino = () => {
         const indexs = 'IJLOSTZ';
         const random = indexs[Math.floor(Math.random() * indexs.length)];
@@ -47,6 +47,6 @@ class Tetrominoes {
 }
 
 module.exports = {
-    Tetrominoes,
+    TetrominoesClass,
     TETROMINOES,
 } 

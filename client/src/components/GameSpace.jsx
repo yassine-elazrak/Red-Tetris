@@ -22,6 +22,7 @@ import {
   leaveRoom,
   refreshRoom,
   changeStatusRoom,
+  gameActions,
 } from "../redux/actions";
 
 import { useStage } from "../hooks/useStage";
@@ -36,6 +37,7 @@ const GameSpace = (props) => {
   const [triggerPlayers, setTriggerPlayers] = useState(true);
   const [collapsedPlayers, setCollapsedPlayers] = useState(true);
   const [userStage, setUserStage] = useState(null);
+  const [map, setMap] = useState([]);
   const [
     currentStage,
     score,
@@ -65,6 +67,10 @@ const GameSpace = (props) => {
   // rows: 0
   // scor: 0
   // status: null
+
+  useEffect(() => {
+    setMap(props.game.map)
+  }, [props.game.map])
 
   useEffect(() => {
     const stage = props.room.users.filter(e => e.id === props.profile.id)?.[0];
@@ -101,23 +107,34 @@ const GameSpace = (props) => {
     updateDropTime(null);
     if (keyCode === 13) {
       pauseGame(!gamePause);
-    }
+    } 
+    let data = {
+        action: "down",
+        roomId: props.room.id
+      }
     if (!gameStart || gamePause || gameOver || gameWon) return;
     if (keyCode === 37 || keyCode === 74) {
+    
       // move to left
-      moveTetromino(currentStage, currentTetromino, { x: -1, y: 0 });
+      // moveTetromino(currentStage, currentTetromino, { x: -1, y: 0 });
+      data.action = "left"
+      props.gameActions(data)
     } else if (keyCode === 39 || keyCode === 76) {
       // move to right
-      moveTetromino(currentStage, currentTetromino, { x: 1, y: 0 });
+      // moveTetromino(currentStage, currentTetromino, { x: 1, y: 0 });
+      data.action = "right"
+      props.gameActions(data)
     } else if (keyCode === 40 || keyCode === 75) {
       // move to down
-      moveTetromino(currentStage, currentTetromino, { x: 0, y: 1 });
+      // moveTetromino(currentStage, currentTetromino, { x: 0, y: 1 });
+      data.action = "down"
+      props.gameActions(data)
     } else if (keyCode === 32 || keyCode === 72) {
       // move to goole drop
-      moveTetromino(currentStage, currentTetromino, { x: 0, y: -1 });
+      // moveTetromino(currentStage, currentTetromino, { x: 0, y: -1 });
     } else if (keyCode === 38 || keyCode === 73) {
       // rotate
-      rotateTetromino(currentStage, currentTetromino);
+      // rotateTetromino(currentStage, currentTetromino);
     }
 
     // updateDropTime(500);
@@ -125,9 +142,9 @@ const GameSpace = (props) => {
 
   const handleKeyUp = (e) => {
     console.log('key up');
-    if (gameStart && !gamePause && !gameWon && !gameOver) {
-      updateDropTime(500);
-    }
+    // if (gameStart && !gamePause && !gameWon && !gameOver) {
+    //   updateDropTime(500);
+    // }
   };
 
   const handleLiveRoom = () => {
@@ -194,7 +211,7 @@ const GameSpace = (props) => {
         //console.log("rotate");
       }
     }
-    updateDropTime(500);
+    // updateDropTime(500);
   };
 
   const bottons = () => {
@@ -346,7 +363,7 @@ const GameSpace = (props) => {
               width: "100%",
             }}
           >
-            <Stage stage={currentStage} />
+            <Stage stage={props.game.map} />
             {bottons()}
           </Col>
         </Row>
@@ -392,6 +409,7 @@ const mapStateToProps = (state) => {
     profile: state.profile,
     room: state.room,
     socket: state.socket.socket,
+    game: state.game
   };
 };
 
@@ -403,4 +421,5 @@ export default connect(mapStateToProps, {
   leaveRoom,
   refreshRoom,
   changeStatusRoom,
+  gameActions,
 })(GameSpace);

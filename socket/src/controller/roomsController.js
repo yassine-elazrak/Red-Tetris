@@ -1,6 +1,7 @@
 const Users = require("../users/users");
 const Rooms = require("../rooms/rooms");
-const Selector = require("../utils/selector");
+// const Selector = require("../utils/selector");
+const Game = require('../rooms/game');
 const _ = require("lodash");
 
 class RoomController {
@@ -8,6 +9,7 @@ class RoomController {
         this.io = io;
         this.users = new Users;
         this.rooms = new Rooms;
+        this.game = new Game;
         // this.selector = new Selector;
     }
 
@@ -129,9 +131,9 @@ class RoomController {
     changeStatusRoom = (socket) => async (data, callback) => {
         try {
             if (!["closed", "paused", "started"].includes(data.status))
-            return callback(null, {message: "Invalid action"})
+                return callback(null, { message: "Invalid action" })
             let res = await this.rooms.changeStatusRoom(
-                { roomId: data.roomId, userId: socket.id, status : data.status });
+                { roomId: data.roomId, userId: socket.id, status: data.status });
             let ids = res.users.map(e => e.id)
                 .filter(id => id !== socket.id);
             let admin = res.users.find((user) => user.id === res.admin);
@@ -214,9 +216,30 @@ class RoomController {
         }
     };
 
-    // startGame = (socket) => (roomId, callback) => {
-
-    // }
+    gameAction = (socket) => async (data, callback) => {
+        try {
+            // data = {action, roomId}
+            // let room = await this.rooms.getRoom(data.roomId);
+            let roomIndex = this.rooms.rooms.findIndex(e => e.id === data.roomId);
+            if (roomIndex === -1) return callback(null, { message: "Room not found" });
+            let room = this.rooms.rooms[roomIndex];
+            // console.log(room, 'room');
+            let playerIndex = room.users.findIndex(e => e.id === socket.id)
+            if (playerIndex === -1) return callback(null, { message: "You are not joined in this room" });
+            // console.log(room.users[playerIndex].currentTetromino);
+            if (room.users[playerIndex].currentTetromino.collided
+                || !room.users[playerIndex].currentTetromino.shapeIndex
+            )
+                room = this.rooms.changeCurrentTetromino(playerIndex, roomIndex);
+            let map = await this.game.action(data.action, room.users[playerIndex]);
+            // console.log(map);
+            // room.users[playerIndex].map = map;
+            callback(map, null);
+        } catch (error) {
+            console.log(error);
+            callback(null, error);
+        }
+    }
 
     /**
      * @description get current rooms

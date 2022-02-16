@@ -296,14 +296,14 @@ export const useStage = () => {
     }
   }, [currentTetromino]);
 
-  useEffect(() => {
-    if (gameStart && !gamePause && !gameOver) {
-      swapTetrominos();
-      updateDropTime(500);
-    } else {
-      updateDropTime(null);
-    }
-  }, [gameStart]);
+  // useEffect(() => {
+  //   if (gameStart && !gamePause && !gameOver) {
+  //     swapTetrominos();
+  //     updateDropTime(500);
+  //   } else {
+  //     updateDropTime(null);
+  //   }
+  // }, [gameStart]);
 
   useEffect(() => {
     if (gameStart && !gamePause && !gameOver) {

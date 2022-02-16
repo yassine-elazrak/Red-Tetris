@@ -70,6 +70,12 @@ export const ROOMS_ERROR = 'ROOMS_ERROR';
 export const ROOMS_LOADING = 'ROOMS_LOADING';
 
 
+// Game Actions
+export const GAME_UPDATE = "GAME_UPDATE";
+export const GAME_ERROR = "GAME_ERROR";
+export const GAME_LOADING = "GAME_LOADING";
+
+
 
 
 

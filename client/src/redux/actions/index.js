@@ -7,3 +7,4 @@ export * from './users';
 export * from './stage';
 export * from './socket';
 export * from './rooms';
+export * from './game';

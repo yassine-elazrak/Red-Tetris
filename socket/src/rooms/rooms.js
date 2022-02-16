@@ -1,6 +1,6 @@
-const { reject } = require('lodash');
+// const { TETROMINOES } = require('../../../client/src/helpers/Tetrominoes');
 const StageHelper = require('../utils/stage')
-const TetrominoesHelper = require('../utils/tetrominoes')
+const {TetrominoesClass, TETROMINOES}= require('../utils/tetrominoes')
 class Rooms {
   constructor() {
     if (Rooms.instance instanceof Rooms) {
@@ -21,7 +21,7 @@ class Rooms {
     this.regx = /^[a-zA-Z0-9\s]{3,15}$/;
     Rooms.instance = this;
     this.stage = new StageHelper.Stage;
-    this.tetromino = new TetrominoesHelper.Tetrominoes;
+    this.tetromino = new TetrominoesClass;
   }
 
   getRooms = () => {
@@ -61,7 +61,7 @@ class Rooms {
       scor: 0,
       rows: 0,
       map: this.stage.initStage(),
-      nextTetrominos,
+      nextTetrominos: [nextTetrominos],
       currentTetromino: {
         position: { x: 0, y: 0 },
         shapeIndex: 0,
@@ -115,18 +115,24 @@ class Rooms {
 
   }
 
-  changeCurrentTetromino = (userIndex, room) => {
+  changeCurrentTetromino = (userIndex, roomIndex) => {
+    // console.log('users', );
+    let shape = TETROMINOES[this.rooms[roomIndex].users[userIndex].nextTetrominos[0]];
       let currentTetromino = {
-        position: { x: StageHelper.STAGE_WIDTH / 2 - 2, y: 0, },
-        shapeIndex: this.rooms[roomIndex].users[userIndex].nextTetromino[0],
+        position: {
+          x: Math.ceil(StageHelper.STAGE_WIDTH / 2 - shape.length / 2),
+          y: (-1 * shape.length) + 1,
+        },
+        shapeIndex: this.rooms[roomIndex].users[userIndex].nextTetrominos[0],
         collided: false,
       }
-      room.users[userIndex].currentTetromino = currentTetromino;
-      room.users[userIndex].nextTetrominos.shift();
-      if (room.users[userIndex].nextTetrominos.length === 0) {
+      this.rooms[roomIndex].users[userIndex].currentTetromino = currentTetromino;
+      this.rooms[roomIndex].users[userIndex].nextTetrominos.shift();
+      if (this.rooms[roomIndex].users[userIndex].nextTetrominos.length === 0) {
         this.NextTetromino(roomIndex);
       }
-      return room;
+      // console.log(room, 'ooooooo');
+      return this.rooms[roomIndex];
   }
 
   inviteUser = (data) => {

@@ -1,7 +1,7 @@
-const Players = require('../rooms/players')
+const Players = require('../rooms/game')
 const Rooms = require('../rooms/rooms')
 const Users = require('../users/users')
-class PlaysersController {
+class PlayersController {
     constructor(io) {
         this.io = io;
         this.rooms = new Rooms;
@@ -26,4 +26,4 @@ class PlaysersController {
 
 }
 
-module.exports = PlaysersController;
+module.exports = PlayersController;

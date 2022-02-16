@@ -8,6 +8,7 @@ import users from "./users";
 import stage from "./stage";
 import socket from "./socket";
 import rooms from "./rooms";
+import game from './game';
 
 export default combineReducers({
     profile,
@@ -19,4 +20,5 @@ export default combineReducers({
     stage,
     socket,
     rooms,
+    game,
 });
