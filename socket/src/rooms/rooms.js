@@ -123,7 +123,7 @@ class Rooms {
           x: Math.ceil(StageHelper.STAGE_WIDTH / 2 - shape.length / 2),
           y: (-1 * shape.length) + 1,
         },
-        shapeIndex: this.rooms[roomIndex].users[userIndex].nextTetrominos[0],
+        shape,
         collided: false,
       }
       this.rooms[roomIndex].users[userIndex].currentTetromino = currentTetromino;

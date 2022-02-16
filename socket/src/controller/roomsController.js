@@ -228,7 +228,7 @@ class RoomController {
             if (playerIndex === -1) return callback(null, { message: "You are not joined in this room" });
             // console.log(room.users[playerIndex].currentTetromino);
             if (room.users[playerIndex].currentTetromino.collided
-                || !room.users[playerIndex].currentTetromino.shapeIndex
+                || !room.users[playerIndex].currentTetromino.shape
             )
                 room = this.rooms.changeCurrentTetromino(playerIndex, roomIndex);
             let map = await this.game.action(data.action, room.users[playerIndex]);

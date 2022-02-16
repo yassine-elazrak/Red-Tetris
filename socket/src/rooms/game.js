@@ -26,9 +26,9 @@ class Players {
     // update Map
     updateMap = (player) => {
         this.clearMap(player);
-        let { position } = player.currentTetromino;
-        let { collided } = player.currentTetromino;
-        let shape = TETROMINOES[player.currentTetromino.shapeIndex];
+        let { position, collided, shape } = player.currentTetromino;
+        // let { collided } = player.currentTetromino;
+        // let {shape} = TETROMINOES[player.currentTetromino.shapeIndex];
         // console.log(shape);
         let { map } = player;
         shape.forEach((row, y) => {
@@ -50,9 +50,8 @@ class Players {
 
     // checkCollision
     checkCollision = (dir, player) => {
-        let { position } = player.currentTetromino;
+        let { position, shape } = player.currentTetromino;
         console.log("position", position);
-        let shape = TETROMINOES[player.currentTetromino.shapeIndex];
         let map = player.map;
         for (let y = 0; y < shape.length; y++) {
             for (let x = 0; x < shape[y].length; x++) {
@@ -94,6 +93,24 @@ class Players {
     // }
 
     // rotate Tetromino
+    rotateTetromino = (player) => {
+        let { shape, position } = player.currentTetromino;
+        let len = shape.length - 1;
+        player.currentTetromino.position = {
+            x: position.x < 0
+                ? 0
+                : position.x + len >= STAGE_WIDTH - 1
+                    ? STAGE_WIDTH - 1 - len
+                    : position.x,
+            y: position.y,
+        }
+        // console.log(shape, 'shape');
+        player.currentTetromino.shape = shape.map((row, y) =>
+            // console.log(row)
+            row.map((_, x) => shape[len - x][y])
+        )
+        // console.log('rot', rot);
+    }
 
     // Drop Tetromino to down
     dropToDown = (player) => {
@@ -116,9 +133,12 @@ class Players {
                 this.moveTetromino({ x: 1, y: 0 }, player);
             else if (a === 'left')
                 this.moveTetromino({ x: -1, y: 0 }, player);
-            else if (a === 'down'){
+            else if (a === 'down') {
                 if (!this.moveTetromino({ x: 0, y: 1 }, player))
-                player.currentTetromino.collided = true;
+                    player.currentTetromino.collided = true;
+            }
+            else if (a === 'rotate') {
+                this.rotateTetromino(player);
             }
             // rotate
             this.updateMap(player);

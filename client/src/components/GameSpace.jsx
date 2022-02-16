@@ -135,6 +135,8 @@ const GameSpace = (props) => {
     } else if (keyCode === 38 || keyCode === 73) {
       // rotate
       // rotateTetromino(currentStage, currentTetromino);
+      data.action = "rotate"
+      props.gameActions(data)
     }
 
     // updateDropTime(500);
