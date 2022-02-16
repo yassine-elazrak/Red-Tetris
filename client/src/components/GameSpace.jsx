@@ -27,6 +27,8 @@ import {
 
 import { useStage } from "../hooks/useStage";
 
+import { useInterval } from "../hooks/useInterval";
+
 const { Content, Sider } = Layout;
 
 const GameSpace = (props) => {
@@ -37,100 +39,89 @@ const GameSpace = (props) => {
   const [triggerPlayers, setTriggerPlayers] = useState(true);
   const [collapsedPlayers, setCollapsedPlayers] = useState(true);
   const [userStage, setUserStage] = useState(null);
-  const [map, setMap] = useState([]);
-  const [
-    currentStage,
-    score,
-    setScore,
-    rows,
-    setRows,
-    gameOver,
-    gameWon,
-    gameStart,
-    startGame,
-    gamePause,
-    pauseGame,
-    currentTetromino,
-    nextTetromino,
-    setNextTetromino,
-    resetGame,
-    moveTetromino,
-    rotateTetromino,
-    updateDropTime,
-  ] = useStage();
-
-  //   currentTetromino: {position: {…}, shapeIndex: 0, collided: false}
-  // id: "qW0LrTJe9XrgKj34AAAl"
-  // map: (20) [Array(10), Array(10), Array(10), Array(10), Array(10), Array(10), Array(10), Array(10), Array(10), Array(10), Array(10), Array(10), Array(10), Array(10), Array(10), Array(10), Array(10), Array(10), Array(10), Array(10)]
-  // name: "ali"
-  // nextTetrominos: "T"
-  // rows: 0
-  // scor: 0
-  // status: null
-
-  // useEffect(() => {
-  //   setMap(props.game.map)
-  // }, [props.game])
-
-  // useEffect(() => {
-  //   const stage = props.room.users.filter(e => e.id === props.profile.id)?.[0];
-  //   setUserStage(stage);
-  // }, [props.room.users]);
+  const [dailyDrop, setDailyDrop] = useState(null);
+  // daily
+  const [scor, setScor] = useState(0);
+  const [rows, setRows] = useState(0);
+  const [nextTetromino, setNextTetromino] = useState(0);
+  const [gameStart, setGameStart] = useState(false);
+  const [gameOver, setGameOver] = useState(false);
+  const [gameWon, setGameWon] = useState(false);
+  const [gamePause, setGamePause] = useState(false);
 
   useEffect(() => {
     console.log("test", userStage);
     // if (userStage) {
-      setUserStage(props.game.map)
-      setScore(props.game.scor);
-      setRows(props.game.rows);
-      console.log("next",TETROMINOES[props.game.nextTetrominos], props.game.nextTetrominos);
+    setUserStage(props.game.map);
+    setScor(props.game.scor);
+    setRows(props.game.rows);
+    console.log(
+      "next",
+      TETROMINOES[props.game.nextTetrominos],
+      props.game.nextTetrominos
+    );
 
-      setNextTetromino(props.game.nextTetrominos);
+    setNextTetromino(props.game.nextTetrominos);
     // }
   }, [props.game]);
 
   useEffect(() => {
     props.room.error && message.error(props.room.error);
-  }, [props.room.error])
+  }, [props.room.error]);
 
   const changeFocused = () => {
     document.getElementById("game-space").focus();
   };
 
+  useInterval(() => {
+    let data = {
+      action: "down",
+      roomId: props.room.id,
+    };
+    props.gameActions(data);
+  }, dailyDrop);
+
+  useEffect(() => {
+    console.log("gameStart", gameStart);
+    if (gameStart && !gamePause && !gameWon && !gameOver) setDailyDrop(500);
+    else setDailyDrop(null);
+  }, [gameStart, gamePause, gameWon, gameOver]);
+
   useEffect(() => {
     changeFocused();
-  },[])
+  }, []);
 
   const handleKeyDown = ({ keyCode }) => {
     if (!gameStart && keyCode === 13) {
-      startGame();
+      // startGame();
+      setGameStart(1000);
     }
     if (!gameStart) return;
-    updateDropTime(null);
+    setDailyDrop(null);
     if (keyCode === 13) {
-      pauseGame(!gamePause);
-    } 
+      // pauseGame(!gamePause);
+      setGamePause(!gamePause);
+    }
     let data = {
-        action: "down",
-        roomId: props.room.id
-      }
+      action: "down",
+      roomId: props.room.id,
+    };
     if (!gameStart || gamePause || gameOver || gameWon) return;
     if (keyCode === 37 || keyCode === 74) {
-    
       // move to left
       // moveTetromino(currentStage, currentTetromino, { x: -1, y: 0 });
-      data.action = "left"
-      props.gameActions(data)
+      data.action = "left";
+      props.gameActions(data);
     } else if (keyCode === 39 || keyCode === 76) {
       // move to right
       // moveTetromino(currentStage, currentTetromino, { x: 1, y: 0 });
-      data.action = "right"
-      props.gameActions(data)
+      data.action = "right";
+      props.gameActions(data);
     } else if (keyCode === 40 || keyCode === 75) {
       // move to down
       // moveTetromino(currentStage, currentTetromino, { x: 0, y: 1 });
-      data.action = "down"
-      props.gameActions(data)
+      data.action = "down";
+      props.gameActions(data);
     } else if (keyCode === 32 || keyCode === 72) {
       // move to goole drop
       // moveTetromino(currentStage, currentTetromino, { x: 0, y: -1 });
@@ -139,15 +130,16 @@ const GameSpace = (props) => {
     } else if (keyCode === 38 || keyCode === 73) {
       // rotate
       // rotateTetromino(currentStage, currentTetromino);
-      data.action = "rotate"
-      props.gameActions(data)
+      data.action = "rotate";
+      props.gameActions(data);
     }
 
     // updateDropTime(500);
   };
 
   const handleKeyUp = (e) => {
-    console.log('key up');
+    console.log("key up");
+    if (gameStart && !gamePause && !gameWon && !gameOver) setDailyDrop(500);
     // if (gameStart && !gamePause && !gameWon && !gameOver) {
     //   updateDropTime(500);
     // }
@@ -158,14 +150,14 @@ const GameSpace = (props) => {
   };
 
   useEffect(() => {
-    console.log("GameSpace useEffect", gameOver, gameWon, resetGame);
+    // console.log("GameSpace useEffect", gameOver, gameWon, resetGame);
     const modal = () => {
       Modal.confirm({
         width: "500px",
         title: gameOver ? "Game Over" : "Game Won",
         content: gameOver ? "You lose!" : "You win!",
         onOk() {
-          resetGame(randomTetromino());
+          // resetGame(randomTetromino());
           changeFocused();
         },
         onCancel() {
@@ -186,39 +178,40 @@ const GameSpace = (props) => {
         ),
       });
     };
-    if (gameOver || gameWon){
+    if (gameOver || gameWon) {
       modal();
-      updateDropTime(null);
+      setDailyDrop(null);
     }
   }, [gameOver, gameWon]);
 
-  const [touchStart, setTouchStart] = useState({ x: 0, y: 0 });
+  // MOBILE ACTIONS
 
-  const handleTouchEnd = ({ changedTouches }) => {
-    if (!gameStart) return;
-    //console.log("starting");
-    const { clientX, clientY } = changedTouches[0];
-    const deltaX = clientX - touchStart.x;
-    const deltaY = clientY - touchStart.y;
-    //console.log(deltaX, " ", deltaY);
-    if (deltaX === deltaY)
-      moveTetromino(currentStage, currentTetromino, { x: 0, y: -1 });
-    if (Math.abs(deltaX) > Math.abs(deltaY)) {
-      if (deltaX > 0) {
-        //console.log("right");
-        moveTetromino(currentStage, currentTetromino, { x: 1, y: 0 });
-      } else {
-        moveTetromino(currentStage, currentTetromino, { x: -1, y: 0 });
-        //console.log("left");
-      }
-    } else {
-      if (deltaY < 0) {
-        rotateTetromino(currentStage, currentTetromino);
-        //console.log("rotate");
-      }
-    }
-    // updateDropTime(500);
-  };
+  // const [touchStart, setTouchStart] = useState({ x: 0, y: 0 });
+  // const handleTouchEnd = ({ changedTouches }) => {
+  //   if (!gameStart) return;
+  //   //console.log("starting");
+  //   const { clientX, clientY } = changedTouches[0];
+  //   const deltaX = clientX - touchStart.x;
+  //   const deltaY = clientY - touchStart.y;
+  //   //console.log(deltaX, " ", deltaY);
+  //   if (deltaX === deltaY)
+  //     moveTetromino(currentStage, currentTetromino, { x: 0, y: -1 });
+  //   if (Math.abs(deltaX) > Math.abs(deltaY)) {
+  //     if (deltaX > 0) {
+  //       //console.log("right");
+  //       moveTetromino(currentStage, currentTetromino, { x: 1, y: 0 });
+  //     } else {
+  //       moveTetromino(currentStage, currentTetromino, { x: -1, y: 0 });
+  //       //console.log("left");
+  //     }
+  //   } else {
+  //     if (deltaY < 0) {
+  //       rotateTetromino(currentStage, currentTetromino);
+  //       //console.log("rotate");
+  //     }
+  //   }
+  //   // updateDropTime(500);
+  // };
 
   const bottons = () => {
     return (
@@ -235,8 +228,12 @@ const GameSpace = (props) => {
             type="primary"
             hidden={gameStart}
             onClick={() => {
-              !gameStart && props.changeStatusRoom({roomId: props.room.id, status: "started"})
-              gameStart ? resetGame(randomTetromino()) : startGame();
+              !gameStart &&
+                props.changeStatusRoom({
+                  roomId: props.room.id,
+                  status: "started",
+                });
+              gameStart ? console.log("reset Game") : setGameStart(true);
               changeFocused();
             }}
           >
@@ -248,11 +245,11 @@ const GameSpace = (props) => {
             type="primary"
             disabled={!props.room.admin === props.profile.id}
             onClick={() => {
-            props.changeStatusRoom({
-              roomId: props.room.id,
-              status: !gamePause ? "paused" : "started"
-            })
-              pauseGame(!gamePause);
+              props.changeStatusRoom({
+                roomId: props.room.id,
+                status: !gamePause ? "paused" : "started",
+              });
+              setGamePause(!gamePause);
               changeFocused();
             }}
           >
@@ -322,14 +319,14 @@ const GameSpace = (props) => {
         onKeyDown={(e) => handleKeyDown(e)}
         onKeyUp={(e) => handleKeyUp(e)}
         onTouchStart={(e) => {
-          if (gameStart) updateDropTime(null);
-          setTouchStart({
-            x: e.changedTouches[0].clientX,
-            y: e.changedTouches[0].clientY,
-          });
+          // if (gameStart) updateDropTime(null);
+          // setTouchStart({
+          //   x: e.changedTouches[0].clientX,
+          //   y: e.changedTouches[0].clientY,
+          // });
         }}
         onTouchEnd={(e) => {
-          handleTouchEnd(e);
+          // handleTouchEnd(e);
         }}
         style={{
           padding: 0,
@@ -345,7 +342,7 @@ const GameSpace = (props) => {
           <Col span={24}>
             <StageBar
               shape={TETROMINOES[nextTetromino].shape}
-              score={score}
+              score={scor}
               rows={rows}
               color={TETROMINOES[nextTetromino].color}
             />
@@ -415,7 +412,7 @@ const mapStateToProps = (state) => {
     profile: state.profile,
     room: state.room,
     socket: state.socket.socket,
-    game: state.game
+    game: state.game,
   };
 };
 
