@@ -24,7 +24,7 @@ class Players {
     }
 
     // update Map
-    updateMap = (player) => {
+    updateMap = (player, shadow) => {
         this.clearMap(player);
         let { position, collided, shape } = player.currentTetromino;
         // let { collided } = player.currentTetromino;
@@ -34,11 +34,12 @@ class Players {
         shape.forEach((row, y) => {
             row.forEach((v, x) => {
                 if (v !== 0) {
-                    // shadow
-
+                    // console.log('psh', y + position.y + shadow);
+                    if (y + position.y + shadow > 0){
+                        map[y + position.y + shadow][x + position.x] = [v, 'shadow']
+                    }
                     if (y + position.y >= 0) {
-                        // console.log('value', y + position.y, x + position.x );
-                        map[y + position.y][x + position.x] = [v, !collided ? "clear" : "tetromino"]
+                        map[y + position.y][x + position.x] = [v, !collided ? "clear" : "tetromino"];
                     }
                 }
             })
@@ -122,7 +123,8 @@ class Players {
         let { shape, position } = player.currentTetromino;
         while (!this.checkCollision({ x: 0, y }, player.map, position, shape))
             y++;
-        return y;
+        console.log(y, 'shadow');
+        return y ? y - 1 : y;
     }
 
     // add Well
@@ -158,7 +160,8 @@ class Players {
             else if (a === 'rotate') {
                 this.rotateTetromino(player);
             }
-            this.updateMap(player);
+            let shadow = this.dropToDown(player);
+            this.updateMap(player, shadow);
             if (player.currentTetromino.collided) {
                 this.deletRow(player)
             }
