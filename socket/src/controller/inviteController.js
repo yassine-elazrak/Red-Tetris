@@ -9,7 +9,7 @@ class InviteController {
         this.io = io;
         this.users = new Users;
         this.rooms = new Rooms;
-        this.selector = new Selector;
+        // this.selector = new Selector;
     }
 
     /**

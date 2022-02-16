@@ -128,7 +128,8 @@ class App {
        * @param {object} data - roomId
        * @param {function} callback - (room, err)
        */
-      socket.on("closeRoom", this.RoomsController.changeStatusRoom(socket, 'closed'));
+      // socket.on("closeRoom", this.RoomsController.changeStatusRoom(socket, 'closed'));
+      socket.on("changeStatusRoom", this.RoomsController.changeStatusRoom(socket));
 
       /**
        * @description leave room

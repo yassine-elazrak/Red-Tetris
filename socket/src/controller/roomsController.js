@@ -8,7 +8,7 @@ class RoomController {
         this.io = io;
         this.users = new Users;
         this.rooms = new Rooms;
-        this.selector = new Selector;
+        // this.selector = new Selector;
     }
 
     /**
@@ -48,7 +48,7 @@ class RoomController {
             let trimNameRoom = data.roomName.trim().toLowerCase();
             let room = allRooms.find(item => item.name === trimNameRoom);
             if (room) {
-                if (room.status !== 'waiting') return callback(null, { message: "Room is closed" })
+                if (room.status !== 'waiting') return callback(null, { message: "Room is closed2" })
                 room = await this.rooms.joinRoom({
                     roomId: room.id,
                     userId: user.id,
@@ -126,14 +126,17 @@ class RoomController {
      * @param {id} roomId - room id
      * @param {function} callback - (res, err)
      */
-    changeStatusRoom = (socket, status) => async (roomId, callback) => {
+    changeStatusRoom = (socket) => async (data, callback) => {
         try {
-            let res = await this.rooms.changeStatusRoom({ roomId, userId: socket.id, status });
+            if (!["closed", "paused", "started"].includes(data.status))
+            return callback(null, {message: "Invalid action"})
+            let res = await this.rooms.changeStatusRoom(
+                { roomId: data.roomId, userId: socket.id, status : data.status });
             let ids = res.users.map(e => e.id)
                 .filter(id => id !== socket.id);
             let admin = res.users.find((user) => user.id === res.admin);
             let notif = {
-                message: `this room closed by ${admin.name}`,
+                message: `this room ${data.status} by ${admin.name}`,
                 type: "notification",
                 read: true,
             };
@@ -162,7 +165,6 @@ class RoomController {
                 await this.rooms.deleteRoom(roomId);
                 this.io.emit("updateRooms", this.rooms.getRooms());
             } else {
-                // let ids = this.selector.Data(room.users, ({ id }) => id);
                 let ids = room.users.map(e => e.id);
                 // console.log("ids after leave room => ", ids);
                 if (room.admin === socket.id) {
@@ -180,11 +182,12 @@ class RoomController {
                     // notif users admin is switched!
                     ids.length && this.io.to(ids).emit("notification", notif);
                     // update message notification for admin
-                    notif.message=  "you are admin of this room" ;
+                    notif.message = "you are admin of this room";
                     // update room at new admin
                     this.io.to(newAdmin.id).emit('updateRoom', updateRoom);
                     let resUses = _.omit(updateRoom, ['invit', 'message']);
                     // update room at users
+                    console.log('ids', ids);
                     ids.length && this.io.to(ids).emit("updateRoom", resUses);
                     // notif new admin he is admin now
                     this.io.to(newAdmin.id).emit("notification", notif);
@@ -199,6 +202,7 @@ class RoomController {
                     this.io.to(room.admin).emit("updateRoom", room);
                     room = _.omit(room, ['invit', 'message']);
                     ids = ids.filter(id => id !== room.admin);
+                    console.log('ids2', ids);
                     ids.length && this.io.to(ids).emit("updateRoom", room)
                 }
             }
@@ -209,6 +213,10 @@ class RoomController {
             if (typeof callback === "function") callback(null, error);
         }
     };
+
+    // startGame = (socket) => (roomId, callback) => {
+
+    // }
 
     /**
      * @description get current rooms

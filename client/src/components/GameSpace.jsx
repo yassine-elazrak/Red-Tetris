@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Layout, Row, Col, Button, Popover, Modal } from "antd";
+import { Layout, Row, Col, Button, Popover, Modal, message } from "antd";
 import {
   SettingOutlined,
   CheckCircleOutlined,
@@ -8,14 +8,7 @@ import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
 } from "@ant-design/icons";
-// import {
-//   InitStage,
-//   CreateStage,
-//   STAGE_HEIGHT,
-//   STAGE_WIDTH,
-// } from "../helpers/StageHelper";
 import { TETROMINOES, randomTetromino } from "../helpers/Tetrominoes";
-// import { TetrominoStyle } from "./styles/TetrominoStyle";
 
 import Message from "./Message";
 import Players from "./Players";
@@ -25,10 +18,10 @@ import Stage from "./Stage";
 import {
   createStage,
   updateStage,
-  // updateCell,
   updateTetromino,
   leaveRoom,
   refreshRoom,
+  changeStatusRoom,
 } from "../redux/actions";
 
 import { useStage } from "../hooks/useStage";
@@ -87,6 +80,10 @@ const GameSpace = (props) => {
       setNextTetromino(userStage.nextTetrominos);
     }
   }, [userStage]);
+
+  useEffect(() => {
+    props.room.error && message.error(props.room.error);
+  }, [props.room.error])
 
   const changeFocused = () => {
     document.getElementById("game-space").focus();
@@ -215,6 +212,7 @@ const GameSpace = (props) => {
             type="primary"
             hidden={gameStart}
             onClick={() => {
+              !gameStart && props.changeStatusRoom({roomId: props.room.id, status: "started"})
               gameStart ? resetGame(randomTetromino()) : startGame();
               changeFocused();
             }}
@@ -227,6 +225,10 @@ const GameSpace = (props) => {
             type="primary"
             disabled={!props.room.admin === props.profile.id}
             onClick={() => {
+            props.changeStatusRoom({
+              roomId: props.room.id,
+              status: !gamePause ? "paused" : "started"
+            })
               pauseGame(!gamePause);
               changeFocused();
             }}
@@ -400,4 +402,5 @@ export default connect(mapStateToProps, {
 
   leaveRoom,
   refreshRoom,
+  changeStatusRoom,
 })(GameSpace);

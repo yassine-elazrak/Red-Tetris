@@ -6,7 +6,7 @@ const STAGE_HEIGHT = 20;
 class Stage {
     initStage = () => {
         const newStage = Array.from(Array(STAGE_HEIGHT), () =>
-            new Array(STAGE_WIDTH).fill(0))
+            new Array(STAGE_WIDTH).fill([0, 'clear']))
         return newStage;
     }
 }

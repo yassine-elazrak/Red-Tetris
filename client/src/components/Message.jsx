@@ -25,7 +25,7 @@ const Message = (props) => {
   const handleSubmit = (e) => {
     const newMessage = {
       roomId: props.room.id,
-      ...e,
+      ...e, // {message: "input value"}
     };
     props.sentMessage(newMessage);
     form.resetFields();
@@ -55,12 +55,11 @@ const Message = (props) => {
   }, [messages]);
 
   const MessageSide = () => {
-    console.log(messages);
     return (
       <BoxMessage
         id="chatBox"
         style={{
-          height: "calc(100vh - 320px)",
+          height: "calc(100vh - 250px)",
         }}
       >
         {messages.map((item, id) => {

@@ -25,7 +25,7 @@ export const createRoom = (room) => {
 export const createOrJoinRoom = (room) => {
   return async (dispatch, getState) => {
     try {
-      dispatch({type: LOADING_ROOM});
+      dispatch({ type: LOADING_ROOM });
       const io = getState().socket.socket;
       const res = await socket(io, "createOrJoin", room);
       dispatch(success(res, ROOM_CREATE));
@@ -64,13 +64,13 @@ export const leaveRoom = () => {
   };
 };
 
-export const closeRoom = () => {
+export const changeStatusRoom = (data) => {
   return async (dispatch, getState) => {
     try {
       dispatch({ type: LOADING_ROOM });
       const io = getState().socket.socket;
-      const roomId = getState().room.id;
-      const res = await socket(io, "closeRoom", roomId);
+      // const roomId = getState().room.id;
+      const res = await socket(io, "changeStatusRoom", data);
       dispatch(success(res, ROOM_UPDATE_STATUS));
     } catch (err) {
       dispatch(error(err, ROOM_ERROR));

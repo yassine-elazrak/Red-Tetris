@@ -7,7 +7,7 @@ import { gold, red } from "@ant-design/colors";
 import {
   inviteRequest,
   onlineUsers,
-  closeRoom,
+  changeStatusRoom,
   onlineUsersUpdate,
   leaveRoom,
 } from "../redux/actions";
@@ -309,7 +309,7 @@ const InviteUsers = (props) => {
         </Button>,
         <Button
           type="primary"
-          onClick={() => props.closeRoom(props.room.id)}
+          onClick={() => props.changeStatusRoom({roomId: props.room.id, status: "closed"})}
           style={{
             display: "flex",
             margin: "auto",
@@ -455,7 +455,7 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, {
   inviteRequest,
   onlineUsers,
-  closeRoom,
+  changeStatusRoom,
   onlineUsersUpdate,
   leaveRoom,
 })(InviteUsers);

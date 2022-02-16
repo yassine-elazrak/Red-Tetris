@@ -59,11 +59,11 @@ class AuthController {
                         })
                         this.io.to(newAdmin.id).emit("updateRoom", updateRoom);
                         let resUsers = _.omit(updateRoom, ["invit"]);
-                        this.io.to(usersIds).emit('updateRoom', resUsers);
+                        usersIds.length && this.io.to(usersIds).emit('updateRoom', resUsers);
                     }
                     else {
-                        this.io.to(usersIds).emit("updateRoom", room);
-                        this.io.to(usersIds).emit("notification", {
+                        usersIds.length && this.io.to(usersIds).emit("updateRoom", room);
+                        usersIds.length && this.io.to(usersIds).emit("notification", {
                             message: `${user.name} left this room`,
                             type: "notification",
                             read: true,

@@ -217,8 +217,8 @@ const HomePage = (props) => {
           ) : !room.isPravite &&
             room.status === "waiting" &&
             profile.id === room.admin ? (
-            // <InviteUsers />
-            <GameSpace />
+            <InviteUsers />
+            // <GameSpace />
           ) : (
             <GameSpace />
           )}

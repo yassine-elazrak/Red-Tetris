@@ -63,8 +63,9 @@ class Rooms {
       map: this.stage.initStage(),
       nextTetrominos,
       currentTetromino: {
-        position: { x: 0 , y: 0, },
+        position: { x: 0, y: 0 },
         shapeIndex: 0,
+        shadow: { x: 0, y: 0 },
         collided: false,
       }
     }
@@ -114,22 +115,18 @@ class Rooms {
 
   }
 
-  changeCurrentTetromino = (userIndex, roomIndex) => {
-    return new Promise((resolve, reject) => {
-      if (!this.rooms[roomIndex]) return reject({ message: "Room not found" });
-      if (!this.rooms[roomIndex].users[userIndex]) return reject({ message: "User not found" });
+  changeCurrentTetromino = (userIndex, room) => {
       let currentTetromino = {
         position: { x: StageHelper.STAGE_WIDTH / 2 - 2, y: 0, },
         shapeIndex: this.rooms[roomIndex].users[userIndex].nextTetromino[0],
         collided: false,
       }
-      this.rooms[roomIndex].users[userIndex].currentTetromino = currentTetromino;
-      this.rooms[roomIndex].users[userIndex].nextTetrominos.shift();
-      if (this.rooms[roomIndex].users[userIndex].nextTetrominos.length === 0) {
+      room.users[userIndex].currentTetromino = currentTetromino;
+      room.users[userIndex].nextTetrominos.shift();
+      if (room.users[userIndex].nextTetrominos.length === 0) {
         this.NextTetromino(roomIndex);
       }
-      resolve(this.rooms[roomIndex].users[userIndex]);
-    })
+      return room;
   }
 
   inviteUser = (data) => {
