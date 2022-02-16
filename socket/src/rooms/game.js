@@ -49,10 +49,10 @@ class Players {
 
 
     // checkCollision
-    checkCollision = (dir, player) => {
-        let { position, shape } = player.currentTetromino;
+    checkCollision = (dir, map, position, shape) => {
+        // let { position } = player.currentTetromino;
         console.log("position", position);
-        let map = player.map;
+        // let map = player.map;
         for (let y = 0; y < shape.length; y++) {
             for (let x = 0; x < shape[y].length; x++) {
                 if (shape[y][x] !== 0) {
@@ -76,9 +76,10 @@ class Players {
 
     // move Tetromino
     moveTetromino = (dir, player) => {
-        // let { position } = player.currentTetromino;
+        let { shape, position } = player.currentTetromino;
+        // let {map} = player;
         // console.log(player, 'position');
-        if (!this.checkCollision(dir, player)) {
+        if (!this.checkCollision(dir, player.map, position, shape)) {
             console.log("playerPosition", player.currentTetromino.position);
             player.currentTetromino.position.x += dir.x;
             player.currentTetromino.position.y += dir.y;
@@ -96,7 +97,7 @@ class Players {
     rotateTetromino = (player) => {
         let { shape, position } = player.currentTetromino;
         let len = shape.length - 1;
-        player.currentTetromino.position = {
+        let newPositon = {
             x: position.x < 0
                 ? 0
                 : position.x + len >= STAGE_WIDTH - 1
@@ -105,25 +106,42 @@ class Players {
             y: position.y,
         }
         // console.log(shape, 'shape');
-        player.currentTetromino.shape = shape.map((row, y) =>
+        let rotate = shape.map((row, y) =>
             // console.log(row)
             row.map((_, x) => shape[len - x][y])
         )
-        // console.log('rot', rot);
+        if (!this.checkCollision({x: 0, y: 0}, player.map, newPositon, rotate)) {
+            player.currentTetromino.position = newPositon;
+            player.currentTetromino.shape = rotate;
+        }
     }
 
     // Drop Tetromino to down
     dropToDown = (player) => {
         let y = 0;
-        while (this.moveTetromino({ x: 0, y }, player) === true)
+        let { shape, position } = player.currentTetromino;
+        while (!this.checkCollision({ x: 0, y }, player.map, position, shape))
             y++;
         return y;
     }
 
     // add Well
 
+    // delet row
+    deletRow = (player) => {
+        player.map = player.map.reduce((ack, row) => {
+            if (row.findIndex(cell => cell[0] === 0) === -1) {
+                player.row++;
+                ack.unshift(new Array(STAGE_WIDTH).fill([0, 'clear']))
+                return ack;
+            }
+            ack.push(row)
+            return ack;
+        }, []);
+    }
+
     // get action
-    action = (a, player) => {
+    action = (a, player, room) => {
         return new Promise((resolve, reject) => {
             if (!['down', 'right', 'left', 'rotate', 'drop'].includes(a))
                 return reject({ message: "Invalid action" });
@@ -140,8 +158,12 @@ class Players {
             else if (a === 'rotate') {
                 this.rotateTetromino(player);
             }
-            // rotate
             this.updateMap(player);
+            if (player.currentTetromino.collided) {
+                this.deletRow(player)
+            }
+            if (player.currentTetromino.position.y <= 0 && player.currentTetromino.collided)
+                player.status = 'gameOver'
             resolve(player);
         })
     }

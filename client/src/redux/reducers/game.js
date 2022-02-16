@@ -10,7 +10,7 @@ const initialState = {
     isLoading: false,
     error: null,
     map: [],
-    nextTetromino: 0,
+    nextTetrominos: 0,
     currentTetromino: 0,
     scor: 0,
     rows: 0,

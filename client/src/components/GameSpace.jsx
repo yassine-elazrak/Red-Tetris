@@ -68,24 +68,26 @@ const GameSpace = (props) => {
   // scor: 0
   // status: null
 
-  useEffect(() => {
-    setMap(props.game.map)
-  }, [props.game.map])
+  // useEffect(() => {
+  //   setMap(props.game.map)
+  // }, [props.game])
 
-  useEffect(() => {
-    const stage = props.room.users.filter(e => e.id === props.profile.id)?.[0];
-    setUserStage(stage);
-  }, [props.room.users]);
+  // useEffect(() => {
+  //   const stage = props.room.users.filter(e => e.id === props.profile.id)?.[0];
+  //   setUserStage(stage);
+  // }, [props.room.users]);
 
   useEffect(() => {
     console.log("test", userStage);
-    if (userStage) {
-      setScore(userStage.scor);
-      setRows(userStage.rows);
-      console.log("next",TETROMINOES[userStage.nextTetrominos], userStage.nextTetrominos);
-      setNextTetromino(userStage.nextTetrominos);
-    }
-  }, [userStage]);
+    // if (userStage) {
+      setUserStage(props.game.map)
+      setScore(props.game.scor);
+      setRows(props.game.rows);
+      console.log("next",TETROMINOES[props.game.nextTetrominos], props.game.nextTetrominos);
+
+      setNextTetromino(props.game.nextTetrominos);
+    // }
+  }, [props.game]);
 
   useEffect(() => {
     props.room.error && message.error(props.room.error);

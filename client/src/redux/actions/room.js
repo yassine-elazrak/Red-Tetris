@@ -14,7 +14,7 @@ import {
 const game = (data, userId) => {
   let user = data.find(e => e.id === userId);
   console.log(user, 'user');
-  let newData = _.pick(user, ['map', 'nextTetromino', 'currentTetromino', 'scor', 'rows', 'status']);
+  let newData = _.pick(user, ['map', 'nextTetromino', 'nextTetrominos', 'scor', 'rows', 'status']);
   return newData;
 }
 
@@ -27,6 +27,7 @@ export const createRoom = (room) => {
       dispatch(success(res, ROOM_CREATE));
       const profile = getState().profile;
       const gameInfo = game(res.users, profile.id);
+      console.log(gameInfo);
       dispatch(success(gameInfo, GAME_UPDATE));
     } catch (err) {
       dispatch(error(err, ROOM_ERROR));
@@ -43,6 +44,7 @@ export const createOrJoinRoom = (room) => {
       dispatch(success(res, ROOM_CREATE));
       const profile = getState().profile;
       const gameInfo = game(res.users, profile.id);
+      console.log(gameInfo);
       dispatch(success(gameInfo, GAME_UPDATE));
     } catch (err) {
       dispatch(error(err, ROOM_ERROR));
