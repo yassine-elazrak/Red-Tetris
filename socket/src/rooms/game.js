@@ -78,8 +78,6 @@ class Players {
     // move Tetromino
     moveTetromino = (dir, player) => {
         let { shape, position } = player.currentTetromino;
-        // let {map} = player;
-        // console.log(player, 'position');
         if (!this.checkCollision(dir, player.map, position, shape)) {
             console.log("playerPosition", player.currentTetromino.position);
             player.currentTetromino.position.x += dir.x;
@@ -145,10 +143,12 @@ class Players {
     // get action
     action = (a, player, room) => {
         return new Promise((resolve, reject) => {
-            if (!['down', 'right', 'left', 'rotate', 'drop'].includes(a))
+            if (!['downDown', 'right', 'left', 'rotate', 'down'].includes(a))
                 return reject({ message: "Invalid action" });
-            if (a === 'drop')
-                this.dropToDown(player);
+            if (a === 'downDown'){
+                let y = this.dropToDown(player);
+                player.currentTetromino.position.y += y;
+            }
             else if (a === 'right')
                 this.moveTetromino({ x: 1, y: 0 }, player);
             else if (a === 'left')
