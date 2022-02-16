@@ -50,24 +50,30 @@ const GameSpace = (props) => {
   const [gamePause, setGamePause] = useState(false);
 
   useEffect(() => {
-    console.log("test", userStage);
-    // if (userStage) {
+    // console.log("test", userStage);
     setUserStage(props.game.map);
     setScor(props.game.scor);
     setRows(props.game.rows);
-    console.log(
-      "next",
-      TETROMINOES[props.game.nextTetrominos],
-      props.game.nextTetrominos
-    );
+    // console.log(
+    //   "next",
+    //   TETROMINOES[props.game.nextTetrominos],
+    //   props.game.nextTetrominos
+    // );
 
-    setNextTetromino(props.game.nextTetrominos);
-    // }
+    setNextTetromino(props.game.nextTetrominos[0] || 0);
+    if (props.game.status === 'gameOver') setGameOver(true);
   }, [props.game]);
 
   useEffect(() => {
-    props.room.error && message.error(props.room.error);
-  }, [props.room.error]);
+    if (props.room.error) message.error(props.room.error);
+    else {
+      if (props.room.status === 'started'){
+        setGameStart(true)
+        setGamePause(false);
+      }
+      if (props.room.status === 'paused') setGamePause(true);
+    }
+  }, [props.room]);
 
   const changeFocused = () => {
     document.getElementById("game-space").focus();
@@ -82,7 +88,7 @@ const GameSpace = (props) => {
   }, dailyDrop);
 
   useEffect(() => {
-    console.log("gameStart", gameStart);
+    // console.log("gameStart", gameStart);
     if (gameStart && !gamePause && !gameWon && !gameOver) setDailyDrop(500);
     else setDailyDrop(null);
   }, [gameStart, gamePause, gameWon, gameOver]);
@@ -94,7 +100,6 @@ const GameSpace = (props) => {
   const handleKeyDown = ({ keyCode }) => {
     if (!gameStart && keyCode === 13) {
       // startGame();
-      setGameStart(1000);
     }
     if (!gameStart) return;
     setDailyDrop(null);
@@ -233,14 +238,14 @@ const GameSpace = (props) => {
                   roomId: props.room.id,
                   status: "started",
                 });
-              gameStart ? console.log("reset Game") : setGameStart(true);
+              // gameStart ? console.log("reset Game") : setGameStart(true);
               changeFocused();
             }}
           >
             {gameStart ? "Reset" : "Start"}
           </Button>
         )}
-        {gameStart && (
+        { props.profile.id === props.room.admin  && gameStart && (
           <Button
             type="primary"
             disabled={!props.room.admin === props.profile.id}
@@ -249,7 +254,7 @@ const GameSpace = (props) => {
                 roomId: props.room.id,
                 status: !gamePause ? "paused" : "started",
               });
-              setGamePause(!gamePause);
+              // setGamePause(!gamePause);
               changeFocused();
             }}
           >

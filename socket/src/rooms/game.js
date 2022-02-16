@@ -27,9 +27,6 @@ class Players {
     updateMap = (player, shadow) => {
         this.clearMap(player);
         let { position, collided, shape } = player.currentTetromino;
-        // let { collided } = player.currentTetromino;
-        // let {shape} = TETROMINOES[player.currentTetromino.shapeIndex];
-        // console.log(shape);
         let { map } = player;
         shape.forEach((row, y) => {
             row.forEach((v, x) => {

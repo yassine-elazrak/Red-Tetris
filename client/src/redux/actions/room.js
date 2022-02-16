@@ -47,6 +47,7 @@ export const createOrJoinRoom = (room) => {
       console.log(gameInfo);
       dispatch(success(gameInfo, GAME_UPDATE));
     } catch (err) {
+      console.log(err);
       dispatch(error(err, ROOM_ERROR));
     }
   }

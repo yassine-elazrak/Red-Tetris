@@ -35,6 +35,7 @@ class RoomController {
             this.io.emit("updateRooms", this.rooms.getRooms());
             if (typeof callback === "function") callback(res, null);
         } catch (error) {
+            console.log(error);
             if (typeof callback === "function") callback(null, error);
         }
     };
@@ -148,6 +149,7 @@ class RoomController {
             ids.length && this.io.to(ids).emit("updateRoom", roomInfo);
             if (typeof callback === "function") callback(res, null);
         } catch (error) {
+            console.log(error);
             if (typeof callback === "function") callback(null, error);
         }
     };
