@@ -60,19 +60,20 @@ const GameSpace = (props) => {
     //   props.game.nextTetrominos
     // );
 
-    setNextTetromino(props.game.nextTetrominos[0] || 0);
+    setNextTetromino(props.game.nextTetrominos[0]);
     if (props.game.status === 'gameOver') setGameOver(true);
   }, [props.game]);
 
   useEffect(() => {
     if (props.room.error) message.error(props.room.error);
     else {
-      if (props.room.status === 'started'){
+      if (props.room.status === 'started') {
         setGameStart(true)
         setGamePause(false);
       }
       if (props.room.status === 'paused') setGamePause(true);
     }
+    console.log('nextTetromino =>', props.game.nextTetrominos);
   }, [props.room]);
 
   const changeFocused = () => {
@@ -100,6 +101,10 @@ const GameSpace = (props) => {
   const handleKeyDown = ({ keyCode }) => {
     if (!gameStart && keyCode === 13) {
       // startGame();
+      props.changeStatusRoom({
+        roomId: props.room.id,
+        status: "started",
+      });
     }
     if (!gameStart) return;
     setDailyDrop(null);
@@ -245,7 +250,7 @@ const GameSpace = (props) => {
             {gameStart ? "Reset" : "Start"}
           </Button>
         )}
-        { props.profile.id === props.room.admin  && gameStart && (
+        {props.profile.id === props.room.admin && gameStart && (
           <Button
             type="primary"
             disabled={!props.room.admin === props.profile.id}

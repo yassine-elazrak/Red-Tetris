@@ -126,15 +126,24 @@ class Players {
 
     // delet row
     deletRow = (player) => {
+        let rows = 0;
+        // let scor = 0;
+        let bonus = 0;
         player.map = player.map.reduce((ack, row) => {
             if (row.findIndex(cell => cell[0] === 0) === -1) {
-                player.row++;
+                rows++;
                 ack.unshift(new Array(STAGE_WIDTH).fill([0, 'clear']))
                 return ack;
             }
             ack.push(row)
             return ack;
         }, []);
+        if (rows) {
+            bonus = Math.round((rows / 100) * 4 * 10) * 10;
+            player.rows += rows;
+            player.scor += rows * 10 + bonus;
+
+        }
     }
 
     // get action

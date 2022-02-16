@@ -233,10 +233,12 @@ class RoomController {
                 || !room.users[playerIndex].currentTetromino.shape
             )
                 room = this.rooms.changeCurrentTetromino(playerIndex, roomIndex);
-            let map = await this.game.action(data.action, room.users[playerIndex]);
+            let updateSpacePlayer = await this.game.action(data.action, room.users[playerIndex]);
+
             // console.log(map);
-            // room.users[playerIndex].map = map;
-            callback(map, null);
+            // this.rooms.rooms[roomIndex].users[playerIndex] = updateSpacePlayer;
+            console.log(updateSpacePlayer);
+            callback(updateSpacePlayer, null);
         } catch (error) {
             console.log(error);
             callback(null, error);
