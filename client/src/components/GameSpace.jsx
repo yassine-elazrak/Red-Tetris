@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { Layout, Row, Col, Button, Popover, Modal, message } from "antd";
 import {
-  SettingOutlined,
   CheckCircleOutlined,
   CloseCircleOutlined,
   MenuUnfoldOutlined,
@@ -23,24 +22,23 @@ import {
   refreshRoom,
   changeStatusRoom,
   gameActions,
+  continueGame,
+  gameClear,
 } from "../redux/actions";
 
-import { useStage } from "../hooks/useStage";
+// import { useStage } from "../hooks/useStage";
 
 import { useInterval } from "../hooks/useInterval";
 
 const { Content, Sider } = Layout;
 
 const GameSpace = (props) => {
-  console.log("GameSpace props", props);
-  // const { room } = props;
   const [collapsedChat, setCollapsedChat] = useState(true);
   const [triggerChat, setTriggerChat] = useState(true);
   const [triggerPlayers, setTriggerPlayers] = useState(true);
   const [collapsedPlayers, setCollapsedPlayers] = useState(true);
-  const [userStage, setUserStage] = useState(null);
+  const [userStage, setUserStage] = useState([]);
   const [dailyDrop, setDailyDrop] = useState(null);
-  // daily
   const [scor, setScor] = useState(0);
   const [rows, setRows] = useState(0);
   const [nextTetromino, setNextTetromino] = useState(0);
@@ -49,32 +47,47 @@ const GameSpace = (props) => {
   const [gameWon, setGameWon] = useState(false);
   const [gamePause, setGamePause] = useState(false);
 
+  const restGame = () => {
+    setUserStage([]);
+    setDailyDrop(null);
+    setScor(0);
+    setRows(0);
+    setNextTetromino(0);
+    setGameStart(false);
+    setGameOver(false);
+    setGameWon(false);
+    setGamePause(false);
+  }
+
   useEffect(() => {
-    // console.log("test", userStage);
+    if (props.game.error) {
+      setDailyDrop(null);
+      message.error(props.game.error);
+      return;
+    }
     setUserStage(props.game.map);
     setScor(props.game.scor);
     setRows(props.game.rows);
-    // console.log(
-    //   "next",
-    //   TETROMINOES[props.game.nextTetrominos],
-    //   props.game.nextTetrominos
-    // );
-
     setNextTetromino(props.game.nextTetrominos[0]);
-    if (props.game.status === 'gameOver') setGameOver(true);
-    if (props.game.status === 'gameWinner') setGameWon(true);
+    if (props.game.status === "gameOver") setGameOver(true);
+    if (props.game.status === "gameWinner") setGameWon(true);
+    if (!props.game.status) {
+      setGameOver(false);
+      setGameWon(false);
+    }
   }, [props.game]);
 
   useEffect(() => {
     if (props.room.error) message.error(props.room.error);
     else {
-      if (props.room.status === 'started') {
-        setGameStart(true)
+      // if (props.room.status === "waiting") setGameStart(false);
+      if (props.room.status === "started") {
+        setGameStart(true);
         setGamePause(false);
       }
-      if (props.room.status === 'paused') setGamePause(true);
+      if (props.room.status === "paused") setGamePause(true);
     }
-    console.log('nextTetromino =>', props.game.nextTetrominos);
+    console.log("nextTetromino =>", props.game.nextTetrominos);
   }, [props.room]);
 
   const changeFocused = () => {
@@ -101,7 +114,6 @@ const GameSpace = (props) => {
 
   const handleKeyDown = ({ keyCode }) => {
     if (!gameStart && keyCode === 13) {
-      // startGame();
       props.changeStatusRoom({
         roomId: props.room.id,
         status: "started",
@@ -160,10 +172,6 @@ const GameSpace = (props) => {
     // }
   };
 
-  const handleLiveRoom = () => {
-    //console.log("handleLiveRoom");
-  };
-
   useEffect(() => {
     // console.log("GameSpace useEffect", gameOver, gameWon, resetGame);
     const modal = () => {
@@ -172,14 +180,15 @@ const GameSpace = (props) => {
         title: gameOver ? "Game Over" : "Game Won",
         content: gameOver ? "You lose!" : "You are Winner!",
         onOk() {
-          // resetGame(randomTetromino());
-          changeFocused();
+          restGame();
+          props.gameClear();
+          props.continueGame({ roomId: props.room.id });
         },
         onCancel() {
-          handleLiveRoom();
+          console.log("leave Room");
         },
         okText: "Continue",
-        cancelText: "Live Room",
+        cancelText: "Leave Room",
         cancelButtonProps: {
           type: "danger",
         },
@@ -381,7 +390,7 @@ const GameSpace = (props) => {
               width: "100%",
             }}
           >
-            <Stage stage={props.game.map} />
+            <Stage stage={userStage} />
             {bottons()}
           </Col>
         </Row>
@@ -440,4 +449,6 @@ export default connect(mapStateToProps, {
   refreshRoom,
   changeStatusRoom,
   gameActions,
+  continueGame,
+  gameClear,
 })(GameSpace);

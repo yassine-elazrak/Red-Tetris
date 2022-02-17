@@ -145,6 +145,7 @@ class App {
       /****************************** Game ************************************/
 
       socket.on("gameActions", this.RoomsController.gameAction(socket))
+      socket.on("continueGame", this.RoomsController.gameContinue(socket))
 
 
       /***************************** Players ***********************************/

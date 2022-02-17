@@ -3,6 +3,7 @@ import {
     GAME_UPDATE,
     GAME_LOADING,
     GAME_ERROR,
+    GAME_CLEAR,
 } from "../types";
 
 
@@ -37,6 +38,10 @@ export default function gameReducer(state = initialState, action) {
                 ...state,
                 isLoading: false,
                 error: action.payload,
+            }
+        case GAME_CLEAR:
+            return {
+                ...initialState,
             }
         default:
             return state;

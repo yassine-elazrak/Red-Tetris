@@ -1,5 +1,5 @@
 import socket from "../../socket/Socket";
-import _ from'lodash';
+import _ from 'lodash';
 import {
   ROOM_CREATE,
   ROOM_JOIN,
@@ -27,7 +27,6 @@ export const createRoom = (room) => {
       dispatch(success(res, ROOM_CREATE));
       const profile = getState().profile;
       const gameInfo = game(res.users, profile.id);
-      console.log(gameInfo);
       dispatch(success(gameInfo, GAME_UPDATE));
     } catch (err) {
       dispatch(error(err, ROOM_ERROR));
@@ -100,8 +99,11 @@ export const changeStatusRoom = (data) => {
 };
 
 export const refreshRoom = (room) => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     dispatch({ type: LOADING_ROOM });
+    const profile = getState().profile;
+    const gameInfo = game(room.users, profile.id);
+    dispatch(success(gameInfo, GAME_UPDATE));
     dispatch(success(room, ROOM_REFRESH))
   }
 }

@@ -215,7 +215,7 @@ const HomePage = (props) => {
           ) : !room.name ? (
             <FormRoomName />
           ) : !room.isPravite &&
-            room.status === "waiting" &&
+            (room.status === "waiting" || room.status === "end") &&
             profile.id === room.admin ? (
             <InviteUsers />
             // <GameSpace />

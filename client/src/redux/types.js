@@ -74,6 +74,7 @@ export const ROOMS_LOADING = 'ROOMS_LOADING';
 export const GAME_UPDATE = "GAME_UPDATE";
 export const GAME_ERROR = "GAME_ERROR";
 export const GAME_LOADING = "GAME_LOADING";
+export const GAME_CLEAR = "GAME_CLEARE";
 
 
 

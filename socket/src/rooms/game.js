@@ -2,16 +2,27 @@
 const { STAGE_HEIGHT, STAGE_WIDTH } = require('../utils/stage');
 
 class Players {
-    constructor() {
-        if (Players.instance instanceof Players) {
-            return Players.instance;
-        }
-        Players.instance = this;
-    }
+    // constructor() {
+    //     if (Players.instance instanceof Players) {
+    //         return Players.instance;
+    //     }
+    //     Players.instance = this;
+    // }
 
     // reset Map
     resetMap = (player) => {
-        player.map.forEach(y => y.forEach(x => [0, "clear"]));
+        // player.map.forEach(y => y.forEach(x => [0, "clear"]));
+        player.map = player.map.map(row => row.map(_ => [0, "clear"]));
+        player.status = "continue";
+        player.scor = 0;
+        player.rows = 0;
+        player.nextTetrominos= [0];
+        player.currentTetromino = {
+            position: {x: 0, y: 0},
+            shapeIndex : 0,
+            shadow: {x: 0, y: 0},
+            collided: false,
+        }
     }
 
     // clear Map
@@ -48,9 +59,6 @@ class Players {
 
     // checkCollision
     checkCollision = (dir, map, position, shape) => {
-        // let { position } = player.currentTetromino;
-        // console.log("position", position);
-        // let map = player.map;
         for (let y = 0; y < shape.length; y++) {
             for (let x = 0; x < shape[y].length; x++) {
                 if (shape[y][x] !== 0) {
@@ -144,15 +152,18 @@ class Players {
         let rows = 0;
         // let scor = 0;
         let bonus = 0;
-        player.map = player.map.reduce((ack, row) => {
-            if (!row.every(cell => cell[0] === 'W') && (row.findIndex(cell => cell[0] === 0) === -1)) {
+        let newMap = []
+        player.map.forEach(e => {
+            if (!e.every(cell => cell[0] === 'W') && (e.findIndex(cell => cell[0] === 0) === -1)){
+                newMap.unshift( new Array(STAGE_WIDTH).fill([0, 'clear']));
                 rows++;
-                ack.unshift(new Array(STAGE_WIDTH).fill([0, 'clear']))
-                return ack;
+            } else {
+                newMap.push(e);
             }
-            ack.push(row)
-            return ack;
-        }, []);
+        })
+        player.map = newMap;
+
+
         if (rows) {
             console.log('rows', rows, player.id);
             this.addWall(player.id, players, rows);
@@ -163,15 +174,25 @@ class Players {
     }
 
     // getWinner
-    getWinner = (players) => {
-        let winner = players.findIndex(e => e.status !== 'gameOver');
-        if (winner !== -1){
-            players[winner].status = 'gameWinner';
+    getWinner = (room) => {
+        let winners = [], indexs = [];
+        room.users.forEach((u, i) => {
+            if (u.status !== 'gameOver'){
+                winners.push(u);
+                indexs.push(i);
+            }
+        })
+        // console.log(winners.length, indexs[0]);
+        if (winners.length === 1){
+            room.users[indexs[0]].status = 'gameWinner';
+            room.status = 'end'
+            console.log(room.users[indexs[0]]);
         }
     }
 
     // get action
-    action = (a, player, players) => {
+    action = (a, player, room) => {
+        console.log(a , player, room);
         return new Promise((resolve, reject) => {
             if (!['downDown', 'right', 'left', 'rotate', 'down'].includes(a))
                 return reject({ message: "Invalid action" });
@@ -193,11 +214,11 @@ class Players {
             let shadow = this.dropToDown(player);
             this.updateMap(player, shadow);
             if (player.currentTetromino.collided) {
-                this.deletRow(player, players);
+                this.deletRow(player, room.users);
             }
             if (player.currentTetromino.position.y <= 0 && player.currentTetromino.collided){
                 player.status = 'gameOver';
-                this.getWinner(players);
+                this.getWinner(room);
             }
             resolve(player);
         })
