@@ -84,12 +84,17 @@ export const leaveRoom = () => {
   };
 };
 
+export const clearRoom = () => {
+  return (dispatch) => {
+    dispatch(success(null, ROOM_LEAVE));
+  }
+}
+
 export const changeStatusRoom = (data) => {
   return async (dispatch, getState) => {
     try {
       dispatch({ type: LOADING_ROOM });
       const io = getState().socket.socket;
-      // const roomId = getState().room.id;
       const res = await socket(io, "changeStatusRoom", data);
       dispatch(success(res, ROOM_UPDATE_STATUS));
     } catch (err) {

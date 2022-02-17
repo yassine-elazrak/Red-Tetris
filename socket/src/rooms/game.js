@@ -177,7 +177,7 @@ class Players {
     getWinner = (room) => {
         let winners = [], indexs = [];
         room.users.forEach((u, i) => {
-            if (u.status !== 'gameOver'){
+            if (u.status !== 'gameOver' && u.status !== 'continue'){
                 winners.push(u);
                 indexs.push(i);
             }
@@ -186,13 +186,13 @@ class Players {
         if (winners.length === 1){
             room.users[indexs[0]].status = 'gameWinner';
             room.status = 'end'
-            // console.log(room.users[indexs[0]]);
+            console.log('game end');
         }
     }
 
     // get action
     action = (a, player, room) => {
-        console.log(' player => ', player.currentTetromino);
+        // console.log(' player => ', player.currentTetromino);
         return new Promise((resolve, reject) => {
             if (!['downDown', 'right', 'left', 'rotate', 'down'].includes(a))
                 return reject({ message: "Invalid action" });

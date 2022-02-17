@@ -29,7 +29,8 @@ class InviteController {
             if (socket.id !== room.admin) return callback(null, { message: `you are not admin of this room` });
             // //console.log(`Room`, room);
             if (room.invit.find(e => e.userId === data.userId)) return callback(null, { message: `${user.name} is already invited to this room` });
-            if (room.status !== "waiting") return callback(null, { message: "Room is closed" });
+            if (room.status !== "waiting" && room.status !== 'end')
+                return callback(null, { message: "Room is closed" });
             if (room.invit.find(item => item.id === socket.id))
                 return callback(null, { message: `${user.name} is already invited to this room` });
             room = await this.rooms.inviteUser({ roomId: room.id, userId: user.id, userName: user.name });
@@ -60,7 +61,8 @@ class InviteController {
             if (user.notif[notifIndex].read === true) return callback(null, { message: "Notification is already read" });
             user.notif[notifIndex].read = true;
             let room = await this.rooms.getRoom(user.notif[notifIndex].roomId);
-            if (room.status !== "waiting") return callback(null, { message: "Room is closed" });
+            if (room.status !== "waiting" && room.status !== 'end')
+                return callback(null, { message: "Room is closed" });
             let invitIndex = room.invit.findIndex((item) => item.userId === socket.id);
             if (invitIndex === -1) return callback(null, { message: "You are not invited in this room" });
             let notifAdmin = {
@@ -74,7 +76,7 @@ class InviteController {
             if (status === "accepted") {
                 user = await this.users.userJoin(user.id, room.id);
                 let notifUsers = {
-                    id: Math.random().toString(36).substr(2) +Date.now().toString(36),
+                    id: Math.random().toString(36).substr(2) + Date.now().toString(36),
                     message: `${user.name} join ${room.name}`,
                     type: "notification",
                     read: true,

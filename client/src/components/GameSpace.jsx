@@ -71,10 +71,11 @@ const GameSpace = (props) => {
     setNextTetromino(props.game.nextTetrominos[0]);
     if (props.game.status === "gameOver") setGameOver(true);
     if (props.game.status === "gameWinner") setGameWon(true);
-    if (!props.game.status) {
-      setGameOver(false);
-      setGameWon(false);
-    }
+    // if (props.game.status === 'continue') {
+    //   setGameOver(false);
+    //   setGameWon(false);
+    //   setGameStart(false);
+    // }
   }, [props.game]);
 
   useEffect(() => {
@@ -110,6 +111,9 @@ const GameSpace = (props) => {
 
   useEffect(() => {
     changeFocused();
+    return () => {
+      Modal.destroyAll();
+    }
   }, []);
 
   const handleKeyDown = ({ keyCode }) => {
@@ -173,7 +177,6 @@ const GameSpace = (props) => {
   };
 
   useEffect(() => {
-    // console.log("GameSpace useEffect", gameOver, gameWon, resetGame);
     const modal = () => {
       Modal.confirm({
         width: "500px",
@@ -188,11 +191,8 @@ const GameSpace = (props) => {
             )}
           </>
         ),
-        // (gameOver ? "You lose!" : "You are Winner!")
-        // (props.profile.id !== props.room.admin) ? 'You will be leave this room atoumtiquli after admin restart this room' : null,
-        //  gameOver ? "You lose!" : "You are Winner!",
         onOk() {
-          restGame();
+          // restGame();
           props.gameClear();
           props.continueGame({ roomId: props.room.id });
         },
@@ -276,7 +276,7 @@ const GameSpace = (props) => {
             {gameStart ? "Reset" : "Start"}
           </Button>
         )}
-        {props.profile.id === props.room.admin && gameStart && (
+        {props.profile.id === props.room.admin && gameStart && !gameOver && !gameWon && (
           <Button
             type="primary"
             disabled={!props.room.admin === props.profile.id}
@@ -291,6 +291,13 @@ const GameSpace = (props) => {
           >
             {gamePause ? "Resume" : "Pause"}
           </Button>
+        ) }
+        {(gameWon || gameOver) && (
+          <Button
+          disabled={true}
+          type='primary'
+          loading={true}
+          >Waiting</Button>
         )}
         {props.room.isPravite && (
           <Button

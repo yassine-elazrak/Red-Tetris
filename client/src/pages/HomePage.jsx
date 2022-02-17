@@ -21,6 +21,7 @@ import {
   joinRoom,
   createOrJoinRoom,
   refreshRoom,
+  clearRoom,
 } from "../redux/actions";
 
 import "./styles/HeaderStyled.css";
@@ -89,10 +90,15 @@ const HomePage = (props) => {
         props.refreshRoom(data);
         console.log("update Room ============>", data);
       });
+      props.socket.socket.socket('/').on("leaveRoom", data => {
+        props.clearRoom();
+        props.updateUser(data)
+      })
       return () => {
         props.socket.socket.socket("/").off("updateProfile");
         props.socket.socket.socket("/").off("updateRooms");
         props.socket.socket.socket("/").off("updateRoom");
+        props.socket.socket.socket("/").off("leaveRoom");
       };
     }
     if (props.socket.error) {
@@ -162,7 +168,7 @@ const HomePage = (props) => {
               <span>{room.status}</span>
               <Button
                 type="primary"
-                disabled={room.status !== "waiting"}
+                disabled={room.status !== "waiting" && room.status !== 'end'}
                 onClick={() => handleJoinToRoom(room)}
               >
                 join
@@ -299,4 +305,5 @@ export default connect(mapStateToProps, {
   joinRoom,
   createOrJoinRoom,
   refreshRoom,
+  clearRoom,
 })(HomePage);
