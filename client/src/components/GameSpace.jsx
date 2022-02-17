@@ -57,7 +57,7 @@ const GameSpace = (props) => {
     setGameOver(false);
     setGameWon(false);
     setGamePause(false);
-  }
+  };
 
   useEffect(() => {
     if (props.game.error) {
@@ -178,7 +178,19 @@ const GameSpace = (props) => {
       Modal.confirm({
         width: "500px",
         title: gameOver ? "Game Over" : "Game Won",
-        content: gameOver ? "You lose!" : "You are Winner!",
+        content: (
+          <>
+            {gameOver ? "You lose!" : "You are Winner"}
+            {props.room.admin !== props.profile.id && (
+              <p>
+                You will leave automata after admin restart this room
+              </p>
+            )}
+          </>
+        ),
+        // (gameOver ? "You lose!" : "You are Winner!")
+        // (props.profile.id !== props.room.admin) ? 'You will be leave this room atoumtiquli after admin restart this room' : null,
+        //  gameOver ? "You lose!" : "You are Winner!",
         onOk() {
           restGame();
           props.gameClear();
