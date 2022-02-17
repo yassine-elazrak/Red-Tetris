@@ -62,6 +62,7 @@ const GameSpace = (props) => {
 
     setNextTetromino(props.game.nextTetrominos[0]);
     if (props.game.status === 'gameOver') setGameOver(true);
+    if (props.game.status === 'gameWinner') setGameWon(true);
   }, [props.game]);
 
   useEffect(() => {
@@ -169,7 +170,7 @@ const GameSpace = (props) => {
       Modal.confirm({
         width: "500px",
         title: gameOver ? "Game Over" : "Game Won",
-        content: gameOver ? "You lose!" : "You win!",
+        content: gameOver ? "You lose!" : "You are Winner!",
         onOk() {
           // resetGame(randomTetromino());
           changeFocused();

@@ -121,7 +121,6 @@ class Players {
         let { shape, position } = player.currentTetromino;
         while (!this.checkCollision({ x: 0, y }, player.map, position, shape))
             y++;
-        // console.log(y, 'shadow');
         return y ? y - 1 : y;
     }
 
@@ -146,7 +145,7 @@ class Players {
         // let scor = 0;
         let bonus = 0;
         player.map = player.map.reduce((ack, row) => {
-            if (row.findIndex(cell => cell[0] === 0) === -1) {
+            if (!row.every(cell => cell[0] === 'W') && (row.findIndex(cell => cell[0] === 0) === -1)) {
                 rows++;
                 ack.unshift(new Array(STAGE_WIDTH).fill([0, 'clear']))
                 return ack;
@@ -155,12 +154,19 @@ class Players {
             return ack;
         }, []);
         if (rows) {
-            // console.log('players', players);
             console.log('rows', rows, player.id);
             this.addWall(player.id, players, rows);
             bonus = Math.round((rows / 100) * 4 * 10) * 10;
             player.rows += rows;
             player.scor += rows * 10 + bonus;
+        }
+    }
+
+    // getWinner
+    getWinner = (players) => {
+        let winner = players.findIndex(e => e.status !== 'gameOver');
+        if (winner !== -1){
+            players[winner].status = 'gameWinner';
         }
     }
 
@@ -189,8 +195,10 @@ class Players {
             if (player.currentTetromino.collided) {
                 this.deletRow(player, players);
             }
-            if (player.currentTetromino.position.y <= 0 && player.currentTetromino.collided)
-                player.status = 'gameOver'
+            if (player.currentTetromino.position.y <= 0 && player.currentTetromino.collided){
+                player.status = 'gameOver';
+                this.getWinner(players);
+            }
             resolve(player);
         })
     }
