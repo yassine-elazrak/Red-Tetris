@@ -150,6 +150,7 @@ class RoomController {
             let roomInfo = _.omit(res, ['invit', 'message']);
             this.io.emit("updateRooms", this.rooms.getRooms());
             ids.length && this.io.to(ids).emit("updateRoom", roomInfo);
+            // continue Game filter users
             if (typeof callback === "function") callback(res, null);
         } catch (error) {
             console.log(error);
@@ -222,8 +223,9 @@ class RoomController {
     };
 
     gameAction = (socket) => async (data, callback) => {
+        console.log(`userId ${socket.id} try to action game 'data'`, data);
         try {
-            console.log('data game action' ,data);
+            // console.log('data game action' ,data);
             let roomIndex = this.rooms.rooms.findIndex(e => e.id === data.roomId);
             if (roomIndex === -1) return callback(null, { message: "Room not found" });
             let room = this.rooms.rooms[roomIndex];
@@ -235,7 +237,7 @@ class RoomController {
                 room = this.rooms.changeCurrentTetromino(playerIndex, roomIndex);
             let updateSpacePlayer = await this.game.action(data.action, room.users[playerIndex],
                 this.rooms.rooms[roomIndex]);
-            console.log('updateSpacePlayer', updateSpacePlayer);
+            // console.log('updateSpacePlayer', updateSpacePlayer);
             callback(updateSpacePlayer, null);
         } catch (error) {
             console.log(error, 'error<<<<<<<');
@@ -249,7 +251,6 @@ class RoomController {
             let userIndex = room.users.findIndex(u => u.id === socket.id)
             if (userIndex === -1) return callback(null, { message: "You are not joined in this room" });
             this.game.resetMap(room.users[userIndex]);
-            // this.io.to(socket.id, 'updateRoom', room);
             return callback({ game :room.users[userIndex], room}, null);
         } catch (error) {
             console.log(error);

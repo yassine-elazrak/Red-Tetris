@@ -64,7 +64,7 @@ class Rooms {
       nextTetrominos: [nextTetrominos],
       currentTetromino: {
         position: { x: 0, y: 0 },
-        shapeIndex: 0,
+        shape: 0,
         shadow: { x: 0, y: 0 },
         collided: false,
       }
@@ -193,6 +193,10 @@ class Rooms {
       if (roomIndex === -1) return reject({ message: "Room not found" });
       if (this.rooms[roomIndex].admin !== data.userId)
         return reject({ message: "You are not admin" });
+        if (this.rooms[roomIndex].status === 'end'){
+          this.rooms[roomIndex].nextTetromino = this.tetromino.randomTetromino();
+          this.restRoom(this.rooms[roomIndex]);
+        }
       this.rooms[roomIndex].status = data.status;
       return resolve(this.rooms[roomIndex]);
     });
@@ -217,10 +221,10 @@ class Rooms {
   }
 
   restRoom = (room) => {
-  //  room.users = room.users.filter(u => u.status === 'continue' || u.status === 'gameWinner')
-  //  room.ids = room.users.filter(u => { if (u.status === 'continue' || u.status === 'gameWinner') return u.id})
+  room.users = room.users.filter(u => u.status === 'continue');
     room.nextTetromino = this.tetromino.randomTetromino();
-    room.users.forEach(u => u.nextTetrominos.push(room.nextTetromino));
+    room.users.forEach(u => u.nextTetrominos = [room.nextTetromino]);
+    console.log(room.users);
   } 
 
   deleteRoom = (id) => {

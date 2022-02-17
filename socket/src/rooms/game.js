@@ -136,7 +136,7 @@ class Players {
     addWall = (playerId, players, walls) => {
         players.forEach(player => {
             if (player.id !== playerId) {
-                console.log('wall', player.id, playerId);
+                // console.log('wall', player.id, playerId);
                 player.currentTetromino.position.y -= walls;
                 let newWalls = Array.from(Array(walls), () =>
                     new Array(STAGE_WIDTH).fill(['W', 'wall'])
@@ -165,7 +165,7 @@ class Players {
 
 
         if (rows) {
-            console.log('rows', rows, player.id);
+            // console.log('rows', rows, player.id);
             this.addWall(player.id, players, rows);
             bonus = Math.round((rows / 100) * 4 * 10) * 10;
             player.rows += rows;
@@ -186,13 +186,13 @@ class Players {
         if (winners.length === 1){
             room.users[indexs[0]].status = 'gameWinner';
             room.status = 'end'
-            console.log(room.users[indexs[0]]);
+            // console.log(room.users[indexs[0]]);
         }
     }
 
     // get action
     action = (a, player, room) => {
-        console.log(a , player, room);
+        console.log(' player => ', player.currentTetromino);
         return new Promise((resolve, reject) => {
             if (!['downDown', 'right', 'left', 'rotate', 'down'].includes(a))
                 return reject({ message: "Invalid action" });
