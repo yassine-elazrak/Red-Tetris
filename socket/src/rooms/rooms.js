@@ -98,6 +98,7 @@ class Rooms {
         isPravite: data.isPravite,
         status: data.isPravite ? "closed" : "waiting",
         nextTetromino,
+        ids: [user.id],
         users: [this.newUser(user.id, user.name, nextTetromino)],
         invit: [],
       };
@@ -164,6 +165,7 @@ class Rooms {
         let nextTetromino = this.rooms[roomIndex].nextTetromino;
         let user = this.newUser(data.userId, name, nextTetromino);
         this.rooms[roomIndex].users.push(user);
+        this.rooms[roomIndex].ids.push(data.userId);
       }
       resolve(this.rooms[roomIndex]);
     })
@@ -181,6 +183,7 @@ class Rooms {
       if (isInveted !== -1)
         this.rooms[Index].invit[isInveted].status = "accepted";
       this.rooms[Index].users.push(user);
+      this.rooms[Index].ids.push(data.userId);
       return resolve(this.rooms[Index]);
     });
   };
@@ -204,6 +207,7 @@ class Rooms {
       let userIndex = this.rooms[roomIndex].users.findIndex((user) => user.id === userId);
       if (userIndex === -1) return reject({ message: "User is not joined" });
       this.rooms[roomIndex].users.splice(userIndex, 1);
+      this.rooms[roomIndex].ids.filter((id) => id !== userId);
       return resolve(this.rooms[roomIndex]);
     });
   };

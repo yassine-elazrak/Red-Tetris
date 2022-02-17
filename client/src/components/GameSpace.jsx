@@ -110,6 +110,10 @@ const GameSpace = (props) => {
     setDailyDrop(null);
     if (keyCode === 13) {
       // pauseGame(!gamePause);
+      props.changeStatusRoom({
+        roomId: props.room.id,
+        status: gamePause ? "started" : "paused",
+      });
       setGamePause(!gamePause);
     }
     let data = {

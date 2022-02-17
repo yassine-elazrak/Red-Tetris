@@ -6,10 +6,14 @@ const _ = require("lodash");
 
 class RoomController {
     constructor(io) {
+        if (RoomController.instance instanceof RoomController) {
+            return RoomController.instance;
+        }
         this.io = io;
         this.users = new Users;
         this.rooms = new Rooms;
         this.game = new Game;
+        RoomController.instance = this;
         // this.selector = new Selector;
     }
 
@@ -233,11 +237,12 @@ class RoomController {
                 || !room.users[playerIndex].currentTetromino.shape
             )
                 room = this.rooms.changeCurrentTetromino(playerIndex, roomIndex);
-            let updateSpacePlayer = await this.game.action(data.action, room.users[playerIndex]);
+            let updateSpacePlayer = await this.game.action(data.action, room.users[playerIndex],
+                this.rooms.rooms[roomIndex].users);
 
             // console.log(map);
             // this.rooms.rooms[roomIndex].users[playerIndex] = updateSpacePlayer;
-            console.log(updateSpacePlayer);
+            // console.log(updateSpacePlayer);
             callback(updateSpacePlayer, null);
         } catch (error) {
             console.log(error);

@@ -68,9 +68,8 @@ export const TETROMINOES = {
         // type: "Z",
         color: "227, 78, 78",
     },
-    D: {
-        shape: ['D'],
-        // type: "D",
+    W: {
+        shape: ['W'],
         color: "0, 0, 0",
     },
 };

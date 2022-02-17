@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const TetrominoStyle = styled.div`
     background-color: rgba(${props => props.color},
         ${props => props.type[0] === 0 ? 0.3
-        : props.type[0] === 'D' ? 1
+        : props.type[0] === 'W' ? 1
             : props.type[1] === 'shadow' ? 0.3
                 : 0.7});
     border: ${props => props.type[0] === 0
