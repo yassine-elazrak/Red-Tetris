@@ -141,7 +141,7 @@ const HomePage = (props) => {
             error: "",
           });
         }
-        window.location.hash = '';
+        // window.location.hash = '';
       }
     };
     hashBased();

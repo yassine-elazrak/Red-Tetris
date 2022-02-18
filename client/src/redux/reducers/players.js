@@ -3,7 +3,9 @@ import {
     CLEAR_PLAYERS
 } from '../types'
 
-const INITIAL_STATE = [];
+const INITIAL_STATE = {
+    players: [],
+};
 
 const updatePlayers = (player, players) => {
     let P_index = players.findIndex(p => p.id === player.id)
@@ -17,7 +19,9 @@ const updatePlayers = (player, players) => {
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case UPDATE_PLAYERS:
-            return updatePlayers(action.payload, state);
+            return{
+                players: updatePlayers(action.payload, state.players)
+            }
         case CLEAR_PLAYERS:
             return INITIAL_STATE;
         default:

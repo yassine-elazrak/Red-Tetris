@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import { CreateStage } from "../helpers/StageHelper";
 import { UsersStage, SliderMaps } from "./styles/UsersStage";
-// import { updatePlayers } from "../redux/actions";
+import { updatePlayers } from "../redux/actions";
 // import { InitStage } from '../helpers/StageHelper';
 
 export const Players = (props) => {
@@ -16,34 +16,19 @@ export const Players = (props) => {
   // scor: 0
   // status: nul
 
-  const [players, setPlayers] = useState([]);
+  // const [players, setPlayers] = useState([]);
+  const [currentPlayers, setCurrentPlayers] = useState([]);
 
-  const updatePlayers = (data) => {
-      console.log(players, data);
-      let newP =[... players];
-      let P_index = newP.findIndex(p => p.id === data.id)
-      if (P_index !== -1){
-          newP[P_index] = data;
-          setPlayers(newP);
-      }
-      else{
-          console.log('prev', players);
-          console.log('data', data);
-          setPlayers(prev => [...prev, data]);
-      }
-  }
   useEffect(() => {
-    setPlayers(props.players);
-    console.log(props.players, "<<<<<<<P>>>>>>>>>>.");
+    console.log('props players', props.players);
+    setCurrentPlayers(props.players.players);
   }, [props.players]);
+
 
   useEffect(() => {
     console.log("update component Players");
     props.socket.socket("/").on("updatePlayers", (data) => {
-      console.log(data, "players update <<<pppp>>>>");
-      setPlayers([data]);
-    // updatePlayers(data);
-    //   props.updatePlayers(data);
+      props.updatePlayers(data);
     });
 
     return () => {
@@ -52,7 +37,7 @@ export const Players = (props) => {
   }, []);
 
   const lisMaps = () => {
-    return players.map((p, key) => {
+    return currentPlayers.map((p, key) => {
       return (
         <div
           key={key}
@@ -96,5 +81,5 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, {
-//   updatePlayers,
+  updatePlayers,
 })(Players);
