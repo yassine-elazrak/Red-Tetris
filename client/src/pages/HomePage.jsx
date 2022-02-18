@@ -22,6 +22,7 @@ import {
   createOrJoinRoom,
   refreshRoom,
   clearRoom,
+  gameClear,
 } from "../redux/actions";
 
 import "./styles/HeaderStyled.css";
@@ -91,6 +92,7 @@ const HomePage = (props) => {
         console.log("update Room ============>", data);
       });
       props.socket.socket.socket('/').on("leaveRoom", data => {
+        props.gameClear();
         props.clearRoom();
         props.updateUser(data)
       })
@@ -307,4 +309,5 @@ export default connect(mapStateToProps, {
   createOrJoinRoom,
   refreshRoom,
   clearRoom,
+  gameClear,
 })(HomePage);

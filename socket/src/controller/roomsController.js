@@ -142,10 +142,11 @@ class RoomController {
             await this.rooms.changeStatusRoom(
                 { userId: socket.id, status: data.status }, room);
             if (oldStatus === 'end') {
+                // console.log(room.users);
                 let leaveIds = room.ids.filter(id => {
-                    if (!room.users.find(u => u.id !== id)) return id
+                    if (!room.users.find(u => u.id === id)) return id
                 })
-                room.ids = room.ids.filter(id => !leaveIds.find(i => i !== id))
+                room.ids = room.users.map(u => u.id)
                 console.log('leave', leaveIds, 'newIds', room.ids);
                 leaveIds.forEach(id => {
                     let user = this.users.users.find(u => u.id === id)

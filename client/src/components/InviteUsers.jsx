@@ -284,6 +284,7 @@ const InviteUsers = (props) => {
           >
             <span>{user.id}</span>
             <span>{user.name}</span>
+            <span>{!user.status ? 'Joined' : user.status === 'continu' ? 'Continu' : "Waiting"}</span>
           </div>
         </div>
       );
@@ -423,6 +424,7 @@ const InviteUsers = (props) => {
                   >
                     <p>UserId</p>
                     <p>Name</p>
+                    <p>Status</p>
                   </div>
                 </div>
               }

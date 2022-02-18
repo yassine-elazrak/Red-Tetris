@@ -195,13 +195,9 @@ class Rooms {
     return new Promise((resolve, reject) => {
       if (room.admin !== data.userId)
         return reject({ message: "You are not admin" });
+      if (room.status === 'end') this.restRoom(room);
       if (data.status === 'closed'){
         room.nextTetromino = this.tetromino.randomTetromino();
-      }
-      else if (data.status === 'started' && room.status === 'closed'){
-        console.log('change status =>');
-        room.users.forEach(u => u.status = false);
-        console.log(room.users);
       }
       room.status = data.status;
       return resolve(true);
@@ -227,12 +223,13 @@ class Rooms {
   }
 
   restRoom = (room) => {
-    room.users = room.users.filter(u => u.status === 'continue');
+    console.log('restRoom =>', room);
+    room.users = room.users.filter(u => !u.status || u.status === 'continue');
     room.users.forEach((_, i) => room.users[i].status = false);
     console.log('room users =>', room.users);
     room.nextTetromino = this.tetromino.randomTetromino();
     room.users.forEach(u => u.nextTetrominos = [room.nextTetromino]);
-    console.log(room.users);
+    // console.log(room.users);
   }
 
   deleteRoom = (id) => {

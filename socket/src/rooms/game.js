@@ -1,5 +1,6 @@
 
 const { STAGE_HEIGHT, STAGE_WIDTH } = require('../utils/stage');
+const Rooms = require('./rooms');
 
 class Players {
     // constructor() {
@@ -16,11 +17,11 @@ class Players {
         player.status = "continue";
         player.scor = 0;
         player.rows = 0;
-        player.nextTetrominos= [nextTetromino];
+        player.nextTetrominos = [nextTetromino];
         player.currentTetromino = {
-            position: {x: 0, y: 0},
-            shape : 0,
-            shadow: {x: 0, y: 0},
+            position: { x: 0, y: 0 },
+            shape: 0,
+            shadow: { x: 0, y: 0 },
             collided: false,
         }
     }
@@ -154,8 +155,8 @@ class Players {
         let bonus = 0;
         let newMap = []
         player.map.forEach(e => {
-            if (!e.every(cell => cell[0] === 'W') && (e.findIndex(cell => cell[0] === 0) === -1)){
-                newMap.unshift( new Array(STAGE_WIDTH).fill([0, 'clear']));
+            if (!e.every(cell => cell[0] === 'W') && (e.findIndex(cell => cell[0] === 0) === -1)) {
+                newMap.unshift(new Array(STAGE_WIDTH).fill([0, 'clear']));
                 rows++;
             } else {
                 newMap.push(e);
@@ -177,22 +178,22 @@ class Players {
     getWinner = (room) => {
         let winners = [], indexs = [];
         room.users.forEach((u, i) => {
-            if (u.status !== 'gameOver' && u.status !== 'continue'){
+            if (!u.status) {
                 winners.push(u);
                 indexs.push(i);
             }
         })
-        // console.log(winners.length, indexs[0]);
-        if (winners.length === 1){
+        if (winners.length === 1) {
             room.users[indexs[0]].status = 'gameWinner';
             room.status = 'end'
             console.log('game end');
         }
+        else if (room.users.length === 1) room.status = 'end'
     }
 
     // get action
     action = (a, player, room) => {
-        console.log(' player => ', player.currentTetromino);
+        // console.log(' player => ', player.currentTetromino);
         return new Promise((resolve, reject) => {
             if (!['downDown', 'right', 'left', 'rotate', 'down'].includes(a))
                 return reject({ message: "Invalid action" });
@@ -216,7 +217,7 @@ class Players {
             if (player.currentTetromino.collided) {
                 this.deletRow(player, room.users);
             }
-            if (player.currentTetromino.position.y <= 0 && player.currentTetromino.collided){
+            if (player.currentTetromino.position.y <= 0 && player.currentTetromino.collided) {
                 player.status = 'gameOver';
                 this.getWinner(room);
             }
