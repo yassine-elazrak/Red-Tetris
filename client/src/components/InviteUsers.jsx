@@ -78,9 +78,18 @@ const InviteUsers = (props) => {
   }, [props.invite.error]);
 
   useEffect(() => {
+    if (props.room.error){
+      message.error(props.room.error)
+      return;
+    }
+    console.log('room update <<<<<<<<<<<');
     setUsersRoom(props.room.users);
     setInveted(props.room.invit);
   }, [props.room]);
+
+  useEffect(() => {
+    console.log('users room update', usersRoom);
+  }, [usersRoom])
 
   useEffect(() => {
     const data = dataSource.map((user) => {
@@ -98,13 +107,12 @@ const InviteUsers = (props) => {
     setInveted(props.room.invit);
   }, [props.room.invit]);
 
-  useEffect(() => {
-    props.room.error && message.error(props.room.error);
-  }, [props.room.error]);
+  // useEffect(() => {
+  //   props.room.error && message.error(props.room.error);
+  // }, [props.room.error]);
 
   useEffect(() => {
     props.socket.socket("/").on("updateUsers", (data) => {
-      //console.log(data, "updateUsers");
       props.onlineUsersUpdate(data);
     });
 
@@ -112,7 +120,6 @@ const InviteUsers = (props) => {
 
     return () => {
       props.socket.socket("/").off("updateUsers");
-      // props.socket.socket("/").off("userJoind");
     };
   }, []);
 
@@ -258,6 +265,7 @@ const InviteUsers = (props) => {
   };
 
   const UsersInRoom = () => {
+    console.log('get users room >>>>>>>>>>>>');
     return usersRoom.map((user, key) => {
       return (
         <div
@@ -284,7 +292,7 @@ const InviteUsers = (props) => {
           >
             <span>{user.id}</span>
             <span>{user.name}</span>
-            <span>{!user.status ? 'Joined' : user.status === 'continu' ? 'Continu' : "Waiting"}</span>
+            <span>{!user.status ? 'Joined' : user.status}</span>
           </div>
         </div>
       );

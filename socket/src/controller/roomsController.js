@@ -147,11 +147,12 @@ class RoomController {
                     if (!room.users.find(u => u.id === id)) return id
                 })
                 room.ids = room.users.map(u => u.id)
-                console.log('leave', leaveIds, 'newIds', room.ids);
                 leaveIds.forEach(id => {
                     let user = this.users.users.find(u => u.id === id)
-                    user.isJoined = false;
-                    this.io.to(id).emit('leaveRoom', user);
+                    if (user){
+                        user.isJoined = false;
+                        this.io.to(id).emit('leaveRoom', user);
+                    }
                 });
             }
             let ids = room.ids.filter(id => id !== socket.id);
@@ -267,6 +268,7 @@ class RoomController {
             let userIndex = room.users.findIndex(u => u.id === socket.id)
             if (userIndex === -1) return callback(null, { message: "You are not joined in this room" });
             this.game.resetGame(room.users[userIndex],room.nextTetromino);
+            this.io.to(room.admin).emit('updateRoom', room);
             return callback({ game: room.users[userIndex], room }, null);
         } catch (error) {
             console.log(error);
