@@ -48,16 +48,22 @@ const GameSpace = (props) => {
   const [gamePause, setGamePause] = useState(false);
 
   const restGame = () => {
-    setUserStage([]);
     setDailyDrop(null);
     setScor(0);
     setRows(0);
-    setNextTetromino(0);
     setGameStart(false);
     setGameOver(false);
     setGameWon(false);
     setGamePause(false);
   };
+
+  useEffect(() => {
+    changeFocused();
+    restGame();
+    return () => {
+      Modal.destroyAll();
+    }
+  }, []);
 
   useEffect(() => {
     if (props.game.error) {
@@ -70,19 +76,16 @@ const GameSpace = (props) => {
     setRows(props.game.rows);
     setNextTetromino(props.game.nextTetrominos[0]);
     if (props.game.status === "gameOver") setGameOver(true);
-    if (props.game.status === "gameWinner") setGameWon(true);
-    // if (props.game.status === 'continue') {
-    //   setGameOver(false);
-    //   setGameWon(false);
-    //   setGameStart(false);
-    // }
+    else if (props.game.status === "gameWinner") setGameWon(true);
   }, [props.game]);
 
   useEffect(() => {
     if (props.room.error) message.error(props.room.error);
     else {
-      // if (props.room.status === "waiting") setGameStart(false);
+      if (props.room.status === "closed") restGame();
+      if (props.room.status === "end") setGameStart(false);
       if (props.room.status === "started") {
+        console.log('game start');
         setGameStart(true);
         setGamePause(false);
       }
@@ -104,17 +107,18 @@ const GameSpace = (props) => {
   }, dailyDrop);
 
   useEffect(() => {
-    // console.log("gameStart", gameStart);
-    if (gameStart && !gamePause && !gameWon && !gameOver) setDailyDrop(500);
-    else setDailyDrop(null);
+    if (gameStart && !gamePause && !gameWon && !gameOver){
+      setDailyDrop(500);
+      console.log('set daily drop');
+    }
+    else{
+      console.log(gameStart, gamePause, gameWon, gameOver);
+      console.log('cleate daily drop');
+      setDailyDrop(null);
+    }
   }, [gameStart, gamePause, gameWon, gameOver]);
 
-  useEffect(() => {
-    changeFocused();
-    return () => {
-      Modal.destroyAll();
-    }
-  }, []);
+ 
 
   const handleKeyDown = ({ keyCode }) => {
     if (!gameStart && keyCode === 13) {
@@ -175,6 +179,13 @@ const GameSpace = (props) => {
     //   updateDropTime(500);
     // }
   };
+
+  const restState = () => {
+    setGameOver(false);
+    setGamePause(false);
+    setGameWon(false);
+    setGameStart(false);
+  }
 
   useEffect(() => {
     const modal = () => {

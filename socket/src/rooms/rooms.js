@@ -109,10 +109,9 @@ class Rooms {
   NextTetromino = (roomIndex) => {
     let nextTetromino = this.tetromino.randomTetromino();
     this.rooms[roomIndex].nextTetrominos = nextTetromino;
-    this.rooms[roomIndex].users.forEach(e => {
-      e.nextTetrominos.push(nextTetromino);
+    this.rooms[roomIndex].users.forEach(u => {
+      u.nextTetrominos.push(nextTetromino);
     })
-
   }
 
   changeCurrentTetromino = (userIndex, roomIndex) => {
@@ -126,9 +125,13 @@ class Rooms {
       collided: false,
     }
     this.rooms[roomIndex].users[userIndex].currentTetromino = currentTetromino;
+    console.log('user next Tetrominos', this.rooms[roomIndex].users[userIndex].nextTetrominos);
     this.rooms[roomIndex].users[userIndex].nextTetrominos.shift();
-    if (this.rooms[roomIndex].users[userIndex].nextTetrominos.length === 0) {
-      this.NextTetromino(roomIndex);
+    if (!this.rooms[roomIndex].users[userIndex].nextTetrominos.length){
+      let nextTetromino = this.tetromino.randomTetromino();
+      this.rooms[roomIndex].users.forEach(u => {
+        u.nextTetrominos.push(nextTetromino);
+      })
     }
     return this.rooms[roomIndex];
   }
@@ -188,12 +191,17 @@ class Rooms {
 
   // start puase or close room
   changeStatusRoom = (data, room) => {
+    console.log('room new status', data.status);
     return new Promise((resolve, reject) => {
       if (room.admin !== data.userId)
         return reject({ message: "You are not admin" });
-      if (room.status === 'end') {
+      if (data.status === 'closed'){
         room.nextTetromino = this.tetromino.randomTetromino();
-        this.restRoom(room);
+      }
+      else if (data.status === 'started' && room.status === 'closed'){
+        console.log('change status =>');
+        room.users.forEach(u => u.status = false);
+        console.log(room.users);
       }
       room.status = data.status;
       return resolve(true);
@@ -220,6 +228,8 @@ class Rooms {
 
   restRoom = (room) => {
     room.users = room.users.filter(u => u.status === 'continue');
+    room.users.forEach((_, i) => room.users[i].status = false);
+    console.log('room users =>', room.users);
     room.nextTetromino = this.tetromino.randomTetromino();
     room.users.forEach(u => u.nextTetrominos = [room.nextTetromino]);
     console.log(room.users);

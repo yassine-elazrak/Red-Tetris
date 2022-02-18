@@ -10,16 +10,16 @@ class Players {
     // }
 
     // reset Map
-    resetMap = (player) => {
+    resetGame = (player, nextTetromino) => {
         // player.map.forEach(y => y.forEach(x => [0, "clear"]));
         player.map = player.map.map(row => row.map(_ => [0, "clear"]));
         player.status = "continue";
         player.scor = 0;
         player.rows = 0;
-        player.nextTetrominos= [0];
+        player.nextTetrominos= [nextTetromino];
         player.currentTetromino = {
             position: {x: 0, y: 0},
-            shapeIndex : 0,
+            shape : 0,
             shadow: {x: 0, y: 0},
             collided: false,
         }
@@ -192,7 +192,7 @@ class Players {
 
     // get action
     action = (a, player, room) => {
-        // console.log(' player => ', player.currentTetromino);
+        console.log(' player => ', player.currentTetromino);
         return new Promise((resolve, reject) => {
             if (!['downDown', 'right', 'left', 'rotate', 'down'].includes(a))
                 return reject({ message: "Invalid action" });

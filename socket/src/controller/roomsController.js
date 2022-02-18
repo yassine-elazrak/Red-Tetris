@@ -142,8 +142,10 @@ class RoomController {
             await this.rooms.changeStatusRoom(
                 { userId: socket.id, status: data.status }, room);
             if (oldStatus === 'end') {
-                let leaveIds = room.ids.filter(id => room.users.find(u => u.id != id))
-                room.ids = room.ids.filter(id => leaveIds.find(i => i !== id))
+                let leaveIds = room.ids.filter(id => {
+                    if (!room.users.find(u => u.id !== id)) return id
+                })
+                room.ids = room.ids.filter(id => !leaveIds.find(i => i !== id))
                 console.log('leave', leaveIds, 'newIds', room.ids);
                 leaveIds.forEach(id => {
                     let user = this.users.users.find(u => u.id === id)
@@ -235,7 +237,6 @@ class RoomController {
 
     gameAction = (socket) => async (data, callback) => {
         try {
-            // console.log('data game action' ,data);
             let roomIndex = this.rooms.rooms.findIndex(e => e.id === data.roomId);
             if (roomIndex === -1) return callback(null, { message: "Room not found" });
             let room = this.rooms.rooms[roomIndex];
@@ -252,7 +253,6 @@ class RoomController {
                 console.log('updater', room);
                 this.io.to(room.ids).emit('updateRoom', room);
             }
-            // console.log('updateSpacePlayer', updateSpacePlayer);
             callback(updateSpacePlayer, null);
         } catch (error) {
             console.log(error, 'error<<<<<<<');
@@ -265,7 +265,7 @@ class RoomController {
             let room = await this.rooms.getRoom(data.roomId);
             let userIndex = room.users.findIndex(u => u.id === socket.id)
             if (userIndex === -1) return callback(null, { message: "You are not joined in this room" });
-            this.game.resetMap(room.users[userIndex]);
+            this.game.resetGame(room.users[userIndex],room.nextTetromino);
             return callback({ game: room.users[userIndex], room }, null);
         } catch (error) {
             console.log(error);

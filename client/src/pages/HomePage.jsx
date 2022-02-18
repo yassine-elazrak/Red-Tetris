@@ -110,7 +110,7 @@ const HomePage = (props) => {
     //console.log("done");
     const hashBased = () => {
       const { hash } = window.location;
-      if (hash) {
+      if (hash && !props.profile.isAuth) {
         const Regx = new RegExp(/(^#[\w-]+\[[\w-]+\]$)/g);
         const match = hash.match(Regx);
         //console.log("match", match);
@@ -128,7 +128,7 @@ const HomePage = (props) => {
             error: "",
           });
         }
-        // window.location.hash = '';
+        window.location.hash = '';
       }
     };
     hashBased();
@@ -221,7 +221,7 @@ const HomePage = (props) => {
           ) : !room.name ? (
             <FormRoomName />
           ) : !room.isPravite &&
-            (room.status === "waiting" || room.status === "end") &&
+            (room.status === "waiting" || (props.game.status === 'continue' && room.status === 'end')) &&
             profile.id === room.admin ? (
             <InviteUsers />
             // <GameSpace />
@@ -294,6 +294,7 @@ const mapStateToProps = (state) => {
     room: state.room,
     socket: state.socket,
     rooms: state.rooms,
+    game: state.game
   };
 };
 
