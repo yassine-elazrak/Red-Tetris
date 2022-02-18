@@ -8,3 +8,4 @@ export * from './stage';
 export * from './socket';
 export * from './rooms';
 export * from './game';
+export * from './players';

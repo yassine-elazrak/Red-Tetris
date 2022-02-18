@@ -77,6 +77,10 @@ export const GAME_ERROR = "GAME_ERROR";
 export const GAME_LOADING = "GAME_LOADING";
 export const GAME_CLEAR = "GAME_CLEARE";
 
+// Players Actions
+export const UPDATE_PLAYERS = "UPDATE_PLAYERS";
+export const CLEAR_PLAYERS = "CLEAR_PLAYERS";
+
 
 
 

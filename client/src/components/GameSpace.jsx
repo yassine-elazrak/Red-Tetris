@@ -24,6 +24,8 @@ import {
   gameActions,
   continueGame,
   gameClear,
+  updatePlayers,
+  clearPlayers,
 } from "../redux/actions";
 
 // import { useStage } from "../hooks/useStage";
@@ -60,9 +62,17 @@ const GameSpace = (props) => {
   useEffect(() => {
     changeFocused();
     restGame();
+    
+    // props.socket.socket('/').on('updatePlayers', data => {
+    //   // console.log('updateplayer', data);
+    //   props.updatePlayers(data);
+    // })
     return () => {
       Modal.destroyAll();
+      // props.socket.socket('/').off('updatePlayers');
     }
+
+
   }, []);
 
   useEffect(() => {
@@ -85,13 +95,13 @@ const GameSpace = (props) => {
       if (props.room.status === "closed") restGame();
       if (props.room.status === "end") setGameStart(false);
       if (props.room.status === "started") {
-        console.log('game start');
+        // console.log('game start');
         setGameStart(true);
         setGamePause(false);
       }
       if (props.room.status === "paused") setGamePause(true);
     }
-    console.log("nextTetromino =>", props.game.nextTetrominos);
+    // console.log("nextTetromino =>", props.game.nextTetrominos);
   }, [props.room]);
 
   const changeFocused = () => {
@@ -109,11 +119,11 @@ const GameSpace = (props) => {
   useEffect(() => {
     if (gameStart && !gamePause && !gameWon && !gameOver){
       setDailyDrop(500);
-      console.log('set daily drop');
+      // console.log('set daily drop');
     }
     else{
       console.log(gameStart, gamePause, gameWon, gameOver);
-      console.log('cleate daily drop');
+      // console.log('cleate daily drop');
       setDailyDrop(null);
     }
   }, [gameStart, gamePause, gameWon, gameOver]);
@@ -173,19 +183,23 @@ const GameSpace = (props) => {
   };
 
   const handleKeyUp = (e) => {
-    console.log("key up");
+    // console.log("key up");
     if (gameStart && !gamePause && !gameWon && !gameOver) setDailyDrop(500);
     // if (gameStart && !gamePause && !gameWon && !gameOver) {
     //   updateDropTime(500);
     // }
   };
 
-  const restState = () => {
-    setGameOver(false);
-    setGamePause(false);
-    setGameWon(false);
-    setGameStart(false);
-  }
+  // const restState = () => {
+  //   setGameOver(false);
+  //   setGamePause(false);
+  //   setGameWon(false);
+  //   setGameStart(false);
+  // }
+
+  // useEffect(() =>{
+  //   console.log('players update >>>>>>>>>>>kdjsljds');
+  // }, [props.players])
 
   useEffect(() => {
     const modal = () => {
@@ -432,7 +446,7 @@ const GameSpace = (props) => {
         reverseArrow={true}
         collapsed={collapsedChat}
         onCollapse={(collapsed, type) => {
-          console.log(collapsed, type);
+          // console.log(collapsed, type);
           setCollapsedChat(collapsed);
           window.innerWidth <= 350 && setTriggerPlayers(collapsed);
         }}
@@ -467,6 +481,7 @@ const mapStateToProps = (state) => {
     room: state.room,
     socket: state.socket.socket,
     game: state.game,
+    players: state.players,
   };
 };
 
@@ -481,4 +496,6 @@ export default connect(mapStateToProps, {
   gameActions,
   continueGame,
   gameClear,
+  updatePlayers,
+  clearPlayers,
 })(GameSpace);

@@ -23,6 +23,8 @@ import {
   refreshRoom,
   clearRoom,
   gameClear,
+  updateGame,
+  updatePlayers,
 } from "../redux/actions";
 
 import "./styles/HeaderStyled.css";
@@ -30,7 +32,7 @@ import "./styles/HeaderStyled.css";
 const { Header, Content, Footer, Sider } = Layout;
 
 const HomePage = (props) => {
-  const { profile, room, login, createRoom } = props;
+  const { profile, room} = props;
   const [hash, setHash] = useState({
     name: null,
     room: null,
@@ -91,6 +93,13 @@ const HomePage = (props) => {
         props.refreshRoom(data);
         console.log("update Room ============>", data);
       });
+      props.socket.socket.socket('/').on("updateGame", data => {
+        console.log('update Game <<<<<<<<<<>>>>>>>>', data);
+        props.updateGame(data);
+      })
+      // props.socket.socket.socket('/').on("updatePlayers", data =>{
+      //   props.updatePlayers(data);
+      // })
       props.socket.socket.socket('/').on("leaveRoom", data => {
         props.gameClear();
         props.clearRoom();
@@ -101,6 +110,8 @@ const HomePage = (props) => {
         props.socket.socket.socket("/").off("updateRooms");
         props.socket.socket.socket("/").off("updateRoom");
         props.socket.socket.socket("/").off("leaveRoom");
+        props.socket.socket.socket("/").off("updateGame");
+        // props.socket.socket.socket("/").off("updatePlayers");
       };
     }
     if (props.socket.error) {
@@ -310,4 +321,6 @@ export default connect(mapStateToProps, {
   refreshRoom,
   clearRoom,
   gameClear,
+  updateGame,
+  updatePlayers,
 })(HomePage);

@@ -267,7 +267,7 @@ const InviteUsers = (props) => {
   const UsersInRoom = () => {
     console.log('get users room >>>>>>>>>>>>');
     return usersRoom.map((user, key) => {
-      return (
+     return (
         <div
           key={key}
           style={{
@@ -291,7 +291,7 @@ const InviteUsers = (props) => {
             }}
           >
             <span>{user.id}</span>
-            <span>{user.name}</span>
+            <span>{user.id === props.profile.id ? "You" : user.name}</span>
             <span>{!user.status ? 'Joined' : user.status}</span>
           </div>
         </div>

@@ -36,6 +36,12 @@ export const continueGame = (data) => {
     }
 }
 
+export const updateGame = (data) => {
+    return (dispatch) => {
+        dispatch(success(data, GAME_UPDATE));
+    }
+}
+
 export const gameClear = () => {
     return (dispatch) => {
         dispatch({type: GAME_CLEAR});

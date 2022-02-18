@@ -25,9 +25,9 @@ export const createRoom = (room) => {
       const io = getState().socket.socket;
       const res = await socket(io, "createRoom", room);
       dispatch(success(res, ROOM_CREATE));
-      const profile = getState().profile;
-      const gameInfo = game(res.users, profile.id);
-      dispatch(success(gameInfo, GAME_UPDATE));
+      // const profile = getState().profile;
+      // const gameInfo = game(res.users, profile.id);
+      // dispatch(success(gameInfo, GAME_UPDATE));
     } catch (err) {
       dispatch(error(err, ROOM_ERROR));
     }
@@ -42,9 +42,9 @@ export const createOrJoinRoom = (room) => {
       const res = await socket(io, "createOrJoin", room);
       dispatch(success(res, ROOM_CREATE));
       const profile = getState().profile;
-      const gameInfo = game(res.users, profile.id);
-      console.log(gameInfo);
-      dispatch(success(gameInfo, GAME_UPDATE));
+      // const gameInfo = game(res.users, profile.id);
+      // console.log(gameInfo);
+      // dispatch(success(gameInfo, GAME_UPDATE));
     } catch (err) {
       console.log(err);
       dispatch(error(err, ROOM_ERROR));
@@ -61,9 +61,9 @@ export const joinRoom = (roomId) => {
       const res = await socket(io, "joinRoom", roomId);
       //console.log('res join room =>', res);
       dispatch(success(res, ROOM_JOIN));
-      const profile = getState().profile;
-      const gameInfo = game(res.users, profile.id);
-      dispatch(success(gameInfo, GAME_UPDATE));
+      // const profile = getState().profile;
+      // const gameInfo = game(res.users, profile.id);
+      // dispatch(success(gameInfo, GAME_UPDATE));
     } catch (err) {
       dispatch(error(err, ROOM_ERROR));
     }
@@ -106,9 +106,9 @@ export const changeStatusRoom = (data) => {
 export const refreshRoom = (room) => {
   return (dispatch, getState) => {
     dispatch({ type: LOADING_ROOM });
-    const profile = getState().profile;
-    const gameInfo = game(room.users, profile.id);
-    dispatch(success(gameInfo, GAME_UPDATE));
+    // const profile = getState().profile;
+    // const gameInfo = game(room.users, profile.id);
+    // dispatch(success(gameInfo, GAME_UPDATE));
     dispatch(success(room, ROOM_REFRESH))
   }
 }
