@@ -1,5 +1,5 @@
 import io from "socket.io-client";
 
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = "192.168.1.114:5000";
 
 export default io(ENDPOINT);

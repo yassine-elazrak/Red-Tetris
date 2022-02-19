@@ -28,7 +28,6 @@ const StageBar = (props) => {
             justifyContent: 'space-around',
             padding: '10px',
             paddingTop: '20px',
-            background: 'rgba(0,0,0,0.3)',
             color: 'rgba(255,255,255,0.8)',
         }}>
             <div style={{

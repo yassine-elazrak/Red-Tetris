@@ -62,7 +62,7 @@ const GameSpace = (props) => {
     // props.gameClear();
     changeFocused();
     restGame();
-    
+
     // props.socket.socket('/').on('updatePlayers', data => {
     //   // //console.log('updateplayer', data);
     //   props.updatePlayers(data);
@@ -118,18 +118,18 @@ const GameSpace = (props) => {
   }, dailyDrop);
 
   useEffect(() => {
-    if (gameStart && !gamePause && !gameWon && !gameOver){
+    if (gameStart && !gamePause && !gameWon && !gameOver) {
       setDailyDrop(500);
       // //console.log('set daily drop');
     }
-    else{
+    else {
       //console.log(gameStart, gamePause, gameWon, gameOver);
       // //console.log('cleate daily drop');
       setDailyDrop(null);
     }
   }, [gameStart, gamePause, gameWon, gameOver]);
 
- 
+
 
   const handleKeyDown = ({ keyCode }) => {
     if (!gameStart && keyCode === 13) {
@@ -212,7 +212,7 @@ const GameSpace = (props) => {
             {gameOver ? "You lose!" : "You are Winner"}
             {props.room.admin !== props.profile.id && (
               <p>
-                You will leave automata after admin restart this room
+                you will leave automatically when admin close this room
               </p>
             )}
           </>
@@ -316,7 +316,7 @@ const GameSpace = (props) => {
           >
             {gamePause ? "Resume" : "Pause"}
           </Button>
-        ) }
+        )}
         {/* {(gameWon || gameOver) && (
           <Spin />
         )} */}
@@ -402,8 +402,12 @@ const GameSpace = (props) => {
           overflow: "hidden",
         }}
       >
-        <Row style={{}}>
-          <Col span={24}>
+        <Row style={{
+          width: "100%",
+          justifyContent: "center",
+          background: 'rgba(0,0,0,0.3)',
+        }}>
+          <Col xs={24} sm={24} md={24} lg={20} xl={15} xxl={9}>
             <StageBar
               shape={TETROMINOES[nextTetromino].shape}
               score={scor}
@@ -431,14 +435,14 @@ const GameSpace = (props) => {
             }}
           >
             <Spin
-            spinning={gameOver || gameWon}
-            tip={props.profile.id !== props.room.admin ? "Waiting admin close this room" : null}
-            style={{
-              color: 'black',
-              fontSize: 20,
-            }}
+              spinning={gameOver || gameWon}
+              tip={props.profile.id !== props.room.admin ? "Waiting admin close this room" : null}
+              style={{
+                color: 'black',
+                fontSize: 20,
+              }}
             >
-            <Stage stage={userStage} />
+              <Stage stage={userStage} />
             </Spin>
             {bottons()}
           </Col>

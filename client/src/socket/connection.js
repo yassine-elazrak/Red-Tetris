@@ -1,6 +1,6 @@
 import {Manager} from "socket.io-client";
 
-const ENDPOINT = "http://localhost:4000";
+const ENDPOINT = "192.168.1.114:5000";
 
 const initSocket = () => {
   ////console.log("initSocket");
