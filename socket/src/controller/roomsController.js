@@ -75,7 +75,8 @@ class RoomController {
                 let allPlayers = room.users.map(u => _.omit(u, ['nextTetrominos', 'currentTetromino']));
                 this.io.to(room.ids).emit('updateAllPlayers', allPlayers);
                 let updateProfile = await this.users.userJoin(socket.id, room.id);
-                let game = room.users.find(u => u.id === socket)
+                let game = room.users.find(u => u.id === socket.id)
+                // console.log('update game', game, room.users);
                 this.io.to(socket.id).emit("updateGame", game);
                 this.io.to(socket.id).emit("updateProfile", updateProfile);
                 return callback(resUser, null);
