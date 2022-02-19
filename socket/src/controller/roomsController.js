@@ -266,20 +266,23 @@ class RoomController {
                 room = this.rooms.changeCurrentTetromino(playerIndex, roomIndex);
             let updateSpacePlayer = await this.game.action(data.action, room.users[playerIndex],
                 this.rooms.rooms[roomIndex]);
-                // players
-                let playersEmit = _.omit(updateSpacePlayer, ['nextTetrominos', 'currentTetromino'])
+            // players
+            let playersEmit = _.omit(updateSpacePlayer, ['nextTetrominos', 'currentTetromino'])
             let idsEmit = room.ids.filter(id => id !== socket.id);
             idsEmit.length && this.io.to(idsEmit).emit('updatePlayers', playersEmit)
             if (room.status === 'end') {
                 this.io.emit("updateRooms", this.rooms.getRooms());
                 console.log('updater', room);
-                let resUsers = room.users.map(u => { return _.pick(u, ['id', 'name', 'status']) });
+                let resUsers = {...room};
+                resUsers.users = room.users.map(u => {
+                    return _.pick(u, ['id', 'name', 'status'])
+                });
                 this.io.to(room.admin).emit('updateRoom', resUsers);
                 let ids = room.ids.filter(id => id !== room.admin);
                 resUsers = _.omit(room, ["invit", "users", "ids", 'nextTetromino']);
                 ids.length && this.io.to(ids).emit('updateRoom', resUsers);
                 let winner = room.users.find(u => u.status === 'gameWinner')
-                this.io.to(winner.id).emit('updateGame', winner);
+                winner && this.io.to(winner.id).emit('updateGame', winner);
             }
             callback(updateSpacePlayer, null);
         } catch (error) {

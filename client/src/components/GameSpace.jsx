@@ -87,6 +87,7 @@ const GameSpace = (props) => {
     setNextTetromino(props.game.nextTetrominos[0]);
     if (props.game.status === "gameOver") setGameOver(true);
     else if (props.game.status === "gameWinner") setGameWon(true);
+    console.log(props.game.status);
   }, [props.game]);
 
   useEffect(() => {

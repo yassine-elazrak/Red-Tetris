@@ -189,6 +189,7 @@ class Players {
             console.log('game end');
         }
         else if (room.users.length === 1) room.status = 'end'
+        console.log(room, 'game over')
     }
 
     // get action
@@ -219,6 +220,7 @@ class Players {
             }
             if (player.currentTetromino.position.y <= 0 && player.currentTetromino.collided) {
                 player.status = 'gameOver';
+                console.log('game over <<<<', room);
                 this.getWinner(room);
             }
             resolve(player);
