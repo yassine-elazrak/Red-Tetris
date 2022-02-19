@@ -1,6 +1,6 @@
 const Users = require("../users/users");
 const Rooms = require("../rooms/rooms");
-const Selector = require("../utils/selector")
+// const Selector = require("../utils/selector")
 const _ = require("lodash");
 
 class InviteController {
@@ -84,7 +84,11 @@ class InviteController {
                 let userIds = room.users.map(e => e.id).filter(id => id !== user.id && id !== room.admin);
                 //console.log("userIds2 =>", userIds);
                 userIds.length && this.io.to(userIds).emit("notification", notifUsers);
-                roomInfo = _.omit(room, ['message', 'invit']);
+                roomInfo = _.omit(room, ["invit", "users", "ids", 'nextTetromino']);
+                let game = room.users.find(u => u.id === socket.id);
+                let allPlayers = room.users.map(u => _.omit(u, ['nextTetrominos', 'currentTetromino']))
+                this.io.to(room.ids).emit("updateAllPlayers", allPlayers);
+                this.io.to(socket.id).emit("updateGame", game)
                 this.io.to([user.id, userIds]).emit("updateRoom", roomInfo);
             }
             this.io.to(room.admin).emit("updateRoom", room);

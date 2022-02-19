@@ -1,6 +1,6 @@
 const Users = require("../users/users");
 const Rooms = require("../rooms/rooms");
-const Selector = require("../utils/selector");
+// const Selector = require("../utils/selector");
 const _ = require("lodash");
 
 class AuthController {
@@ -9,7 +9,7 @@ class AuthController {
         this.io = io;
         this.users = new Users;
         this.rooms = new Rooms;
-        this.selector = new Selector;
+        // this.selector = new Selector;
     }
 
     /**
@@ -43,7 +43,8 @@ class AuthController {
                     let currntRooms = await this.rooms.deleteRoom(room.id);
                     this.io.emit("updateRooms", currntRooms);
                 } else {
-                    let usersIds = this.selector.Data(room.users, (({ id }) => id));
+                    // let usersIds = this.selector.Data(room.users, (({ id }) => id));
+                    let usersIds = room.ids;
                     if (user.id === room.admin) {
                         let updateRoom = this.rooms.switchAdmin(room.id);
                         let newAdmin = updateRoom.users.find(user => user.id === updateRoom.admin)

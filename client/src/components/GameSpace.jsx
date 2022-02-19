@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Layout, Row, Col, Button, Popover, Modal, message } from "antd";
+import { Layout, Row, Col, Button, Spin, Modal, message } from "antd";
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
@@ -59,6 +59,7 @@ const GameSpace = (props) => {
   };
 
   useEffect(() => {
+    // props.gameClear();
     changeFocused();
     restGame();
     
@@ -223,6 +224,8 @@ const GameSpace = (props) => {
         },
         onCancel() {
           console.log("leave Room");
+          // props.gameClear();
+          props.leaveRoom();
         },
         okText: "Continue",
         cancelText: "Leave Room",
@@ -317,13 +320,9 @@ const GameSpace = (props) => {
             {gamePause ? "Resume" : "Pause"}
           </Button>
         ) }
-        {(gameWon || gameOver) && (
-          <Button
-          disabled={true}
-          type='primary'
-          loading={true}
-          >Waiting</Button>
-        )}
+        {/* {(gameWon || gameOver) && (
+          <Spin />
+        )} */}
         {props.room.isPravite && (
           <Button
             type="primary"
@@ -434,7 +433,17 @@ const GameSpace = (props) => {
               width: "100%",
             }}
           >
+            <Spin
+            spinning={gameOver || gameWon}
+            tip={props.profile.id !== props.room.admin ? (
+              <p style={{
+                color: 'black',
+                fontSize: 12,
+              }}> Waiting admin close this room</p>
+            ) : null}
+            >
             <Stage stage={userStage} />
+            </Spin>
             {bottons()}
           </Col>
         </Row>

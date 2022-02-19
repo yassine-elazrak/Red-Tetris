@@ -40,10 +40,10 @@ class RoomController {
             let game = room.users[0]
             this.io.to(socket.id).emit("updateGame", game)
             res.users = room.users.map(u => { return (_.pick(u, ['id', 'name', 'status'])) })
-            if (typeof callback === "function") callback(res, null);
+            return callback(res, null);
         } catch (error) {
             console.log(error);
-            if (typeof callback === "function") callback(null, error);
+           return callback(null, error);
         }
     };
 
@@ -64,18 +64,14 @@ class RoomController {
                     userId: user.id,
                     userName: user.name,
                 })
-                let ids = room.users.map(e => e.id).filter(id => id !== socket.id && id !== room.admin);
+                let ids = room.ids.filter(id => id !== socket.id && id !== room.admin);
                 this.io.to([...ids, room.admin]).emit("notification", {
                     message: `${user.name} is joind ${room.name}`,
                     type: "notification",
                     read: true,
                 })
                 this.io.to(room.admin).emit("updateRoom", room);
-                console.log('admin', room.admin);
                 let resUser = _.omit(room, ["invit", "users", "ids", 'nextTetromino']);
-                // resUser.users = room.users.map(u => { return _.pick(u, ['id','name', 'status'])})
-                // ids.length && this.io.to(ids).emit("updateRoom", resUser);
-                // update palyers
                 let allPlayers = room.users.map(u => _.omit(u, ['nextTetrominos', 'currentTetromino']));
                 this.io.to(room.ids).emit('updateAllPlayers', allPlayers);
                 let updateProfile = await this.users.userJoin(socket.id, room.id);
@@ -94,7 +90,7 @@ class RoomController {
 
         } catch (error) {
             console.log(error);
-            if (typeof callback === "fucntion") return callback(null, error);
+            return callback(null, error);
         }
     }
 
@@ -115,8 +111,7 @@ class RoomController {
                 userName: user.name,
             });
             let updateProfile = await this.users.userJoin(socket.id, roomId);
-            let ids = room.users.map(e => e.id)
-                .filter(id => id !== socket.id && id !== room.admin);
+            let ids = room.ids.filter(id => id !== socket.id && id !== room.admin);
             let notif = {
                 message: `${user.name} joind to ${room.name}`,
                 type: "notification",
@@ -126,16 +121,14 @@ class RoomController {
             this.io.to(user.id).emit("updateProfile", updateProfile);
             this.io.to(room.admin).emit("updateRoom", room)
             let resUsers = _.omit(room, ["invit", "users", "ids", 'nextTetromino']);
-            // let newPlayer = room.users.find(u => u.id === socket.id)
-            // newPlayer = _.omit(newPlayer, ['nextTetrominos', 'currentTetromino']);
             let allPlayers = room.users.map(u => _.omit(u, ['nextTetrominos', 'currentTetromino']))
             this.io.to(room.ids).emit("updateAllPlayers", allPlayers);
             let game = room.users.find(u => u.id === socket.id)
             this.io.to(socket.id).emit("updateGame", game);
-            if (typeof callback === "function") return callback(resUsers, null);
+           return callback(resUsers, null);
         } catch (error) {
             console.log("error join room =>", error)
-            if (typeof callback === "function") return callback(null, error);
+             return callback(null, error);
         }
     };
 
@@ -154,7 +147,6 @@ class RoomController {
             await this.rooms.changeStatusRoom(
                 { userId: socket.id, status: data.status }, room);
             if (oldStatus === 'end') {
-                // console.log(room.users);
                 let leaveIds = room.ids.filter(id => {
                     if (!room.users.find(u => u.id === id)) return id
                 })
@@ -181,10 +173,10 @@ class RoomController {
             this.io.emit("updateRooms", this.rooms.getRooms());
             ids.length && this.io.to(ids).emit("updateRoom", roomInfo);
             console.log(oldStatus);
-            if (typeof callback === "function") callback(room, null);
+            return callback(room, null);
         } catch (error) {
             console.log(error);
-            if (typeof callback === "function") callback(null, error);
+            return callback(null, error);
         }
     };
 
@@ -202,7 +194,6 @@ class RoomController {
                 await this.rooms.deleteRoom(roomId);
                 this.io.emit("updateRooms", this.rooms.getRooms());
             } else {
-                // let ids = room.users.map(e => e.id);
                 let ids = room.ids;
                 if (room.admin === socket.id) {
                     let updateRoom = this.rooms.switchAdmin(room.id);
@@ -247,10 +238,10 @@ class RoomController {
             }
             this.io.to(user.id).emit("updateProfile", user);
             this.io.emit("updateUsers", this.users.getUsers());
-            if (typeof callback === "function") callback(null, null);
+            return callback(null, null);
         } catch (error) {
             console.log(error);
-            if (typeof callback === "function") callback(null, error);
+            return callback(null, error);
         }
     };
 
@@ -317,7 +308,7 @@ class RoomController {
                 });
             callback(allRooms, null);
         } catch (error) {
-            if (typeof callback === "function") callback(null, error);
+            return callback(null, error);
         }
     };
 }

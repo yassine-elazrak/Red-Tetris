@@ -43,7 +43,6 @@ class Players {
         shape.forEach((row, y) => {
             row.forEach((v, x) => {
                 if (v !== 0) {
-                    // console.log('psh', y + position.y + shadow);
                     if (y + position.y + shadow > 0) {
                         map[y + position.y + shadow][x + position.x] = [v, 'shadow']
                     }

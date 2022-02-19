@@ -229,7 +229,6 @@ class Rooms {
     console.log('room users =>', room.users);
     room.nextTetromino = this.tetromino.randomTetromino();
     room.users.forEach(u => u.nextTetrominos = [room.nextTetromino]);
-    // console.log(room.users);
   }
 
   deleteRoom = (id) => {
