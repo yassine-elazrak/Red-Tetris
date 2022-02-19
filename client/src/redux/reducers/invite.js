@@ -1,11 +1,8 @@
 import {
-    INVITE_REQUEST,
     INVITE_FAILURE,
     INVITE_ACCEPT,
     INVITE_DECLINE,
-    INVITE_REMOVE_ALL,
     LOADING_INVITES,
-    INVITE_REFRESH,
     INVITE_SUCCESS
 } from '../types';
 
@@ -14,14 +11,6 @@ const initialState = {
     error: null,
     // room_id: null,
     // invites: [],
-}
-
-const removeAll = (state) => {
-    const data = {
-        ...state,
-        invites: [],
-    }
-    return data;
 }
 
 export default function inviteReducer(state = initialState, action) {
@@ -38,13 +27,6 @@ export default function inviteReducer(state = initialState, action) {
                 error: null,
                 isLoading: false,
             };
-        // case INVITE_REQUEST:
-        //     return {
-        //         ...state,
-        //         isLoading: false,
-        //         error: null,
-        //         invites: action.payload,
-        //     };
         case INVITE_FAILURE:
             return {
                 ...state,

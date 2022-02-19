@@ -20,14 +20,14 @@ class InviteController {
      */
 
     invitation = (socket) => async (data, callback) => {
-        // //console.log(`User ${socket.id} is trying to invite data =>`, data);
+        // ////console.log(`User ${socket.id} is trying to invite data =>`, data);
         try {
             let user = await this.users.getUser(data.userId);
             let admin = await this.users.getUser(socket.id);
             if (user.isJoined) return callback(null, { message: `${user.name} is already joined to room` });
             let room = await this.rooms.getRoom(data.roomId);
             if (socket.id !== room.admin) return callback(null, { message: `you are not admin of this room` });
-            // //console.log(`Room`, room);
+            // ////console.log(`Room`, room);
             if (room.invit.find(e => e.userId === data.userId)) return callback(null, { message: `${user.name} is already invited to this room` });
             if (room.status !== "waiting" && room.status !== 'end')
                 return callback(null, { message: "Room is closed" });
@@ -45,7 +45,7 @@ class InviteController {
             this.io.to(user.id).emit("notification", notif);
             return callback(room, null);
         } catch (error) {
-            //console.log(error);
+            ////console.log(error);
             if (typeof callback === "function") return callback(null, error);
         }
     }
@@ -82,7 +82,7 @@ class InviteController {
                     read: true,
                 }
                 let userIds = room.users.map(e => e.id).filter(id => id !== user.id && id !== room.admin);
-                //console.log("userIds2 =>", userIds);
+                ////console.log("userIds2 =>", userIds);
                 userIds.length && this.io.to(userIds).emit("notification", notifUsers);
                 roomInfo = _.omit(room, ["invit", "users", "ids", 'nextTetromino']);
                 let game = room.users.find(u => u.id === socket.id);
@@ -93,10 +93,10 @@ class InviteController {
             }
             this.io.to(room.admin).emit("updateRoom", room);
             this.io.to(room.admin).emit("notification", notifAdmin);
-            //console.log("room => ", room);
+            ////console.log("room => ", room);
             return callback({ profile: user, room: roomInfo }, null);
         } catch (error) {
-            //console.log(error);
+            ////console.log(error);
             return callback(null, error);
         }
     }

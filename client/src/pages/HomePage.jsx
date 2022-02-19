@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Layout, message, Button, List, Tooltip, notification } from "antd";
+import { Layout, message, Button, List, Tooltip} from "antd";
 
 import Nabar from "../components/Navbar";
 import FooterComponent from "../components/Footer";
@@ -56,17 +56,17 @@ const HomePage = (props) => {
   }, [props.rooms.rooms]);
 
   useEffect(() => {
-    //console.log("hash", hash);
+    ////console.log("hash", hash);
     if (hash.error) message.error(hash.error);
     else if (hash.name && hash.room) {
-      //console.log("login by url-hash", hash);
+      ////console.log("login by url-hash", hash);
       props.login(hash.name);
     }
   }, [hash]);
 
   useEffect(() => {
     if (props.profile.isAuth && !props.profile.isJoined && !hash.error && hash.room) {
-      //console.log('don1');
+      ////console.log('don1');
       let roomInfo = {
         roomName: hash.room,
         isPravite: false,
@@ -78,27 +78,27 @@ const HomePage = (props) => {
   }, [props.profile]);
 
   useEffect(() => {
-    console.log('socket changed');
+    //console.log('socket changed');
     if (props.socket.socket) {
       // MOVE THIS LISTENERS TO GAME SPACE
       props.socket.socket.socket("/").on("updateProfile", (data) => {
-        console.log("udpate profile", data)
+        //console.log("udpate profile", data)
         props.updateUser(data);
       });
       props.socket.socket.socket("/").on("updateRooms", (data) => {
-        console.log("update rooms", data);
+        //console.log("update rooms", data);
         props.refreshRooms(data);
       });
       props.socket.socket.socket("/").on("updateRoom", (data) => {
         props.refreshRoom(data);
-        console.log("update Room ============>", data);
+        //console.log("update Room ============>", data);
       });
       props.socket.socket.socket('/').on("updateGame", data => {
-        console.log('update Game <<<<<<<<<<>>>>>>>>', data);
+        //console.log('update Game <<<<<<<<<<>>>>>>>>', data);
         props.updateGame(data);
       })
       props.socket.socket.socket('/').on("updateAllPlayers", data =>{
-        console.log('all Players ====>', data);
+        //console.log('all Players ====>', data);
         props.updateAllPlayers(data)
       })
       props.socket.socket.socket('/').on("leaveRoom", data => {
@@ -121,13 +121,13 @@ const HomePage = (props) => {
   }, [props.socket]);
 
   useEffect(() => {
-    //console.log("done");
+    ////console.log("done");
     const hashBased = () => {
       const { hash } = window.location;
       if (hash && !props.profile.isAuth) {
         const Regx = new RegExp(/(^#[\w-]+\[[\w-]+\]$)/g);
         const match = hash.match(Regx);
-        //console.log("match", match);
+        ////console.log("match", match);
         if (!match) {
           setHash({
             ...hash,
@@ -135,7 +135,7 @@ const HomePage = (props) => {
           });
         } else {
           const split = hash.match(/([\w-]+)/g);
-          //console.log("split", split);
+          ////console.log("split", split);
           setHash({
             room: split[0],
             name: split[1],
@@ -150,7 +150,7 @@ const HomePage = (props) => {
 
   const handleJoinToRoom = (room) => {
     props.joinRoom(room.id);
-    //console.log(room, "room want to join");
+    ////console.log(room, "room want to join");
   };
 
   const menu = () => {

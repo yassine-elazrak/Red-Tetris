@@ -54,7 +54,7 @@ const FormRoomName = (props) => {
               userId: props.profile.id,
             };
             props.createOrJoinRoom(data);
-            console.log("click ok");
+            //console.log("click ok");
           },
           onCancel() {},
         });

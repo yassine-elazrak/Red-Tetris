@@ -12,7 +12,7 @@ class MessagesController {
         try {
             let user = await this.users.getUser(socket.id);
             let room = await this.rooms.getRoom(data.roomId);
-            console.log('=> room', room, 'socketId =>', socket.id);
+            //console.log('=> room', room, 'socketId =>', socket.id);
             if (!room.users.find(e => e.id === socket.id))
                 return callback(null, {message : `you are not member at ${room.name}`});
             let ids = room.users.map(e => e.id).filter(id => id !== socket.id);
@@ -25,7 +25,7 @@ class MessagesController {
             ids.length && this.io.to(ids).emit("message", newMessage);
             callback(newMessage, null);
         } catch (error) {
-            console.log(error)
+            //console.log(error)
             if (typeof callback === 'fanction') return callback(null, error);
         }
     }

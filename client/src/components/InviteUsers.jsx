@@ -17,7 +17,7 @@ const { Option } = Select;
 const { TabPane } = Tabs;
 
 const InviteUsers = (props) => {
-  // //console.log(props, 'props2');
+  // ////console.log(props, 'props2');
 
   const [dataSource, setDataSource] = useState([]);
   const [inveted, setInveted] = useState([]);
@@ -44,7 +44,7 @@ const InviteUsers = (props) => {
         inveted: false,
       };
     });
-    // //console.log(data, "data");
+    // ////console.log(data, "data");
     setDataSource(data);
   }, [props.users]);
 
@@ -60,7 +60,7 @@ const InviteUsers = (props) => {
           error: true,
         });
     if (input.error || !input.id) return;
-    // //console.log(input.id, props.room.id, "input.value");
+    // ////console.log(input.id, props.room.id, "input.value");
     props.inviteRequest({
       userId: input.id,
       roomId: props.room.id,
@@ -82,13 +82,13 @@ const InviteUsers = (props) => {
       message.error(props.room.error)
       return;
     }
-    console.log('room update <<<<<<<<<<<');
+    //console.log('room update <<<<<<<<<<<');
     setUsersRoom(props.room.users);
     setInveted(props.room.invit);
   }, [props.room]);
 
   useEffect(() => {
-    console.log('users room update', usersRoom);
+    //console.log('users room update', usersRoom);
   }, [usersRoom])
 
   useEffect(() => {
@@ -265,7 +265,7 @@ const InviteUsers = (props) => {
   };
 
   const UsersInRoom = () => {
-    console.log('get users room >>>>>>>>>>>>');
+    //console.log('get users room >>>>>>>>>>>>');
     return usersRoom.map((user, key) => {
      return (
         <div

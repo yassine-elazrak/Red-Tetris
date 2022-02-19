@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 
 import { Button, Input, message, Form } from "antd";
-import { RestFilled, SendOutlined } from "@ant-design/icons";
+import { SendOutlined } from "@ant-design/icons";
 import moment from "moment";
 
 import {
@@ -35,7 +35,7 @@ const Message = (props) => {
     props.clearMessages();
     props.socket.socket("/").on("message", (data) => {
       props.receiveMessage(data);
-      console.log(data);
+      //console.log(data);
     });
     return () => {
       props.socket.socket("/").off("message");
@@ -45,7 +45,7 @@ const Message = (props) => {
   useEffect(() => {
     if (props.messenger.error) message.error(props.messenger.error);
     setMessages(props.messenger.messages);
-    console.log("messenger", props.messenger);
+    //console.log("messenger", props.messenger);
   }, [props.messenger]);
 
   // scrool to bottom wheres new message

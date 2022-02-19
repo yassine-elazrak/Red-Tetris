@@ -125,7 +125,7 @@ class Rooms {
       collided: false,
     }
     this.rooms[roomIndex].users[userIndex].currentTetromino = currentTetromino;
-    console.log('user next Tetrominos', this.rooms[roomIndex].users[userIndex].nextTetrominos);
+    //console.log('user next Tetrominos', this.rooms[roomIndex].users[userIndex].nextTetrominos);
     this.rooms[roomIndex].users[userIndex].nextTetrominos.shift();
     if (!this.rooms[roomIndex].users[userIndex].nextTetrominos.length){
       let nextTetromino = this.tetromino.randomTetromino();
@@ -191,7 +191,7 @@ class Rooms {
 
   // start puase or close room
   changeStatusRoom = (data, room) => {
-    console.log('room new status', data.status);
+    //console.log('room new status', data.status);
     return new Promise((resolve, reject) => {
       if (room.admin !== data.userId)
         return reject({ message: "You are not admin" });
@@ -223,10 +223,10 @@ class Rooms {
   }
 
   restRoom = (room) => {
-    console.log('restRoom =>', room);
+    //console.log('restRoom =>', room);
     room.users = room.users.filter(u => !u.status || u.status === 'continue');
     room.users.forEach((_, i) => room.users[i].status = false);
-    console.log('room users =>', room.users);
+    //console.log('room users =>', room.users);
     room.nextTetromino = this.tetromino.randomTetromino();
     room.users.forEach(u => u.nextTetrominos = [room.nextTetromino]);
   }

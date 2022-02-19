@@ -13,7 +13,7 @@ class Socket {
   }
 
   login = async (user, callback) => {
-    //console.log("login", user);
+    ////console.log("login", user);
   };
 
   start = async () => {
@@ -24,9 +24,9 @@ class Socket {
      * User namespace
      **/
     this.io.on("connection", (socket) => {
-      //console.log(`User connected: ${socket.id}`);
+      ////console.log(`User connected: ${socket.id}`);
       socket.on("login", (user, callback) => {
-        // //console.log("login", socket.id);
+        // ////console.log("login", socket.id);
         users
           .addNewUser(socket.id, user)
           .then((user) => {
@@ -42,19 +42,19 @@ class Socket {
           })
           .catch((err) => {
             if (typeof callback === "function") {
-              //console.log("err", { err });
+              ////console.log("err", { err });
               callback(null, { message: err });
             }
           });
       });
 
       // socket.on("rooms",  (callback) => {
-      //   //console.log("rooms", socket.id);
+      //   ////console.log("rooms", socket.id);
       // });
 
       socket.on("disconnect", () => {
         users.removeUser(socket.id);
-        //console.log(`user disconnected ${socket.id}`);
+        ////console.log(`user disconnected ${socket.id}`);
         this.io.emit("updateUsers", users.getUsers());
       });
     });
@@ -77,7 +77,7 @@ class Socket {
         socket.on("create", (room, callback) => {
           socket.join(room.name);
           socket.to(room.name).emit("rooms", `new user user joined`);
-          //console.log("create room", socket.id);
+          ////console.log("create room", socket.id);
           callback(
             {
               name: room,
@@ -89,7 +89,7 @@ class Socket {
         });
 
         socket.on("disconnect", () => {
-          //console.log(`user disconnected room ${socket.id}`);
+          ////console.log(`user disconnected room ${socket.id}`);
         });
       });
   };

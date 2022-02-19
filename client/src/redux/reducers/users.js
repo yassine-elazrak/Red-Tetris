@@ -14,20 +14,6 @@ const initialState = {
   ],
 };
 
-const generateRandomUser = (value) => {
-  const users = [];
-  for (let i = 0; i < 100; i++) {
-    users.push({
-      id: i,
-      name: Math.random().toString(36).substring(7),
-    });
-  }
-  const newusers = users.filter((user) =>
-    user.name.toLowerCase().includes(value.toLowerCase())
-  );
-  return newusers;
-};
-
 export default function usersReducer(state = initialState, action) {
   switch (action.type) {
     case LOADING_ONLINE_USERS:

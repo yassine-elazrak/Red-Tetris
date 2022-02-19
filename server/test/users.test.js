@@ -12,7 +12,7 @@ let token;
 
 
 beforeAll((done) => {
-    // //console.log("DATABASE_URL",process.env.DATABASE_URL)
+    // ////console.log("DATABASE_URL",process.env.DATABASE_URL)
     request(app)
         .post('/user/login')
         .send({
@@ -23,7 +23,7 @@ beforeAll((done) => {
             token = response.body['x-access-token'] //#.x-access-token //#.token; // save the token!
             done();
         });
-    // //console.log("DATABASE_URL",process.env.DATABASE_URL)
+    // ////console.log("DATABASE_URL",process.env.DATABASE_URL)
 
 });
 

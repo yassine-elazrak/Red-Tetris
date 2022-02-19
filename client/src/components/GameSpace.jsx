@@ -7,7 +7,7 @@ import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
 } from "@ant-design/icons";
-import { TETROMINOES, randomTetromino } from "../helpers/Tetrominoes";
+import { TETROMINOES } from "../helpers/Tetrominoes";
 
 import Message from "./Message";
 import Players from "./Players";
@@ -64,7 +64,7 @@ const GameSpace = (props) => {
     restGame();
     
     // props.socket.socket('/').on('updatePlayers', data => {
-    //   // console.log('updateplayer', data);
+    //   // //console.log('updateplayer', data);
     //   props.updatePlayers(data);
     // })
     return () => {
@@ -87,7 +87,7 @@ const GameSpace = (props) => {
     setNextTetromino(props.game.nextTetrominos[0]);
     if (props.game.status === "gameOver") setGameOver(true);
     else if (props.game.status === "gameWinner") setGameWon(true);
-    console.log(props.game.status);
+    //console.log(props.game.status);
   }, [props.game]);
 
   useEffect(() => {
@@ -96,13 +96,13 @@ const GameSpace = (props) => {
       if (props.room.status === "closed") restGame();
       if (props.room.status === "end") setGameStart(false);
       if (props.room.status === "started") {
-        // console.log('game start');
+        // //console.log('game start');
         setGameStart(true);
         setGamePause(false);
       }
       if (props.room.status === "paused") setGamePause(true);
     }
-    // console.log("nextTetromino =>", props.game.nextTetrominos);
+    // //console.log("nextTetromino =>", props.game.nextTetrominos);
   }, [props.room]);
 
   const changeFocused = () => {
@@ -120,11 +120,11 @@ const GameSpace = (props) => {
   useEffect(() => {
     if (gameStart && !gamePause && !gameWon && !gameOver){
       setDailyDrop(500);
-      // console.log('set daily drop');
+      // //console.log('set daily drop');
     }
     else{
-      console.log(gameStart, gamePause, gameWon, gameOver);
-      // console.log('cleate daily drop');
+      //console.log(gameStart, gamePause, gameWon, gameOver);
+      // //console.log('cleate daily drop');
       setDailyDrop(null);
     }
   }, [gameStart, gamePause, gameWon, gameOver]);
@@ -184,7 +184,7 @@ const GameSpace = (props) => {
   };
 
   const handleKeyUp = (e) => {
-    // console.log("key up");
+    // //console.log("key up");
     if (gameStart && !gamePause && !gameWon && !gameOver) setDailyDrop(500);
     // if (gameStart && !gamePause && !gameWon && !gameOver) {
     //   updateDropTime(500);
@@ -199,7 +199,7 @@ const GameSpace = (props) => {
   // }
 
   // useEffect(() =>{
-  //   console.log('players update >>>>>>>>>>>kdjsljds');
+  //   //console.log('players update >>>>>>>>>>>kdjsljds');
   // }, [props.players])
 
   useEffect(() => {
@@ -218,13 +218,10 @@ const GameSpace = (props) => {
           </>
         ),
         onOk() {
-          // restGame();
           props.gameClear();
           props.continueGame({ roomId: props.room.id });
         },
         onCancel() {
-          console.log("leave Room");
-          // props.gameClear();
           props.leaveRoom();
         },
         okText: "Continue",
@@ -253,25 +250,25 @@ const GameSpace = (props) => {
   // const [touchStart, setTouchStart] = useState({ x: 0, y: 0 });
   // const handleTouchEnd = ({ changedTouches }) => {
   //   if (!gameStart) return;
-  //   //console.log("starting");
+  //   ////console.log("starting");
   //   const { clientX, clientY } = changedTouches[0];
   //   const deltaX = clientX - touchStart.x;
   //   const deltaY = clientY - touchStart.y;
-  //   //console.log(deltaX, " ", deltaY);
+  //   ////console.log(deltaX, " ", deltaY);
   //   if (deltaX === deltaY)
   //     moveTetromino(currentStage, currentTetromino, { x: 0, y: -1 });
   //   if (Math.abs(deltaX) > Math.abs(deltaY)) {
   //     if (deltaX > 0) {
-  //       //console.log("right");
+  //       ////console.log("right");
   //       moveTetromino(currentStage, currentTetromino, { x: 1, y: 0 });
   //     } else {
   //       moveTetromino(currentStage, currentTetromino, { x: -1, y: 0 });
-  //       //console.log("left");
+  //       ////console.log("left");
   //     }
   //   } else {
   //     if (deltaY < 0) {
   //       rotateTetromino(currentStage, currentTetromino);
-  //       //console.log("rotate");
+  //       ////console.log("rotate");
   //     }
   //   }
   //   // updateDropTime(500);
@@ -297,7 +294,7 @@ const GameSpace = (props) => {
                   roomId: props.room.id,
                   status: "started",
                 });
-              // gameStart ? console.log("reset Game") : setGameStart(true);
+              // gameStart ? //console.log("reset Game") : setGameStart(true);
               changeFocused();
             }}
           >
@@ -328,7 +325,7 @@ const GameSpace = (props) => {
             type="primary"
             hidden={gameStart}
             onClick={() => {
-              console.log("swithcroom");
+              //console.log("swithcroom");
             }}
           >
             chnage room to public

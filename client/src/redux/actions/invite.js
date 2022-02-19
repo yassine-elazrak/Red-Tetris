@@ -1,14 +1,11 @@
 import socket from "../../socket/Socket";
 import {
-    INVITE_REQUEST,
     INVITE_REMOVE_ALL,
     LOADING_INVITES,
     INVITE_FAILURE,
     UPDATE_PROFILE,
-    INVITE_REFRESH,
     INVITE_SUCCESS,
     INVITE_ACCEPT,
-    INVITE_DECLINE,
     NOTIFICATION_FAILURE,
     ROOM_REFRESH,
 } from '../types';
@@ -28,21 +25,14 @@ export const inviteRequest = (invite) => {
     }
 }
 
-// export const refreshInvite = (data) => {
-//     return (dispatch) => {
-//         dispatch({type: LOADING_INVITES});
-//         dispatch(success(data, INVITE_REQUEST));
-//     }
-// }
-
 export const changeStatusInvite = (data) => {
     return async (dispatch, getState) => {
         try {
             dispatch({type: LOADING_INVITES});
             const io = getState().socket.socket;
-            //console.log(data);
+            ////console.log(data);
             const res = await socket(io, data.event, data);
-            //console.log("res chnage status initation", res);
+            ////console.log("res chnage status initation", res);
             dispatch({type: INVITE_ACCEPT});
             dispatch(success(res.profile, UPDATE_PROFILE));
             res.room && dispatch(success(res.room, ROOM_REFRESH));

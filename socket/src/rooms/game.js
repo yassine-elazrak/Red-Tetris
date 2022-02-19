@@ -28,11 +28,11 @@ class Players {
 
     // clear Map
     clearMap = (player) => {
-        // console.log(player);
+        // //console.log(player);
         player.map = player.map.map(y => y.map(cell =>
             cell[1] === "clear" || cell[1] === "shadow" ? [0, "clear"] : cell
         ))
-        // console.log(player.map);
+        // //console.log(player.map);
     }
 
     // update Map
@@ -87,7 +87,7 @@ class Players {
     moveTetromino = (dir, player) => {
         let { shape, position } = player.currentTetromino;
         if (!this.checkCollision(dir, player.map, position, shape)) {
-            // console.log("playerPosition", player.currentTetromino.position);
+            // //console.log("playerPosition", player.currentTetromino.position);
             player.currentTetromino.position.x += dir.x;
             player.currentTetromino.position.y += dir.y;
             return true;
@@ -112,9 +112,9 @@ class Players {
                     : position.x,
             y: position.y,
         }
-        // console.log(shape, 'shape');
+        // //console.log(shape, 'shape');
         let rotate = shape.map((row, y) =>
-            // console.log(row)
+            // //console.log(row)
             row.map((_, x) => shape[len - x][y])
         )
         if (!this.checkCollision({ x: 0, y: 0 }, player.map, newPositon, rotate)) {
@@ -136,7 +136,7 @@ class Players {
     addWall = (playerId, players, walls) => {
         players.forEach(player => {
             if (player.id !== playerId) {
-                // console.log('wall', player.id, playerId);
+                // //console.log('wall', player.id, playerId);
                 player.currentTetromino.position.y -= walls;
                 let newWalls = Array.from(Array(walls), () =>
                     new Array(STAGE_WIDTH).fill(['W', 'wall'])
@@ -165,7 +165,7 @@ class Players {
 
 
         if (rows) {
-            // console.log('rows', rows, player.id);
+            // //console.log('rows', rows, player.id);
             this.addWall(player.id, players, rows);
             bonus = Math.round((rows / 100) * 4 * 10) * 10;
             player.rows += rows;
@@ -185,15 +185,15 @@ class Players {
         if (winners.length === 1) {
             room.users[indexs[0]].status = 'gameWinner';
             room.status = 'end'
-            console.log('game end');
+            //console.log('game end');
         }
         else if (room.users.length === 1) room.status = 'end'
-        console.log(room, 'game over')
+        //console.log(room, 'game over')
     }
 
     // get action
     action = (a, player, room) => {
-        // console.log(' player => ', player.currentTetromino);
+        // //console.log(' player => ', player.currentTetromino);
         return new Promise((resolve, reject) => {
             if (!['downDown', 'right', 'left', 'rotate', 'down'].includes(a))
                 return reject({ message: "Invalid action" });
@@ -219,7 +219,7 @@ class Players {
             }
             if (player.currentTetromino.position.y <= 0 && player.currentTetromino.collided) {
                 player.status = 'gameOver';
-                console.log('game over <<<<', room);
+                //console.log('game over <<<<', room);
                 this.getWinner(room);
             }
             resolve(player);

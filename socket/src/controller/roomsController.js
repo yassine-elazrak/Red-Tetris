@@ -42,7 +42,7 @@ class RoomController {
             res.users = room.users.map(u => { return (_.pick(u, ['id', 'name', 'status'])) })
             return callback(res, null);
         } catch (error) {
-            console.log(error);
+            //console.log(error);
            return callback(null, error);
         }
     };
@@ -76,7 +76,7 @@ class RoomController {
                 this.io.to(room.ids).emit('updateAllPlayers', allPlayers);
                 let updateProfile = await this.users.userJoin(socket.id, room.id);
                 let game = room.users.find(u => u.id === socket.id)
-                // console.log('update game', game, room.users);
+                // //console.log('update game', game, room.users);
                 this.io.to(socket.id).emit("updateGame", game);
                 this.io.to(socket.id).emit("updateProfile", updateProfile);
                 return callback(resUser, null);
@@ -90,7 +90,7 @@ class RoomController {
             }
 
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             return callback(null, error);
         }
     }
@@ -128,7 +128,7 @@ class RoomController {
             this.io.to(socket.id).emit("updateGame", game);
            return callback(resUsers, null);
         } catch (error) {
-            console.log("error join room =>", error)
+            //console.log("error join room =>", error)
              return callback(null, error);
         }
     };
@@ -173,10 +173,10 @@ class RoomController {
             let roomInfo = _.omit(room, ["invit", "users", "ids", 'nextTetromino']);
             this.io.emit("updateRooms", this.rooms.getRooms());
             ids.length && this.io.to(ids).emit("updateRoom", roomInfo);
-            console.log(oldStatus);
+            //console.log(oldStatus);
             return callback(room, null);
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             return callback(null, error);
         }
     };
@@ -216,7 +216,7 @@ class RoomController {
                     this.io.to(newAdmin.id).emit('updateRoom', updateRoom);
                     let resUses = _.omit(updateRoom, ["invit", "users", "ids", 'nextTetromino']);
                     // update room at users
-                    console.log('ids', ids);
+                    //console.log('ids', ids);
                     ids.length && this.io.to(ids).emit("updateRoom", resUses);
                     // notif new admin he is admin now
                     this.io.to(newAdmin.id).emit("notification", notif);
@@ -233,7 +233,7 @@ class RoomController {
                     ids = ids.filter(id => id !== room.admin);
                     ids.length && this.io.to(ids).emit("updateRoom", roomRes)
                 }
-                // console.log(room);
+                // //console.log(room);
                 let allPlayers = room.users.map(u => _.omit(u, [['nextTetrominos', 'currentTetromino']]))
                 if (room.users.length === 1 && room.status !== "wainting" && room.status !== 'end'){
                     room.status = 'end',
@@ -249,7 +249,7 @@ class RoomController {
             this.io.emit("updateUsers", this.users.getUsers());
             return callback(null, null);
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             return callback(null, error);
         }
     };
@@ -273,7 +273,7 @@ class RoomController {
             idsEmit.length && this.io.to(idsEmit).emit('updateOnePlayer', playersEmit)
             if (room.status === 'end') {
                 this.io.emit("updateRooms", this.rooms.getRooms());
-                console.log('updater', room);
+                //console.log('updater', room);
                 let resUsers = {...room};
                 resUsers.users = room.users.map(u => {
                     return _.pick(u, ['id', 'name', 'status'])
@@ -302,7 +302,7 @@ class RoomController {
             this.io.to(room.admin).emit('updateRoom', room);
             return callback({ game: room.users[userIndex], room }, null);
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             return callback(null, error);
         }
     }

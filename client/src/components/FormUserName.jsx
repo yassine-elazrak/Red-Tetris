@@ -37,19 +37,19 @@ const FormUserName = (props) => {
         if (input.value.length > 2 && !input.error) {
             props.login(input.value);
         }
-        //console.log(input.value);
+        ////console.log(input.value);
     }
 
 
     useEffect(() => {
-        // //console.log(props.profile);
+        // ////console.log(props.profile);
         if (props.profile.error){
             message.error(props.profile.error);
         }
     }, [props.profile.error]);
 
     // useEffect(() => {
-    //     //console.log(socketio, 'socketio');
+    //     ////console.log(socketio, 'socketio');
 
     // }, [io]);
 

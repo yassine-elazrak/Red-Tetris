@@ -32,7 +32,7 @@ const success = (type, action) => {
 }
 
 const filter_players = (players, id) => {
-    console.log(players, id, 'players, id');
+    //console.log(players, id, 'players, id');
     let newPlayers = players.filter(p => p.id !== id);
     return newPlayers;
 }

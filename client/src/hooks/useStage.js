@@ -4,7 +4,7 @@ import { TETROMINOES, randomTetromino } from "../helpers/Tetrominoes";
 import { useInterval } from "./useInterval";
 
 export const useStage = () => {
-  // //console.log("useStage");
+  // ////console.log("useStage");
   // useEffect(() => {
   const [currentStage, setCurrentStage] = useState(InitStage());
   // const [dropRow, setDropRow] = useState(0);
@@ -149,7 +149,7 @@ export const useStage = () => {
     if (rows > 0) {
       score = rows * 10;
       percent = Math.round((rows / 100) * 4 * 10) * 10;
-      //   //console.log(Math.round(((rows / 100) * 4) * 10), 'percent', (rows / 100) * 3);
+      //   ////console.log(Math.round(((rows / 100) * 4) * 10), 'percent', (rows / 100) * 3);
       updateScore((prevScore) => prevScore + score + percent);
       updateRows((prevRows) => prevRows + rows);
     }
@@ -165,7 +165,7 @@ export const useStage = () => {
     tetromino.shape.forEach((row, y) => {
       row.forEach((value, x) => {
         if (value !== 0) {
-          // //console.log(y + tetromino.pos.y + tetromino.shadow, 'shadow');
+          // ////console.log(y + tetromino.pos.y + tetromino.shadow, 'shadow');
           if (y + tetromino.position.y + tetromino.shadow > 0) {
             newStage[y + tetromino.position.y + tetromino.shadow][
               x + tetromino.position.x
@@ -194,7 +194,7 @@ export const useStage = () => {
     while (!checkCollision(stage, tetromino, { x: 0, y: drop })) {
       drop++;
     }
-    // //console.log(drop, "drop");
+    // ////console.log(drop, "drop");
     return drop ? drop - 1 : 0;
   };
 
@@ -232,7 +232,7 @@ export const useStage = () => {
         shape: rotated,
       });
     }
-    //console.log(newTetromino, tetromino, "newTetromino");
+    ////console.log(newTetromino, tetromino, "newTetromino");
   };
 
   const drop = (stage, tetromino) => {

@@ -15,7 +15,7 @@ export const sentMessage = (data) => {
             const res = await socket(io, "sentMessage", data);
             dispatch(success(MESSAGE_SENT_SUCCESS, res));
         } catch (err) {
-            console.log(err);
+            //console.log(err);
             dispatch(error(err));
         }
     }

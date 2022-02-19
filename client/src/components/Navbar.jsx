@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import logD from "../img/logo.svg";
 import logM from "../img/logoMobile.svg";
 
 import NotifComponent from "./Notifications";
 
 import { NavbarStyled, NotifDiv, LogoDesktop, LogoMobile } from './styles/NavBarStyled';
-import { Affix, Dropdown, Menu } from "antd";
+import { Affix} from "antd";
 
 import { connect } from "react-redux";
 // actions
@@ -19,10 +19,10 @@ const NavbarComponent = (props) => {
     const { profile, room } = props;
 
     // useEffect(() => {
-    //     //console.log("props updatedwww");
+    //     ////console.log("props updatedwww");
     //     if (props.socket){
     //         props.socket.socket("/").on("updateProfile", (data) => {
-    //             //console.log(data, "updateProfile");
+    //             ////console.log(data, "updateProfile");
     //         });
     //         return () => {
     //             props.socket.socket("/").off("updateUsers");

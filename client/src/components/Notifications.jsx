@@ -21,7 +21,7 @@ const NotifComponent = (props) => {
     const id = parseInt(split[1]);
     // const id = split[1];
     const action = split[0];
-    // //console.log(action, id , '-------------------');
+    // ////console.log(action, id , '-------------------');
     notifs.forEach((notif, key) => {
       if (id === key) {
         props.changeStatusInvite({
@@ -42,7 +42,7 @@ const NotifComponent = (props) => {
   }, [notifs]);
 
   useEffect(() => {
-    //console.log('-- props profile notif--', props.profile.notif)
+    ////console.log('-- props profile notif--', props.profile.notif)
     setNotifs(props.profile.notif);
   }, [props.profile.notif]);
 
@@ -57,7 +57,7 @@ const NotifComponent = (props) => {
   useEffect(() => {
     if (props.socket.socket) {
       props.socket.socket.socket("/").on("notification", (data) => {
-        //console.log("notification", data);
+        ////console.log("notification", data);
         notification.info({
           message: "New notification",
           description: data.message,
@@ -65,7 +65,7 @@ const NotifComponent = (props) => {
         props.pushNotification(data);
       });
       // props.socket.socket.socket("/").on("updateRoom", data => {
-      //   console.log('update => ', data);
+      //   //console.log('update => ', data);
       // })
       return () => {
         props.socket.socket.socket("/").off("notification");
@@ -74,12 +74,12 @@ const NotifComponent = (props) => {
   }, [props.socket]);
 
   useEffect(() => {
-    //console.log(props.notifications);
+    ////console.log(props.notifications);
     props.notifications.error && message.error(props.notifications.error);
   }, [props.notifications.error]);
 
   const mapnotifs = notifs.map((item, key) => {
-    // //console.log(item, "item");
+    // ////console.log(item, "item");
     return item.type === "invitation" && !item.read ? (
       <SubMenu key={`notif-${key}`} title={item.message}>
         <MenuItemGroup className="ulNotif">

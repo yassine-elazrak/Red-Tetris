@@ -8,7 +8,7 @@ import { Spin } from "antd";
 // import { InitStage } from '../helpers/StageHelper';
 
 export const Players = (props) => {
-  //console.log('Players');
+  ////console.log('Players');
 
   //     id: "tuIA2GVZWK_VIKIQAAAN"
   // map: (20) [Array(10), Array(10), Array(10), Array(10)]
@@ -21,13 +21,13 @@ export const Players = (props) => {
   const [currentPlayers, setCurrentPlayers] = useState([]);
 
   useEffect(() => {
-    console.log('props players', props.players);
+    //console.log('props players', props.players);
     setCurrentPlayers(props.players.players);
   }, [props.players]);
 
 
   useEffect(() => {
-    console.log("update component Players");
+    //console.log("update component Players");
     props.socket.socket("/").on("updateOnePlayer", (data) => {
       props.updateOnePlayer(data)
     });

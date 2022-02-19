@@ -1,5 +1,4 @@
 import socket from "../../socket/Socket";
-import _ from 'lodash';
 import {
   ROOM_CREATE,
   ROOM_JOIN,
@@ -8,15 +7,7 @@ import {
   ROOM_UPDATE_STATUS,
   LOADING_ROOM,
   ROOM_REFRESH,
-  GAME_UPDATE,
 } from "../types";
-
-const game = (data, userId) => {
-  let user = data.find(e => e.id === userId);
-  console.log(user, 'user');
-  let newData = _.pick(user, ['map', 'nextTetromino', 'nextTetrominos', 'scor', 'rows', 'status']);
-  return newData;
-}
 
 export const createRoom = (room) => {
   return async (dispatch, getState) => {
@@ -41,25 +32,21 @@ export const createOrJoinRoom = (room) => {
       const io = getState().socket.socket;
       const res = await socket(io, "createOrJoin", room);
       dispatch(success(res, ROOM_CREATE));
-      const profile = getState().profile;
-      // const gameInfo = game(res.users, profile.id);
-      // console.log(gameInfo);
-      // dispatch(success(gameInfo, GAME_UPDATE));
     } catch (err) {
-      console.log(err);
+      //console.log(err);
       dispatch(error(err, ROOM_ERROR));
     }
   }
 }
 
 export const joinRoom = (roomId) => {
-  // //console.log("joinRoom", roomId);
+  // ////console.log("joinRoom", roomId);
   return async (dispatch, getState) => {
     try {
       dispatch({ type: LOADING_ROOM });
       const io = getState().socket.socket;
       const res = await socket(io, "joinRoom", roomId);
-      //console.log('res join room =>', res);
+      ////console.log('res join room =>', res);
       dispatch(success(res, ROOM_JOIN));
       // const profile = getState().profile;
       // const gameInfo = game(res.users, profile.id);
