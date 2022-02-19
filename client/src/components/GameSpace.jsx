@@ -435,12 +435,11 @@ const GameSpace = (props) => {
           >
             <Spin
             spinning={gameOver || gameWon}
-            tip={props.profile.id !== props.room.admin ? (
-              <p style={{
-                color: 'black',
-                fontSize: 12,
-              }}> Waiting admin close this room</p>
-            ) : null}
+            tip={props.profile.id !== props.room.admin ? "Waiting admin close this room" : null}
+            style={{
+              color: 'black',
+              fontSize: 20,
+            }}
             >
             <Stage stage={userStage} />
             </Spin>
@@ -454,8 +453,7 @@ const GameSpace = (props) => {
         breakpoint="lg"
         reverseArrow={true}
         collapsed={collapsedChat}
-        onCollapse={(collapsed, type) => {
-          // console.log(collapsed, type);
+        onCollapse={collapsed => {
           setCollapsedChat(collapsed);
           window.innerWidth <= 350 && setTriggerPlayers(collapsed);
         }}

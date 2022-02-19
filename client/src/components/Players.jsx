@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { CreateStage } from "../helpers/StageHelper";
 import { UsersStage, SliderMaps } from "./styles/UsersStage";
 import { updateOnePlayer } from "../redux/actions";
+import { Spin } from "antd";
 // import { InitStage } from '../helpers/StageHelper';
 
 export const Players = (props) => {
@@ -62,9 +63,19 @@ export const Players = (props) => {
             <span>{`S: ${p.scor}`}</span>
             <span>{`R: ${p.rows}`}</span>
           </div>
+          <Spin
+          spinning={!p.status ? false : true}
+          indicator={null}
+          tip={p.status}
+          style={{
+            color: p.status === 'gameOver' ? 'red' : p.status === 'continue' ? 'black' : '#02FD3E',
+            fontSize: 20,
+          }}
+          >
           <SliderMaps x={p.map[0].length} y={p.map.length}>
             {CreateStage(p.map)}
           </SliderMaps>
+          </Spin>
         </div>
       );
     });

@@ -274,6 +274,8 @@ class RoomController {
                 resUsers = _.omit(room, ["invit", "users", "ids", 'nextTetromino']);
                 ids.length && this.io.to(ids).emit('updateRoom', resUsers);
                 let winner = room.users.find(u => u.status === 'gameWinner')
+                idsEmit = idsEmit.filter(i => i !== winner.id);
+                idsEmit.length && this.io.to(idsEmit).emit("updateOnePlayer", winner);
                 winner && this.io.to(winner.id).emit('updateGame', winner);
             }
             callback(updateSpacePlayer, null);
