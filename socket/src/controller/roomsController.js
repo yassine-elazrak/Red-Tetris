@@ -232,8 +232,16 @@ class RoomController {
                     ids = ids.filter(id => id !== room.admin);
                     ids.length && this.io.to(ids).emit("updateRoom", roomRes)
                 }
-                console.log(room);
+                // console.log(room);
                 let allPlayers = room.users.map(u => _.omit(u, [['nextTetrominos', 'currentTetromino']]))
+                if (room.users.length === 1 && room.status !== "wainting" && room.status !== 'end'){
+                    room.status = 'end',
+                    room.users[0].status = 'gameWinner'
+                    let game = room.users[0];
+                    this.io.to(room.users[0].id).emit('updateGame', game)
+                    this.io.to(room.users[0].id).emit('updateRoom', room);
+                    this.io.emit('updateRooms', this.rooms.getRooms());
+                }
                 this.io.to(room.ids).emit('updateAllPlayers', allPlayers);
             }
             this.io.to(user.id).emit("updateProfile", user);
