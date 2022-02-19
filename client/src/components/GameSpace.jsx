@@ -24,7 +24,6 @@ import {
   gameActions,
   continueGame,
   gameClear,
-  updatePlayers,
   clearPlayers,
 } from "../redux/actions";
 
@@ -497,6 +496,5 @@ export default connect(mapStateToProps, {
   gameActions,
   continueGame,
   gameClear,
-  updatePlayers,
   clearPlayers,
 })(GameSpace);

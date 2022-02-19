@@ -211,7 +211,7 @@ class Rooms {
       let userIndex = this.rooms[roomIndex].users.findIndex((user) => user.id === userId);
       if (userIndex === -1) return reject({ message: "User is not joined" });
       this.rooms[roomIndex].users.splice(userIndex, 1);
-      this.rooms[roomIndex].ids.filter((id) => id !== userId);
+      this.rooms[roomIndex].ids = this.rooms[roomIndex].ids.filter((id) => id !== userId);
       return resolve(this.rooms[roomIndex]);
     });
   };

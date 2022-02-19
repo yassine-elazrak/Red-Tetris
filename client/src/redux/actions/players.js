@@ -1,12 +1,20 @@
 import {
-    UPDATE_PLAYERS,
     CLEAR_PLAYERS,
+    UPDATE_ALL_PLAYERS,
+    UPDATE_ONE_PLAYER,
 } from '../types'
 
-
-export const updatePlayers = (data) => {
+export const updateOnePlayer = (data) => {
     return (dispatch) => {
-        dispatch(success(UPDATE_PLAYERS, data));
+        dispatch(success(UPDATE_ONE_PLAYER, data));
+    }
+}
+
+export const updateAllPlayers = (data) => {
+    return (dispatch, getState) => {
+        let profile = getState().profile
+        let filterPlayers = filter_players(data, profile.id);
+        dispatch(success(UPDATE_ALL_PLAYERS, filterPlayers));
     }
 }
 
@@ -21,4 +29,10 @@ const success = (type, action) => {
         type,
         payload: action,
     }
+}
+
+const filter_players = (players, id) => {
+    console.log(players, id, 'players, id');
+    let newPlayers = players.filter(p => p.id !== id);
+    return newPlayers;
 }

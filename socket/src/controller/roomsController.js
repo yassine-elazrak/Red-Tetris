@@ -76,6 +76,8 @@ class RoomController {
                 // resUser.users = room.users.map(u => { return _.pick(u, ['id','name', 'status'])})
                 // ids.length && this.io.to(ids).emit("updateRoom", resUser);
                 // update palyers
+                let allPlayers = room.users.map(u => _.omit(u, ['nextTetrominos', 'currentTetromino']));
+                this.io.to(room.ids).emit('updateAllPlayers', allPlayers);
                 let updateProfile = await this.users.userJoin(socket.id, room.id);
                 let game = room.users.find(u => u.id === socket)
                 this.io.to(socket.id).emit("updateGame", game);
@@ -124,16 +126,10 @@ class RoomController {
             this.io.to(user.id).emit("updateProfile", updateProfile);
             this.io.to(room.admin).emit("updateRoom", room)
             let resUsers = _.omit(room, ["invit", "users", "ids", 'nextTetromino']);
-            // resUsers.users = room.users.map(u => {return _.pick(u, ['id','name', 'status'])});
-            // ids.length && this.io.to(ids).emit("updateRoom", resUsers);
-            // update players
-            // let plyaers = room.users.map(u => {
-            //     return ( _.omit(u, ['nextTetrominos', 'currentTetromino']))
-            // })
-            // this.io.to(socket.id).emit("updatePlayers", plyaers);
-            let newPlayer = room.users.find(u => u.id === socket.id)
-            newPlayer = _.omit(newPlayer, ['nextTetrominos', 'currentTetromino']);
-            this.io.to(room.ids).emit("updatePlayers", newPlayer);
+            // let newPlayer = room.users.find(u => u.id === socket.id)
+            // newPlayer = _.omit(newPlayer, ['nextTetrominos', 'currentTetromino']);
+            let allPlayers = room.users.map(u => _.omit(u, ['nextTetrominos', 'currentTetromino']))
+            this.io.to(room.ids).emit("updateAllPlayers", allPlayers);
             let game = room.users.find(u => u.id === socket.id)
             this.io.to(socket.id).emit("updateGame", game);
             if (typeof callback === "function") return callback(resUsers, null);
@@ -170,6 +166,8 @@ class RoomController {
                         this.io.to(id).emit('leaveRoom', user);
                     }
                 });
+                let allPlayers = room.users.map(u => _.omit(u, ['nextTetrominos', 'currentTetromino']))
+                this.io.to(room.ids).emit("updateAllPlayers", allPlayers);
             }
             let ids = room.ids.filter(id => id !== socket.id);
             let admin = room.users.find((user) => user.id === room.admin);
@@ -204,8 +202,8 @@ class RoomController {
                 await this.rooms.deleteRoom(roomId);
                 this.io.emit("updateRooms", this.rooms.getRooms());
             } else {
-                let ids = room.users.map(e => e.id);
-                // console.log("ids after leave room => ", ids);
+                // let ids = room.users.map(e => e.id);
+                let ids = room.ids;
                 if (room.admin === socket.id) {
                     let updateRoom = this.rooms.switchAdmin(room.id);
                     let newAdmin = updateRoom.users.find(
@@ -239,16 +237,19 @@ class RoomController {
                     // nitif all users is a user leave room
                     this.io.to([...ids, room.admin]).emit("notification", notif);
                     this.io.to(room.admin).emit("updateRoom", room);
-                    room = _.omit(room, ["invit", "users", "ids", 'nextTetromino']);
+                    let roomRes = _.omit(room, ["invit", "users", "ids", 'nextTetromino']);
                     ids = ids.filter(id => id !== room.admin);
-                    console.log('ids2', ids);
-                    ids.length && this.io.to(ids).emit("updateRoom", room)
+                    ids.length && this.io.to(ids).emit("updateRoom", roomRes)
                 }
+                console.log(room);
+                let allPlayers = room.users.map(u => _.omit(u, [['nextTetrominos', 'currentTetromino']]))
+                this.io.to(room.ids).emit('updateAllPlayers', allPlayers);
             }
             this.io.to(user.id).emit("updateProfile", user);
             this.io.emit("updateUsers", this.users.getUsers());
             if (typeof callback === "function") callback(null, null);
         } catch (error) {
+            console.log(error);
             if (typeof callback === "function") callback(null, error);
         }
     };
@@ -269,7 +270,7 @@ class RoomController {
             // players
             let playersEmit = _.omit(updateSpacePlayer, ['nextTetrominos', 'currentTetromino'])
             let idsEmit = room.ids.filter(id => id !== socket.id);
-            idsEmit.length && this.io.to(idsEmit).emit('updatePlayers', playersEmit)
+            idsEmit.length && this.io.to(idsEmit).emit('updateOnePlayer', playersEmit)
             if (room.status === 'end') {
                 this.io.emit("updateRooms", this.rooms.getRooms());
                 console.log('updater', room);

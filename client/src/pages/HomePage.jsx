@@ -24,7 +24,7 @@ import {
   clearRoom,
   gameClear,
   updateGame,
-  updatePlayers,
+  updateAllPlayers,
 } from "../redux/actions";
 
 import "./styles/HeaderStyled.css";
@@ -97,9 +97,10 @@ const HomePage = (props) => {
         console.log('update Game <<<<<<<<<<>>>>>>>>', data);
         props.updateGame(data);
       })
-      // props.socket.socket.socket('/').on("updatePlayers", data =>{
-      //   props.updatePlayers(data);
-      // })
+      props.socket.socket.socket('/').on("updateAllPlayers", data =>{
+        console.log('all Players ====>', data);
+        props.updateAllPlayers(data)
+      })
       props.socket.socket.socket('/').on("leaveRoom", data => {
         props.gameClear();
         props.clearRoom();
@@ -111,7 +112,7 @@ const HomePage = (props) => {
         props.socket.socket.socket("/").off("updateRoom");
         props.socket.socket.socket("/").off("leaveRoom");
         props.socket.socket.socket("/").off("updateGame");
-        // props.socket.socket.socket("/").off("updatePlayers");
+        props.socket.socket.socket("/").off("updateAllPlayers");
       };
     }
     if (props.socket.error) {
@@ -322,5 +323,5 @@ export default connect(mapStateToProps, {
   clearRoom,
   gameClear,
   updateGame,
-  updatePlayers,
+  updateAllPlayers,
 })(HomePage);

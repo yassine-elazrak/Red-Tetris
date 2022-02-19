@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import { CreateStage } from "../helpers/StageHelper";
 import { UsersStage, SliderMaps } from "./styles/UsersStage";
-import { updatePlayers } from "../redux/actions";
+import { updateOnePlayer } from "../redux/actions";
 // import { InitStage } from '../helpers/StageHelper';
 
 export const Players = (props) => {
@@ -27,12 +27,12 @@ export const Players = (props) => {
 
   useEffect(() => {
     console.log("update component Players");
-    props.socket.socket("/").on("updatePlayers", (data) => {
-      props.updatePlayers(data);
+    props.socket.socket("/").on("updateOnePlayer", (data) => {
+      props.updateOnePlayer(data)
     });
 
     return () => {
-      props.socket.socket("/").off("updatePlayers");
+      props.socket.socket("/").off("updateOnePlayer");
     };
   }, []);
 
@@ -81,5 +81,5 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, {
-  updatePlayers,
+  updateOnePlayer,
 })(Players);

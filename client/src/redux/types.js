@@ -78,8 +78,9 @@ export const GAME_LOADING = "GAME_LOADING";
 export const GAME_CLEAR = "GAME_CLEARE";
 
 // Players Actions
-export const UPDATE_PLAYERS = "UPDATE_PLAYERS";
+export const UPDATE_ONE_PLAYER = "UPDATE_ONE_PLAYER";
 export const CLEAR_PLAYERS = "CLEAR_PLAYERS";
+export const UPDATE_ALL_PLAYERS = "UPDATE_ALL_PLAYERS"
 
 
 
