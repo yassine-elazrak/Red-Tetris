@@ -25,6 +25,7 @@ import {
   continueGame,
   gameClear,
   clearPlayers,
+  updateRoomToPublic
 } from "../redux/actions";
 
 // import { useStage } from "../hooks/useStage";
@@ -327,12 +328,13 @@ const GameSpace = (props) => {
         {/* {(gameWon || gameOver) && (
           <Spin />
         )} */}
-        {props.room.isPravite && (
+        {props.room.isPrivate && (
           <Button
             type="primary"
             hidden={gameStart}
             onClick={() => {
               //console.log("swithcroom");
+              props.updateRoomToPublic({ roomId: props.room.id });
             }}
           >
             chnage room to public
@@ -356,6 +358,7 @@ const GameSpace = (props) => {
         background: "none",
       }}
     >
+      {!props.room.isPrivate && (
       <Sider
         collapsedWidth={0}
         width={280}
@@ -383,6 +386,7 @@ const GameSpace = (props) => {
       >
         <Players />
       </Sider>
+      )}
       <Content
         id="game-space"
         role="button"
@@ -397,6 +401,7 @@ const GameSpace = (props) => {
           // });
         }}
         onTouchEnd={(e) => {
+          console.log(e)
           // handleTouchEnd(e);
         }}
         style={{
@@ -455,6 +460,7 @@ const GameSpace = (props) => {
           </Col>
         </Row>
       </Content>
+      {!props.room.isPrivate && (
       <Sider
         collapsedWidth={0}
         width={280}
@@ -486,6 +492,7 @@ const GameSpace = (props) => {
       >
         <Message />
       </Sider>
+      )}
     </Layout>
   );
 };
@@ -512,4 +519,5 @@ export default connect(mapStateToProps, {
   continueGame,
   gameClear,
   clearPlayers,
+  updateRoomToPublic,
 })(GameSpace);

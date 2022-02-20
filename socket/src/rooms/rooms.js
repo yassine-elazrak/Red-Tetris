@@ -25,7 +25,7 @@ class Rooms {
   }
 
   getRooms = () => {
-    let rooms = this.rooms.filter((room) => room.isPravite === false);
+    let rooms = this.rooms.filter((room) => room.isPrivate === false);
     return rooms;
   };
 
@@ -94,8 +94,8 @@ class Rooms {
         id: Math.random().toString(36).substr(2) + Date.now().toString(36),
         name: trimName,
         admin: user.id,
-        isPravite: data.isPravite,
-        status: data.isPravite ? "closed" : "waiting",
+        isPrivate: data.isPrivate,
+        status: data.isPrivate ? "closed" : "waiting",
         nextTetromino,
         ids: [user.id],
         users: [this.newUser(user.id, user.name, nextTetromino)],

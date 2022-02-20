@@ -181,6 +181,22 @@ class RoomController {
         }
     };
 
+    changeRoomToPublic = (socket) => async (data, callback) => {
+        try{
+            console.log('change room to public',data.roomId);
+            let room = await this.rooms.getRoom(data.roomId);
+            if (room.admin !== socket.id) return callback(null, { message: "You are not admin" });
+            room.isPrivate = false;
+            room.status = 'waiting';
+            console.log(room)
+            this.io.emit("updateRooms", this.rooms.getRooms());
+            return callback(room, null);
+        }catch(error){
+            console.log(error);
+            return callback(null, error);
+        }
+    }
+
     /**
      * @description create new room
      * @param {string} socket.id - socket id
@@ -250,7 +266,7 @@ class RoomController {
             this.io.emit("updateUsers", this.users.getUsers());
             return callback(null, null);
         } catch (error) {
-            //console.log(error);
+            console.log(error);
             return callback(null, error);
         }
     };
@@ -316,7 +332,7 @@ class RoomController {
         try {
             let allRooms = this.rooms.getRooms()
                 .map(e => {
-                    return _.pick(e, ['id', 'name', 'isPravite', 'admin', 'status']);
+                    return _.pick(e, ['id', 'name', 'isPrivate', 'admin', 'status']);
                 });
             callback(allRooms, null);
         } catch (error) {

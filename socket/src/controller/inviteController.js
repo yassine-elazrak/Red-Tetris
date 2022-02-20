@@ -83,7 +83,6 @@ class InviteController {
                     read: true,
                 }
                 let userIds = room.users.map(e => e.id).filter(id => id !== user.id && id !== room.admin);
-                ////console.log("userIds2 =>", userIds);
                 userIds.length && this.io.to(userIds).emit("notification", notifUsers);
                 roomInfo = _.omit(room, ["invit", "users", "ids", 'nextTetromino']);
                 let game = room.users.find(u => u.id === socket.id);
@@ -94,10 +93,8 @@ class InviteController {
             }
             this.io.to(room.admin).emit("updateRoom", room);
             this.io.to(room.admin).emit("notification", notifAdmin);
-            ////console.log("room => ", room);
             return callback({ profile: user, room: roomInfo }, null);
         } catch (error) {
-            ////console.log(error);
             return callback(null, error);
         }
     }

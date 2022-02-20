@@ -11,7 +11,7 @@ import {
 const initialState = {
     isLoading: false,
     error: null,
-    isPravite: false,
+    isPrivate: false,
     admin: null,
     status: '',
     id: null,

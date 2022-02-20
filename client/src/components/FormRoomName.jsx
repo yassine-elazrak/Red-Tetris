@@ -23,7 +23,7 @@ const FormRoomName = (props) => {
     e.preventDefault();
     const data = {
       roomName: input.value,
-      isPravite: !checked,
+      isPrivate: !checked,
       userId: props.profile.id,
     };
     input.value.length > 2
@@ -52,7 +52,7 @@ const FormRoomName = (props) => {
           onOk() {
             let data = {
               roomName: input.value,
-              isPravite: true,
+              isPrivate: true,
               userId: profile.id,
             };
             createOrJoinRoom(data);

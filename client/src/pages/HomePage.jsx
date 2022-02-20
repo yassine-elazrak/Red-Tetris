@@ -70,7 +70,7 @@ const HomePage = (props) => {
       ////console.log('don1');
       let roomInfo = {
         roomName: hashUrl.room,
-        isPravite: false,
+        isPrivate: true,
         userId: profile.id,
       };
       setHashUrl({
@@ -240,7 +240,7 @@ const HomePage = (props) => {
             <FormUserName />
           ) : !room.name ? (
             <FormRoomName />
-          ) : !room.isPravite &&
+          ) : !room.isPrivate &&
             (room.status === "waiting" || (props.game.status === 'continue' && room.status === 'end')) &&
             profile.id === room.admin ? (
             <InviteUsers />

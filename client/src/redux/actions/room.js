@@ -90,8 +90,21 @@ export const changeStatusRoom = (data) => {
   };
 };
 
+export const updateRoomToPublic = (data) => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch({ type: LOADING_ROOM });
+      const io = getState().socket.socket;
+      const res = await socket(io, "changeRoomToPublid", data);
+      dispatch(success(res, ROOM_REFRESH));
+    } catch (err) {
+      dispatch(error(err, ROOM_ERROR));
+    }
+  }
+}
+
 export const refreshRoom = (room) => {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     dispatch({ type: LOADING_ROOM });
     // const profile = getState().profile;
     // const gameInfo = game(room.users, profile.id);
