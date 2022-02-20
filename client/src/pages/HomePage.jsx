@@ -32,7 +32,7 @@ import "./styles/HeaderStyled.css";
 const { Header, Content, Footer, Sider } = Layout;
 
 const HomePage = (props) => {
-  const { profile, room, refreshRooms } = props;
+  const { profile, room, refreshRooms, login } = props;
   const [hash, setHash] = useState({
     name: null,
     room: null,
@@ -61,9 +61,9 @@ const HomePage = (props) => {
     if (hash.error) message.error(hash.error);
     else if (hash.name && hash.room) {
       ////console.log("login by url-hash", hash);
-      props.login(hash.name);
+      login(hash.name);
     }
-  }, [hash]);
+  }, [hash, login]);
 
   useEffect(() => {
     if (props.profile.isAuth && !props.profile.isJoined && !hash.error && hash.room) {

@@ -40,27 +40,29 @@ const FormRoomName = (props) => {
     }
   };
 
+  const {room, profile, createOrJoinRoom} = props;
+
   useEffect(() => {
-    if (props.room.error) {
-      if (props.room.error === "Room is already exists do you want to join") {
+    if (room.error) {
+      if (room.error === "Room is already exists do you want to join") {
         Modal.confirm({
-          title: props.room.error,
+          title: room.error,
           cancelText: "No",
           okText: "Yes",
           onOk() {
             let data = {
               roomName: input.value,
-              isPravite: !checked,
-              userId: props.profile.id,
+              isPravite: true,
+              userId: profile.id,
             };
-            props.createOrJoinRoom(data);
+            createOrJoinRoom(data);
             //console.log("click ok");
           },
           onCancel() {},
         });
-      } else message.error(props.room.error);
+      } else message.error(room.error);
     }
-  }, [props.room.error]);
+  }, [room, profile.id, createOrJoinRoom, input.value]);
 
   return (
     <Form
