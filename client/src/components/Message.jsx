@@ -31,16 +31,20 @@ const Message = (props) => {
     form.resetFields();
   };
 
+  const { clearMessages, receiveMessage, socket } = props;
+
   useEffect(() => {
-    props.clearMessages();
-    props.socket.socket("/").on("message", (data) => {
-      props.receiveMessage(data);
-      //console.log(data);
-    });
-    return () => {
-      props.socket.socket("/").off("message");
-    };
-  }, []);
+    clearMessages();
+    if (socket) {
+      socket.socket("/").on("message", (data) => {
+        receiveMessage(data);
+        //console.log(data);
+      });
+      return () => {
+        socket.socket("/").off("message");
+      };
+    }
+  }, [socket, clearMessages, receiveMessage]);
 
   useEffect(() => {
     if (props.messenger.error) message.error(props.messenger.error);
@@ -91,23 +95,23 @@ const Message = (props) => {
     <>
       {MessageSide()}
       <Form onFinish={handleSubmit}
-      form={form}
+        form={form}
       >
-       <Form.Item
+        <Form.Item
           name="message"
-         rules={[
-          () => ({
-            validator(_, value) {
-              if (!value || value.trim().length < 3) {
-                setInputError(true);
-                return Promise.reject(new Error('Please enter  at least 3 characters long!'));
-              }
-              setInputError(false);
-              return Promise.resolve();
-            },
-          })
-         ]}
-      >
+          rules={[
+            () => ({
+              validator(_, value) {
+                if (!value || value.trim().length < 3) {
+                  setInputError(true);
+                  return Promise.reject(new Error('Please enter  at least 3 characters long!'));
+                }
+                setInputError(false);
+                return Promise.resolve();
+              },
+            })
+          ]}
+        >
           <Input
             allowClear={true}
             style={{
@@ -124,7 +128,7 @@ const Message = (props) => {
               </Button>
             }
           />
-      </Form.Item>
+        </Form.Item>
       </Form>
     </>
   );
