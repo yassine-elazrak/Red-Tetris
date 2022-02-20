@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Layout, message, Button, List, Tooltip} from "antd";
+import { Layout, message, Button, List, Tooltip } from "antd";
 
 import Nabar from "../components/Navbar";
 import FooterComponent from "../components/Footer";
@@ -32,7 +32,7 @@ import "./styles/HeaderStyled.css";
 const { Header, Content, Footer, Sider } = Layout;
 
 const HomePage = (props) => {
-  const { profile, room} = props;
+  const { profile, room, refreshRooms } = props;
   const [hash, setHash] = useState({
     name: null,
     room: null,
@@ -42,14 +42,15 @@ const HomePage = (props) => {
   const [tooltipVisible, setTooltipVisible] = useState(true);
   const [rooms, setRooms] = useState([]);
 
+
   useEffect(() => {
-    if (props.profile.isAuth && !props.profile.isJoined) {
+    if (profile.isAuth && !profile.isJoined) {
       setTimeout(() => {
         setTooltipVisible(false);
       }, 3000);
-      props.refreshRooms();
+      refreshRooms();
     } else setCollapsed(true);
-  }, [props.profile]);
+  }, [profile, refreshRooms]);
 
   useEffect(() => {
     setRooms(props.rooms.rooms);
@@ -97,7 +98,7 @@ const HomePage = (props) => {
         //console.log('update Game <<<<<<<<<<>>>>>>>>', data);
         props.updateGame(data);
       })
-      props.socket.socket.socket('/').on("updateAllPlayers", data =>{
+      props.socket.socket.socket('/').on("updateAllPlayers", data => {
         //console.log('all Players ====>', data);
         props.updateAllPlayers(data)
       })
