@@ -52,13 +52,13 @@ const InviteUsers = (props) => {
     e.preventDefault();
     input.value.length > 2
       ? setInput({
-          ...input,
-          error: false,
-        })
+        ...input,
+        error: false,
+      })
       : setInput({
-          ...input,
-          error: true,
-        });
+        ...input,
+        error: true,
+      });
     if (input.error || !input.id) return;
     // ////console.log(input.id, props.room.id, "input.value");
     props.inviteRequest({
@@ -78,7 +78,7 @@ const InviteUsers = (props) => {
   }, [props.invite.error]);
 
   useEffect(() => {
-    if (props.room.error){
+    if (props.room.error) {
       message.error(props.room.error)
       return;
     }
@@ -111,17 +111,21 @@ const InviteUsers = (props) => {
   //   props.room.error && message.error(props.room.error);
   // }, [props.room.error]);
 
+  const { socket, onlineUsersUpdate, onlineUsers } = props;
+
   useEffect(() => {
-    props.socket.socket("/").on("updateUsers", (data) => {
-      props.onlineUsersUpdate(data);
-    });
+    if (socket) {
+      socket.socket("/").on("updateUsers", (data) => {
+        onlineUsersUpdate(data);
+      });
 
-    props.onlineUsers();
+      onlineUsers();
 
-    return () => {
-      props.socket.socket("/").off("updateUsers");
-    };
-  }, []);
+      return () => {
+        socket.socket("/").off("updateUsers");
+      };
+    }
+  }, [socket, onlineUsersUpdate, onlineUsers]);
 
   const handleSelect = (id) => {
     const value = dataSource.filter((item) => item.id === id);
@@ -148,7 +152,7 @@ const InviteUsers = (props) => {
   const options = dataSource.map((item) => {
     return (
       item.id !== props.profile.id &&
-      !item.inveted && (
+      !inveted.find(i => i.userId === item.id) && (
         <Option key={item.id} value={item.id} disabled={item.isJoined}>
           {item.value}
           <span
@@ -249,8 +253,8 @@ const InviteUsers = (props) => {
                   invite.status === "accepted"
                     ? "#6FCF97"
                     : invite.status === "waiting"
-                    ? gold.primary
-                    : red[4],
+                      ? gold.primary
+                      : red[4],
                 padding: "5px",
                 borderRadius: "5px",
                 margin: "5px",
@@ -267,7 +271,7 @@ const InviteUsers = (props) => {
   const UsersInRoom = () => {
     //console.log('get users room >>>>>>>>>>>>');
     return usersRoom.map((user, key) => {
-     return (
+      return (
         <div
           key={key}
           style={{
@@ -318,7 +322,7 @@ const InviteUsers = (props) => {
         </Button>,
         <Button
           type="primary"
-          onClick={() => props.changeStatusRoom({roomId: props.room.id, status: "closed"})}
+          onClick={() => props.changeStatusRoom({ roomId: props.room.id, status: "closed" })}
           style={{
             display: "flex",
             margin: "auto",
