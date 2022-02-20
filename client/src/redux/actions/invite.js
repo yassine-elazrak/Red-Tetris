@@ -7,6 +7,7 @@ import {
     INVITE_SUCCESS,
     INVITE_ACCEPT,
     NOTIFICATION_FAILURE,
+    NOTIFICATION_LOADING,
     ROOM_REFRESH,
 } from '../types';
 
@@ -37,6 +38,7 @@ export const changeStatusInvite = (data) => {
             dispatch(success(res.profile, UPDATE_PROFILE));
             res.room && dispatch(success(res.room, ROOM_REFRESH));
         } catch (err) {
+            dispatch({type: NOTIFICATION_LOADING});
             dispatch(error(err, NOTIFICATION_FAILURE));
         }
     }

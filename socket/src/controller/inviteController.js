@@ -55,6 +55,7 @@ class InviteController {
         try {
 
             let user = await this.users.getUser(socket.id);
+            if (user.isJoined && status === 'accepted') return callback(null, {message: 'You are already joined to room'});
             let notifIndex = user.notif.findIndex((item) => item.id === data.notifId);
             if (notifIndex === -1) return callback(null, { message: "Notification not found" });
             if (user.notif[notifIndex].type !== "invitation") return callback(null, { message: "Notification is not invitation" });
