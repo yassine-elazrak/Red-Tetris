@@ -90,7 +90,7 @@ class RoomController {
             }
 
         } catch (error) {
-            //console.log(error);
+            console.log(error);
             return callback(null, error);
         }
     }

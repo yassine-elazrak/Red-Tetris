@@ -54,24 +54,26 @@ const NotifComponent = (props) => {
   // roomId: "832NhjV0cGTWFo3-AAAJ"
   // roomName: "das"
 
+  const { socket, pushNotification } = props;
+
   useEffect(() => {
-    if (props.socket.socket) {
-      props.socket.socket.socket("/").on("notification", (data) => {
+    if (socket.socket) {
+      socket.socket.socket("/").on("notification", (data) => {
         ////console.log("notification", data);
         notification.info({
           message: "New notification",
           description: data.message,
         });
-        props.pushNotification(data);
+        pushNotification(data);
       });
       // props.socket.socket.socket("/").on("updateRoom", data => {
       //   //console.log('update => ', data);
       // })
       return () => {
-        props.socket.socket.socket("/").off("notification");
+        socket.socket.socket("/").off("notification");
       };
     }
-  }, [props.socket]);
+  }, [socket, pushNotification]);
 
   useEffect(() => {
     ////console.log(props.notifications);
