@@ -92,18 +92,18 @@ const InviteUsers = (props) => {
   }, [usersRoom])
 
   useEffect(() => {
-    const data = dataSource.map((user) => {
-      return {
-        ...user,
-        inveted: props.room.invit.find(
-          (invited) => invited.userId === user.id
-        )
-          ? true
-          : false,
-      };
-    });
+    // const data = dataSource.map((user) => {
+    //   return {
+    //     ...user,
+    //     inveted: props.room.invit.find(
+    //       (invited) => invited.userId === user.id
+    //     )
+    //       ? true
+    //       : false,
+    //   };
+    // });
 
-    setDataSource(data);
+    // setDataSource(data);
     setInveted(props.room.invit);
   }, [props.room.invit]);
 

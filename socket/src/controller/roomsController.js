@@ -235,7 +235,8 @@ class RoomController {
                 }
                 // //console.log(room);
                 let allPlayers = room.users.map(u => _.omit(u, [['nextTetrominos', 'currentTetromino']]))
-                if (room.users.length === 1 && room.status !== "wainting" && room.status !== 'end'){
+                if (room.users.length === 1 && room.status !== "waiting" && room.status !== 'end'){
+                    // console.log(room.status)
                     room.status = 'end',
                     room.users[0].status = 'gameWinner'
                     let game = room.users[0];
