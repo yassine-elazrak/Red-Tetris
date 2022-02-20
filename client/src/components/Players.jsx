@@ -25,17 +25,21 @@ export const Players = (props) => {
     setCurrentPlayers(props.players.players);
   }, [props.players]);
 
+  const {socket, updateOnePlayer} = props;
+
 
   useEffect(() => {
     //console.log("update component Players");
-    props.socket.socket("/").on("updateOnePlayer", (data) => {
-      props.updateOnePlayer(data)
-    });
+    if (socket) {
+      socket.socket("/").on("updateOnePlayer", (data) => {
+        updateOnePlayer(data)
+      });
 
-    return () => {
-      props.socket.socket("/").off("updateOnePlayer");
-    };
-  }, []);
+      return () => {
+        socket.socket("/").off("updateOnePlayer");
+      };
+    }
+  }, [socket, updateOnePlayer]);
 
   const lisMaps = () => {
     return currentPlayers.map((p, key) => {
@@ -64,17 +68,17 @@ export const Players = (props) => {
             <span>{`R: ${p.rows}`}</span>
           </div>
           <Spin
-          spinning={!p.status ? false : true}
-          indicator={null}
-          tip={p.status}
-          style={{
-            color: p.status === 'gameOver' ? 'red' : p.status === 'continue' ? 'black' : '#02FD3E',
-            fontSize: 20,
-          }}
+            spinning={!p.status ? false : true}
+            indicator={null}
+            tip={p.status}
+            style={{
+              color: p.status === 'gameOver' ? 'red' : p.status === 'continue' ? 'black' : '#02FD3E',
+              fontSize: 20,
+            }}
           >
-          <SliderMaps x={p.map[0].length} y={p.map.length}>
-            {CreateStage(p.map)}
-          </SliderMaps>
+            <SliderMaps x={p.map[0].length} y={p.map.length}>
+              {CreateStage(p.map)}
+            </SliderMaps>
           </Spin>
         </div>
       );
