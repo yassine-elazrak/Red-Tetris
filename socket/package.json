@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "nodemon src/app.js  --trace-warnings"
   },
   "keywords": [],
@@ -16,5 +16,9 @@
     "moment": "^2.29.1",
     "nodemon": "^2.0.15",
     "socket.io": "^4.4.1"
+  },
+  "devDependencies": {
+    "jest": "^27.5.1",
+    "socket.io-client": "^4.4.1"
   }
 }

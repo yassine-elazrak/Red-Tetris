@@ -19,13 +19,15 @@ class AuthController {
      * @param {function} callback - (res, err)
      */
     login = (socket) => async (data, callback) => {
-        ////console.log(`User ${socket.id} is trying to login`);
+        //console.log(`User ${socket.id} is trying to login`);
         try {
+            if (!data) return callback(null, { message: "Data is empty" });
             let res = await this.users.login(socket.id, data);
             socket.join('online');
             this.io.in('online').emit("updateUsers", this.users.getUsers());
             if (typeof callback === "function") callback(res, null);
         } catch (error) {
+            console.log(error);
             if (typeof callback === "function") callback(null, error);
         }
     };

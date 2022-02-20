@@ -38,7 +38,7 @@ class App {
 
 
     this.io.on("connection", (socket) => {
-      ////console.log(`User connected: ${socket.id}`);
+      console.log(`User connected: ${socket.id}`);
       socket.use(AuthMiddleware.auth(socket));
 
       /********************** Auth ************************************/

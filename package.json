@@ -6,7 +6,8 @@
     "server": "npm run start --prefix server/",
     "client": "npm start --prefix client/",
     "socket": "npm start --prefix socket/",
-    "build": "npm run build --prefix client/"
+    "build": "npm run build --prefix client/",
+    "testSocket" : "npm run test --prefix socket/"
   },
   "rules": {
     "react/react-in-jsx-scope": "off"
