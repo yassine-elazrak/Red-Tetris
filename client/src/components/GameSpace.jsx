@@ -87,6 +87,10 @@ const GameSpace = (props) => {
     setNextTetromino(props.game.nextTetrominos[0]);
     if (props.game.status === "gameOver") setGameOver(true);
     else if (props.game.status === "gameWinner") setGameWon(true);
+    else {
+      setGameOver(false);
+      setGameWon(false);
+    }
     //console.log(props.game.status);
   }, [props.game]);
 
@@ -201,16 +205,18 @@ const GameSpace = (props) => {
   // useEffect(() =>{
   //   //console.log('players update >>>>>>>>>>>kdjsljds');
   // }, [props.players])
+  const {room, profile, gameClear, continueGame, leaveRoom} = props;
 
   useEffect(() => {
     const modal = () => {
-      Modal.confirm({
+      // Modal.destroyAll();
+      return Modal.confirm({
         width: "500px",
         title: gameOver ? "Game Over" : "Game Won",
         content: (
           <>
             {gameOver ? "You lose!" : "You are Winner"}
-            {props.room.admin !== props.profile.id && (
+            {room.admin !== profile.id && (
               <p>
                 you will leave automatically when admin close this room
               </p>
@@ -218,11 +224,11 @@ const GameSpace = (props) => {
           </>
         ),
         onOk() {
-          props.gameClear();
-          props.continueGame({ roomId: props.room.id });
+          gameClear();
+          continueGame({ roomId: room.id });
         },
         onCancel() {
-          props.leaveRoom();
+          leaveRoom();
         },
         okText: "Continue",
         cancelText: "Leave Room",
@@ -240,10 +246,11 @@ const GameSpace = (props) => {
       });
     };
     if (gameOver || gameWon) {
+      console.log(gameOver, gameWon);
       modal();
       setDailyDrop(null);
     }
-  }, [gameOver, gameWon]);
+  }, [gameOver, gameWon, room.id, room.admin, profile.id, gameClear, continueGame, leaveRoom]);
 
   // MOBILE ACTIONS
 
