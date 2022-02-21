@@ -13,7 +13,7 @@ class Users {
        * @param {array} notifications - user notifications
        */
     ];
-    this.regx = /^[a-zA-Z0-9\s]{3,15}$/;
+    this.regx = /^[a-zA-Z0-9\-\s]{3,15}$/;
 
     Users.instance = this;
   }
@@ -28,7 +28,7 @@ class Users {
     return new Promise((resolve, reject) => {
       let trimName = name.trim().toLowerCase();
       if (!this.regx.test(trimName)) {
-        return reject({ message: "Name is invalid" });
+        return reject({ message: "Please enter a valid name" });
       }
       let existingUser = this.users.find((user) => user.name === trimName);
       if (existingUser) {
