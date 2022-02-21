@@ -125,7 +125,6 @@ class Rooms {
       collided: false,
     }
     this.rooms[roomIndex].users[userIndex].currentTetromino = currentTetromino;
-    //console.log('user next Tetrominos', this.rooms[roomIndex].users[userIndex].nextTetrominos);
     this.rooms[roomIndex].users[userIndex].nextTetrominos.shift();
     if (!this.rooms[roomIndex].users[userIndex].nextTetrominos.length){
       let nextTetromino = this.tetromino.randomTetromino();

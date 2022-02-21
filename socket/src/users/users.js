@@ -1,3 +1,4 @@
+const _ = require('lodash');
 class Users {
   constructor() {
     if (Users.instance instanceof Users) {
@@ -26,7 +27,9 @@ class Users {
    */
   login = (id, name) => {
     return new Promise((resolve, reject) => {
+      // console.log(`login: ${id} ${name}`);
       let trimName = name.trim().toLowerCase();
+      if (!trimName) return reject({message: "Please enter a valid name"})
       if (!this.regx.test(trimName)) {
         return reject({ message: "Please enter a valid name" });
       }
@@ -46,9 +49,10 @@ class Users {
    * @returns online users object or error object
    */
   logout = (id) => {
+    // console.log(`${id} is logout`);
     return new Promise((resolve, reject) => {
       let index = this.users.findIndex((user) => user.id === id);
-      if (index === -1) return reject({ message: "User not found" });
+      if (index === -1) return reject({ message: "User not login" });
       this.users.splice(index, 1);
       return resolve(this.getUsers());
     });
@@ -60,10 +64,9 @@ class Users {
    */
   getUsers = () => {
     let res = this.users.map((user) => {
-      return (
-        (({ id, name, isJoined }) => ({ id, name, isJoined }))(user)
-      )
+      return _.pick(user, ['id', 'name', 'isJoined']);
     });
+    // console.log(res, 'res');
     return res;
   };
 
@@ -107,29 +110,11 @@ class Users {
   userJoin = (id, room) => {
     return new Promise((resolve, reject) => {
       const index = this.users.findIndex((user) => user.id === id);
-      if (!index === -1) return reject({ message: "User not found" });
+      if (index === -1) return reject({ message: "User not found" });
       this.users[index] = { ...this.users[index], room, isJoined: true };
       return resolve(this.users[index]);
     });
   }
-
-
-  /**
-   * @description invetify user to join room
-   * @param {string} id - user id
-   * @param {object} invit - user invite object
-   * @returns 
-   */
-  // userInvitation = (id, notif) => {
-  //   return new Promise((resolve, reject) => {
-  //     let index = this.users.findIndex((user) => user.id === id);
-  //     if (index !== -1) {
-  //       this.users[index].notif = { notif, ...this.users[index].notif };
-  //       return resolve(notif);
-  //     }
-  //     return reject({ message: "User not found" });
-  //   });
-  // }
 
 
   /**
@@ -158,11 +143,12 @@ class Users {
   }
 
   userCahngeNotifStatus = (userId, notifId, status) => {
+    // console.log(userId, notifId, status)
     return new Promise((resolve, reject) => {
       let userIndex = this.users.findIndex(item => item.id === userId);
-      // if (user === -1) return reject({message: "User not found"});
+      // if (userIndex === -1) return reject({message: "User not found"});
       let notifIndex = this.users[userIndex].notif.findIndex(item => item.id === notifId);
-      if (notifId === -1) return reject({ message: "Notification not found" });
+      if (notifIndex === -1) return reject({ message: "Notification not found" });
       if (this.users[userIndex].notif[notifIndex].read) return reject({ message: "This notification is already read" });
       this.users[userIndex].notif[notifIndex].status = status;
       this.users[userIndex].notif[notifIndex].read = true;
