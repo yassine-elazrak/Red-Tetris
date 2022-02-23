@@ -76,7 +76,7 @@ class Rooms {
     return new Promise((resolve, reject) => {
       let trimName = data.roomName.trim().toLowerCase();
       if (!this.regx.test(trimName)) {
-        return reject({ message: "Room name is invalid" });
+        return reject({ message: "Please enter a valid name" });
       }
       let existingRoom = this.rooms.find((room) => room.name === trimName);
       if (existingRoom) {

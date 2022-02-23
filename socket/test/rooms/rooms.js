@@ -53,7 +53,7 @@ describe('rooms tes', () => {
                     invit: expect.any(Array),
                 })
             } catch (e) {
-                expect(e).toBe(null)
+                expect(e).toBeUndefined()
             }
         })
 
@@ -61,7 +61,33 @@ describe('rooms tes', () => {
 
 
     describe('fail create room', () => {
-        
+        describe('invalid name', () => {
+            test('space name', async () => {
+                try{
+                    expect(await rooms.createRoom({
+                        roomName: "                ",
+                        isPrivate: false,
+                    }, user)).toBeUndefined();
+                }catch(e){
+                    expect(e.message).toBe('Please enter a valid name')
+                }
+            })
+            
+            test('invalid charachters', async () => {
+                try{
+                    expect(await rooms.createRoom({
+                        roomName: "----------@",
+                        isPrivate: false,
+                    }, user))
+                }catch(e){
+                    expect(e.message).toBe('Please enter a valid name');
+                }
+            })
+        })
+
+        // describe('room is already exists', () => {
+
+        // })
     })
 
 

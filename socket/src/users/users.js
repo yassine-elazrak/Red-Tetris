@@ -27,9 +27,7 @@ class Users {
    */
   login = (id, name) => {
     return new Promise((resolve, reject) => {
-      // console.log(`login: ${id} ${name}`);
       let trimName = name.trim().toLowerCase();
-      if (!trimName) return reject({message: "Please enter a valid name"})
       if (!this.regx.test(trimName)) {
         return reject({ message: "Please enter a valid name" });
       }
