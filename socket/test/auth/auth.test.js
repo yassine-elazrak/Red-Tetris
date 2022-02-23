@@ -1,70 +1,104 @@
-// const io = require('socket.io')(1347);
-// const Client = require("socket.io-client");
 const authClass = require('../../src/controller/authController')
-const initSocket = require('../initSocket')
 
 
-describe("auth test", () => {
-    let serverSocket, clientSocket, auth, socket;
+let auth;
+beforeAll(() => {
+    auth = new authClass(global.__io__)
+});
 
-    beforeAll(async () => {
-        try {
-            socket = await initSocket.befor();
-            expect(socket).toMatchObject({
-                io: expect.any(Object),
-                serverSocket: expect.any(Object),
-                clientSocket: expect.any(Object),
+describe('success login', () => {
+    test('login', (done) => {
+        auth.login(global.__socketServer__)('ali', (res, err) => {
+            expect(res).toMatchObject({
+                id: expect.any(String),
+                name: 'ali',
+                isJoined: false,
+                notif: [],
+                room: null,
             })
-            auth = new authClass(socket.io)
-        } catch (e) {
-            console.log(e)
-        }
-    });
-
-    afterAll(() => {
-        initSocket.after();
-    });
-
-    describe('success login', () => {
-        test('login', (done) => {
-            auth.login(socket.serverSocket)('ali', (res, err) => {
-                expect(res).toMatchObject({
-                    id: expect.any(String),
-                    name: 'ali',
-                    isJoined: false,
-                    notif: [],
-                    room: null,
-                })
-                done();
-            })
+            expect(err).toBeNull()
+            done();
         })
-    });
+    })
+    test('login trim', (done) => {
+        auth.login(global.__socketServer__)(' ali2  ', (res, err) => {
+            expect(res).toMatchObject({
+                id: expect.any(String),
+                name: 'ali2',
+                isJoined: false,
+                notif: [],
+                room: null,
+            })
+            expect(err).toBeNull()
+            done();
+        })
+    })
+});
 
-    describe('fail login', () => {
-        test('empty data', (done) => {
-            auth.login(socket.serverSocket)('', (res, err) => {
-                expect(err).toMatchObject({
-                    message: 'Please enter a valid name',
-                })
-                done()
+describe('fail login', () => {
+    test('empty data', (done) => {
+        auth.login(global.__socketServer__)('', (res, err) => {
+            expect(res).toBeNull()
+            expect(err).toMatchObject({
+                message: 'Please enter a valid name',
             })
+            done()
         })
-        test('invalid data', (done) => {
-            auth.login(socket.serverSocket)('----@', (res, err) => {
-                expect(err).toMatchObject({
-                    message: 'Please enter a valid name',
-                })
-                done()
+    })
+    test('invalid data', (done) => {
+        auth.login(global.__socketServer__)('----@', (res, err) => {
+            expect(res).toBeNull()
+            expect(err).toMatchObject({
+                message: 'Please enter a valid name',
             })
+            done()
         })
-        test('name is already token', (done) => {
-            auth.login(socket.serverSocket)('ali', (res, err) => {
-                expect(err).toMatchObject({
-                    message: 'Username is already taken',
-                })
-                done()
+    })
+    test('invalid data type', (done) => {
+        auth.login(global.__socketServer__)({ name: 'ali' }, (res, err) => {
+            expect(res).toBeNull()
+            expect(err).toMatchObject({
+                message: 'Please enter a valid name',
             })
+            done()
+        })
+    })
+    test('spaces', (done) => {
+        auth.login(global.__socketServer__)('          ', (res, err) => {
+            expect(res).toBeNull()
+            expect(err).toMatchObject({
+                message: 'Please enter a valid name',
+            })
+            done()
+        })
+    })
+    test('name is already token', (done) => {
+        auth.login(global.__socketServer__)('ali', (res, err) => {
+            expect(res).toBeNull()
+            expect(err).toMatchObject({
+                message: 'Username is already taken',
+            })
+            done()
         })
     })
 
-});
+    test('short name', (done) => {
+        auth.login(global.__socketServer__)('a', (res, err) => {
+            expect(res).toBeNull()
+            expect(err).toMatchObject({
+                message: 'Please enter a valid name',
+            })
+            done()
+        })
+    })
+
+    test('long name', (done) => {
+        auth.login(global.__socketServer__)('long name long name long long long', (res, err) => {
+            expect(res).toBeNull()
+            expect(err).toMatchObject({
+                message: 'Please enter a valid name',
+            })
+            done()
+        })
+    })
+})

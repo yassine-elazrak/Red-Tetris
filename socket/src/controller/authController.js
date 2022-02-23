@@ -20,7 +20,7 @@ class AuthController {
      */
     login = (socket) => async (data, callback) => {
         // console.log(socket)
-        console.log(`User ${socket.id} is trying to login ${data}`);
+        // console.log(`User ${socket.id} is trying to login ${data}`);
         try {
             if (!data || typeof data !== 'string')
                 return callback(null, { message: "Please enter a valid name" });
@@ -29,7 +29,6 @@ class AuthController {
             this.io.in('online').emit("updateUsers", this.users.getUsers());
             return callback(res, null);
         } catch (error) {
-            console.log(error);
             return callback(null, error);
         }
     };

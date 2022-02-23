@@ -24,6 +24,13 @@
   "jest" :{
     "collectCoverage": true,
     "coverageReporters": ["html", "text-summary"],
-    "collectCoverageFrom": [ "src/**/*.js"]
+    "collectCoverageFrom": [ "src/**/*.js"],
+    "setupFilesAfterEnv": ["./test/config/jest.config.js"],
+    "globals": {
+      "__test__" : "test2",
+      "__io__": null,
+      "__socketServer__": null,
+      "__socketClient__": null
+    }
   }
 }

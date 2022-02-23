@@ -17,13 +17,13 @@ class UsersController {
   onlineUsers = () => (_, callback) => {
     try {
       let res = this.users.getUsers();
-      if (typeof callback === "function") callback(res, null);
+      return callback(res, null);
     } catch (error) {
-      if (typeof callback === "function") callback(null, error);
+      return callback(null, error);
     }
   }
 
-  
+
 
 }
 
