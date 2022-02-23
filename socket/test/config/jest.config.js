@@ -1,14 +1,13 @@
 const Client = require('socket.io-client');
-global.__io__ = require('socket.io')(3337);
-
+global.__io__ = require('socket.io')(global.__PORT__);
+let test, socket = null;
 
 global.beforeAll((done) => {
-    global.__socketClient__ = Client('http://localhost:3337');
     global.__io__.on("connection", (socket) => {
         global.__socketServer__ = socket;
-        // console.log('beforeAll config')
         done();
     })
+    global.__socketClient__ = Client(`${global.__URL__}:${global.__PORT__}/`);
 })
 
 global.afterAll(() => {
