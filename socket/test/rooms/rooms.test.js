@@ -17,13 +17,17 @@ beforeAll(() => {
 describe('rooms test', () => {
     RoomModel = new RoomModelClass();
     UserModel = new UserModelClass();
-    let roomId, fakeUser
+    let roomId, fakeUser, fakeUser2, roomId2;
 
     test('login fake user', async () => {
         try {
             fakeUser = await UserModel.login(
                 Math.random().toString(36).substring(2) + Date.now().toString(36),
                 'fakeUser'
+            )
+            fakeUser2 = await UserModel.login(
+                Math.random().toString(36).substr(2) + Date.now().toString(36),
+                'fakeUser2'
             )
         } catch (e) {
             expect(e).toMatchObject({
@@ -62,7 +66,7 @@ describe('rooms test', () => {
 
         })
 
-        test('join room', async () => {
+        test('join room fakeUser1', async () => {
             try {
 
                 let res = await RoomModel.joinRoom({
@@ -71,7 +75,21 @@ describe('rooms test', () => {
                     userName: fakeUser.name
                 })
                 // console.log(res)
-                expect(res).toBe(null)
+                expect(res).toMatchObject({
+                    id: roomId,
+                    users: expect.arrayContaining([
+                        expect.objectContaining({
+                            id: fakeUser.id,
+                            name: fakeUser.name,
+                            status: null,
+                            scor: 0,
+                            rows: 0,
+                            map: expect.any(Array),
+                            nextTetrominos: expect.any(Array),
+                            currentTetromino: expect.any(Object),
+                        }), expect.any(Object),
+                    ])
+                })
             } catch (e) {
                 expect(e).toMatchObject({
                     message: expect.any(String)
@@ -79,7 +97,38 @@ describe('rooms test', () => {
             }
         })
 
-        test('leave room', (done) => {
+        test('join room fakeUser2', async () => {
+            try {
+
+                let res = await RoomModel.joinRoom({
+                    roomId,
+                    userId: fakeUser2.id,
+                    userName: fakeUser2.name
+                })
+                // console.log(res)
+                expect(res).toMatchObject({
+                    id: roomId,
+                    users: expect.arrayContaining([
+                        expect.objectContaining({
+                            id: fakeUser2.id,
+                            name: fakeUser2.name,
+                            status: null,
+                            scor: 0,
+                            rows: 0,
+                            map: expect.any(Array),
+                            nextTetrominos: expect.any(Array),
+                            currentTetromino: expect.any(Object),
+                        }), expect.any(Object),
+                    ])
+                })
+            } catch (e) {
+                expect(e).toMatchObject({
+                    message: expect.any(String)
+                })
+            }
+        })
+
+        test('admin leave room', (done) => {
             rooms.leaveRoom(global.__socketServer__)(roomId, (res, err) => {
                 expect(res).toBe(null)
                 expect(err).toBe(null)
@@ -87,7 +136,80 @@ describe('rooms test', () => {
             })
         })
 
-        test('create or join room', (done) => {
+
+
+        test('user leave room', (done) => {
+            rooms.leaveRoom({ id: fakeUser2.id })(roomId, (res, err) => {
+                expect(res).toBe(null)
+                expect(err).toBe(null)
+                done()
+            })
+        })
+
+        test('create or join exist room', (done) => {
+            rooms.createOrJoinRoom({ id: fakeUser2.id })({
+                roomName: 'room',
+                isPrivate: true,
+            }, (res, err) => {
+                expect(res).toMatchObject({
+                    id: roomId,
+                    name: 'room',
+                    admin: fakeUser.id,
+                    status: 'waiting'
+                })
+                expect(err).toBe(null)
+                done()
+            })
+        })
+
+        test('user leave room', (done) => {
+            rooms.leaveRoom({ id: fakeUser2.id })(roomId, (res, err) => {
+                expect(res).toBe(null)
+                expect(err).toBe(null)
+                done()
+            })
+        })
+
+        test('user join room', (done) => {
+            rooms.joinRoom({ id: fakeUser2.id })(roomId, (res, err) => {
+                expect(res).toMatchObject({
+                    id: roomId,
+                    name: 'room',
+                    admin: fakeUser.id,
+                    status: 'waiting'
+                })
+                expect(err).toBe(null)
+                done()
+            })
+        })
+
+
+        test('new admin close room', (done) => {
+            rooms.changeStatusRoom({ id: fakeUser.id })({
+                status: 'closed',
+                roomId
+            }, (res, err) => {
+                expect(res).toMatchObject({
+                    id: roomId,
+                    name: expect.any(String),
+                    admin: fakeUser.id,
+                    isPrivate: false,
+                    status: 'closed',
+                    users: expect.arrayContaining([
+                        expect.objectContaining({
+                            id: expect.any(String),
+                            name: expect.any(String),
+                            status: null,
+                        })
+                    ]),
+                    invit: [],
+                })
+                expect(err).toBe(null)
+                done()
+            })
+        })
+
+        test('create or join new room', (done) => {
             rooms.createOrJoinRoom(global.__socketServer__)({
                 roomName: 'room2',
                 isPrivate: true,
@@ -107,13 +229,13 @@ describe('rooms test', () => {
                     ]),
                     invit: [],
                 })
-                roomId = res.id;
+                roomId2 = res.id;
                 expect(err).toBe(null)
                 done()
             })
         })
         test('change room to public', (done) => {
-            rooms.changeRoomToPublic(global.__socketServer__)({ roomId }, (res, err) => {
+            rooms.changeRoomToPublic(global.__socketServer__)({ roomId: roomId2 }, (res, err) => {
                 expect(res).toMatchObject({
                     id: expect.any(String),
                     name: 'room2',
@@ -137,10 +259,10 @@ describe('rooms test', () => {
         test('change room status', (done) => {
             rooms.changeStatusRoom(global.__socketServer__)({
                 status: 'closed',
-                roomId
+                roomId: roomId2
             }, (res, err) => {
                 expect(res).toMatchObject({
-                    id: roomId,
+                    id: roomId2,
                     name: expect.any(String),
                     admin: user.id,
                     isPrivate: false,
@@ -167,20 +289,22 @@ describe('rooms test', () => {
                         name: expect.any(String),
                         isPrivate: expect.any(Boolean),
                         status: expect.any(String)
-                    }),expect.anything(),
+                    }), expect.any(Object),
                 ])
                 expect(err).toBe(null)
                 done()
             })
         })
 
-        test('leave room', (done) => {
-            rooms.leaveRoom(global.__socketServer__)(roomId, (res, err) => {
+        test('admin leave room', (done) => {
+            rooms.leaveRoom(global.__socketServer__)(roomId2, (res, err) => {
                 expect(res).toBe(null)
                 expect(err).toBe(null)
                 done()
             })
         })
+
+
 
 
 
