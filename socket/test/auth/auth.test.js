@@ -1,4 +1,5 @@
 const authClass = require('../../src/controller/authController')
+const usersClass = require('../../src/users/users')
 
 
 let auth;
@@ -8,7 +9,8 @@ beforeAll(() => {
 
 describe('auth tests', () => {
 
-    describe('success login', () => {
+    /************************** SUCCESS TEST ******************************/
+    describe('success test', () => {
         test('login', (done) => {
             auth.login(global.__socketServer__)('ali', (res, err) => {
                 expect(res).toMatchObject({
@@ -35,9 +37,15 @@ describe('auth tests', () => {
                 done();
             })
         })
+
+        test('logout', (done) => {
+            auth.logout(global.__socketServer__)()
+            done()
+        })
     });
 
-    describe('fail login', () => {
+    /****************************** FAIL TEST *********************************/
+    describe('fail tests', () => {
         test('empty data', (done) => {
             auth.login(global.__socketServer__)('', (res, err) => {
                 expect(res).toBeNull()
@@ -75,7 +83,7 @@ describe('auth tests', () => {
             })
         })
         test('name is already token', (done) => {
-            auth.login(global.__socketServer__)('ali', (res, err) => {
+            auth.login(global.__socketServer__)('ali2', (res, err) => {
                 expect(res).toBeNull()
                 expect(err).toMatchObject({
                     message: 'Username is already taken',

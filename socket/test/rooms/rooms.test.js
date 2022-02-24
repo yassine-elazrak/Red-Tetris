@@ -1,3 +1,4 @@
+const { kebabCase } = require('lodash');
 const authClass = require('../../src/controller/authController')
 const roomClass = require('../../src/controller/roomsController');
 const RoomModelClass = require('../../src/rooms/rooms')
@@ -17,9 +18,9 @@ beforeAll(() => {
 describe('rooms test', () => {
     RoomModel = new RoomModelClass();
     UserModel = new UserModelClass();
-    let roomId, fakeUser, fakeUser2, roomId2;
+    let roomId, fakeUser, fakeUser2, roomId2, fakeUser3;
 
-    test('login fake user', async () => {
+    test('login fake users', async () => {
         try {
             fakeUser = await UserModel.login(
                 Math.random().toString(36).substring(2) + Date.now().toString(36),
@@ -29,6 +30,10 @@ describe('rooms test', () => {
                 Math.random().toString(36).substr(2) + Date.now().toString(36),
                 'fakeUser2'
             )
+            fakeUser3 = await UserModel.login(
+                Math.random().toString(36).substr(2) + Date.now().toString(36),
+                'fakeUser3'
+            )
         } catch (e) {
             expect(e).toMatchObject({
                 message: expect.any(String)
@@ -36,6 +41,7 @@ describe('rooms test', () => {
         }
     })
 
+    /************************ SUCCESS TEST *******************************/
     describe('success tests room', () => {
 
         test('create room', (done) => {
@@ -112,6 +118,37 @@ describe('rooms test', () => {
                         expect.objectContaining({
                             id: fakeUser2.id,
                             name: fakeUser2.name,
+                            status: null,
+                            scor: 0,
+                            rows: 0,
+                            map: expect.any(Array),
+                            nextTetrominos: expect.any(Array),
+                            currentTetromino: expect.any(Object),
+                        }), expect.any(Object),
+                    ])
+                })
+            } catch (e) {
+                expect(e).toMatchObject({
+                    message: expect.any(String)
+                })
+            }
+        })
+
+        test('join room fakeUser3', async () => {
+            try {
+
+                let res = await RoomModel.joinRoom({
+                    roomId,
+                    userId: fakeUser3.id,
+                    userName: fakeUser3.name
+                })
+                // console.log(res)
+                expect(res).toMatchObject({
+                    id: roomId,
+                    users: expect.arrayContaining([
+                        expect.objectContaining({
+                            id: fakeUser3.id,
+                            name: fakeUser3.name,
                             status: null,
                             scor: 0,
                             rows: 0,
@@ -281,20 +318,6 @@ describe('rooms test', () => {
             })
         })
 
-        test('get current rooms', (done) => {
-            rooms.currentRoom(global.__socketServer__)(null, (res, err) => {
-                expect(res).toEqual([
-                    expect.objectContaining({
-                        id: expect.any(String),
-                        name: expect.any(String),
-                        isPrivate: expect.any(Boolean),
-                        status: expect.any(String)
-                    }), expect.any(Object),
-                ])
-                expect(err).toBe(null)
-                done()
-            })
-        })
 
         test('admin leave room', (done) => {
             rooms.leaveRoom(global.__socketServer__)(roomId2, (res, err) => {
@@ -303,18 +326,32 @@ describe('rooms test', () => {
                 done()
             })
         })
+        test('logout fakeUser', (done) => {
+            auth.logout({id : fakeUser3.id})()
+            done()
+        })
 
-
-
-
+        test('get current rooms', (done) => {
+            rooms.currentRoom(global.__socketServer__)(null, (res, err) => {
+                console.log(res, global.__socketServer__.id)
+                expect(res).toEqual([
+                    expect.objectContaining({
+                        id: expect.any(String),
+                        name: expect.any(String),
+                        isPrivate: expect.any(Boolean),
+                        status: expect.any(String)
+                    })
+                ])
+                expect(err).toBe(null)
+                done()
+            })
+        })
 
     })
 
 
 
-
-
-    //  fail tests
+    /********************** FAIL TESTS ***********************************/
     describe('fail tests room', () => {
         test('invalid room name', (done) => {
             rooms.createRoom(global.__socketServer__)({
@@ -368,6 +405,89 @@ describe('rooms test', () => {
             })
         })
 
+        test('user try to join closed room', (done) => {
+            rooms.joinRoom(global.__socketServer__)(roomId, (res, err) => {
+                expect(res).toBe(null)
+                expect(err).toMatchObject({
+                    message: "Room is closed"
+                })
+                done()
+            })
+        })
+
+        test('join to room not exists', (done) => {
+            rooms.joinRoom(global.__socketServer__)("invalid id", (res, err) => {
+                expect(res).toBe(null)
+                expect(err).toMatchObject({
+                    message: "Room not found"
+                })
+                done()
+            })
+        })
+
+        test('join to room invalid data', (done) => {
+            rooms.joinRoom(global.__socketServer__)({ test }, (res, err) => {
+                expect(res).toBe(null)
+                expect(err).toMatchObject({
+                    message: "Please enter a valid data type"
+                })
+                done()
+            })
+        })
+
+        test('change status room invalid action', (done) => {
+            rooms.changeStatusRoom(global.__socketServer__)('invalid data', (res, err) => {
+                expect(res).toBe(null)
+                expect(err).toMatchObject({
+                    message: 'Invalid action'
+                })
+                done()
+            })
+        })
+
+        test('change status room not exists', (done) => {
+            rooms.changeStatusRoom(global.__socketServer__)({
+                roomId: 'no exists id',
+                status: 'closed'
+            }, (res, err) => {
+                expect(res).toBe(null)
+                expect(err).toMatchObject({
+                    message: 'Room not found'
+                })
+                done()
+            })
+        })
+
+        test('user try to change no exists room to publid', (done) => {
+            rooms.changeRoomToPublic(global.__socketServer__)({ roomId: 'no exist id' }, (res, err) => {
+                expect(res).toBe(null)
+                expect(err).toMatchObject({
+                    message: 'Room not found'
+                })
+                done()
+            })
+        })
+
+        test('user (not admin) try to change room to publid', (done) => {
+            rooms.changeRoomToPublic(global.__socketServer__)({ roomId }, (res, err) => {
+                expect(res).toBe(null)
+                expect(err).toMatchObject({
+                    message: 'You are not admin'
+                })
+                done()
+            })
+        })
+
+        test('user try to change room to publid invalid data type', (done) => {
+            rooms.changeRoomToPublic(global.__socketServer__)('invalid data type', (res, err) => {
+                expect(res).toBe(null)
+                expect(err).toMatchObject({
+                    message: 'Please enter a valid data type'
+                })
+                done()
+            })
+        })
+
         test('leave room not exists', (done) => {
             rooms.leaveRoom(global.__socketServer__)('fack id', (res, err) => {
                 expect(res).toBe(null),
@@ -379,6 +499,19 @@ describe('rooms test', () => {
         })
     })
 
-
+    describe('logout all users', () => {
+        test('admin logout', (done) => {
+            auth.logout(global.__socketServer__)()
+            done()
+        })
+        test('admin logout', (done) => {
+            auth.logout({ id: fakeUser.id })()
+            done()
+        })
+        test('admin logout', (done) => {
+            auth.logout({ id: fakeUser2.id })()
+            done()
+        })
+    })
 })
 

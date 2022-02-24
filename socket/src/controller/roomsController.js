@@ -110,6 +110,8 @@ class RoomController {
      * @param {function} callback - (res, err)
      */
     joinRoom = (socket) => async (roomId, callback) => {
+        if (!roomId || typeof roomId !== 'string')
+            return callback(null, {message: 'Please enter a valid data type'})
         try {
             let user = await this.users.getUser(socket.id);
             if (user.isJoined)
@@ -149,7 +151,8 @@ class RoomController {
      */
     changeStatusRoom = (socket) => async (data, callback) => {
         try {
-            if (!["closed", "paused", "started"].includes(data.status))
+            if (!data || typeof data !==  'object' || typeof data.roomId !== 'string' || typeof data.status !== 'string'
+            || !["closed", "paused", "started"].includes(data.status))
                 return callback(null, { message: "Invalid action" });
             let room = await this.rooms.getRoom(data.roomId);
             let oldStatus = room.status;
@@ -193,6 +196,8 @@ class RoomController {
     changeRoomToPublic = (socket) => async (data, callback) => {
         try {
             // console.log('change room to public',data.roomId);
+            if (!data || typeof data !== 'object' || typeof data.roomId !== 'string')
+            return callback(null, {message: 'Please enter a valid data type'})
             let room = await this.rooms.getRoom(data.roomId);
             if (room.admin !== socket.id) return callback(null, { message: "You are not admin" });
             room.isPrivate = false;
