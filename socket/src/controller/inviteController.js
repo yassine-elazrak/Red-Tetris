@@ -20,7 +20,7 @@ class InviteController {
      */
 
     invitation = (socket) => async (data, callback) => {
-        // ////console.log(`User ${socket.id} is trying to invite data =>`, data);
+        // console.log(`User ${socket.id} is trying to invite data =>`, data);
         try {
             let user = await this.users.getUser(data.userId);
             let admin = await this.users.getUser(socket.id);
