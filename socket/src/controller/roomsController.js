@@ -151,8 +151,9 @@ class RoomController {
      */
     changeStatusRoom = (socket) => async (data, callback) => {
         try {
-            if (!data || typeof data !==  'object' || typeof data.roomId !== 'string' || typeof data.status !== 'string'
-            || !["closed", "paused", "started"].includes(data.status))
+            if (!data || typeof data !==  'object' || typeof data.roomId !== 'string' || typeof data.status !== 'string')
+            return callback(null, {message: "Please enter a valid data type"})
+            if (!["closed", "paused", "started"].includes(data.status))
                 return callback(null, { message: "Invalid action" });
             let room = await this.rooms.getRoom(data.roomId);
             let oldStatus = room.status;
@@ -195,7 +196,6 @@ class RoomController {
 
     changeRoomToPublic = (socket) => async (data, callback) => {
         try {
-            console.log('change room to public',data.roomId);
             if (!data || typeof data !== 'object' || typeof data.roomId !== 'string')
             return callback(null, {message: 'Please enter a valid data type'})
             let room = await this.rooms.getRoom(data.roomId);
@@ -221,6 +221,8 @@ class RoomController {
      */
     leaveRoom = (socket) => async (roomId, callback) => {
         try {
+            if (!roomId || typeof roomId !== 'string')
+            return callback(null, {message: "Please enter a valid data type"})
             let room = await this.rooms.leaveRoom(socket.id, roomId);
             let user = await this.users.userLeave(socket.id);
             if (room.users.length === 0) {
@@ -345,15 +347,11 @@ class RoomController {
      * @param {function} callback - (res, err)
      */
     currentRoom = () => (d, callback) => {
-        // try {
             let allRooms = this.rooms.getRooms()
                 .map(e => {
                     return _.pick(e, ['id', 'name', 'isPrivate', 'admin', 'status']);
                 });
             callback(allRooms, null);
-        // } catch (error) {
-        //     return callback(null, error);
-        // }
     };
 }
 
