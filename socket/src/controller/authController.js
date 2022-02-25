@@ -41,7 +41,7 @@ class AuthController {
         // console.log(`User ${socket.id} is trying to logout`);
         try {
             let user = await this.users.getUser(socket.id);
-            // console.log(user);
+            // console.log(user, 'logout');
             if (user.isJoined) {
                 let room = await this.rooms.leaveRoom(socket.id, user.room);
                 // console.log(room);

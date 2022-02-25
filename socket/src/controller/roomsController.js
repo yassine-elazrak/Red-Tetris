@@ -138,7 +138,7 @@ class RoomController {
             this.io.to(socket.id).emit("updateGame", game);
             return callback(resUsers, null);
         } catch (error) {
-            //console.log("error join room =>", error)
+            // console.log("error join room =>", error)
             return callback(null, error);
         }
     };
@@ -195,7 +195,7 @@ class RoomController {
 
     changeRoomToPublic = (socket) => async (data, callback) => {
         try {
-            // console.log('change room to public',data.roomId);
+            console.log('change room to public',data.roomId);
             if (!data || typeof data !== 'object' || typeof data.roomId !== 'string')
             return callback(null, {message: 'Please enter a valid data type'})
             let room = await this.rooms.getRoom(data.roomId);
@@ -345,15 +345,15 @@ class RoomController {
      * @param {function} callback - (res, err)
      */
     currentRoom = () => (d, callback) => {
-        try {
+        // try {
             let allRooms = this.rooms.getRooms()
                 .map(e => {
                     return _.pick(e, ['id', 'name', 'isPrivate', 'admin', 'status']);
                 });
             callback(allRooms, null);
-        } catch (error) {
-            return callback(null, error);
-        }
+        // } catch (error) {
+        //     return callback(null, error);
+        // }
     };
 }
 
