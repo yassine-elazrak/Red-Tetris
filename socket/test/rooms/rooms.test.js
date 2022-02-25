@@ -1,10 +1,8 @@
-const { kebabCase } = require('lodash');
 const authClass = require('../../src/controller/authController')
 const roomClass = require('../../src/controller/roomsController');
-const RoomModelClass = require('../../src/rooms/rooms')
 const UserModelClass = require('../../src/users/users')
 
-let user, Rooms, Auth, RoomModel, UserModel;
+let user, Rooms, Auth, UserModel;
 beforeAll((done) => {
     Auth = new authClass(global.__io__);
     Rooms = new roomClass(global.__io__);
@@ -17,7 +15,6 @@ beforeAll((done) => {
 })
 
 describe('rooms tests', () => {
-    RoomModel = new RoomModelClass();
     UserModel = new UserModelClass();
     let roomId1, roomId2, fakeUser1, fakeUser2;
 
