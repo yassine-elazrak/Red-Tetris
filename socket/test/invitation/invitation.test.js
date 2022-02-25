@@ -54,6 +54,7 @@ describe('invitation test', () => {
 
     /********************************* SUCCESS TEST *********************************/
     describe('success test invitation', () => {
+        let invit1, invit2;
         test('invit user', (done) => {
             Invite.invitation(global.__socketServer__)({
                 userId: fakeUser1.id,
@@ -72,6 +73,84 @@ describe('invitation test', () => {
                 done()
             })
         })
+
+        test('invit user2', (done) => {
+            Invite.invitation(global.__socketServer__)({
+                userId: fakeUser2.id,
+                roomId: room.id
+            }, (res, err) => {
+                expect(res).toMatchObject({
+                    invit: expect.arrayContaining([
+                        expect.objectContaining({
+                            userId: fakeUser2.id,
+                            userName: fakeUser2.name,
+                            status: 'waiting'
+                        })
+                    ])
+                })
+                expect(err).toBeNull()
+                done()
+            })
+        })
+
+        test('update fakeUser1',  async () => {
+            try{
+            fakeUser1 = await UserModel.getUser(fakeUser1.id)
+            invit1 = fakeUser1.notif.find(n => n.type === 'invitation')
+            } catch(e) {
+                expect(e).toMatchObject({
+                    message: expect.any(String)
+                })
+            }
+        })
+
+        test('update fakeUser2',  async () => {
+            try{
+            fakeUser2 = await UserModel.getUser(fakeUser2.id)
+            invit2 = fakeUser2.notif.find(n => n.type === 'invitation')
+            } catch(e) {
+                expect(e).toMatchObject({
+                    message: expect.any(String)
+                })
+            }
+        })
+
+        test('accept invitations', (done) => {
+            Invite.changeStatusInvitation({id : fakeUser1.id}, 'accepted')({
+                notifId: invit1.id
+            }, (res, err) => {
+                expect(res).toMatchObject({
+                    profile: expect.objectContaining({
+                        room: room.id,
+                        isJoined: true
+                    }),
+                    room: expect.objectContaining({
+                        id: room.id,
+                        admin: user.id,
+                        name: room.name
+                    })
+                })
+                expect(err).toBeNull()
+                done()
+            })
+        })
+
+        test('decline invitations', (done) => {
+            Invite.changeStatusInvitation({id : fakeUser2.id}, 'decline')({
+                notifId: invit2.id
+            }, (res, err) => {
+                expect(res).toMatchObject({
+                    profile: expect.objectContaining({
+                        room: null,
+                        isJoined: false
+                    }),
+                    room: null
+                })
+                expect(err).toBeNull()
+                done()
+            })
+        })
+
     })
 
 
