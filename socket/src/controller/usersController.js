@@ -15,12 +15,12 @@ class UsersController {
    * @param {function} callback - (res, err)
    */
   onlineUsers = () => (_, callback) => {
-    try {
+    // try {
       let res = this.users.getUsers();
       return callback(res, null);
-    } catch (error) {
-      return callback(null, error);
-    }
+    // } catch (error) {
+    //   return callback(null, error);
+    // }
   }
 
 

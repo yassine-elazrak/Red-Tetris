@@ -25,8 +25,8 @@ class MessagesController {
             ids.length && this.io.to(ids).emit("message", newMessage);
             callback(newMessage, null);
         } catch (error) {
-            //console.log(error)
-            if (typeof callback === 'fanction') return callback(null, error);
+            console.log(error)
+            return callback(null, error);
         }
     }
 }

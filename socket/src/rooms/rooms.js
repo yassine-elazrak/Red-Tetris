@@ -126,7 +126,7 @@ class Rooms {
     }
     this.rooms[roomIndex].users[userIndex].currentTetromino = currentTetromino;
     this.rooms[roomIndex].users[userIndex].nextTetrominos.shift();
-    if (!this.rooms[roomIndex].users[userIndex].nextTetrominos.length){
+    if (!this.rooms[roomIndex].users[userIndex].nextTetrominos.length) {
       let nextTetromino = this.tetromino.randomTetromino();
       this.rooms[roomIndex].users.forEach(u => {
         u.nextTetrominos.push(nextTetromino);
@@ -184,7 +184,7 @@ class Rooms {
         this.rooms[Index].invit[isInveted].status = "accepted";
       this.rooms[Index].users.push(user);
       this.rooms[Index].ids.push(data.userId);
-      return resolve(this.rooms[Index]);
+      resolve(this.rooms[Index]);
     });
   };
 
@@ -195,7 +195,7 @@ class Rooms {
       if (room.admin !== data.userId)
         return reject({ message: "You are not admin" });
       if (room.status === 'end') this.restRoom(room);
-      if (data.status === 'closed'){
+      if (data.status === 'closed') {
         room.nextTetromino = this.tetromino.randomTetromino();
       }
       room.status = data.status;

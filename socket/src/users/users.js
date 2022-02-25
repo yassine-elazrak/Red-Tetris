@@ -64,7 +64,6 @@ class Users {
     let res = this.users.map((user) => {
       return _.pick(user, ['id', 'name', 'isJoined']);
     });
-    // console.log(res, 'res');
     return res;
   };
 

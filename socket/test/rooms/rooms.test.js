@@ -4,18 +4,19 @@ const roomClass = require('../../src/controller/roomsController');
 const RoomModelClass = require('../../src/rooms/rooms')
 const UserModelClass = require('../../src/users/users')
 
-let rooms, auth, RoomModel, UserModel;
-beforeAll(() => {
+let user, rooms, auth, RoomModel, UserModel;
+beforeAll((done) => {
     auth = new authClass(global.__io__);
     rooms = new roomClass(global.__io__);
     auth.login(global.__socketServer__)('user', (res, err) => {
         expect(res).toEqual(expect.any(Object))
         expect(err).toBe(null)
         user = res;
+        done()
     })
 })
 
-describe('rooms test', () => {
+describe('rooms tests', () => {
     RoomModel = new RoomModelClass();
     UserModel = new UserModelClass();
     let roomId, fakeUser, fakeUser2, roomId2, fakeUser3;
@@ -333,7 +334,6 @@ describe('rooms test', () => {
 
         test('get current rooms', (done) => {
             rooms.currentRoom(global.__socketServer__)(null, (res, err) => {
-                console.log(res, global.__socketServer__.id)
                 expect(res).toEqual([
                     expect.objectContaining({
                         id: expect.any(String),

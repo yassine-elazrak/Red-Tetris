@@ -38,7 +38,7 @@ class AuthController {
      * @param {object} socket - socket object 
      */
     logout = (socket) => async () => {
-        console.log(`User ${socket.id} is trying to logout`);
+        // console.log(`User ${socket.id} is trying to logout`);
         try {
             let user = await this.users.getUser(socket.id);
             // console.log(user);
