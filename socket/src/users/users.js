@@ -47,7 +47,6 @@ class Users {
    * @returns online users object or error object
    */
   logout = (id) => {
-    // console.log(`${id} is logout`);
     return new Promise((resolve, reject) => {
       let index = this.users.findIndex((user) => user.id === id);
       if (index === -1) return reject({ message: "User not login" });
@@ -113,23 +112,6 @@ class Users {
     });
   }
 
-
-  /**
-  //  * 
-  //  * @param {string} userId - user id 
-  //  * @param {string} notifId - notification id 
-  //  * @returns notification object or error object
-  //  */
-  // userGetNotif = (userId, notifId) => {
-  //   return new Promise((resolve, reject) => {
-  //     let userIndex = this.users.findIndex((user) => user.id === userId);
-  //     if (userIndex === -1) return reject({ message: "User not found" });
-  //     let notifIndex = this.users[userIndex].notif.findIndex((notif) => notif.id === notifId);
-  //     if (notifIndex === -1) return reject({ message: "Notification not found" });
-  //     return resolve(this.users[userIndex].notif[notifIndex]);
-  //   });
-  // }
-
   userNotifications = (id, notif) => {
     return new Promise((resolve, reject) => {
       let index = this.users.findIndex((user) => user.id === id);
@@ -138,21 +120,6 @@ class Users {
       return resolve(this.users[index]);
     });
   }
-
-  // userCahngeNotifStatus = (userId, notifId, status) => {
-  //   // console.log(userId, notifId, status)
-  //   return new Promise((resolve, reject) => {
-  //     let userIndex = this.users.findIndex(item => item.id === userId);
-  //     // if (userIndex === -1) return reject({message: "User not found"});
-  //     let notifIndex = this.users[userIndex].notif.findIndex(item => item.id === notifId);
-  //     if (notifIndex === -1) return reject({ message: "Notification not found" });
-  //     if (this.users[userIndex].notif[notifIndex].read) return reject({ message: "This notification is already read" });
-  //     this.users[userIndex].notif[notifIndex].status = status;
-  //     this.users[userIndex].notif[notifIndex].read = true;
-  //     resolve(this.users[userIndex].notif);
-  //   })
-
-  // }
 
 }
 

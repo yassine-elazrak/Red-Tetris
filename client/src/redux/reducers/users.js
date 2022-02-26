@@ -7,11 +7,7 @@ import {
 const initialState = {
   isLoading: false,
   error: null,
-  online: [
-    // userId: userId,
-    // userName: userName,
-    // loggedAt: loggedAt,
-  ],
+  online: [],
 };
 
 export default function usersReducer(state = initialState, action) {

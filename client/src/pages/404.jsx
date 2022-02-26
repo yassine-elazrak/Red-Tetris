@@ -1,8 +1,5 @@
 import React from "react"
 import { Result, Button, Card } from "antd"
-// import FooterComponet from "../components/Footer"
-
-// const { Content, Footer } = Layout
 
 const Page404 = () => {
     return (
@@ -17,7 +14,6 @@ const Page404 = () => {
             title="404"
             subTitle="Sorry, the page you visited does not exist."
             style={{
-              //   border: '1px solid green',
                 padding: 0,
                 margin: 0,
             }}

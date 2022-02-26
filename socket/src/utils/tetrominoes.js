@@ -35,7 +35,6 @@ const TETROMINOES = {
             [0, 'Z', 'Z'],
             [0, 0, 0],
         ],
-    D:  ['D'],
 }
 
 class TetrominoesClass {

@@ -63,7 +63,6 @@ describe('messages tests', () => {
                     userName: fakeUser.name
                 })
                 expect(res).toEqual(expect.any(Object))
-                // console.log(res)
             } catch (e) {
                 expect(e).toBe(null)
             }
@@ -77,7 +76,6 @@ describe('messages tests', () => {
                 roomId: room.id,
                 message: 'test message'
             }, (res, err) => {
-                // console.log(res)
                 expect(res).toMatchObject({
                     userId: user.id,
                     userName: user.name,

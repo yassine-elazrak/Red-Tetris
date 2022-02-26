@@ -19,8 +19,6 @@ const StageBar = (props) => {
         });
     }
 
-
-
     return (
         <div style={{
             display: 'flex',

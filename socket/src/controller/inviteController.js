@@ -1,6 +1,5 @@
 const Users = require("../users/users");
 const Rooms = require("../rooms/rooms");
-// const Selector = require("../utils/selector")
 const _ = require("lodash");
 
 class InviteController {
@@ -9,7 +8,6 @@ class InviteController {
         this.io = io;
         this.users = new Users;
         this.rooms = new Rooms;
-        // this.selector = new Selector;
     }
 
     /**
@@ -20,7 +18,6 @@ class InviteController {
      */
 
     invitation = (socket) => async (data, callback) => {
-        // console.log(`User ${socket.id} is trying to invite data =>`, data);
         try {
             if (!data || typeof data !== 'object' || typeof data.userId !== 'string'
                 || typeof data.roomId !== 'string')
@@ -30,7 +27,6 @@ class InviteController {
             if (user.isJoined) return callback(null, { message: `${user.name} is already joined to room` });
             let room = await this.rooms.getRoom(data.roomId);
             if (socket.id !== room.admin) return callback(null, { message: `you are not admin of this room` });
-            // ////console.log(`Room`, room);
             if (room.invit.find(e => e.userId === data.userId)) return callback(null, { message: `${user.name} is already invited to this room` });
             if (room.status !== "waiting" && room.status !== 'end')
                 return callback(null, { message: "Room is closed" });
@@ -46,7 +42,6 @@ class InviteController {
             this.io.to(user.id).emit("notification", notif);
             return callback(room, null);
         } catch (error) {
-            ////console.log(error);
             if (typeof callback === "function") return callback(null, error);
         }
     }

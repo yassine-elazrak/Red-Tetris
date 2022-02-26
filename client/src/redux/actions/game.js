@@ -14,7 +14,6 @@ export const gameActions = (data) => {
             dispatch({ type: GAME_LOADING });
             const io = getState().socket.socket;
             const res = await socket(io, 'gameActions', data);
-            // //console.log('res =========>>>>', res);
             dispatch(success(res, GAME_UPDATE))
         } catch (err) {
             dispatch(error(err));

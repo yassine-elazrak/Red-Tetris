@@ -1,7 +1,5 @@
 const { Server } = require("socket.io");
 const { createServer } = require("http");
-// const Users = require("./users/users");
-// const Rooms = require("./rooms/rooms");
 const Middleware = require("./middleware/auth");
 const AuthController = require("./controller/authController");
 const UsersController = require("./controller/usersController");
@@ -29,16 +27,13 @@ class App {
   }
 
   start() {
-    // const users = new Users();
-    // const rooms = new Rooms();
     const AuthMiddleware = new Middleware();
     this.server.listen(process.env.PORT || 5000, () => {
-      ////console.log(`server is running on port ${process.env.PORT || 5000}`);
+      console.log(`server is running on port ${process.env.PORT || 5000}`);
     });
 
 
     this.io.on("connection", (socket) => {
-      console.log(`User connected: ${socket.id}`);
       socket.use(AuthMiddleware.auth(socket));
 
       /********************** Auth ************************************/
@@ -163,7 +158,6 @@ class App {
        */
       socket.on("disconnect", this.AuthController.logout(socket));
       socket.on("error", (error) => {
-        console.log(error, 'log error');
         socket.emit("error", { message: error.message });
       });
 

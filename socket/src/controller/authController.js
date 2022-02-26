@@ -1,6 +1,5 @@
 const Users = require("../users/users");
 const Rooms = require("../rooms/rooms");
-// const Selector = require("../utils/selector");
 const _ = require("lodash");
 
 class AuthController {
@@ -9,7 +8,6 @@ class AuthController {
         this.io = io;
         this.users = new Users;
         this.rooms = new Rooms;
-        // this.selector = new Selector;
     }
 
     /**
@@ -19,8 +17,6 @@ class AuthController {
      * @param {function} callback - (res, err)
      */
     login = (socket) => async (data, callback) => {
-        // console.log(socket)
-        // console.log(`User ${socket.id} is trying to login ${data}`);
         try {
             if (!data || typeof data !== 'string')
                 return callback(null, { message: "Please enter a valid name" });
@@ -38,18 +34,14 @@ class AuthController {
      * @param {object} socket - socket object 
      */
     logout = (socket) => async () => {
-        // console.log(`User ${socket.id} is trying to logout`);
         try {
             let user = await this.users.getUser(socket.id);
-            // console.log(user, 'logout');
             if (user.isJoined) {
                 let room = await this.rooms.leaveRoom(socket.id, user.room);
-                // console.log(room);
                 if (room.users.length === 0) {
                     let currntRooms = await this.rooms.deleteRoom(room.id);
                     this.io.emit("updateRooms", currntRooms);
                 } else {
-                    // let usersIds = this.selector.Data(room.users, (({ id }) => id));
                     let usersIds = room.ids;
                     if (user.id === room.admin) {
                         let updateRoom = this.rooms.switchAdmin(room.id);

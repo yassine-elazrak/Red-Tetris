@@ -31,9 +31,7 @@ export const changeStatusInvite = (data) => {
         try {
             dispatch({type: LOADING_INVITES});
             const io = getState().socket.socket;
-            ////console.log(data);
             const res = await socket(io, data.event, data);
-            ////console.log("res chnage status initation", res);
             dispatch({type: INVITE_ACCEPT});
             dispatch(success(res.profile, UPDATE_PROFILE));
             res.room && dispatch(success(res.room, ROOM_REFRESH));

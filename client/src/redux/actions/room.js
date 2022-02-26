@@ -16,9 +16,6 @@ export const createRoom = (room) => {
       const io = getState().socket.socket;
       const res = await socket(io, "createRoom", room);
       dispatch(success(res, ROOM_CREATE));
-      // const profile = getState().profile;
-      // const gameInfo = game(res.users, profile.id);
-      // dispatch(success(gameInfo, GAME_UPDATE));
     } catch (err) {
       dispatch(error(err, ROOM_ERROR));
     }
@@ -33,24 +30,18 @@ export const createOrJoinRoom = (room) => {
       const res = await socket(io, "createOrJoin", room);
       dispatch(success(res, ROOM_CREATE));
     } catch (err) {
-      //console.log(err);
       dispatch(error(err, ROOM_ERROR));
     }
   }
 }
 
 export const joinRoom = (roomId) => {
-  // ////console.log("joinRoom", roomId);
   return async (dispatch, getState) => {
     try {
       dispatch({ type: LOADING_ROOM });
       const io = getState().socket.socket;
       const res = await socket(io, "joinRoom", roomId);
-      ////console.log('res join room =>', res);
       dispatch(success(res, ROOM_JOIN));
-      // const profile = getState().profile;
-      // const gameInfo = game(res.users, profile.id);
-      // dispatch(success(gameInfo, GAME_UPDATE));
     } catch (err) {
       dispatch(error(err, ROOM_ERROR));
     }
@@ -106,9 +97,6 @@ export const updateRoomToPublic = (data) => {
 export const refreshRoom = (room) => {
   return (dispatch) => {
     dispatch({ type: LOADING_ROOM });
-    // const profile = getState().profile;
-    // const gameInfo = game(room.users, profile.id);
-    // dispatch(success(gameInfo, GAME_UPDATE));
     dispatch(success(room, ROOM_REFRESH))
   }
 }

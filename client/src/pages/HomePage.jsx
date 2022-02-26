@@ -57,17 +57,14 @@ const HomePage = (props) => {
   }, [props.rooms.rooms]);
 
   useEffect(() => {
-    ////console.log("hash", hash);
     if (hashUrl.error) message.error(hashUrl.error);
     else if (hashUrl.name && hashUrl.room) {
-      ////console.log("login by url-hash", hash);
       login(hashUrl.name);
     }
   }, [hashUrl, login]);
 
   useEffect(() => {
     if (profile.isAuth && !profile.isJoined && !hashUrl.error && hashUrl.room) {
-      ////console.log('don1');
       let roomInfo = {
         roomName: hashUrl.room,
         isPrivate: true,
@@ -85,27 +82,20 @@ const HomePage = (props) => {
 
   const {updateUser, updateGame, updateAllPlayers, gameClear, clearRoom, refreshRoom, socket} = props;
   useEffect(() => {
-    //console.log('socket changed');
     if (socket.socket) {
-      // MOVE THIS LISTENERS TO GAME SPACE
       socket.socket.socket("/").on("updateProfile", (data) => {
-        //console.log("udpate profile", data)
         updateUser(data);
       });
       socket.socket.socket("/").on("updateRooms", (data) => {
-        //console.log("update rooms", data);
         refreshRooms(data);
       });
       socket.socket.socket("/").on("updateRoom", (data) => {
         refreshRoom(data);
-        //console.log("update Room ============>", data);
       });
       socket.socket.socket('/').on("updateGame", data => {
-        //console.log('update Game <<<<<<<<<<>>>>>>>>', data);
         updateGame(data);
       })
       socket.socket.socket('/').on("updateAllPlayers", data => {
-        //console.log('all Players ====>', data);
         updateAllPlayers(data)
       })
       socket.socket.socket('/').on("leaveRoom", data => {
@@ -133,21 +123,19 @@ const HomePage = (props) => {
       if (hash && !profile.isAuth) {
         const Regx = new RegExp(/(^#[\w-]+\[[\w-]+\]$)/g);
         const match = hash.match(Regx);
-        ////console.log("match", match);
         if (!match) {
           setHashUrl({
             error: "Invalid hash-based url",
           });
         } else {
           const split = hash.match(/([\w-]+)/g);
-          ////console.log("split", split);
           setHashUrl({
             room: split[0],
             name: split[1],
             error: "",
           });
         }
-        // window.location.hash = "";
+        window.location.hash = "";
       }
     };
 
@@ -156,7 +144,6 @@ const HomePage = (props) => {
 
   const handleJoinToRoom = (room) => {
     props.joinRoom(room.id);
-    ////console.log(room, "room want to join");
   };
 
   const menu = () => {
@@ -244,7 +231,6 @@ const HomePage = (props) => {
             (room.status === "waiting" || (props.game.status === 'continue' && room.status === 'end')) &&
             profile.id === room.admin ? (
             <InviteUsers />
-            // <GameSpace />
           ) : (
             <GameSpace />
           )}
@@ -254,7 +240,6 @@ const HomePage = (props) => {
           collapsible
           collapsed={collapsed}
           reverseArrow={true}
-          // breakpoint="lg"
           trigger={
             props.profile.isAuth && !props.profile.isJoined ? (
               collapsed ? (

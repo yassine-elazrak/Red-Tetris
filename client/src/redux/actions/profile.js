@@ -26,14 +26,6 @@ export const updateUser = (user) => {
   };
 };
 
-
-// export const refreshNotifications = (notifications) => {
-//   return (dispatch) => {
-//       dispatch({type: NOTIFICATION_LOADING});
-//       dispatch({ type: NOTIFICATION_REFRESH, payload: notifications });
-//   };
-// };
-
 export const pushNotification = (notification) => {
   return (dispatch) => {
       // dispatch({ type: NOTIFICATION_LOADING });

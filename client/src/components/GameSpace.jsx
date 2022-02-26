@@ -8,11 +8,11 @@ import {
   MenuFoldOutlined,
 } from "@ant-design/icons";
 import { TETROMINOES } from "../helpers/Tetrominoes";
-
+import { CreateStage } from "../helpers/StageHelper"
+import { StageStyled } from './styles/StageStyled'
 import Message from "./Message";
 import Players from "./Players";
 import StageBar from "./StageBar";
-import Stage from "./Stage";
 
 import {
   createStage,
@@ -27,8 +27,6 @@ import {
   clearPlayers,
   updateRoomToPublic
 } from "../redux/actions";
-
-// import { useStage } from "../hooks/useStage";
 
 import { useInterval } from "../hooks/useInterval";
 
@@ -60,20 +58,11 @@ const GameSpace = (props) => {
   };
 
   useEffect(() => {
-    // props.gameClear();
     changeFocused();
     restGame();
-
-    // props.socket.socket('/').on('updatePlayers', data => {
-    //   // //console.log('updateplayer', data);
-    //   props.updatePlayers(data);
-    // })
     return () => {
       Modal.destroyAll();
-      // props.socket.socket('/').off('updatePlayers');
     }
-
-
   }, []);
 
   useEffect(() => {
@@ -92,7 +81,6 @@ const GameSpace = (props) => {
       setGameOver(false);
       setGameWon(false);
     }
-    //console.log(props.game.status);
   }, [props.game]);
 
   useEffect(() => {
@@ -101,13 +89,11 @@ const GameSpace = (props) => {
       if (props.room.status === "closed") restGame();
       if (props.room.status === "end") setGameStart(false);
       if (props.room.status === "started") {
-        // //console.log('game start');
         setGameStart(true);
         setGamePause(false);
       }
       if (props.room.status === "paused") setGamePause(true);
     }
-    // //console.log("nextTetromino =>", props.game.nextTetrominos);
   }, [props.room]);
 
   const changeFocused = () => {
@@ -125,11 +111,8 @@ const GameSpace = (props) => {
   useEffect(() => {
     if (gameStart && !gamePause && !gameWon && !gameOver) {
       setDailyDrop(500);
-      // //console.log('set daily drop');
     }
     else {
-      //console.log(gameStart, gamePause, gameWon, gameOver);
-      // //console.log('cleate daily drop');
       setDailyDrop(null);
     }
   }, [gameStart, gamePause, gameWon, gameOver]);
@@ -146,7 +129,6 @@ const GameSpace = (props) => {
     if (!gameStart) return;
     setDailyDrop(null);
     if (keyCode === 13) {
-      // pauseGame(!gamePause);
       props.changeStatusRoom({
         roomId: props.room.id,
         status: gamePause ? "started" : "paused",
@@ -159,58 +141,63 @@ const GameSpace = (props) => {
     };
     if (!gameStart || gamePause || gameOver || gameWon) return;
     if (keyCode === 37 || keyCode === 74) {
-      // move to left
-      // moveTetromino(currentStage, currentTetromino, { x: -1, y: 0 });
       data.action = "left";
       props.gameActions(data);
     } else if (keyCode === 39 || keyCode === 76) {
-      // move to right
-      // moveTetromino(currentStage, currentTetromino, { x: 1, y: 0 });
       data.action = "right";
       props.gameActions(data);
     } else if (keyCode === 40 || keyCode === 75) {
-      // move to down
-      // moveTetromino(currentStage, currentTetromino, { x: 0, y: 1 });
       data.action = "down";
       props.gameActions(data);
     } else if (keyCode === 32 || keyCode === 72) {
-      // move to goole drop
-      // moveTetromino(currentStage, currentTetromino, { x: 0, y: -1 });
       data.action = "dropDown";
       props.gameActions(data);
     } else if (keyCode === 38 || keyCode === 73) {
-      // rotate
-      // rotateTetromino(currentStage, currentTetromino);
       data.action = "rotate";
       props.gameActions(data);
     }
+  };
 
-    // updateDropTime(500);
+  const [touchStart, setTouchStart] = useState({ x: 0, y: 0 });
+  const handleTouchEnd = (e) => {
+    if (!gameStart) return;
+    const { changedTouches } = e
+    const { clientX, clientY } = changedTouches[0];
+    let deltaX = clientX - touchStart.x;
+    let deltaY = clientY - touchStart.y;
+    let data = {
+      action: 'down',
+      roomId: props.room.id
+    }
+    if (Math.abs(deltaX - deltaY) <= 2) deltaX = deltaY;
+    if (deltaX === deltaY) {
+      data.action = 'dropDown'
+      props.gameActions(data)
+    }
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      if (deltaX > 0) {
+        data.action = 'right'
+        props.gameActions(data)
+      } else {
+        data.action = 'left'
+        props.gameActions(data)
+      }
+    } else {
+      if (deltaY < 0) {
+        data.action = 'rotate'
+        props.gameActions(data)
+      }
+    }
   };
 
   const handleKeyUp = (e) => {
-    // //console.log("key up");
     if (gameStart && !gamePause && !gameWon && !gameOver) setDailyDrop(500);
-    // if (gameStart && !gamePause && !gameWon && !gameOver) {
-    //   updateDropTime(500);
-    // }
   };
 
-  // const restState = () => {
-  //   setGameOver(false);
-  //   setGamePause(false);
-  //   setGameWon(false);
-  //   setGameStart(false);
-  // }
-
-  // useEffect(() =>{
-  //   //console.log('players update >>>>>>>>>>>kdjsljds');
-  // }, [props.players])
-  const {room, profile, gameClear, continueGame, leaveRoom} = props;
+  const { room, profile, gameClear, continueGame, leaveRoom } = props;
 
   useEffect(() => {
     const modal = () => {
-      // Modal.destroyAll();
       return Modal.confirm({
         width: "500px",
         title: gameOver ? "Game Over" : "Game Won",
@@ -247,40 +234,11 @@ const GameSpace = (props) => {
       });
     };
     if (gameOver || gameWon) {
-      console.log(gameOver, gameWon);
       modal();
       setDailyDrop(null);
     }
   }, [gameOver, gameWon, room.id, room.admin, profile.id, gameClear, continueGame, leaveRoom]);
 
-  // MOBILE ACTIONS
-
-  // const [touchStart, setTouchStart] = useState({ x: 0, y: 0 });
-  // const handleTouchEnd = ({ changedTouches }) => {
-  //   if (!gameStart) return;
-  //   ////console.log("starting");
-  //   const { clientX, clientY } = changedTouches[0];
-  //   const deltaX = clientX - touchStart.x;
-  //   const deltaY = clientY - touchStart.y;
-  //   ////console.log(deltaX, " ", deltaY);
-  //   if (deltaX === deltaY)
-  //     moveTetromino(currentStage, currentTetromino, { x: 0, y: -1 });
-  //   if (Math.abs(deltaX) > Math.abs(deltaY)) {
-  //     if (deltaX > 0) {
-  //       ////console.log("right");
-  //       moveTetromino(currentStage, currentTetromino, { x: 1, y: 0 });
-  //     } else {
-  //       moveTetromino(currentStage, currentTetromino, { x: -1, y: 0 });
-  //       ////console.log("left");
-  //     }
-  //   } else {
-  //     if (deltaY < 0) {
-  //       rotateTetromino(currentStage, currentTetromino);
-  //       ////console.log("rotate");
-  //     }
-  //   }
-  //   // updateDropTime(500);
-  // };
 
   const bottons = () => {
     return (
@@ -296,44 +254,41 @@ const GameSpace = (props) => {
           <Button
             type="primary"
             hidden={gameStart}
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation()
               !gameStart &&
                 props.changeStatusRoom({
                   roomId: props.room.id,
                   status: "started",
                 });
-              // gameStart ? //console.log("reset Game") : setGameStart(true);
               changeFocused();
             }}
           >
-            {gameStart ? "Reset" : "Start"}
+            Start
           </Button>
         )}
         {props.profile.id === props.room.admin && gameStart && !gameOver && !gameWon && (
           <Button
             type="primary"
             disabled={!props.room.admin === props.profile.id}
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation()
               props.changeStatusRoom({
                 roomId: props.room.id,
                 status: !gamePause ? "paused" : "started",
               });
-              // setGamePause(!gamePause);
               changeFocused();
             }}
           >
             {gamePause ? "Resume" : "Pause"}
           </Button>
         )}
-        {/* {(gameWon || gameOver) && (
-          <Spin />
-        )} */}
         {props.room.isPrivate && (
           <Button
             type="primary"
             hidden={gameStart}
-            onClick={() => {
-              //console.log("swithcroom");
+            onClick={(e) => {
+              e.stopPropagation()
               props.updateRoomToPublic({ roomId: props.room.id });
             }}
           >
@@ -342,7 +297,8 @@ const GameSpace = (props) => {
         )}
         <Button
           type="primary"
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation()
             props.leaveRoom();
           }}
         >
@@ -359,33 +315,33 @@ const GameSpace = (props) => {
       }}
     >
       {!props.room.isPrivate && (
-      <Sider
-        collapsedWidth={0}
-        width={280}
-        breakpoint="lg"
-        onCollapse={(collapsed) => {
-          setCollapsedPlayers(collapsed);
-          window.innerWidth <= 350 && setTriggerChat(collapsed);
-        }}
-        trigger={
-          triggerPlayers ? (
-            collapsedPlayers ? (
-              <MenuUnfoldOutlined />
-            ) : (
-              <MenuFoldOutlined />
-            )
-          ) : null
-        }
-        style={{
-          background: "rgba(0, 0, 0, 0.3)",
-          marginTop: 50,
-          padding: 0,
-          position: "absolute",
-          zIndex: 10,
-        }}
-      >
-        <Players />
-      </Sider>
+        <Sider
+          collapsedWidth={0}
+          width={280}
+          breakpoint="lg"
+          onCollapse={(collapsed) => {
+            setCollapsedPlayers(collapsed);
+            window.innerWidth <= 350 && setTriggerChat(collapsed);
+          }}
+          trigger={
+            triggerPlayers ? (
+              collapsedPlayers ? (
+                <MenuUnfoldOutlined />
+              ) : (
+                <MenuFoldOutlined />
+              )
+            ) : null
+          }
+          style={{
+            background: "rgba(0, 0, 0, 0.3)",
+            marginTop: 50,
+            padding: 0,
+            position: "absolute",
+            zIndex: 10,
+          }}
+        >
+          <Players />
+        </Sider>
       )}
       <Content
         id="game-space"
@@ -394,15 +350,17 @@ const GameSpace = (props) => {
         onKeyDown={(e) => handleKeyDown(e)}
         onKeyUp={(e) => handleKeyUp(e)}
         onTouchStart={(e) => {
-          // if (gameStart) updateDropTime(null);
-          // setTouchStart({
-          //   x: e.changedTouches[0].clientX,
-          //   y: e.changedTouches[0].clientY,
-          // });
+          if (!gameStart || gamePause || gameOver || gameWon) return;
+          setDailyDrop(null);
+          setTouchStart({
+            x: e.changedTouches[0].clientX,
+            y: e.changedTouches[0].clientY,
+          });
         }}
         onTouchEnd={(e) => {
-          console.log(e)
-          // handleTouchEnd(e);
+          if (!gameStart || gamePause || gameOver || gameWon) return;
+          setDailyDrop(500)
+          handleTouchEnd(e);
         }}
         style={{
           padding: 0,
@@ -412,6 +370,7 @@ const GameSpace = (props) => {
           marginTop: "-10px",
           marginBottom: "-20px",
           overflow: "hidden",
+          cursor: 'default'
         }}
       >
         <Row style={{
@@ -454,44 +413,44 @@ const GameSpace = (props) => {
                 fontSize: 20,
               }}
             >
-              <Stage stage={userStage} />
+              <StageStyled> {CreateStage(userStage)} </StageStyled>
             </Spin>
             {bottons()}
           </Col>
         </Row>
       </Content>
       {!props.room.isPrivate && (
-      <Sider
-        collapsedWidth={0}
-        width={280}
-        breakpoint="lg"
-        reverseArrow={true}
-        collapsed={collapsedChat}
-        onCollapse={collapsed => {
-          setCollapsedChat(collapsed);
-          window.innerWidth <= 350 && setTriggerPlayers(collapsed);
-        }}
-        trigger={
-          triggerChat ? (
-            collapsedChat ? (
-              <MenuFoldOutlined />
-            ) : (
-              <MenuUnfoldOutlined />
-            )
-          ) : null
-        }
-        style={{
-          background: "rgba(0, 0, 0, 0.3)",
-          zIndex: 10,
-          marginTop: 50,
-          padding: 0,
-          paddingBottom: 5,
-          position: "absolute",
-          right: 0,
-        }}
-      >
-        <Message />
-      </Sider>
+        <Sider
+          collapsedWidth={0}
+          width={280}
+          breakpoint="lg"
+          reverseArrow={true}
+          collapsed={collapsedChat}
+          onCollapse={collapsed => {
+            setCollapsedChat(collapsed);
+            window.innerWidth <= 350 && setTriggerPlayers(collapsed);
+          }}
+          trigger={
+            triggerChat ? (
+              collapsedChat ? (
+                <MenuFoldOutlined />
+              ) : (
+                <MenuUnfoldOutlined />
+              )
+            ) : null
+          }
+          style={{
+            background: "rgba(0, 0, 0, 0.3)",
+            zIndex: 10,
+            marginTop: 50,
+            padding: 0,
+            paddingBottom: 5,
+            position: "absolute",
+            right: 0,
+          }}
+        >
+          <Message />
+        </Sider>
       )}
     </Layout>
   );

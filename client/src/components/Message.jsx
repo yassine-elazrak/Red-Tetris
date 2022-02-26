@@ -38,7 +38,6 @@ const Message = (props) => {
     if (socket) {
       socket.socket("/").on("message", (data) => {
         receiveMessage(data);
-        //console.log(data);
       });
       return () => {
         socket.socket("/").off("message");
@@ -49,7 +48,6 @@ const Message = (props) => {
   useEffect(() => {
     if (props.messenger.error) message.error(props.messenger.error);
     setMessages(props.messenger.messages);
-    //console.log("messenger", props.messenger);
   }, [props.messenger]);
 
   // scrool to bottom wheres new message

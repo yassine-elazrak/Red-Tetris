@@ -9,8 +9,6 @@ import {
 const initialState = {
     isLoading: false,
     error: null,
-    // room_id: null,
-    // invites: [],
 }
 
 export default function inviteReducer(state = initialState, action) {
@@ -45,8 +43,6 @@ export default function inviteReducer(state = initialState, action) {
                 isLoading: false,
                 error: null,
             };
-        // case INVITE_REMOVE_ALL:
-        //     return removeAll(state);
         default:
             return state;
     }

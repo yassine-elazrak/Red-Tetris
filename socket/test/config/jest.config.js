@@ -13,5 +13,4 @@ global.beforeAll((done) => {
 global.afterAll(() => {
     global.__io__.close();
     global.__socketClient__.close();
-    // console.log('afterAll config')
 })

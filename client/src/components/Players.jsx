@@ -5,23 +5,11 @@ import { CreateStage } from "../helpers/StageHelper";
 import { UsersStage, SliderMaps } from "./styles/UsersStage";
 import { updateOnePlayer } from "../redux/actions";
 import { Spin } from "antd";
-// import { InitStage } from '../helpers/StageHelper';
 
 export const Players = (props) => {
-  ////console.log('Players');
-
-  //     id: "tuIA2GVZWK_VIKIQAAAN"
-  // map: (20) [Array(10), Array(10), Array(10), Array(10)]
-  // name: "asdfsa"
-  // rows: 0
-  // scor: 0
-  // status: nul
-
-  // const [players, setPlayers] = useState([]);
   const [currentPlayers, setCurrentPlayers] = useState([]);
 
   useEffect(() => {
-    //console.log('props players', props.players);
     setCurrentPlayers(props.players.players);
   }, [props.players]);
 
@@ -29,7 +17,6 @@ export const Players = (props) => {
 
 
   useEffect(() => {
-    //console.log("update component Players");
     if (socket) {
       socket.socket("/").on("updateOnePlayer", (data) => {
         updateOnePlayer(data)

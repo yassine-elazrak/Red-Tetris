@@ -29,21 +29,6 @@ class Rooms {
     return rooms;
   };
 
-  // getRoomUsers = (id) => {
-  //   return new Promise((resolve, reject) => {
-  //     const room = this.rooms.find((room) => room.id === id);
-  //     if (room) {
-  //       let users = room.users.map((user) => {
-  //         return (
-  //           (({ id }) => ({ id }))(user)
-  //         )
-  //       });
-  //       return resolve(users);
-  //     }
-  //     return reject({ message: "Room not found" });
-  //   });
-  // };
-
   getRoom = (id) => {
     return new Promise((resolve, reject) => {
       let index = this.rooms.findIndex((room) => room.id === id);
@@ -105,14 +90,6 @@ class Rooms {
       return resolve(room);
     });
   };
-
-  // NextTetromino = (roomIndex) => {
-  //   let nextTetromino = this.tetromino.randomTetromino();
-  //   this.rooms[roomIndex].nextTetrominos = nextTetromino;
-  //   this.rooms[roomIndex].users.forEach(u => {
-  //     u.nextTetrominos.push(nextTetromino);
-  //   })
-  // }
 
   changeCurrentTetromino = (userIndex, roomIndex) => {
     let shape = TETROMINOES[this.rooms[roomIndex].users[userIndex].nextTetrominos[0]];
@@ -190,7 +167,6 @@ class Rooms {
 
   // start puase or close room
   changeStatusRoom = (data, room) => {
-    //console.log('room new status', data.status);
     return new Promise((resolve, reject) => {
       if (room.admin !== data.userId)
         return reject({ message: "You are not admin" });
@@ -222,10 +198,8 @@ class Rooms {
   }
 
   restRoom = (room) => {
-    //console.log('restRoom =>', room);
     room.users = room.users.filter(u => !u.status || u.status === 'continue');
     room.users.forEach((_, i) => room.users[i].status = false);
-    //console.log('room users =>', room.users);
     room.nextTetromino = this.tetromino.randomTetromino();
     room.users.forEach(u => u.nextTetrominos = [room.nextTetromino]);
   }

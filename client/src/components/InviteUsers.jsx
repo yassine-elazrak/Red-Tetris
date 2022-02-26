@@ -17,7 +17,6 @@ const { Option } = Select;
 const { TabPane } = Tabs;
 
 const InviteUsers = (props) => {
-  // ////console.log(props, 'props2');
 
   const [dataSource, setDataSource] = useState([]);
   const [inveted, setInveted] = useState([]);
@@ -44,7 +43,6 @@ const InviteUsers = (props) => {
         inveted: false,
       };
     });
-    // ////console.log(data, "data");
     setDataSource(data);
   }, [props.users]);
 
@@ -60,7 +58,6 @@ const InviteUsers = (props) => {
         error: true,
       });
     if (input.error || !input.id) return;
-    // ////console.log(input.id, props.room.id, "input.value");
     props.inviteRequest({
       userId: input.id,
       roomId: props.room.id,
@@ -70,7 +67,6 @@ const InviteUsers = (props) => {
       value: "",
       id: null,
     });
-    // setInveted([...inveted, input.id]);
   };
 
   useEffect(() => {
@@ -82,34 +78,13 @@ const InviteUsers = (props) => {
       message.error(props.room.error)
       return;
     }
-    //console.log('room update <<<<<<<<<<<');
     setUsersRoom(props.room.users);
     setInveted(props.room.invit);
   }, [props.room]);
 
   useEffect(() => {
-    //console.log('users room update', usersRoom);
-  }, [usersRoom])
-
-  useEffect(() => {
-    // const data = dataSource.map((user) => {
-    //   return {
-    //     ...user,
-    //     inveted: props.room.invit.find(
-    //       (invited) => invited.userId === user.id
-    //     )
-    //       ? true
-    //       : false,
-    //   };
-    // });
-
-    // setDataSource(data);
     setInveted(props.room.invit);
   }, [props.room.invit]);
-
-  // useEffect(() => {
-  //   props.room.error && message.error(props.room.error);
-  // }, [props.room.error]);
 
   const { socket, onlineUsersUpdate, onlineUsers } = props;
 
@@ -269,7 +244,6 @@ const InviteUsers = (props) => {
   };
 
   const UsersInRoom = () => {
-    //console.log('get users room >>>>>>>>>>>>');
     return usersRoom.map((user, key) => {
       return (
         <div

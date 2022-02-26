@@ -13,12 +13,10 @@ const middleware = (store) => (next) => (action) => {
     store.dispatch({ type: LOADING_SOCKET });
     connect()
       .then((socket) => {
-        ////console.log("socket connected");
         store.dispatch(success(socket, SOCKET_CONNECT));
         next(action);
       })
       .catch((err) => {
-        ////console.log("socket error", err);
         next(error(err, SOCKET_ERROR));
       });
   } else if (

@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import socketio from 'socket.io-client';
-
-
 import { Form, Input, Button, message} from "antd";
-
 import { connect } from "react-redux";
 import { login } from "../redux/actions";
 
@@ -37,21 +33,14 @@ const FormUserName = (props) => {
         if (input.value.length > 2 && !input.error) {
             props.login(input.value);
         }
-        ////console.log(input.value);
     }
 
 
     useEffect(() => {
-        // ////console.log(props.profile);
         if (props.profile.error){
             message.error(props.profile.error);
         }
     }, [props.profile.error]);
-
-    // useEffect(() => {
-    //     ////console.log(socketio, 'socketio');
-
-    // }, [io]);
 
     return (
         <Form size="large"

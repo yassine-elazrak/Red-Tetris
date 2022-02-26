@@ -65,7 +65,6 @@ class Users {
     });
   }
   logout(id) {
-    console.log(`${id} is logout`);
     return new Promise((resolve, reject) =>{
         let indexUser = this.onlinesUsers.findIndex((user) => user.id === id);
         if (indexUser === -1) return reject({ message: "User not login" });

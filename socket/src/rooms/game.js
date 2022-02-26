@@ -1,17 +1,9 @@
-
 const { STAGE_HEIGHT, STAGE_WIDTH } = require('../utils/stage');
 
 class Players {
-    // constructor() {
-    //     if (Players.instance instanceof Players) {
-    //         return Players.instance;
-    //     }
-    //     Players.instance = this;
-    // }
 
     // reset Map
     resetGame = (player, nextTetromino) => {
-        // player.map.forEach(y => y.forEach(x => [0, "clear"]));
         player.map = player.map.map(row => row.map(_ => [0, "clear"]));
         player.status = "continue";
         player.scor = 0;
@@ -27,11 +19,9 @@ class Players {
 
     // clear Map
     clearMap = (player) => {
-        // //console.log(player);
         player.map = player.map.map(y => y.map(cell =>
             cell[1] === "clear" || cell[1] === "shadow" ? [0, "clear"] : cell
         ))
-        // //console.log(player.map);
     }
 
     // update Map
@@ -51,7 +41,6 @@ class Players {
                 }
             })
         });
-        // if (collided) // delet rows
         return map;
     }
 
@@ -105,9 +94,7 @@ class Players {
                     : position.x,
             y: position.y,
         }
-        // //console.log(shape, 'shape');
         let rotate = shape.map((row, y) =>
-            // //console.log(row)
             row.map((_, x) => shape[len - x][y])
         )
         if (!this.checkCollision({ x: 0, y: 0 }, player.map, newPositon, rotate)) {

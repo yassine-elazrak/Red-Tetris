@@ -10,8 +10,6 @@ import { pushNotification, changeStatusInvite } from "../redux/actions";
 const { SubMenu } = Menu;
 const MenuItemGroup = Menu.ItemGroup;
 const NotifComponent = (props) => {
-  // don't forget to create a new action of newNotification
-  // push notification to the user
 
   const [notifs, setNotifs] = useState([]);
   const [contNotifs, setContNotifs] = useState(0);
@@ -19,9 +17,7 @@ const NotifComponent = (props) => {
   const handnotif = (e) => {
     let split = e.key.split("-");
     const id = parseInt(split[1]);
-    // const id = split[1];
     const action = split[0];
-    // ////console.log(action, id , '-------------------');
     notifs.forEach((notif, key) => {
       if (id === key) {
         props.changeStatusInvite({
@@ -32,7 +28,6 @@ const NotifComponent = (props) => {
       }
       return notif;
     });
-    // setNotifs(newNotifs);
   };
 
   useEffect(() => {
@@ -42,33 +37,20 @@ const NotifComponent = (props) => {
   }, [notifs]);
 
   useEffect(() => {
-    ////console.log('-- props profile notif--', props.profile.notif)
     setNotifs(props.profile.notif);
   }, [props.profile.notif]);
-
-  // useEffect(() => {}, [])
-
-  //   id: "832NhjV0cGTWFo3-AAAJ"
-  // name: "dasfdas"
-  // read: false
-  // roomId: "832NhjV0cGTWFo3-AAAJ"
-  // roomName: "das"
 
   const { socket, pushNotification } = props;
 
   useEffect(() => {
     if (socket.socket) {
       socket.socket.socket("/").on("notification", (data) => {
-        ////console.log("notification", data);
         notification.info({
           message: "New notification",
           description: data.message,
         });
         pushNotification(data);
       });
-      // props.socket.socket.socket("/").on("updateRoom", data => {
-      //   //console.log('update => ', data);
-      // })
       return () => {
         socket.socket.socket("/").off("notification");
       };
@@ -76,15 +58,13 @@ const NotifComponent = (props) => {
   }, [socket, pushNotification]);
 
   useEffect(() => {
-    ////console.log(props.notifications);
     props.notifications.error && message.error(props.notifications.error);
   }, [props.notifications.error]);
 
   const mapnotifs = notifs.map((item, key) => {
-    // ////console.log(item, "item");
     return item.type === "invitation" && !item.read ? (
       <SubMenu key={`notif-${key}`} title={item.message}>
-        <MenuItemGroup className="ulNotif">
+        <MenuItemGroup className="ulNotif" >
           <Menu.Item
             key={`accept-${key}`}
             className="ant-btn ant-btn-primary"
@@ -169,8 +149,6 @@ const NotifComponent = (props) => {
         placement="bottomRight"
         overlayClassName="notif-popover"
         autoAdjustOverflow={false}
-        // getPopupContainer={trigger => trigger.parentNode}
-        // arrowContent={null}
         title={
           <p style={{ fontSize: "16px", color: "#8c8c8c" }}>Notifications</p>
         }
@@ -181,9 +159,7 @@ const NotifComponent = (props) => {
           className="site-badge-count-109"
           style={{
             cursor: "pointer",
-            // border: "1px solid #d9d9d9",
             backgroundColor: "#6FCF97",
-            // color: '#fff',
             margin: 0,
             padding: 0,
           }}
