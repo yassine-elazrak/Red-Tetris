@@ -106,13 +106,13 @@ class Rooms {
     });
   };
 
-  NextTetromino = (roomIndex) => {
-    let nextTetromino = this.tetromino.randomTetromino();
-    this.rooms[roomIndex].nextTetrominos = nextTetromino;
-    this.rooms[roomIndex].users.forEach(u => {
-      u.nextTetrominos.push(nextTetromino);
-    })
-  }
+  // NextTetromino = (roomIndex) => {
+  //   let nextTetromino = this.tetromino.randomTetromino();
+  //   this.rooms[roomIndex].nextTetrominos = nextTetromino;
+  //   this.rooms[roomIndex].users.forEach(u => {
+  //     u.nextTetrominos.push(nextTetromino);
+  //   })
+  // }
 
   changeCurrentTetromino = (userIndex, roomIndex) => {
     let shape = TETROMINOES[this.rooms[roomIndex].users[userIndex].nextTetrominos[0]];

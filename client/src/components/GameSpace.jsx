@@ -176,7 +176,7 @@ const GameSpace = (props) => {
     } else if (keyCode === 32 || keyCode === 72) {
       // move to goole drop
       // moveTetromino(currentStage, currentTetromino, { x: 0, y: -1 });
-      data.action = "downDown";
+      data.action = "dropDown";
       props.gameActions(data);
     } else if (keyCode === 38 || keyCode === 73) {
       // rotate

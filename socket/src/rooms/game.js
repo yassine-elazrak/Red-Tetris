@@ -1,6 +1,5 @@
 
 const { STAGE_HEIGHT, STAGE_WIDTH } = require('../utils/stage');
-const Rooms = require('./rooms');
 
 class Players {
     // constructor() {
@@ -87,18 +86,12 @@ class Players {
     moveTetromino = (dir, player) => {
         let { shape, position } = player.currentTetromino;
         if (!this.checkCollision(dir, player.map, position, shape)) {
-            // //console.log("playerPosition", player.currentTetromino.position);
             player.currentTetromino.position.x += dir.x;
             player.currentTetromino.position.y += dir.y;
             return true;
         }
         return false;
     }
-
-    // moveToDown = (palyer) => {
-    //     let dir = { x: 0, y: 1 };
-    //     if ()
-    // }
 
     // rotate Tetromino
     rotateTetromino = (player) => {
@@ -136,7 +129,6 @@ class Players {
     addWall = (playerId, players, walls) => {
         players.forEach(player => {
             if (player.id !== playerId) {
-                // //console.log('wall', player.id, playerId);
                 player.currentTetromino.position.y -= walls;
                 let newWalls = Array.from(Array(walls), () =>
                     new Array(STAGE_WIDTH).fill(['W', 'wall'])
@@ -150,11 +142,10 @@ class Players {
     // delet row
     deletRow = (player, players) => {
         let rows = 0;
-        // let scor = 0;
         let bonus = 0;
         let newMap = []
         player.map.forEach(e => {
-            if (!e.every(cell => cell[0] === 'W') && (e.findIndex(cell => cell[0] === 0) === -1)) {
+            if (!e.find(cell => cell[0] === 'W') && (e.findIndex(cell => cell[0] === 0) === -1)) {
                 newMap.unshift(new Array(STAGE_WIDTH).fill([0, 'clear']));
                 rows++;
             } else {
@@ -165,7 +156,6 @@ class Players {
 
 
         if (rows) {
-            // //console.log('rows', rows, player.id);
             this.addWall(player.id, players, rows);
             bonus = Math.round((rows / 100) * 4 * 10) * 10;
             player.rows += rows;
@@ -185,18 +175,16 @@ class Players {
         if (winners.length === 1) {
             room.users[indexs[0]].status = 'gameWinner';
             room.status = 'end'
-            //console.log('game end');
         }
         else if (room.users.length === 1) room.status = 'end'
-        //console.log(room, 'game over')
     }
 
     // get action
     action = (a, player, room) => {
         return new Promise((resolve, reject) => {
-            if (!['downDown', 'right', 'left', 'rotate', 'down'].includes(a))
+            if (!['dropDown', 'right', 'left', 'rotate', 'down'].includes(a))
                 return reject({ message: "Invalid action" });
-            if (a === 'downDown') {
+            if (a === 'dropDown') {
                 let y = this.dropToDown(player);
                 player.currentTetromino.position.y += y;
             }
