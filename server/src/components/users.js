@@ -17,6 +17,8 @@ class Users {
   }
 
   getUser(room, id) {
+    let user // created by ali zaynoune 
+    // i think you are forget to declaration var user
     if (this.users.has(room)) {
       user = this.users.get(room).filter((user) => user.id == id);
       return user;
@@ -65,13 +67,15 @@ class Users {
     });
   }
   logout(id) {
-    return new Promise((resolve, reject) =>{
-        let indexUser = this.onlinesUsers.findIndex((user) => user.id === id);
-        if (indexUser === -1) return reject({ message: "User not login" });
-        this.onlinesUsers.splice(indexUser, 1);
-        return resolve(this.onlineUsers);
+    console.log(`${id} is logout`);
+    return new Promise((resolve, reject) => {
+      let indexUser = this.onlinesUsers.findIndex((user) => user.id === id);
+      if (indexUser === -1) return reject({ message: "User not login" });
+      this.onlinesUsers.splice(indexUser, 1);
+      return resolve(this.onlineUsers);
     })
 
+  }
 }
 
 module.exports = new Users();
