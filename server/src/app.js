@@ -23,7 +23,7 @@ class BaseSocket extends BaseServer {
 
     //event for connection
     this.io.on("connection", (socket) => {
-      console.log(`User connected: ${socket.id}`);
+      console.log(`User connected: ${socket.id} , ${socket}`);
       socket.use((socket, next) => {
         console.log("middleware");
         next();
