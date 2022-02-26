@@ -29,20 +29,20 @@ class Rooms {
     return rooms;
   };
 
-  getRoomUsers = (id) => {
-    return new Promise((resolve, reject) => {
-      const room = this.rooms.find((room) => room.id === id);
-      if (room) {
-        let users = room.users.map((user) => {
-          return (
-            (({ id }) => ({ id }))(user)
-          )
-        });
-        return resolve(users);
-      }
-      return reject({ message: "Room not found" });
-    });
-  };
+  // getRoomUsers = (id) => {
+  //   return new Promise((resolve, reject) => {
+  //     const room = this.rooms.find((room) => room.id === id);
+  //     if (room) {
+  //       let users = room.users.map((user) => {
+  //         return (
+  //           (({ id }) => ({ id }))(user)
+  //         )
+  //       });
+  //       return resolve(users);
+  //     }
+  //     return reject({ message: "Room not found" });
+  //   });
+  // };
 
   getRoom = (id) => {
     return new Promise((resolve, reject) => {

@@ -22,6 +22,9 @@ class InviteController {
     invitation = (socket) => async (data, callback) => {
         // console.log(`User ${socket.id} is trying to invite data =>`, data);
         try {
+            if (!data || typeof data !== 'object' || typeof data.userId !== 'string'
+                || typeof data.roomId !== 'string')
+                return callback(null, { message: 'Please enter a valid data' })
             let user = await this.users.getUser(data.userId);
             let admin = await this.users.getUser(socket.id);
             if (user.isJoined) return callback(null, { message: `${user.name} is already joined to room` });
@@ -31,8 +34,6 @@ class InviteController {
             if (room.invit.find(e => e.userId === data.userId)) return callback(null, { message: `${user.name} is already invited to this room` });
             if (room.status !== "waiting" && room.status !== 'end')
                 return callback(null, { message: "Room is closed" });
-            if (room.invit.find(item => item.id === socket.id))
-                return callback(null, { message: `${user.name} is already invited to this room` });
             room = await this.rooms.inviteUser({ roomId: room.id, userId: user.id, userName: user.name });
             let notif = {
                 id: Math.random().toString(36).substr(2) + Date.now().toString(36),
@@ -53,9 +54,10 @@ class InviteController {
 
     changeStatusInvitation = (socket, status) => async (data, callback) => {
         try {
-
+            if (!data || typeof data !== 'object' || typeof data.notifId !== 'string')
+                return callback(null, { message: "Please enter a valid data" })
             let user = await this.users.getUser(socket.id);
-            if (user.isJoined && status === 'accepted') return callback(null, {message: 'You are already joined to room'});
+            if (user.isJoined && status === 'accepted') return callback(null, { message: 'You are already joined to room' });
             let notifIndex = user.notif.findIndex((item) => item.id === data.notifId);
             if (notifIndex === -1) return callback(null, { message: "Notification not found" });
             if (user.notif[notifIndex].type !== "invitation") return callback(null, { message: "Notification is not invitation" });

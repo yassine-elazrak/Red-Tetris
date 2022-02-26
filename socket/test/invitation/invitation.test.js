@@ -19,7 +19,7 @@ beforeAll((done) => {
 
 describe('invitation test', () => {
     UserModel = new UserModelClass();
-    let room, fakeUser1, fakeUser2;
+    let room, fakeUser1, fakeUser2, invit1, invit2;
 
     /************************* LOGIN FAKE USERS ******************************/
     test('login fake users', async () => {
@@ -53,8 +53,7 @@ describe('invitation test', () => {
     })
 
     /********************************* SUCCESS TEST *********************************/
-    describe('success test invitation', () => {
-        let invit1, invit2;
+    describe('success tests invitation', () => {
         test('invit user', (done) => {
             Invite.invitation(global.__socketServer__)({
                 userId: fakeUser1.id,
@@ -93,22 +92,22 @@ describe('invitation test', () => {
             })
         })
 
-        test('update fakeUser1',  async () => {
-            try{
-            fakeUser1 = await UserModel.getUser(fakeUser1.id)
-            invit1 = fakeUser1.notif.find(n => n.type === 'invitation')
-            } catch(e) {
+        test('update fakeUser1', async () => {
+            try {
+                fakeUser1 = await UserModel.getUser(fakeUser1.id)
+                invit1 = fakeUser1.notif.find(n => n.type === 'invitation')
+            } catch (e) {
                 expect(e).toMatchObject({
                     message: expect.any(String)
                 })
             }
         })
 
-        test('update fakeUser2',  async () => {
-            try{
-            fakeUser2 = await UserModel.getUser(fakeUser2.id)
-            invit2 = fakeUser2.notif.find(n => n.type === 'invitation')
-            } catch(e) {
+        test('update fakeUser2', async () => {
+            try {
+                fakeUser2 = await UserModel.getUser(fakeUser2.id)
+                invit2 = fakeUser2.notif.find(n => n.type === 'invitation')
+            } catch (e) {
                 expect(e).toMatchObject({
                     message: expect.any(String)
                 })
@@ -116,7 +115,7 @@ describe('invitation test', () => {
         })
 
         test('accept invitations', (done) => {
-            Invite.changeStatusInvitation({id : fakeUser1.id}, 'accepted')({
+            Invite.changeStatusInvitation({ id: fakeUser1.id }, 'accepted')({
                 notifId: invit1.id
             }, (res, err) => {
                 expect(res).toMatchObject({
@@ -136,7 +135,7 @@ describe('invitation test', () => {
         })
 
         test('decline invitations', (done) => {
-            Invite.changeStatusInvitation({id : fakeUser2.id}, 'decline')({
+            Invite.changeStatusInvitation({ id: fakeUser2.id }, 'decline')({
                 notifId: invit2.id
             }, (res, err) => {
                 expect(res).toMatchObject({
@@ -144,7 +143,7 @@ describe('invitation test', () => {
                         room: null,
                         isJoined: false
                     }),
-                    room: null
+                    room: null,
                 })
                 expect(err).toBeNull()
                 done()
@@ -155,6 +154,106 @@ describe('invitation test', () => {
 
 
     /*********************************** FAIL TETS ***********************************/
+    describe('fail tests invitation', () => {
+        describe('invitation', () => {
+            test('user already invited', (done) => {
+                Invite.invitation(global.__socketServer__)({
+                    userId: fakeUser2.id,
+                    roomId: room.id
+                }, (res, err) => {
+                    expect(res).toBeNull()
+                    expect(err).toMatchObject({
+                        message: expect.any(String)
+                    })
+                    done()
+                })
+            })
+            test('user already joined in a room', done => {
+                Invite.invitation(global.__socketServer__)({
+                    userId: user.id,
+                    roomId: room.id
+                }, (res, err) => {
+                    expect(res).toBeNull()
+                    expect(err).toMatchObject({
+                        message: expect.any(String)
+                    })
+                    done()
+                })
+            })
 
+            test('user not admin invitation', done => {
+                Invite.invitation({ id: fakeUser1.id })({
+                    userId: fakeUser2.id,
+                    roomId: room.id,
+                }, (res, err) => {
+                    expect(res).toBeNull()
+                    expect(err).toMatchObject({
+                        message: "you are not admin of this room"
+                    })
+                    done()
+                })
+            })
+
+            test('invalid data', done => {
+                Invite.invitation(global.__socketServer__)(null, (res, err) => {
+                    expect(res).toBeNull()
+                    expect(err).toMatchObject({
+                        message: expect.any(String)
+                    })
+                    done()
+                })
+            })
+        })
+
+        describe('invitation status', () => {
+            test('invalid dat', done => {
+                Invite.changeStatusInvitation(global.__socketServer__)(null, (res, err) => {
+                    expect(res).toBeNull()
+                    expect(err).toMatchObject({
+                        message: expect.any(String)
+                    })
+                    done()
+                })
+            })
+
+            test('accept invitations', (done) => {
+                Invite.changeStatusInvitation({ id: fakeUser1.id }, 'accepted')({
+                    notifId: invit1.id
+                }, (res, err) => {
+                    expect(res).toBeNull()
+                    expect(err).toMatchObject({
+                        message: expect.any(String)
+                    })
+                    done()
+                })
+            })
+
+            test('invitation not exists', done => {
+                Invite.changeStatusInvitation({id: fakeUser2.id}, 'accepted')({
+                    notifId: 'invalid id'
+                }, (res, err) => {
+                    expect(res).toBeNull()
+                    expect(err).toMatchObject({
+                        message: expect.any(String)
+                    })
+                    done()
+                })
+            })
+
+            test('invitations already read', done => {
+                Invite.changeStatusInvitation({ id: fakeUser2.id }, 'decline')({
+                    notifId: invit2.id
+                }, (res, err) => {
+                    expect(res).toBeNull()
+                    expect(err).toMatchObject({
+                        message: expect.any(String)
+                    })
+                    done()
+                })
+            })
+
+        })
+
+    })
 
 })

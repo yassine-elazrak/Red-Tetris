@@ -193,7 +193,6 @@ class Players {
 
     // get action
     action = (a, player, room) => {
-        // //console.log(' player => ', player.currentTetromino);
         return new Promise((resolve, reject) => {
             if (!['downDown', 'right', 'left', 'rotate', 'down'].includes(a))
                 return reject({ message: "Invalid action" });
@@ -219,7 +218,6 @@ class Players {
             }
             if (player.currentTetromino.position.y <= 0 && player.currentTetromino.collided) {
                 player.status = 'gameOver';
-                //console.log('game over <<<<', room);
                 this.getWinner(room);
             }
             resolve(player);
