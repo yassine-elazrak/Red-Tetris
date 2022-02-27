@@ -18,18 +18,22 @@ const NavbarComponent = (props) => {
             <NavbarStyled className='d-flex justify-content-between'>
                 {!profile.isAuth ?
                     <div className='d-flex justify-content-around' style={{ width: '100%' }} >
-                        <img src={logD} alt="logo" />
+                        <a href="/">
+                            <img src={logD} alt="logo" />
+                        </a>
                     </div>
                     :
                     <>
 
                         <h3> {room.name} </h3>
-                        <LogoDesktop>
-                            <img src={logD} alt="logo" className='d-none d-md-block' />
-                        </LogoDesktop>
-                        <LogoMobile>
-                            <img src={logM} alt="logo" className='d-none d-sm-block' />
-                        </LogoMobile>
+                        <a href="/">
+                            <LogoDesktop>
+                                <img src={logD} alt="logo" className='d-none d-md-block' />
+                            </LogoDesktop>
+                            <LogoMobile>
+                                <img src={logM} alt="logo" className='d-none d-sm-block' />
+                            </LogoMobile>
+                        </a>
                         <NotifDiv>
                             <h3 className="d-none d-sm-block" > {profile.name} </h3>
                             <NotifComponent />

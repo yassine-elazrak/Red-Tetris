@@ -5,7 +5,6 @@ import Nabar from "../components/Navbar";
 import FooterComponent from "../components/Footer";
 import FormUserName from "../components/FormUserName";
 import FormRoomName from "../components/FormRoomName";
-import Page404 from "./404";
 
 import GameSpace from "../components/GameSpace";
 import InviteUsers from "../components/InviteUsers";
@@ -80,7 +79,7 @@ const HomePage = (props) => {
   }, [hashUrl, profile, createOrJoinRoom]);
 
 
-  const {updateUser, updateGame, updateAllPlayers, gameClear, clearRoom, refreshRoom, socket} = props;
+  const { updateUser, updateGame, updateAllPlayers, gameClear, clearRoom, refreshRoom, socket } = props;
   useEffect(() => {
     if (socket.socket) {
       socket.socket.socket("/").on("updateProfile", (data) => {
@@ -221,9 +220,7 @@ const HomePage = (props) => {
             minHeight: "calc(100vh - 115px)",
           }}
         >
-          {window.location.pathname !== "/" ? (
-            <Page404 />
-          ) : !profile.isAuth ? (
+          {!profile.isAuth ? (
             <FormUserName />
           ) : !room.name ? (
             <FormRoomName />
