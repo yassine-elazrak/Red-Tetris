@@ -1,6 +1,5 @@
 const Client = require('socket.io-client');
 global.__io__ = require('socket.io')(global.__PORT__);
-let test, socket = null;
 
 global.beforeAll((done) => {
     global.__io__.on("connection", (socket) => {

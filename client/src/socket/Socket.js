@@ -1,7 +1,7 @@
 const socket = (manager, event, data) => {
   return new Promise((resolve, reject) => {
     let io = manager.socket("/");
-    
+
     if (!io.connected) {
       io.connect((err) => {
         if (err) {

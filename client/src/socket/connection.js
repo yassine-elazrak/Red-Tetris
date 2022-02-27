@@ -1,14 +1,18 @@
-import {Manager} from "socket.io-client";
-
-const ENDPOINT = "192.168.1.114:5000";
+import { Manager } from "socket.io-client";
 
 const initSocket = () => {
   return new Promise((resolve, reject) => {
-    const manager = new Manager(ENDPOINT, {
-      reconnection: false,
-      autoConnect: false,
-    });
-    resolve(manager);
+    try {
+      const manager = new Manager(
+        process.env.REACT_APP_IO_ENDPOINT,
+        {
+          reconnection: false,
+          autoConnect: false,
+        });
+      resolve(manager);
+    } catch (e) {
+      reject(e)
+    }
   });
 };
 

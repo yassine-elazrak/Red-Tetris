@@ -1,11 +1,10 @@
 const authClass = require('../../src/controller/authController')
 const roomClass = require('../../src/controller/roomsController');
-const RoomModelClass = require('../../src/rooms/rooms')
 const UserModelClass = require('../../src/users/users')
 const InviteClass = require('../../src/controller/inviteController')
 const GameClass = require('../../src/rooms/game')
 
-let user, Rooms, Auth, Game, RoomModel, UserModel, Invite, player;
+let user, Rooms, Auth, Game, UserModel, Invite, player;
 beforeAll((done) => {
     Auth = new authClass(global.__io__);
     Rooms = new roomClass(global.__io__);

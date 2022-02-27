@@ -1,6 +1,4 @@
 const authClass = require('../../src/controller/authController')
-const usersClass = require('../../src/users/users')
-
 
 let auth;
 beforeAll(() => {
