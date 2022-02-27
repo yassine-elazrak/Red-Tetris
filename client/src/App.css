@@ -1,10 +1,19 @@
 body{
     background-image: url("./img/background.jpg");
+    background-color: #6DB3F2;
     overflow: hidden;
     padding: 0;
     margin: 0 ;
     font-family: 'Source Code Pro', monospace !important;
 }
+body::before{
+    background-color: rgba(0, 0, 0, 0.6);
+    content: '';
+    display: block;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+  }
 * {
     letter-spacing: -1px;
 }

@@ -189,7 +189,7 @@ const HomePage = (props) => {
   return (
     <Layout
       style={{
-        background: "rgba(0, 0, 0, 0.6)",
+        background: "none",
         width: "100vw",
         height: "100vh",
         padding: 0,
