@@ -312,6 +312,7 @@ const GameSpace = (props) => {
     <Layout
       style={{
         background: "none",
+        height: '100%',
       }}
     >
       {!props.room.isPrivate && (
@@ -365,12 +366,12 @@ const GameSpace = (props) => {
         style={{
           padding: 0,
           margin: 0,
-          height: "calc(100vh - 90px)",
+          height: "100%",
           paddingBottom: "30px",
           marginTop: "-10px",
-          marginBottom: "-20px",
           overflow: "hidden",
-          cursor: 'default'
+          cursor: 'default',
+                  outline: 'none'
         }}
       >
         <Row style={{

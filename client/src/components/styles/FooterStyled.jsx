@@ -8,8 +8,12 @@ export const FooterStyled = styled.footer`
     background-repeat-y: no-repeat;
     z-index: 100;
     padding: 15px 20px;
-    margin-bottom: -3px;
+    // margin-bottom: -3px;
     align-items: center;
+    // margin-top: auto;
+    // height: 65px;
+    // clear: both;
+    // position: relative;
     @media (max-width: 768px) {
         background-size: contain;
     }
@@ -26,7 +30,6 @@ export const FooterStyled = styled.footer`
 `
 
 export const FooterDiv = styled.div`
-    // border : 1px solid blue;
     display: flex;
     justify-content: space-between;
     width: 100%;

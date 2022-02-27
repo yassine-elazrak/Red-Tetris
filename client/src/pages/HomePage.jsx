@@ -26,8 +26,6 @@ import {
   updateAllPlayers,
 } from "../redux/actions";
 
-import "./styles/HeaderStyled.css";
-
 const { Header, Content, Footer, Sider } = Layout;
 
 const HomePage = (props) => {
@@ -134,7 +132,7 @@ const HomePage = (props) => {
             error: "",
           });
         }
-        window.location.hash = "";
+        // window.location.hash = "";
       }
     };
 
@@ -150,6 +148,7 @@ const HomePage = (props) => {
       <List
         style={{
           background: "transparent",
+          // background: 'green',
           color: "white",
         }}
       >
@@ -190,11 +189,15 @@ const HomePage = (props) => {
     <Layout
       style={{
         background: "none",
-        width: "100vw",
-        height: "100vh",
+        width: "100%",
+        // height: "calc(100vh - 30px)",
+        height: 'calc(100vh - 50px)',
+        // position: 'relative',
         padding: 0,
         margin: 0,
-        overflow: "hidden",
+        overflow: "hidden !important",
+        // display: 'flex',
+        // flexDirection: 'column',
       }}
     >
       <Header
@@ -212,12 +215,13 @@ const HomePage = (props) => {
       <Layout
         style={{
           background: "none",
+          height: '100%'
         }}
       >
         <Content
           style={{
             background: "none",
-            minHeight: "calc(100vh - 115px)",
+            height: '100%'
           }}
         >
           {!profile.isAuth ? (
@@ -257,7 +261,9 @@ const HomePage = (props) => {
           width="300px"
           style={{
             background: "rgba(0, 0, 0, 0.5)",
-            height: "100vh",
+            height: "100%",
+            // margin: 0,
+            // padding: 0,
             marginTop: "-10px",
             paddingTop: "10px",
             fontSize: "20px",
@@ -282,13 +288,19 @@ const HomePage = (props) => {
           background: "none",
           zIndex: "999",
           padding: 0,
+          height: '40px',
+          marginBottom: 0,
+          position: 'absolute',
+          bottom: 0,
+          width: '100vw',
         }}
       >
         <FooterComponent />
       </Footer>
-    </Layout>
+    </Layout >
   );
 };
+
 
 const mapStateToProps = (state) => {
   return {

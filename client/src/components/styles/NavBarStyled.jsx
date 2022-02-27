@@ -6,7 +6,6 @@ export const NavbarStyled = styled.nav`
     background-image: url(${background});
     background-size: contain;
     background-repeat-y: no-repeat;
-    // width: 100%;
     height: 64px;
     z-index: 100;
     padding: 0px 20px;
@@ -40,17 +39,8 @@ export const NotifDiv = styled.div`
 `
 
 export const NotifIcon = styled.div`
-    // border : 1px solid red;
-    // display: flex;
-    // position: relative;
     padding: 8px 0px;
-    // margin: 0;
-    // height: 100%;
-    // width: 100%;
-    // justify-content: space-between;
-    // align-items: top;
     cursor: pointer;
-    // color: #666;
 
 `
 

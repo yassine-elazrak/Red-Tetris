@@ -5,7 +5,7 @@ export const StageStyled = styled.div`
   display: grid;
   grid-template-rows: repeat(${STAGE_HEIGHT}, calc(55vh / ${STAGE_HEIGHT}));
       grid-template-columns: repeat(${STAGE_WIDTH}, calc(40vh / ${STAGE_WIDTH}));
-  grid-gap: 1.5px;
+  grid-gap: 1.3px;
   margin: 0;
   padding: 0;
   justify-content: center;
@@ -27,16 +27,16 @@ export const StageStyled = styled.div`
 
   @media (max-width: 425px) {
     grid-template-rows: repeat(${STAGE_HEIGHT}, calc(60vh / ${STAGE_HEIGHT}));
-    grid-template-columns: repeat(${STAGE_WIDTH}, calc(80vw / ${STAGE_WIDTH}));
+    grid-template-columns: repeat(${STAGE_WIDTH}, calc(60vw / ${STAGE_WIDTH}));
   }
 
   @media (max-width: 375px) {
     grid-template-rows: repeat(${STAGE_HEIGHT}, calc(50vh / ${STAGE_HEIGHT}));
-    grid-template-columns: repeat(${STAGE_WIDTH}, calc(90vw / ${STAGE_WIDTH}));
+    grid-template-columns: repeat(${STAGE_WIDTH}, calc(70vw / ${STAGE_WIDTH}));
   }
 
   @media (max-width: 320px) {
     grid-template-rows: repeat(${STAGE_HEIGHT}, calc(50vh / ${STAGE_HEIGHT}));
-    grid-template-columns: repeat(${STAGE_WIDTH}, calc(90vw / ${STAGE_WIDTH}));
+    grid-template-columns: repeat(${STAGE_WIDTH}, calc(70vw / ${STAGE_WIDTH}));
   }
 `;
